@@ -2,9 +2,9 @@
 id: carousel.dots
 stack: web/react
 status: beta
-tags: [carousel, slider, dots, autoplay, reduced-motion]
-aliases: [hero-carousel, marquee, featured-gallery, hero-gallery]
-summary: Horizontally-advancing carousel with prev/next buttons, dot navigation, and pause behavior.
+tags: [marquee, carousel, slider, dots, autoplay, reduced-motion]
+aliases: [hero-carousel, marquee, featured-gallery, hero-gallery, slider]
+summary: Horizontally-advancing carousel (aka hero or marquee carousel) with 'dot' navigation, prev/next buttons, and pause behavior.
 ---
 
 # Carousel with Dot Navigation
@@ -16,26 +16,24 @@ summary: Horizontally-advancing carousel with prev/next buttons, dot navigation,
 - "Dot" may be mentioned.
 
 ## Do Not Use When
-- Multiple items are visible at once: this would probably be a `content-shelf`.
-- Thumbnail images are used to navigate between slides: this would be a `carousel.thumbnails`.
+- Multiple items are visible at once (use `content-shelf`).
+- Thumbnail images are used for direct slide selection (use `carousel.thumbnail`).
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
-- Each slide must have `aria-roledescription="slide"` and an `aria-label` like “1 of N”.
-- Provide Previous/Next buttons as real `<button>` elements.
-- Provide dot navigation as real `<button>` elements in normal tab order (no roving tabindex).
-- Provide a Pause/Play button.
+- Ensure the carousel container has a semantic HTML5 element or role, such as `<section>` or `role="region"`.
+- Each slide must have `role="group"`, `aria-roledescription="slide"` and an `aria-label` like “1 of N” (N is total number of slides).
+- Provide Previous/Next buttons as real `<button>` elements, with `aria-label` like "Previous Slide" and "Next Slide".
+- Provide dot navigation as real `<button>` elements in normal tab order (no roving tabindex), with `aria-label` like "Go to slide 2", and with `aria-current="true"` on the button corresponding to the active slide.
+- Provide a Pause/Play button as the first focusable element inside the carousel container.
 - Default to paused when `prefers-reduced-motion: reduce`.
-- Pause when focus enters the carousel region.
-- Slides must include:
-  - A title as an `<h2>`
-  - A short description
-  - One primary CTA (e.g., “View details”)
+- Pause when keyboard focus enters the carousel region.
+ 
+## Customizable
+- The contents of each slide are customizable. However, if they contain a title, then these should usually be `<h2>`.
 
 ## Don’ts
-- Don’t implement dot navigation using `role="tablist"` / `role="tab"` for this variant.
-- Don’t require arrow-key navigation between dots.
-- Don’t autoplay without a visible Pause/Play control.
+- Don’t auto-advance the slides without a visible Pause/Play control.
 - Don’t ignore `prefers-reduced-motion`.
 - Don’t keep moving while the user is interacting (focus inside carousel must pause autoplay).
 
@@ -376,9 +374,9 @@ const DEFAULT_ITEMS = [
 ```
 
 ## Acceptance Checks
+- The carousel container has a semantic role and appropriate accessible name.
 - Tab into the carousel: autoplay pauses immediately.
-- With prefers-reduced-motion: reduce, autoplay is paused by default.
+- With `prefers-reduced-motion: reduce`, autoplay is paused by default.
 - Previous/Next buttons are reachable by Tab and change slides on activation.
 - Each dot is reachable by Tab and activates its slide on activation.
-- Each slide has an <h2>, description text, and one “View details” link.
-- Screen reader announces the carousel label and slide position (e.g., “2 of 3”) when slides change while paused.
+- Each slide container has `role="group"`, `aria-roledescription="slide"`, and an `aria-label`, like "1 of N"
