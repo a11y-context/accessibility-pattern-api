@@ -2,8 +2,8 @@
 id: carousel.thumbnails
 stack: web/react
 status: beta
-tags: [carousel, slider, thumbnails, autoplay, reduced-motion]
-aliases: [hero-carousel-thumbnails, marquee-thumbnails, featured-gallery-thumbnails, hero-gallery-thumbnails]
+tags: [carousel, slider, thumbnails, autoplay, reduced-motion, image-preview]
+aliases: [hero-carousel-thumbnails, marquee-thumbnails, featured-gallery-thumbnails, hero-gallery-thumbnails, preview-carousel]
 summary: Horizontally-advancing carousel with prev/next buttons, thumbnail navigation, and pause behavior.
 ---
 
@@ -14,6 +14,12 @@ summary: Horizontally-advancing carousel with prev/next buttons, thumbnail navig
 - Use when each slide contains a clear headline and a single primary CTA.
 - Use when autoplay is desired but must respect reduced motion and user interaction.
 - Use when you want to visually preview upcoming slides to encourage exploration beyond the first slide.
+- - When users need visual preview of all slides.
+- When slide discovery is important.
+- When slide selection accuracy matters.
+- - When a second image set exists for thumbnails.
+- When slide objects include both full and preview image fields.
+- When explicit thumbnail navigation UI is requested.
 
 ## Do Not Use When
 - Do not use when users must compare multiple items at once (use a grid or list).
