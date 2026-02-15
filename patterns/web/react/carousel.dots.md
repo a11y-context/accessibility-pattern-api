@@ -17,7 +17,7 @@ summary: Horizontally-advancing carousel (aka hero or marquee carousel) with 'do
 
 ## Do Not Use When
 - Multiple items are visible at once (use `content-shelf`).
-- Thumbnail images are used for direct slide selection (use `carousel.thumbnail`).
+- Thumbnail images are used for direct slide selection (use `carousel.thumbnails`).
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
