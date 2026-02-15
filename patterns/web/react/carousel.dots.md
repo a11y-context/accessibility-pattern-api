@@ -10,14 +10,14 @@ summary: Horizontally-advancing carousel with prev/next buttons, dot navigation,
 # Carousel with Dot Navigation
 
 ## Use When
-- Use when you need to highlight a small set of featured items (typically 3–10) in a horizontally-advancing hero region.
-- Use when each slide contains a clear headline and a single primary CTA.
-- Use when autoplay is desired but must respect reduced motion and user interaction.
+- When slide count is small and exact slide selection is not critical.
+- When thumbnails are not included for navigation between slides.
+- When visual preview of other slides is unnecessary.
+- "Dot" may be mentioned.
 
 ## Do Not Use When
-- Do not use when users must compare multiple items at once (use a grid or list).
-- Do not use when the content is long-form or requires extended reading (use a page/section).
-- Do not use when you cannot provide a reliable pause mechanism for motion.
+- Multiple items are visible at once: this would probably be a `content-shelf`.
+- Thumbnail images are used to navigate between slides: this would be a `carousel.thumbnails`.
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
