@@ -2,48 +2,39 @@
 id: carousel.thumbnails
 stack: web/react
 status: beta
-tags: [carousel, slider, thumbnails, autoplay, reduced-motion, image-preview]
+tags: [marquee, carousel, slider, thumbnails, autoplay, reduced-motion, image-preview]
 aliases: [hero-carousel-thumbnails, marquee-thumbnails, featured-gallery-thumbnails, hero-gallery-thumbnails, preview-carousel]
-summary: Horizontally-advancing carousel with prev/next buttons, thumbnail navigation, and pause behavior.
+summary: Horizontally-advancing carousel (aka hero or marquee carousel) with thumbnail navigation, prev/next buttons, and pause behavior.
 ---
 
 # Carousel with Thumbnail Navigation
 
 ## Use When
-- Use when you need to highlight a small set of featured items (typically 3–10) in a horizontally-advancing hero region.
-- Use when each slide contains a clear headline and a single primary CTA.
-- Use when autoplay is desired but must respect reduced motion and user interaction.
-- Use when you want to visually preview upcoming slides to encourage exploration beyond the first slide.
-- - When users need visual preview of all slides.
-- When slide discovery is important.
-- When slide selection accuracy matters.
-- - When a second image set exists for thumbnails.
-- When slide objects include both full and preview image fields.
+- When the user may benefit from a visual preview of other slides, or when slide discovery is important.
+- When thumbnail images are included for navigation between slides (in addition to the background images for the slides themselves).
+- "Thumbnail" may be mentioned.
 - When explicit thumbnail navigation UI is requested.
 
 ## Do Not Use When
-- Do not use when users must compare multiple items at once (use a grid or list).
-- Do not use when the content is long-form or requires extended reading (use a page/section).
-- Do not use when you cannot provide a reliable pause mechanism for motion.
+- Multiple items are visible at once (use `content-shelf`).
+- "Dot" navigation is mentioned, **and** there is no separate set of images to be used as thumbnail navigation (use `carousel.dots`).
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
-- Each slide must have `aria-roledescription="slide"` and an `aria-label` like “1 of N”.
-- Provide Previous/Next buttons as real `<button>` elements.
-- Provide thumbnail navigation as real `<button>` elements in normal tab order (no roving tabindex).
-- Provide a Pause/Play button.
-- Default to paused when `prefers-reduced-motion: reduce`.
-- Pause when focus enters the carousel region.
-- Slides must include:
-  - A title as an `<h2>`
-  - A short description
-  - One primary CTA (e.g., “View details”)
+- Ensure the carousel container has a semantic HTML5 element or role, such as `<section>` or `role="region"`.
+- Each slide must have `role="group"`, `aria-roledescription="slide"` and an `aria-label` like “1 of N”.
+- Provide Previous/Next buttons as real `<button>` elements, with `aria-label` like "Previous Slide" and "Next Slide".
+- Provide thumbnail navigation as real `<button>` elements in normal tab order (no roving tabindex), with `aria-label` like "Go to slide 2: {title of slide 2}", and with `aria-current="true"` on the button corresponding to the active slide.
+- Provide a Pause/Play button as the first focusable element inside the carousel container.
+- Default to paused when prefers-reduced-motion: reduce.
+- Pause when keyboard focus enters the carousel region.
+
+## Customizable
+- The contents of each slide are customizable. However, if they contain a title, then these should usually be <h2>.
 
 ## Don’ts
-- Don’t implement thumbnail navigation using `role="tablist"` / `role="tab"` for this variant.
-- Don’t require arrow-key navigation between thumbnails.
-- Don’t autoplay without a visible Pause/Play control.
-- Don’t ignore `prefers-reduced-motion`.
+- Don’t auto-advance the slides without a visible Pause/Play control.
+- Don’t ignore prefers-reduced-motion.
 - Don’t keep moving while the user is interacting (focus inside carousel must pause autoplay).
 
 ## Golden Pattern
@@ -396,9 +387,9 @@ const DEFAULT_ITEMS = [
 ```
 
 ## Acceptance Checks
+- The carousel container has a semantic role and appropriate accessible name.
 - Tab into the carousel: autoplay pauses immediately.
-- With prefers-reduced-motion: reduce, autoplay is paused by default.
+- With `prefers-reduced-motion: reduce`, autoplay is paused by default.
 - Previous/Next buttons are reachable by Tab and change slides on activation.
-- Each thumbnail is reachable by Tab and activates its slide on activation.
-- Each slide has an <h2>, description text, and one “View details” link.
-- Screen reader announces the carousel label and slide position (e.g., “2 of 3”) when slides change while paused.
+- Each dot is reachable by Tab and activates its slide on activation.
+- Each slide container has `role="group"`, `aria-roledescription="slide"`, and an `aria-label`, like "1 of N".
