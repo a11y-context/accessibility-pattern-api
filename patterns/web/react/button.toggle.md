@@ -3,7 +3,7 @@ id: button.toggle
 stack: web/react
 status: beta
 tags: [button, toggle, pressed, aria-pressed, mute-button]
-aliases: [toggle-button, pressed-button]
+aliases: [toggle button, pressed button]
 summary: Two-state button that toggles between pressed and not pressed using aria-pressed. Label remains stable across states.
 ---
 
