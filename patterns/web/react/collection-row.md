@@ -10,40 +10,43 @@ summary: Horizontal product shelf with a heading, list semantics, and Prev/Next 
 # Collection Row
 
 ## Use When
-- Use when presenting a category of related items in a single horizontal strip (e.g., “Customers Also Viewed”, “Action Movies”, “Related Products”).
-- Use when each item is a single destination (image + text as one link).
+- Use when presenting a category of related items in a single horizontal strip. The row itself has a category heading (e.g., “Customers Also Viewed”, “Action Movies”, “Related Products”).
+- Use when each item in the row includes a visual element (image, poster, thumbnail, or other media) along with brief text metadata.
 
 ## Do Not Use When
-- Do not use when users must compare many items at once (use a grid/list page).
+- Do not use when only one item should be visible at a time (use `carousel`).
 - Do not use when items require multiple interactive controls per card (use a different “card grid” pattern).
 
 ## Must Haves
-- Wrap the component in a container with `role="group"` and `aria-labelledby` pointing to the heading ID.
 - Use a visible heading, typically an `<h2>`, above the row.
 - Use list semantics for the row: `ul` with `li` items.
-- Each item must be a single link `<a>` that contains:
-  - the product image
-  - a title (visible)
-  - metadata (visible; e.g., price)
-- Each item must expose position information (e.g., “3 of 18”) via an offscreen element included in the link’s accessible name.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each item and button.
+- Each item must comprise a single focus stop: in other words, consist of a single link `<a>` that contains:
+  - A visual element (image, poster, thumbnail, or media preview).
+  - A visible title that identifies the item.
+  - Optional visible metadata (e.g., price, episode number, rating).
 - Each item link must have an accessible name composed of:
-  - title + metadata via `aria-labelledby`
-- Each item link must include position context as supplemental information:
-  - an offscreen “X of Y” element referenced via `aria-describedby`
-  - the “X of Y” string must reflect the item’s position in the full set, not just the current visible set of items
+  - title + metadata (optional) via `aria-labelledby`
+- Each item link should expose position context (e.g., “3 of 18”) as supplemental information:
+  - Provide an offscreen “X of Y” element.
+  - Reference it via `aria-describedby`.
+  - The position must reflect the item’s index within the full set, not just the currently visible subset.
 - Provide paging controls:
   - Next button on the right edge of the row container (vertically centered)
   - Previous button on the left edge when not on the first page
 - Paging focus behavior:
-  - Activating Next moves focus to the first newly revealed item (left-most visible link)
+  - Activating Next moves focus to the first newly revealed item (left-most visible link).
+    - For example, if items 1 through 6 are visible, and the user activates the Next button, then items 7 through 12 become visible, and focus moves to item 7.
   - Activating Previous moves focus to the last newly revealed item (right-most visible link)
+ 
+## Customizable
+- In the golden pattern, we wrap the component in a container with `role="group"` and `aria-labelledby` pointing to the heading ID. This is optional. Engineers may choose instead to use a `<section>` or `role="region"`, or to eschew the container entirely.
+- Items must at minimum have some "title" text that gives each item a name, but they are not required to also have metadata, like a price, or rating, etc.
 
 ## Don’ts
-- Don’t auto-scroll/paginate when the user Tabs from the last visible item.
-- Don’t use `role="tablist"` / `role="tab"` for item navigation in this pattern.
-- Don’t add roving tabindex or require arrow-key navigation between items.
+- When a user's focus is on the last visible item, and they press Tab, focus should move to a 'Next' button, not to the next item in the collection row.
 - Don’t split the item into multiple separate interactive elements (one item = one link).
-- Don’t include “X of Y” in both the accessible name and description (avoid duplicate announcements).
+- Do not rely solely on poster art or imagery to communicate the name of each item.
 
 ## Golden Pattern
 ```js
