@@ -39,6 +39,7 @@ summary: Interactive channel guide grid with one Tab stop and arrow-key navigati
   - Channel column (row header) opens “channel details”.
   - “Now” column activates tune (no-op if already selected).
   - Future columns open “program details” (demo can use a modal).
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each focusable element, such as grid cells and grid headers.
 
 ## Don’ts
 - Don’t make every cell a Tab stop.
