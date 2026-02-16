@@ -391,16 +391,17 @@ const DEFAULT_ITEMS = [
 
 ## Acceptance Checks
 - Structure:
-  - The heading is an `<h2>` and is referenced by the container `aria-labelledby`.
-  - The row uses `ul`/`li`.
-  - Each list item contains one link wrapping image + title + metadata.
+  - A visible heading is present.
+  - The row uses `ul` / `li` semantics.
+  - Each item is a single link wrapping its content.
 - Accessible naming:
-  - Link name includes title and metadata (e.g., “Superflo Water Bottle $24.95”).
-  - Link description includes “X of Y” announced once (e.g., “1 of 18”).
+  - Each link exposes a programmatic name that includes the visible title.
+  - If metadata is present, it contributes to the accessible name.
+  - Each link exposes position context (e.g., “3 of 18”) once via `aria-describedby`.
 - Keyboard:
-  - Tab order reaches Previous/Next buttons without forcing navigation through hidden items.
-  - Next button activates and focus lands on the first newly visible item.
-  - Previous button activates and focus lands on the last newly visible item.
-  - No automatic paging occurs from Tab alone.
-- Screen reader:
-  - When moving pages, users can orient quickly because the focused link announces its “X of Y” via `aria-describedby`.
+  - Tab order reaches Previous and Next buttons without forcing navigation through hidden items.
+  - Activating Next moves focus to the first newly visible item.
+  - Activating Previous moves focus to the last newly visible item.
+  - Tabbing from the last visible item moves to the Next button (not to hidden items).
+- Visual focus:
+  - All interactive elements (item links and paging buttons) have a visible focus indicator.
