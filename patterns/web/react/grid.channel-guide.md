@@ -3,7 +3,7 @@ id: grid.channel-guide
 stack: web/react
 status: beta
 tags: [grid, channel-guide, epg, schedule, roving-tabindex, keyboard]
-aliases: [epg, electronic-program-guide, tv-guide, live-guide, schedule-grid]
+aliases: [epg, electronic program guide, tv guide, live guide, schedule grid]
 summary: Interactive channel guide grid with one Tab stop and arrow-key navigation across channels and time slots.
 ---
 
