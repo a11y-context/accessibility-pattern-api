@@ -15,6 +15,7 @@ summary: Native button that triggers an action. Supports text-only, icon+text, a
 ## Do Not Use When
 - Do not use when the control navigates to a new URL (use `link`).
 - Do not use when the control represents an on/off pressed state (use `button.toggle`).
+- Do not use when the control opens a menu (use `menu.button`).
 
 ## Must Haves
 - Use a native `<button>` element for built-in semantics and keyboard behavior. 
