@@ -27,6 +27,7 @@ summary: User-initiated blocking dialog that traps focus, inerts background cont
 - Focus returns to the invoking element when the dialog closes.
 - Escape closes the dialog.
 - Background application content is not focusable or interactive while the dialog is open.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each button or focusable element.
 
 ## Don’ts
 - Do not rely on the native `<dialog>` element for consistent cross-browser modal behavior in portal-based applications.
