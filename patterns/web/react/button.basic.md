@@ -40,125 +40,35 @@ summary: Native button that triggers an action. Supports text-only, icon+text, a
 ```jsx
 import * as React from "react";
 
-export function ButtonBasic({
-  children,
-  onClick,
-  disabled = false,
-  ariaLabel,
-  leadingIcon,
-  trailingIcon,
-  style,
-  ...rest
-}) {
-  const isIconOnly = children == null || (typeof children === "string" && children.trim() === "");
-
-  if (isIconOnly && !ariaLabel) {
-    // Keep this guard minimal and explicit: icon-only buttons must be labeled.
-    throw new Error("ButtonBasic: icon-only buttons require ariaLabel.");
-  }
-
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      onClick={onClick}
-      aria-label={isIconOnly ? ariaLabel : undefined}
-      style={{ ...baseButtonStyle, ...style }}
-      {...rest}
-    >
-      {leadingIcon ? <span aria-hidden="true" style={iconWrapStyle}>{leadingIcon}</span> : null}
-      {children ? <span style={labelStyle}>{children}</span> : null}
-      {trailingIcon ? <span aria-hidden="true" style={iconWrapStyle}>{trailingIcon}</span> : null}
-    </button>
-  );
-}
-
-/** Demo: text-only, icon+text, icon-only */
 export function ButtonBasicDemo() {
   return (
-    <div style={{ display: "flex", gap: 12, flexWrap: "wrap", padding: 16 }}>
-      <ButtonBasic onClick={() => alert("Saved")}>Save</ButtonBasic>
+    <div>
+      {/* Text-only */}
+      <button type="button" onClick={() => alert("Saved")}>
+        Save
+      </button>
 
-      <ButtonBasic
-        onClick={() => alert("Downloaded")}
-        leadingIcon={<DownloadIcon />}
-      >
-        Download
-      </ButtonBasic>
+      {/* Icon + text */}
+      <button type="button" onClick={() => alert("Downloaded")}>
+        <span aria-hidden="true">[icon]</span> Download
+      </button>
 
-      <ButtonBasic
+      {/* Icon-only (must have accessible name) */}
+      <button
+        type="button"
+        aria-label="Open settings"
         onClick={() => alert("Settings")}
-        ariaLabel="Open settings"
-        leadingIcon={<SettingsIcon />}
-        style={{ paddingInline: 12 }}
-      />
-      
-      <ButtonBasic disabled onClick={() => alert("Won't fire")}>
+      >
+        <span aria-hidden="true">[icon]</span>
+      </button>
+
+      {/* Disabled */}
+      <button type="button" disabled onClick={() => alert("Won't fire")}>
         Disabled
-      </ButtonBasic>
+      </button>
     </div>
   );
 }
-
-function DownloadIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
-      <path
-        d="M12 3v10m0 0 4-4m-4 4-4-4M5 21h14"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function SettingsIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
-      <path
-        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M19.4 15a7.9 7.9 0 0 0 .1-2l2-1.1-2-3.4-2.3.7a7.4 7.4 0 0 0-1.7-1l-.3-2.4H9.1l-.3 2.4a7.4 7.4 0 0 0-1.7 1l-2.3-.7-2 3.4 2 1.1a7.9 7.9 0 0 0 .1 2l-2 1.1 2 3.4 2.3-.7a7.4 7.4 0 0 0 1.7 1l.3 2.4h5.8l.3-2.4a7.4 7.4 0 0 0 1.7-1l2.3.7 2-3.4-2-1.1Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-const baseButtonStyle = {
-  appearance: "none",
-  border: "1px solid rgba(0,0,0,0.2)",
-  borderRadius: 10,
-  background: "#111",
-  color: "#fff",
-  padding: "10px 14px",
-  fontSize: 14,
-  fontWeight: 600,
-  lineHeight: 1.1,
-  cursor: "pointer",
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 8,
-};
-
-const iconWrapStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-};
-
-const labelStyle = {
-  display: "inline-block",
-};
 ```
 
 ## Acceptance Checks
