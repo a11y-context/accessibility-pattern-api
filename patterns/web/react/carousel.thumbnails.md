@@ -23,6 +23,7 @@ summary: Horizontally-advancing carousel (aka hero or marquee carousel) with thu
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
 - Ensure the carousel container has a semantic HTML5 element or role, such as `<section>` or `role="region"`.
 - Each slide must have `role="group"`, `aria-roledescription="slide"` and an `aria-label` like “1 of N”.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each focusable element, including the previous/next buttons, pause button, and dots.
 - Provide Previous/Next buttons as real `<button>` elements, with `aria-label` like "Previous Slide" and "Next Slide".
 - Provide thumbnail navigation as real `<button>` elements in normal tab order (no roving tabindex), with `aria-label` like "Go to slide 2: {title of slide 2}", and with `aria-current="true"` on the button corresponding to the active slide.
 - Provide a Pause/Play button as the first focusable element inside the carousel container.
