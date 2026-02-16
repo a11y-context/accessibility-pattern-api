@@ -2,32 +2,54 @@
 id: dialog.modal
 stack: web/react
 status: beta
-aliases: [dialog, modal]
-tags: [dialog, modal, overlay, focus-trap, blocking]
+tags: [dialog, modal, pop-up, overlay, focus-trap, blocking]
+aliases: [dialog, modal, pop-up]
 summary: User-initiated blocking dialog that traps focus, inerts background content, and restores focus on close.
 ---
 
-# <Pattern Title>
+# Dialog (Modal)
 
 ## Use When
-- When interaction outside the container must be blocked until dismissal.
-- When the user must complete or explicitly dismiss a task before continuing.
-- When returning to the same page context after dismissal matters.
+- Use when the user must complete or dismiss something before continuing.
+- Use when background content should not be interactive.
+- Use for short, focused tasks (e.g., confirmation, small form, critical setting).
 
 ## Do Not Use When
-- When the content requires long-form reading or editing (prefer a dedicated page).
-- When side-by-side comparison with page content is required.
-- When critical alerts require immediate announcement and stricter semantics (use `dialog.alert`).
+- Do not use for long content or complex, multi-step flows.
+- Do not use when the content requires long-form reading or editing (prefer a dedicated page).
+- Do not use when the message does not block progress, and is intended as a simple user notification (use `toast` or `snackbar`).
+- When the message must interrupt the user and require acknowledgment (use `dialog.alert`).
 
 ## Must Haves
-- The dialog container has `role="dialog"` and `aria-modal="true"`.
-- The dialog has an accessible name via `aria-labelledby` or `aria-label`.
-- Focus moves to the dialog when it opens.
-- Focus is trapped within the dialog while open.
-- Focus returns to the invoking element when the dialog closes.
-- Escape closes the dialog.
-- Background application content is not focusable or interactive while the dialog is open.
-- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each button or focusable element.
+- Render an overlay/backdrop that is not exposed as a separate landmark:
+  - Backdrop uses `role="presentation"` (or equivalent non-semantic container).
+  - Clicking the backdrop (outside the dialog surface) closes the dialog.
+  - Clicking inside the dialog must not close the dialog.
+- Dialog semantics:
+  - Dialog surface has `role="dialog"` (or native `<dialog>` with equivalent semantics).
+  - Dialog surface sets `aria-modal="true"`.
+  - Dialog surface is focusable for entry (`tabIndex={-1}` or equivalent) and receives initial focus on open.
+- Accessible naming (required):
+  - Dialog has an accessible name via `aria-labelledby` (preferred) or `aria-label`.
+  - If `aria-labelledby` is used, it must reference a visible title element (e.g., `<h2 id="...">`).
+- Accessible description (recommended when present):
+  - If a description is rendered, it should be referenced by `aria-describedby` (do not rely on incidental reading order).
+- Focus management:
+  - Capture the invoking element on open.
+  - Move focus into the dialog on open.
+  - Trap keyboard focus within the dialog while open.
+  - Restore focus to the invoking element on close.
+- Dismiss behavior:
+  - Escape closes the dialog.
+  - Provide a visible close control (`<button type="button">`) with an accessible name (e.g., `aria-label="Close dialog"`).
+- Background isolation:
+  - Background application content **must not** be focusable or reachable by keyboard or screen readers while the dialog is open.
+  - Enforce via `inert` on the app root (preferred when available) or an equivalent approach.
+- Visible focus:
+  - All focusable elements inside the dialog must have a clearly visible focus indicator.
+
+## Customizable
+- The `<dialog>` element does not have perfect browser support yet. For this reason, we still recommend using `role="dialog"` and `aria-modal="true"`. The engineer may use `<dialog>`, but if they do, they must still include `aria-modal="true"`.
 
 ## Don’ts
 - Do not rely on the native `<dialog>` element for consistent cross-browser modal behavior in portal-based applications.
@@ -196,9 +218,23 @@ export function ModalDialog({
 ```
 
 ## Acceptance Checks
-- Open dialog via keyboard → focus moves inside dialog.
-- Press Tab repeatedly → focus does not leave the dialog.
-- Press Shift+Tab on first focusable → focus moves to last.
-- Press Escape → dialog closes.
-- After close → focus returns to the triggering element.
-- With screen reader enabled → dialog role and title are announced.
+- On open:
+  - Focus moves to the dialog.
+  - Dialog is announced with its accessible name.
+  - Background content is not reachable by keyboard or screen reader.
+
+- While open:
+  - Tab and Shift+Tab remain within the dialog.
+  - Escape closes the dialog.
+  - Clicking the backdrop closes the dialog.
+  - Clicking inside the dialog does not close it.
+  - Focus indicators are visible on all interactive elements.
+
+- On close:
+  - Focus returns to the invoking element.
+  - Background content becomes interactive again.
+
+- Semantics:
+  - Dialog has `role="dialog"` and `aria-modal="true"`.
+  - Dialog has an accessible name.
+  - Close button has an accessible name.
