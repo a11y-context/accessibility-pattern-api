@@ -375,9 +375,18 @@ const DEFAULT_ITEMS = [
 ```
 
 ## Acceptance Checks
-- The carousel container has a semantic role and appropriate accessible name.
-- Tab into the carousel: autoplay pauses immediately.
-- With `prefers-reduced-motion: reduce`, autoplay is paused by default.
-- Previous/Next buttons are reachable by Tab and change slides on activation.
-- Each dot is reachable by Tab and activates its slide on activation.
-- Each slide container has `role="group"`, `aria-roledescription="slide"`, and an `aria-label`, like "1 of N"
+- Semantics:
+  - The carousel container has `aria-roledescription="carousel"` and an accessible name.
+  - Each slide has `aria-roledescription="slide"` and exposes position (e.g., “2 of 3”).
+- Autoplay:
+  - With `prefers-reduced-motion: reduce`, autoplay is paused by default.
+  - Tabbing into the carousel pauses autoplay.
+  - Autoplay does not run while paused.
+- Controls (keyboard):
+  - Previous and Next buttons are reachable via Tab and move one slide per activation.
+  - Each dot is reachable via Tab and activates its corresponding slide.
+  - The active dot exposes state (e.g., `aria-current="true"`).
+- Content:
+  - Each slide includes a visible title (`<h2>`), a short description, and one primary CTA link.
+- Screen reader:
+  - When changing slides while paused, the carousel name and slide position are announced without duplicate announcements.
