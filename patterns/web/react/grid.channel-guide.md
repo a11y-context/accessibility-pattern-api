@@ -10,14 +10,12 @@ summary: Interactive channel guide grid with one Tab stop and arrow-key navigati
 # Channel Guide Grid
 
 ## Use When
+- Use for streaming video applications when presenting linear TV listings.
 - Use when presenting a 2D schedule where rows are channels and columns are time slots (current + future).
-- Use when keyboard navigation must be efficient: one Tab into the guide, arrow keys within it, one Tab out.
-- Use when activation behavior is column-based (e.g., “Now” tunes, “Future” opens details).
 
 ## Do Not Use When
-- Do not use for general data tables where standard Tab navigation is expected (use a table/list).
+- Do not use for general data tables where standard Tab navigation is expected (use `table` or `list`).
 - Do not use for spreadsheet-like editing, multi-cell selection, resizing, sorting, or reordering (use a data grid/spreadsheet pattern).
-- Do not use if you cannot implement roving focus and arrow-key navigation reliably.
 
 ## Must Haves
 - Use `role="grid"` with an accessible name (e.g., `aria-label="Channel guide"`).
@@ -25,27 +23,37 @@ summary: Interactive channel guide grid with one Tab stop and arrow-key navigati
 - Use `role="columnheader"` for the time header cells (typically static).
 - Use `role="rowheader"` for the channel name/logo column (may be interactive).
 - Use `role="gridcell"` for program listing cells (interactive).
+- Grid structural roles (`gridcell`, `rowheader`, `columnheader`) must be applied to container elements.
+  - Interactive controls (e.g., `<button>`, `<a>`) must be nested inside those containers.
+- The grid must expose its dimensions:
+  - Set `aria-rowcount` to the total number of rows in the grid.
+  - Set `aria-colcount` to the total number of columns in the grid (including the channel column).
 - Keyboard model:
   - The grid must be a single Tab stop.
   - Only one cell is tabbable at a time (roving `tabIndex`: active cell `0`, all others `-1`).
   - Arrow keys move focus within the grid (Left/Right/Up/Down).
   - Tab/Shift+Tab exits the grid to the next/previous focusable element outside.
+- Pointer + keyboard continuity:
+  - Clicking a cell updates the roving “current cell” so Arrow-key navigation continues from that cell.
 - Persist and restore “last focused cell”:
   - When focus leaves and re-enters the grid, focus lands on the last focused cell.
-- Support a “currently playing” channel:
-  - Exactly one channel row is marked as selected (separate from focus).
-  - Selecting/tuning changes the selected row, but focus stays with the user’s navigation.
 - Activation model:
   - Channel column (row header) opens “channel details”.
   - “Now” column activates tune (no-op if already selected).
   - Future columns open “program details” (demo can use a modal).
 - Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) on each focusable element, such as grid cells and grid headers.
 
+## Customizable
+- Support a “currently playing” channel:
+  - Exactly one channel row is marked as selected (separate from focus).
+  - Selecting/tuning changes the selected row, but focus stays with the user’s navigation.
+
 ## Don’ts
 - Don’t make every cell a Tab stop.
 - Don’t require Tab to move between cells.
 - Don’t mix multiple interactive controls inside a cell in this basic pattern.
 - Don’t conflate “selected channel” with “focused cell”.
+- Do not use `<button role="gridcell">` or `<button role="columnheader">`.
 
 ## Golden Pattern
 ```js
@@ -395,11 +403,21 @@ const DEMO_CHANNELS = [
 ```
 
 ## Acceptance Checks
-- Tab lands on exactly one cell in the grid (the last-focused cell).
-- Arrow keys move between cells without requiring Tab.
-- Tab exits the grid to the next focusable element outside.
-- The channel column is a row header and is interactive.
-- The time row is column headers and is non-interactive.
-- Exactly one row is marked as selected (currently playing channel).
-- Activating a “Now” cell tunes the channel; activating it on the selected row is a no-op.
-- Activating a future cell opens details; activating a channel cell opens channel details.
+- Entry/exit:
+  - Tab enters the grid to the last-focused cell.
+  - Tab/Shift+Tab exits the grid to the next/previous focusable element outside.
+- Keyboard navigation:
+  - Arrow keys move focus between cells (Left/Right/Up/Down).
+  - Home moves to the channel column for the current row.
+  - End moves to the last time column for the current row.
+  - Only the active cell is tabbable (`tabIndex=0`); all others are not (`tabIndex=-1`).
+- Semantics:
+  - Grid container uses `role="grid"` and has an accessible name.
+  - Time headers use `role="columnheader"` and are not focusable.
+  - Channel cells are row headers and are interactive.
+  - Program cells use `role="gridcell"` and are interactive.
+- State:
+  - Exactly one channel row is marked as selected (currently playing), distinct from focus.
+  - Selecting/tuning updates the selected row without forcibly moving focus.
+- Pointer + keyboard continuity:
+  - Clicking a cell updates the roving “current cell” so arrow-key navigation continues from that cell.
