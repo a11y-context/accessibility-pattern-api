@@ -4,13 +4,13 @@ stack: web/react
 status: beta
 tags: [button, toggle, pressed, aria-pressed, mute-button]
 aliases: [toggle button, pressed button]
-summary: Two-state button that toggles between pressed and not pressed using aria-pressed. Label remains stable across states.
+summary: Two- or three-state button that toggles between pressed and not pressed using aria-pressed.
 ---
 
 # Toggle Button
 
 ## Use When
-- Use when a control toggles a feature or action within the current context (e.g., “Mute”, “Bold”, “Pin”).
+- Use when a control toggles a feature or action within the current context (e.g., “Mute”, “Bold”, “Pin”, "Enable Closed Captioning").
 
 ## Do Not Use When
 - Do not use when the control navigates to a new URL (use `link`).
