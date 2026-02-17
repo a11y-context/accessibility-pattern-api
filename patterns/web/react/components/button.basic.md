@@ -18,7 +18,8 @@ summary: Native button that triggers an action. Supports text-only, icon+text, a
 - Do not use when the control opens a menu (use `menu.button`).
 
 ## Must Haves
-- Use a native `<button>` element for built-in semantics and keyboard behavior. 
+- Use a native `<button>` element for built-in semantics and keyboard behavior.
+  - If `role="button"` must be used instead of the native element, then ensure it is also equipped with `tabindex="0"` and key handling for Enter key (not Space).
 - Ensure the button has an accessible name that clearly describes its purpose or action.
 - For buttons with visible text, the button's inner text may serve as the accessible name. Additional context may be added for screen reader users with `aria-label` or `aria-labelledby`, or offscreen text, when needed.
 - If the accessible name extends beyond the visible text, ensure the visible text appears at the beginning of the accessible name.
