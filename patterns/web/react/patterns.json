@@ -1,11 +1,32 @@
 {
   "stack": "web/react",
+  "schema_version": "1.0.0",
+  "catalog_revision": "rev_2026-02-17T18:00:00Z",
+  "generated_at": "2026-02-17T18:00:00Z",
+  "cache_ttl_seconds": 3600,
+
   "patterns": [
     {
       "id": "dialog.modal",
       "title": "Modal Dialog",
-      "tags": ["dialog", "modal"],
-      "status": "stable"
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "User-initiated blocking dialog that traps focus, inerts background content, and restores focus on close.",
+      "aliases": ["modal dialog", "modal", "popup dialog", "dialog"],
+
+      "tags": ["dialog", "modal", "overlay", "focus-trap", "blocking"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/dialog.modal.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
     }
   ]
 }
