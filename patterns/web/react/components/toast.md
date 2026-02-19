@@ -50,14 +50,7 @@ summary: Temporary, non-blocking status message announced via live region. May i
 
 ---
 
-# Golden Pattern (Minimal React)
-
-This pattern:
-
-- Keeps the live region mounted at all times.
-- Injects message text when active.
-- Automatically clears after 5 seconds.
-- Does not steal focus.
+# Golden Pattern
 
 ```jsx
 "use client";
