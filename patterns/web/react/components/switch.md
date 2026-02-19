@@ -53,7 +53,7 @@ summary: Two-state on/off control representing a persistent setting. Uses role="
 - Don’t use both `checked` and `aria-checked` on `input[type="checkbox"]`.
 - Do not use a switch to trigger actions; use it only for persistent on/off settings.
 
-## Golden Pattern (Minimal React)
+## Golden Pattern
 
 ```jsx
 "use client";
