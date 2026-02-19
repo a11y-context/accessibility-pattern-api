@@ -7,23 +7,232 @@
 
   "patterns": [
     {
+      "id": "accordion.basic",
+      "title": "Accordion",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "A set of show/hide sections with heading-wrapped buttons controlling associated panels via aria-expanded (and optionally aria-controls / region).",
+      "aliases": ["accordion", "disclosure group", "expand collapse", "collapsible panels"],
+      "tags": ["accordion", "disclosure", "show-hide"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/accordion.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "button.basic",
+      "title": "Basic Button",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Native button that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns.",
+      "aliases": ["btn", "primary button", "icon button", "call to action", "cta"],
+      "tags": ["button", "control", "action", "icon-button"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/button.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "carousel.dots",
+      "title": "Carousel with Dot Navigation",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Horizontally-advancing carousel (aka hero or marquee carousel) with 'dot' navigation, prev/next buttons, and pause behavior.",
+      "aliases": ["hero carousel", "marquee", "featured gallery", "hero gallery", "slider"],
+      "tags": ["marquee", "carousel", "slider", "dots", "autoplay", "reduced-motion"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/carousel.dots.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "carousel.thumbnails",
+      "title": "Carousel with Thumbnail Navigation",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Horizontally-advancing carousel (aka hero or marquee carousel) with thumbnail navigation, prev/next buttons, and pause behavior.",
+      "aliases": ["hero carousel thumbnails", "marquee thumbnails", "featured gallery thumbnails", "hero gallery thumbnails", "preview carousel"],
+      "tags": ["marquee", "carousel", "slider", "thumbnails", "autoplay", "reduced-motion", "image-preview"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/carousel.thumbnails.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "grid.channel-guide",
+      "title": "Channel Guide Grid",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Interactive channel guide grid with one Tab stop and arrow-key navigation across channels and time slots.",
+      "aliases": ["epg", "electronic program guide", "tv guide", "live guide", "schedule grid"],
+      "tags": ["grid", "channel-guide", "epg", "schedule", "roving-tabindex", "keyboard"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/grid.channel-guide.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "collection-row.basic",
+      "title": "Collection Row",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Horizontal product shelf with a heading, list semantics, and Prev/Next paging that moves focus to newly revealed items.",
+      "aliases": ["content row", "content rail", "rail", "strip", "shelf", "multi item carousel", "product row"],
+      "tags": ["collection-row", "shelf", "rail", "horizontal-list", "ecommerce", "navigation"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/collection-row.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "dialog.modal",
-      "title": "Modal Dialog",
+      "title": "Dialog (Modal)",
       "pattern_type": "component",
 
       "status": "beta",
       "latest_version": "0.1.0",
 
       "summary": "User-initiated blocking dialog that traps focus, inerts background content, and restores focus on close.",
-      "aliases": ["modal dialog", "modal", "popup dialog", "dialog"],
-
-      "tags": ["dialog", "modal", "overlay", "focus-trap", "blocking"],
+      "aliases": ["dialog", "modal", "pop-up"],
+      "tags": ["dialog", "modal", "pop-up", "overlay", "focus-trap", "blocking"],
 
       "variants": [],
       "default_variant": null,
 
       "source": {
         "path": "components/dialog.modal.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "link.basic",
+      "title": "Link",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Native link for navigation using <a href>. Supports optional context in the accessible name, including “opens in new tab/window/dialog”.",
+      "aliases": ["anchor", "hyperlink", "external link"],
+      "tags": ["link", "anchor", "navigation", "external-link"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/link.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "switch.basic",
+      "title": "Switch",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Two-state on/off control representing a persistent setting. Uses role=\"switch\" with aria-checked, or native checkbox semantics when applicable.",
+      "aliases": ["toggle switch", "preference toggle"],
+      "tags": ["switch", "settings", "on-off", "form-control", "toggle"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/switch.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "toast.basic",
+      "title": "Toast",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Temporary, non-blocking status message announced via live region. May include optional dismiss control. Disappears automatically.",
+      "aliases": ["notification", "toast", "transient message", "status message"],
+      "tags": ["toast", "notification", "status", "live-region"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/toast.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "button.toggle",
+      "title": "Toggle Button",
+      "pattern_type": "component",
+
+      "status": "beta",
+      "latest_version": "0.1.0",
+
+      "summary": "Two- or three-state button that toggles between pressed and not pressed using aria-pressed.",
+      "aliases": ["toggle button", "pressed button"],
+      "tags": ["button", "toggle", "pressed", "aria-pressed", "mute-button"],
+
+      "variants": [],
+      "default_variant": null,
+
+      "source": {
+        "path": "components/button.toggle.md",
         "format": "markdown",
         "frontmatter": true
       }
