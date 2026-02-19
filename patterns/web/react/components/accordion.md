@@ -42,7 +42,7 @@ summary: A set of show/hide sections with heading-wrapped buttons controlling as
 - Don’t use `role="heading"` without an `aria-level`.
 - Don't nest accordions within accordion panels.
 
-## Golden Pattern (Minimal React)
+## Golden Pattern
 ```jsx
 "use client";
 
