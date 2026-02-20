@@ -46,7 +46,7 @@ summary: Temporary, non-blocking status message announced via live region. May i
 
 ## Golden Pattern
 
-```js
+```jsx
 "use client";
 
 import * as React from "react";
@@ -92,8 +92,6 @@ export function ToastDemo() {
   );
 }
 ```
-
----
 
 ## Acceptance Checks
 
