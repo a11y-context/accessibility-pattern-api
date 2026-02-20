@@ -46,7 +46,7 @@ summary: Temporary, non-blocking status message announced via live region. May i
 
 ## Golden Pattern
 
-```jsx
+```js
 "use client";
 
 import * as React from "react";
