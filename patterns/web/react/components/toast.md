@@ -37,7 +37,7 @@ summary: Temporary, non-blocking status message announced via live region. May i
 - Whether a dismiss button is included.
 - Styling (color, elevation, animation).
 
-## Don’ts
+## Donts
 
 - Don’t mount/unmount the live region container based on toast visibility.
 - Do not move focus into the toast when it appears.
