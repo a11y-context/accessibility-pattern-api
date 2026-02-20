@@ -10,15 +10,15 @@ summary: Temporary, non-blocking status message announced via live region. May i
 # Toast
 
 ## Use When
+
 - Use when presenting a temporary, non-blocking status message.
 - Use when the message confirms an action (e.g., “Saved”, “Added to watchlist”).
 - Use when the message is text-only and contains no required actions, except for (at most) a dismiss button.
 
 ## Do Not Use When
+
 - Do not use when user action is required (use `dialog` or `snackbar`).
 - Do not use for critical time-sensitive alerts requiring interruption (consider `alert`).
-
----
 
 ## Must Haves
 
@@ -30,16 +30,12 @@ summary: Temporary, non-blocking status message announced via live region. May i
 - The live region text must be cleared when the toast dismisses to avoid stale messages being discovered later.
 - If a dismiss button is present, it must not steal focus when the toast appears.
 
----
-
 ## Customizable
 
 - Visual placement (top-right, bottom-center, etc.).
 - Duration (within reasonable non-disruptive bounds).
 - Whether a dismiss button is included.
 - Styling (color, elevation, animation).
-
----
 
 ## Don’ts
 
@@ -48,9 +44,7 @@ summary: Temporary, non-blocking status message announced via live region. May i
 - Do not use `role="alertdialog"`.
 - The toast must not contain buttons or elements that require user action (use `snackbar` or `dialog` instead).
 
----
-
-# Golden Pattern
+## Golden Pattern
 
 ```jsx
 "use client";
@@ -101,7 +95,7 @@ export function ToastDemo() {
 
 ---
 
-# Acceptance Checks
+## Acceptance Checks
 
 - Keyboard
   - Trigger a toast via keyboard.
