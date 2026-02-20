@@ -1,5 +1,5 @@
 ---
-id: accordion
+id: accordion.basic
 stack: web/react
 status: beta
 tags: [accordion, disclosure, show-hide]
