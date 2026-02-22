@@ -10,15 +10,14 @@ summary: Two-state on/off control representing a persistent setting. Uses role="
 # Switch
 
 ## Use When
-- Use when a control represents a persistent on/off system or application setting (e.g., “Enable notifications”, “Dark mode”, “Autoplay”).
-- Use when the state applies beyond the current moment or page context (i.e., usually in Settings or Preferences pages).
-- Use when the setting takes effect immediately, as soon as it is toggled.
+- Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., “Enable notifications”, “Dark mode”).
+- Use when the setting takes effect immediately when toggled, without requiring form submission.
+- Use when the control reflects the current state of a system or application preference.
 
 ## Do Not Use When
-- Do not use for transient, in-context feature toggles, such as “Mute”, “Pin”, or formatting controls (use `button.toggle`).
-- Do not use when there are 3 possible states (use `button.toggle`).
-- Do not use when selecting one or more options from a list of choices (use `checkbox`).
-- Do not use when the setting or selection does not take effect until a form is submitted (use `checkbox`).
+- Do not use when the control triggers an in-place action or transient feature toggle within the current context (use `button.toggle`).
+- Do not use when selecting one or more options from a group of related choices (use `checkbox`).
+- Do not use when more than two states are required (use `button.toggle`).
 
 ## Must Haves
 - The switch has `role="switch"`.
