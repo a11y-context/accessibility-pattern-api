@@ -16,9 +16,9 @@ summary: Temporary, non-blocking status message announced via live region. May i
 - Use when the message is text-only and contains no required actions, except for (at most) a dismiss button.
 
 ## Do Not Use When
-
-- Do not use when user action is required (use `dialog` or `snackbar`).
-- Do not use for critical time-sensitive alerts requiring interruption (consider `alert`).
+- Do not use when the message requires user acknowledgment, moves keyboard focus, or blocks background interaction (use `dialog`).
+- Do not use when the message is urgent or must interrupt the user immediately (use `dialog.alert`).
+- Do not use when the message includes required actions or interactive controls beyond simple dismissal (use `snackbar`).
 
 ## Must Haves
 
