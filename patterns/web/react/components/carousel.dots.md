@@ -10,14 +10,12 @@ summary: Horizontally-advancing carousel (aka hero or marquee carousel) with 'do
 # Carousel with Dot Navigation
 
 ## Use When
-- When slide count is small and exact slide selection is not critical.
-- When thumbnails are not included for navigation between slides.
-- When visual preview of other slides is unnecessary.
-- "Dot" may be mentioned.
+- Use when slides are navigated sequentially using next/previous controls or dot indicators.
+- Use when dot buttons indicate slide position but do not display image previews.
 
 ## Do Not Use When
-- Multiple items are visible at once (use `content-shelf`).
-- Thumbnail images are used for direct slide selection (use `carousel.thumbnails`).
+- Do not use when thumbnail images are shown for direct slide selection (use `carousel.thumbnails`).
+- Do not use when multiple slides are visible at once in a horizontal list (use `content-shelf`).
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
