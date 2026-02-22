@@ -10,12 +10,14 @@ summary: Horizontal product shelf with a heading, list semantics, and Prev/Next 
 # Collection Row
 
 ## Use When
-- Use when presenting a category of related items in a single horizontal strip. The row itself has a category heading (e.g., “Customers Also Viewed”, “Action Movies”, “Related Products”).
-- Use when each item in the row includes a visual element (image, poster, thumbnail, or other media) along with brief text metadata.
+- Use when displaying multiple related items in a horizontally scrollable row under a shared category heading (e.g., e.g., “Customers Also Viewed”, “Action Movies”).
+- Use when multiple items are visible simultaneously and can be scrolled left or right.
+- Use when each item is a compact card with a primary visual element and brief supporting text.
 
 ## Do Not Use When
-- Do not use when only one item should be visible at a time (use `carousel`).
-- Do not use when items require multiple interactive controls per card (use a different “card grid” pattern).
+- Do not use when only one item is visible at a time within a rotatable sequence (use `carousel`).
+- Do not use when items are arranged in a multi-row or multi-column layout (use `grid`).
+- Do not use when items are presented as a simple vertical list without horizontal scrolling (use `list`).
 
 ## Must Haves
 - Use a visible heading, typically an `<h2>`, above the row.
