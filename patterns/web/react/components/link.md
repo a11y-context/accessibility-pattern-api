@@ -10,11 +10,12 @@ summary: Native link for navigation using <a href>. Supports optional context in
 # Link
 
 ## Use When
-- Use when activating the control navigates to a destination (URL, route, or page section).
+- Use when activating the element navigates to a different URL, route, or in-page anchor.
+- Use when the primary purpose of the element is destination-based navigation rather than performing an action.
 
 ## Do Not Use When
-- Do not use when activating the control performs an action, such as “Save”, “Delete”, “Open dialog”, without navigation (use `button`).
-- Do not use `role="link"` on non-link elements unless you cannot use a native `<a href>`. Native links provide browser behaviors ARIA cannot add automatically. 
+- Do not use when activating the element performs an in-place action such as submitting, saving, deleting, toggling, or opening a dialog (use `button`).
+- Do not use when the element changes UI state without navigation (use `button`).
 
 ## Must Haves
 - Use a native `<a>` element with an `href` whenever possible.
@@ -40,7 +41,8 @@ summary: Native link for navigation using <a href>. Supports optional context in
 - Don’t style a link to look like plain text when it appears inline within a paragraph; inline links must be visually obvious (e.g., underlined).
 - Don’t rely on color alone to indicate a link.
 - Don’t use `<a>` without `href` for interactive behavior; it loses native link semantics and behaviors.
-- Don’t use `role="link"` unless you also implement the missing link behaviors (focus, Enter activation, navigation, and expected link affordances).
+- Do not use `role="link"` on non-link elements unless you cannot use a native `<a href>`. Native links provide browser behaviors ARIA cannot add automatically.
+  - Don’t use `role="link"` unless you also implement the missing link behaviors (focus, Enter activation, navigation, and expected link affordances).
 - Don’t permit Space to activate links.
 
 ## Golden Pattern
