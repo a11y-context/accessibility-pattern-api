@@ -10,14 +10,13 @@ summary: Horizontally-advancing carousel (aka hero or marquee carousel) with thu
 # Carousel with Thumbnail Navigation
 
 ## Use When
-- When the user may benefit from a visual preview of other slides, or when slide discovery is important.
-- When thumbnail images are included for navigation between slides (in addition to the background images for the slides themselves).
-- "Thumbnail" may be mentioned.
-- When explicit thumbnail navigation UI is requested.
+- Use when thumbnail images are displayed for direct slide selection.
+- Use when users can identify slide content from visible preview images before activating a slide.
+- Use when thumbnails act as explicit navigation controls for specific slides.
 
 ## Do Not Use When
-- Multiple items are visible at once (use `content-shelf`).
-- "Dot" navigation is mentioned, **and** there is no separate set of images to be used as thumbnail navigation (use `carousel.dots`).
+- Do not use when navigation is limited to dot indicators without image previews (use `carousel.dots`).
+- Do not use when multiple full-size items are visible simultaneously in a scrollable row (use `content-shelf`).
 
 ## Must Haves
 - Render a carousel container with `aria-roledescription="carousel"` and an accessible name (`aria-label`).
