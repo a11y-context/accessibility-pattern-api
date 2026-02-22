@@ -10,15 +10,15 @@ summary: User-initiated blocking dialog that traps focus, inerts background cont
 # Dialog (Modal)
 
 ## Use When
-- Use when the user must complete or dismiss something before continuing.
-- Use when background content should not be interactive.
-- Use for short, focused tasks (e.g., confirmation, small form, critical setting).
+- Use when content appears in an overlay that blocks interaction with the underlying page.
+- Use when keyboard focus must move into the dialog and remain contained until dismissal.
+- Use when the user must explicitly complete or dismiss the dialog before returning to the main interface.
 
 ## Do Not Use When
-- Do not use for long content or complex, multi-step flows.
-- Do not use when the content requires long-form reading or editing (prefer a dedicated page).
-- Do not use when the message does not block progress, and is intended as a simple user notification (use `toast` or `snackbar`).
-- When the message must interrupt the user and require acknowledgment (use `dialog.alert`).
+- Do not use when the content is part of the normal page flow and does not block background interaction.
+- Do not use when presenting brief, non-blocking status messages that do not require focus movement (use `toast` or `snackbar`).
+- Do not use when the message is urgent and requires immediate acknowledgment (use `dialog.alert`).
+- Do not use when the interaction involves complex, multi-step workflows spanning multiple screens.
 
 ## Must Haves
 - Render an overlay/backdrop that is not exposed as a separate landmark:
