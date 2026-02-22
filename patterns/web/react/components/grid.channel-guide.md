@@ -10,12 +10,14 @@ summary: Interactive channel guide grid with one Tab stop and arrow-key navigati
 # Channel Guide Grid
 
 ## Use When
-- Use for streaming video applications when presenting linear TV listings.
-- Use when presenting a 2D schedule where rows are channels and columns are time slots (current + future).
+- Use when content is arranged in a 2D matrix of channels (rows) and time slots (columns).
+- Use when program items span time horizontally and are positioned according to schedule duration.
+- Use when users navigate spatially across a time-based schedule using arrow keys.
 
 ## Do Not Use When
-- Do not use for general data tables where standard Tab navigation is expected (use `table` or `list`).
-- Do not use for spreadsheet-like editing, multi-cell selection, resizing, sorting, or reordering (use a data grid/spreadsheet pattern).
+- Do not use when presenting static tabular data with row/column headers (use `grid.data`).
+- Do not use when items are displayed as a simple vertical or horizontal list without time-based positioning (use `list`).
+- Do not use when supporting spreadsheet-style editing, multi-cell selection, sorting, or resizing (use `grid.interactive`).
 
 ## Must Haves
 - Use `role="grid"` with an accessible name (e.g., `aria-label="Channel guide"`).
