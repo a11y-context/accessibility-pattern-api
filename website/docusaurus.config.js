@@ -12,7 +12,8 @@ const config = {
   organizationName: 'jsweetdude',
   projectName: 'accessibility-pattern-api',
 
-  onBrokenLinks: 'warn',
+  // Fail the build on broken internal links so Vercel catches regressions before deploy.
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
   // Process .md files as standard CommonMark (not MDX) so that HTML tags
