@@ -1,5 +1,6 @@
 ---
 id: dialog.modal
+title: "Dialog (Modal)"
 stack: web/react
 status: beta
 tags: [dialog, modal, pop-up, overlay, focus-trap, blocking]

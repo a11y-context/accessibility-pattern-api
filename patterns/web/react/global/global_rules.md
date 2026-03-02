@@ -1,6 +1,8 @@
 ---
 
 id: "global_ruleset.baseline"
+title: "Foundations"
+slug: "/foundations"
 stack: "web/react"
 rule_set: "baseline"
 status: "beta"

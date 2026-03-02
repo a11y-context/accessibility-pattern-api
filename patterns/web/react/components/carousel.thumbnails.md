@@ -1,5 +1,6 @@
 ---
 id: carousel.thumbnails
+title: Carousel with Thumbnail Navigation
 stack: web/react
 status: beta
 tags: [marquee, carousel, slider, gallery, thumbnails, autoplay, reduced-motion, image-preview]

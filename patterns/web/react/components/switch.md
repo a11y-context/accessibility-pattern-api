@@ -1,5 +1,6 @@
 ---
 id: switch.basic
+title: Switch
 stack: web/react
 status: beta
 tags: [switch, settings, on-off, form-control, toggle]

@@ -1,5 +1,6 @@
 ---
 id: carousel.dots
+title: Carousel with Dot Navigation
 stack: web/react
 status: beta
 tags: [marquee, carousel, slider, gallery, dots, autoplay, reduced-motion]

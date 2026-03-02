@@ -1,5 +1,6 @@
 ---
 id: collection-row.basic
+title: Collection Row
 stack: web/react
 status: beta
 tags: [collection-row, shelf, rail, horizontal-list, ecommerce, navigation]
