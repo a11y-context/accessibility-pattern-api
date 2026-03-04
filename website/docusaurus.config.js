@@ -47,6 +47,20 @@ const config = {
   ],
 
   plugins: [
+    // ── Main (Installation + Operations) ──────────────────────────────────────
+    // routeBasePath: '/' serves docs at /installation/... and /operations/...
+    // Docs root: /docs at repo root (sibling of /patterns and /website).
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'main',
+        path: 'docs',
+        routeBasePath: '/',
+        sidebarPath: './sidebars-main.js',
+        breadcrumbs: true,
+      },
+    ],
+
     // ── React (Web) ───────────────────────────────────────────────────────────
     [
       '@docusaurus/plugin-content-docs',
@@ -105,6 +119,16 @@ const config = {
           srcDark: 'img/logo-dark.svg',
         },
         items: [
+          {
+            label: 'Installation',
+            to: '/installation/overview',
+            position: 'left',
+          },
+          {
+            label: 'Operations',
+            to: '/operations/update-policy-url-stability',
+            position: 'left',
+          },
           {
             type: 'dropdown',
             label: 'Frameworks',
