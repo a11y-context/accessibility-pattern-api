@@ -36,6 +36,7 @@ summary: A non-modal header navigation pattern that supports top-level links and
   - If the top-level item is a link, apply aria-current="page" to that link.
   - If the top-level item is a button-only parent (no destination), do not put aria-current on the button. Instead, apply aria-current="page" to the submenu link that represents the current page.
   - Ensure there is some visual change that indicates this is the current page link.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around all links and buttons.
 
 ### Toggle button semantics (for cases B and C)
 - The toggle control is a native `<button>` (preferred) or `role="button"` only when a native button cannot be used.

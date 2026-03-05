@@ -35,6 +35,7 @@ summary: A non-modal, button-invoked account menu that reveals a small list of l
 - Menu items are contained in a list structure (`<ul><li>…</li></ul>`).
   - Items are links, buttons, and/or static text.
   - Any buttons and links comply with the rules for the button/link patterns.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the button that opens the menu, as well as the links and buttons inside.
 
 ## Customizable
 - Whether the menu closes when a menu item is activated (often yes).
