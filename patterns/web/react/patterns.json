@@ -58,7 +58,7 @@
     },
     {
       "id": "button.basic",
-      "title": "Basic Button",
+      "title": "Button",
       "pattern_type": "component",
 
       "status": "beta",
@@ -83,7 +83,7 @@
     },
     {
       "id": "carousel.dots",
-      "title": "Carousel with Dot Navigation",
+      "title": "Carousel (Dot Navigation)",
       "pattern_type": "component",
 
       "status": "beta",
@@ -108,7 +108,7 @@
     },
     {
       "id": "carousel.thumbnails",
-      "title": "Carousel with Thumbnail Navigation",
+      "title": "Carousel (Thumbnail Navigation)",
       "pattern_type": "component",
 
       "status": "beta",
