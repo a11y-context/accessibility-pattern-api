@@ -71,7 +71,7 @@ export default function Home() {
             <Link className="button button--secondary button--lg" to="/web/react">
               Browse React Patterns
             </Link>
-            <Link className="button button--outline button--secondary button--lg" to="/installation/overview">
+            <Link className="button button--outline button--secondary button--lg" to="/getting-started">
               Get Started
             </Link>
           </div>

@@ -26,7 +26,7 @@ summary: A set of show/hide sections with heading-wrapped buttons controlling as
 - Users move focus between accordion headers using Tab / Shift+Tab.
 - Since the header control is a button, it is activated with Enter or Space.
 - If the accordion does not permit a panel to be collapsed while expanded, the expanded header button uses `aria-disabled="true"` (rare case).
-- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the button.
+- Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the header controls.
 
 ## Customizable
 - `aria-controls` on the header button pointing to the panel ID (recommended, but optional).

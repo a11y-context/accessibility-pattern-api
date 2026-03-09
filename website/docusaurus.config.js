@@ -120,13 +120,13 @@ const config = {
         },
         items: [
           {
-            label: 'Installation',
-            to: '/installation/overview',
+            label: 'Getting Started',
+            to: '/getting-started',
             position: 'left',
           },
           {
-            label: 'Operations',
-            to: '/operations/update-policy-url-stability',
+            label: 'Guides',
+            to: '/guides',
             position: 'left',
           },
           {
