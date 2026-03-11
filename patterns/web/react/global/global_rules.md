@@ -113,19 +113,19 @@ scope: [page, layout]
 ### Must Haves
 - Each page (route/view/document) has one level 1 heading, or `<h1>`, that identifies the main topic of the page.
 - Headings are nested in a logical order according to the relationships of the content they introduce.
-  - An <h2> introduces a major section of the page.
-  - An <h3> introduces a subsection of the preceding <h2>, and so on.
+  - An `<h2>` introduces a major section of the page.
+  - An `<h3>` introduces a subsection of the preceding `<h2>`, and so on.
   - When closing a subsection and returning to a higher-level section, it is acceptable to return to a higher heading level.
 - If text visually functions as a heading, it must be marked up as a heading element rather than only styled to look like one.
 - Headings are descriptive of the content they introduce.
 
 ### Customizable
-- Section headings use native HTML heading elements (<h1> through <h6>) to communicate the structure of the page.
+- Section headings use native HTML heading elements (`<h1>` through `<h6>`) to communicate the structure of the page.
   - If native elements are unavailable, headings can be implemented with `role="heading"` and `aria-level`.
 
 ### Don'ts
 - Do not use heading elements only to make text look larger or bolder.
-- Do not skip heading levels when moving deeper into the hierarchy, such as going from <h2> directly to <h4>, unless closing a subsection and returning to a higher-level section.
+- Do not skip heading levels when moving deeper into the hierarchy, such as going from `<h2>` directly to `<h4>`, unless closing a subsection and returning to a higher-level section.
 - Do not use non-heading elements as visual-only section titles when they function as headings.
 
 ### Acceptance Checks
