@@ -1,10 +1,12 @@
 ---
-title: Indexing guidance
+title: Enterprise RAG Indexing
 ---
 
+# Enterprise RAG Indexing
+
 ## When you need this
-- Required for RAG-only mode
-- Recommended if you want RAG fallback in Hybrid mode
+- Required when [Enterprise RAG](./retrieval-options.md) is the retrieval mode
+- Recommended when RAG serves as a fallback alongside another retrieval mode
 
 ## Choose scope
 - Index all stacks (broader coverage)

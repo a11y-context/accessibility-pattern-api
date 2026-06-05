@@ -63,7 +63,7 @@ const config = {
       },
     ],
 
-    // ── React (Web) ───────────────────────────────────────────────────────────
+    // ── Web / React ───────────────────────────────────────────────────────────
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -126,26 +126,21 @@ const config = {
             to: '/getting-started',
             position: 'left',
           },
-          {
-            label: 'Guides',
-            to: '/guides',
-            position: 'left',
-          },
-          // Single framework for now — direct link instead of a dropdown of one.
+          // Single platform for now — direct link instead of a dropdown of one.
           // Restore the dropdown below when Android/iOS docs exist.
           {
-            label: 'React (Web) Patterns',
+            label: 'Web / React Patterns',
             to: '/web/react',
             position: 'left',
           },
           // {
           //   type: 'dropdown',
-          //   label: 'Frameworks',
+          //   label: 'Platforms',
           //   position: 'left',
           //   items: [
-          //     { label: 'React (Web)', to: '/web/react' },
-          //     { label: 'Android (Compose)', to: '/android' },
-          //     { label: 'iOS (SwiftUI)', to: '/ios' },
+          //     { label: 'Web / React', to: '/web/react' },
+          //     { label: 'Android / Compose', to: '/android' },
+          //     { label: 'iOS / SwiftUI', to: '/ios' },
           //   ],
           // },
           {
@@ -162,10 +157,10 @@ const config = {
           {
             title: 'Patterns',
             items: [
-              { label: 'React (Web)', to: '/web/react' },
+              { label: 'Web / React', to: '/web/react' },
               // Restore when these platforms have published docs:
-              // { label: 'Android (Compose)', to: '/android' },
-              // { label: 'iOS (SwiftUI)', to: '/ios' },
+              // { label: 'Android / Compose', to: '/android' },
+              // { label: 'iOS / SwiftUI', to: '/ios' },
             ],
           },
           {

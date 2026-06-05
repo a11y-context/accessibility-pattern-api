@@ -32,13 +32,13 @@ The subagent implementation: the main agent delegates; the subagent retrieves, c
 
 ## The corpus itself
 
-- Browse: [React (Web) patterns](/web/react)
+- Browse: [Web / React patterns](/web/react)
 - Machine index: `patterns.json` at the [GitHub repository](https://github.com/jsweetdude/accessibility-pattern-api) (`patterns/web/react/patterns.json`)
 - Clone for local mode: `git clone https://github.com/jsweetdude/accessibility-pattern-api`
 
 ## Verification prompt
 
-After installing a rule + skill/subagent, run this in a UI repo — note that it never mentions accessibility:
+After installing a rule + skill/subagent, run this in a UI repo (note that it never mentions accessibility):
 
 ```
 Add a toast notification that confirms when an item is saved.

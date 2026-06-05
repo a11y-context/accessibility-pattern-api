@@ -6,7 +6,7 @@ slug: /component-gallery
 
 # Components
 
-Browse all accessibility patterns available for React (Web).
+Browse all accessibility patterns available for Web / React.
 
 <!-- gallery:start — generated from patterns.json; do not edit by hand. Run `npm run gen:gallery` in /website. -->
 

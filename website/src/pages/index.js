@@ -4,9 +4,9 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
 
-const FRAMEWORKS = [
+const PLATFORMS = [
   {
-    label: 'React (Web)',
+    label: 'Web / React',
     href: '/web/react',
     description:
       'Accessible component patterns for React applications, covering buttons, dialogs, carousels, grids, and more.',
@@ -14,16 +14,16 @@ const FRAMEWORKS = [
     cta: 'Browse Patterns',
   },
   {
-    label: 'Android (Compose)',
+    label: 'Android / Compose',
     href: '/android',
-    description: 'Jetpack Compose accessibility patterns — coming soon.',
+    description: 'Jetpack Compose accessibility patterns (coming soon).',
     badge: { label: 'Coming Soon', type: 'secondary' },
     cta: null,
   },
   {
-    label: 'iOS (SwiftUI)',
+    label: 'iOS / SwiftUI',
     href: '/ios',
-    description: 'SwiftUI accessibility patterns — coming soon.',
+    description: 'SwiftUI accessibility patterns (coming soon).',
     badge: { label: 'Coming Soon', type: 'secondary' },
     cta: null,
   },
@@ -65,11 +65,11 @@ export default function Home() {
           <p style={{ maxWidth: '640px' }}>
             A structured corpus of production-ready accessibility patterns for modern UI frameworks.
             Each pattern provides prescriptive guidance, a golden implementation, and acceptance
-            checks — ready for developer AI contexts, design system docs, or direct team reference.
+            checks, ready for developer AI contexts, design system docs, or direct team reference.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <Link className="button button--secondary button--lg" to="/web/react">
-              Browse React Patterns
+              Browse Web / React Patterns
             </Link>
             <Link className="button button--outline button--secondary button--lg" to="/getting-started">
               Get Started
@@ -81,9 +81,9 @@ export default function Home() {
       <main>
         <section style={{ padding: '3rem 0' }}>
           <div className="container">
-            <h2>Choose a Framework</h2>
+            <h2>Choose a Platform</h2>
             <div className="row" style={{ marginTop: '1.5rem' }}>
-              {FRAMEWORKS.map((fw) => (
+              {PLATFORMS.map((fw) => (
                 <FrameworkCard key={fw.href} {...fw} />
               ))}
             </div>

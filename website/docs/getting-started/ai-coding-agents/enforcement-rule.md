@@ -16,11 +16,11 @@ Measured directly, in 15 runs per condition with no rule present:
 - Subagent invoked on its own: **8 of 15 runs (53%)**
 - With an always-on rule: **100% invocation, both architectures**
 
-Every run that skipped retrieval produced the baseline failure rate — the corpus can't help if it's never consulted. Voluntary consultation does not survive contact with real sessions.
+Every run that skipped retrieval produced the baseline failure rate: the corpus can't help if it's never consulted. Voluntary consultation does not survive contact with real sessions.
 
 ## What the rule does
 
-The rule is short — it doesn't teach accessibility, it mandates a procedure:
+The rule is short. It doesn't teach accessibility; it mandates a procedure:
 
 1. Before generating or modifying UI code, run a pattern-selection pass for each component being implemented.
 2. Select patterns using their `Use When` text; reject candidates whose `Do Not Use When` applies.

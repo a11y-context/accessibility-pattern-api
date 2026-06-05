@@ -3,7 +3,7 @@
 /**
  * Sidebar for the main docs instance.
  * Docs root: website/docs/
- * routeBasePath: '/' — pages served at /getting-started/..., /guides/..., etc.
+ * routeBasePath: '/' — pages served at /getting-started/..., /troubleshooting/..., etc.
  *
  * Getting Started structure (reworked 2026-06): corpus-first framing with two
  * consumption branches — AI coding agents (generation-time) and QA/testing
@@ -45,6 +45,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'getting-started/ai-coding-agents/indexing-guidance',
+              label: 'Enterprise RAG Indexing',
+            },
+            {
+              type: 'doc',
               id: 'getting-started/ai-coding-agents/downloads',
               label: 'Downloads',
             },
@@ -63,22 +68,6 @@ const sidebars = {
               label: 'Building an Automated Harness',
             },
           ],
-        },
-      ],
-    },
-
-    // ── Guides ────────────────────────────────────────────────────────────────
-    {
-      type: 'category',
-      label: 'Guides',
-      collapsible: true,
-      collapsed: false,
-      link: { type: 'doc', id: 'guides/index' },
-      items: [
-        {
-          type: 'doc',
-          id: 'guides/indexing-guidance',
-          label: 'Indexing guidance',
         },
       ],
     },
