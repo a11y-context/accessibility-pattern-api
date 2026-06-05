@@ -10,6 +10,10 @@ summary: User-initiated blocking dialog that traps focus, inerts background cont
 
 # Dialog (Modal)
 
+Pattern ID: `dialog.modal`
+
+User-initiated blocking dialog that traps focus, inerts background content, and restores focus on close.
+
 ## Use When
 - Use when content appears in an overlay that blocks interaction with the underlying page.
 - Use when keyboard focus must move into the dialog and remain contained until dismissal.
@@ -51,16 +55,16 @@ summary: User-initiated blocking dialog that traps focus, inerts background cont
 ## Customizable
 - The `<dialog>` element does not have perfect browser support yet. For this reason, we still recommend using `role="dialog"` and `aria-modal="true"`. The engineer may use `<dialog>`, but if they do, they must still include `aria-modal="true"`.
 
-## Don’ts
+## Don'ts
 - Do not rely on the native `<dialog>` element for consistent cross-browser modal behavior in portal-based applications.
-- Don’t rely on `aria-modal="true"` to block background interaction; it does not prevent focus/pointer access on its own.
-- Don’t render the modal inside containers that create clipping or stacking contexts (e.g., `overflow: hidden/auto`, `transform`), and don’t rely on `z-index` alone to “make it work.”
-- Don’t inert `document.body` or `document.documentElement`; inert only the application content root.
-- Don’t omit focus restoration; closing a modal must return the user to where they were.
+- Don't rely on `aria-modal="true"` to block background interaction; it does not prevent focus/pointer access on its own.
+- Don't render the modal inside containers that create clipping or stacking contexts (e.g., `overflow: hidden/auto`, `transform`), and don't rely on `z-index` alone to "make it work."
+- Don't inert `document.body` or `document.documentElement`; inert only the application content root.
+- Don't omit focus restoration; closing a modal must return the user to where they were.
 
 ## Golden Pattern
 
-```js
+```jsx
 "use client";
 
 import * as React from "react";
@@ -131,6 +135,42 @@ export function ModalDialog({
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
+
+  // Fallback focus containment: wrap Tab within the dialog.
+  // Primary containment is `inert` on the app root (above); this guards
+  // setups where no inert target exists.
+  React.useEffect(() => {
+    if (!open) return;
+
+    function onKeyDown(e) {
+      if (e.key !== "Tab") return;
+
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+
+      const focusables = dialog.querySelectorAll(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (
+        e.shiftKey &&
+        (document.activeElement === first || document.activeElement === dialog)
+      ) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   if (!open) return null;
 

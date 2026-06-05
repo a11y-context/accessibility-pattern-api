@@ -10,18 +10,22 @@ summary: Two- or three-state button that toggles between pressed and not pressed
 
 # Toggle Button
 
+Pattern ID: `button.toggle`
+
+Two- or three-state button that toggles between pressed and not pressed using `aria-pressed`.
+
 ## Use When
-- Use when a control toggles a feature or action within the current context (e.g., “Mute”, “Bold”, “Pin”, "Enable Closed Captioning").
+- Use when a control toggles a feature or action within the current context (e.g., "Mute", "Bold", "Pin", "Enable Closed Captioning").
 
 ## Do Not Use When
 - Do not use when the control navigates to a new URL (use `link`).
-- Do not use when the control represents a persistent on/off system or application setting, such as “Enable notifications”, “Dark mode” (use `switch`).
+- Do not use when the control represents a persistent on/off system or application setting, such as "Enable notifications", "Dark mode" (use `switch`).
 - Do not use when the control opens a menu (use `menu.button`).
 
 ## Must Haves
 - Use a native `<button>` element for built-in semantics and keyboard behavior.
 - Ensure the button has an accessible name that clearly describes its purpose or action.
-- Default strategy: represent state by changing the accessible name to the next action (e.g., “Mute” ↔ “Unmute”, “Pin” ↔ “Remove pin”).
+- Default strategy: represent state by changing the accessible name to the next action (e.g., "Mute" ↔ "Unmute", "Pin" ↔ "Remove pin").
 - For buttons with visible text, the button's inner text may serve as the accessible name. Additional context may be added for screen reader users with `aria-label` or `aria-labelledby`, or offscreen text, when needed.
 - If the accessible name extends beyond the visible text, ensure the visible text appears at the beginning of the accessible name.
 - For icon-only buttons, provide an accessible name using `aria-label` or `aria-labelledby`.
@@ -31,15 +35,15 @@ summary: Two- or three-state button that toggles between pressed and not pressed
 
 ### Formatting toolbar exception
 - If the control is a formatting toggle in a toolbar (e.g., Bold/Italic/Underline), use aria-pressed="true|false" to reflect whether formatting is currently applied.
-- In this toolbar case, keep the accessible name stable (e.g., “Bold”) and do not rename it to “Remove bold” or “Unbold”.
+- In this toolbar case, keep the accessible name stable (e.g., "Bold") and do not rename it to "Remove bold" or "Unbold".
 
 ## Customizable
-- For most toggles (non-toolbar), you may express “next action” via:
+- For most toggles (non-toolbar), you may express "next action" via:
   - Visible text (preferred when space allows), and/or
   - `aria-label` / `aria-labelledby` (required for icon-only).
-- You may add context to the accessible name when multiple similar toggles exist (e.g., “Mute Trailer”, “Unmute Trailer”) using `aria-label`, `aria-labelledby`, or offscreen text.
+- You may add context to the accessible name when multiple similar toggles exist (e.g., "Mute Trailer", "Unmute Trailer") using `aria-label`, `aria-labelledby`, or offscreen text.
 
-## Don’ts
+## Don'ts
 -   Don't use `aria-pressed` for non-toolbar toggles **if** you are already changing the accessible name to the next action (avoid conflicting models like "Unmute, pressed").
 - Don't leave `aria-pressed` incorrect, stale, or always `"true"` / always `"false"` when you choose the toolbar approach.
 - Don't ship icon-only toggles without an accessible name (`aria-label` or `aria-labelledby`).

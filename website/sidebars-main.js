@@ -4,6 +4,10 @@
  * Sidebar for the main docs instance.
  * Docs root: website/docs/
  * routeBasePath: '/' — pages served at /getting-started/..., /guides/..., etc.
+ *
+ * Getting Started structure (reworked 2026-06): corpus-first framing with two
+ * consumption branches — AI coding agents (generation-time) and QA/testing
+ * (post-development). The earlier NPM-CLI install funnel was retired.
  */
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -19,40 +23,44 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'getting-started/choose-your-setup-path',
-          label: 'Choose Setup Path',
+          id: 'getting-started/why-this-works',
+          label: 'Why This Works',
         },
         {
           type: 'category',
-          label: 'Repo Install',
+          label: 'For AI Coding Agents',
           collapsible: true,
           collapsed: false,
-          link: { type: 'doc', id: 'getting-started/repo-install/index' },
+          link: { type: 'doc', id: 'getting-started/ai-coding-agents/index' },
           items: [
             {
               type: 'doc',
-              id: 'getting-started/repo-install/choose-retrieval-mode',
-              label: 'Choose Retrieval Mode',
+              id: 'getting-started/ai-coding-agents/enforcement-rule',
+              label: 'The Enforcement Rule',
             },
             {
               type: 'doc',
-              id: 'getting-started/repo-install/install-the-kit',
-              label: 'Install the Kit',
+              id: 'getting-started/ai-coding-agents/retrieval-options',
+              label: 'Retrieval Options',
             },
             {
               type: 'doc',
-              id: 'getting-started/repo-install/configure-docs-fallback',
-              label: 'Configure RAG',
+              id: 'getting-started/ai-coding-agents/downloads',
+              label: 'Downloads',
             },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'For QA & Accessibility Testing',
+          collapsible: true,
+          collapsed: false,
+          link: { type: 'doc', id: 'getting-started/qa-testing/index' },
+          items: [
             {
               type: 'doc',
-              id: 'getting-started/repo-install/enable-in-your-client',
-              label: 'Enable in Your Client',
-            },
-            {
-              type: 'doc',
-              id: 'getting-started/repo-install/verify-installation',
-              label: 'Verify Installation',
+              id: 'getting-started/qa-testing/automated-harness',
+              label: 'Building an Automated Harness',
             },
           ],
         },
@@ -72,16 +80,6 @@ const sidebars = {
           id: 'guides/indexing-guidance',
           label: 'Indexing guidance',
         },
-        {
-          type: 'doc',
-          id: 'guides/update-policy-url-stability',
-          label: 'Update policy & URL stability',
-        },
-        {
-          type: 'doc',
-          id: 'guides/admin-managed-enforcement',
-          label: 'Admin-managed enforcement',
-        },
       ],
     },
 
@@ -90,13 +88,6 @@ const sidebars = {
       type: 'doc',
       id: 'troubleshooting/index',
       label: 'Troubleshooting',
-    },
-
-    // ── Evaluating Accessible Output ──────────────────────────────────────────
-    {
-      type: 'doc',
-      id: 'evaluating-accessible-output/index',
-      label: 'Evaluating Accessible Output',
     },
   ],
 };

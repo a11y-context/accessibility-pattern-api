@@ -10,8 +10,12 @@ summary: Native button that triggers an action. Supports text-only, icon+text, a
 
 # Basic Button
 
+Pattern ID: `button.basic`
+
+Native button that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns.
+
 ## Use When
-- Use when the user triggers an immediate action (e.g., “Save”, “Continue”, “Dismiss”).
+- Use when the user triggers an immediate action (e.g., "Save", "Continue", "Dismiss").
 
 ## Do Not Use When
 - Do not use when the control navigates to a new URL (use `link`).
@@ -33,11 +37,11 @@ summary: Native button that triggers an action. Supports text-only, icon+text, a
 ## Customizable
 - Buttons with visible text don't usually need additional context for screen reader users (though they might). If they do, then an `aria-label` or offscreen element should be used.
 
-## Don’ts
-- Don’t build a button out of a `<div>` or `<span>` with `role="button"` unless you absolutely must; native `<button>` is the baseline.
-- Don’t create icon-only buttons without an accessible name (no unlabeled icons). 
-- Don’t use `aria-label` that conflicts with (or is wildly different from) the visible label text. Accessible names should at least begin with the visible label.
-- Don’t hide focus outlines without providing a strong custom focus style.
+## Don'ts
+- Don't build a button out of a `<div>` or `<span>` with `role="button"` unless you absolutely must; native `<button>` is the baseline.
+- Don't create icon-only buttons without an accessible name (no unlabeled icons). 
+- Don't use `aria-label` that conflicts with (or is wildly different from) the visible label text. Accessible names should at least begin with the visible label.
+- Don't hide focus outlines without providing a strong custom focus style.
 
 ## Golden Pattern
 ```jsx

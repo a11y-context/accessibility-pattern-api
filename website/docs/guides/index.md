@@ -6,6 +6,4 @@ title: Guides
 - Deeper guidance and reference material that supports Getting Started.
 
 ## Topics
-- Indexing guidance (chunking and retrieval guardrails)
-- Update policy and URL stability
-- Admin-managed enforcement (TBD)
+- [Indexing guidance](./indexing-guidance.md) — chunking and retrieval guardrails for enterprise RAG

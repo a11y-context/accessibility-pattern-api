@@ -2,11 +2,13 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Accessibility Pattern API',
-  tagline: 'Production-ready accessibility patterns for modern frameworks',
+  title: 'A11y Context',
+  tagline: 'Accessibility patterns built for AI coding agents',
   favicon: 'img/favicon.svg',
 
-  url: 'https://accessibility-pattern-api.vercel.app',
+  // NOTE: this is a manually-declared canonical URL (used for sitemap and
+  // canonical links). It must match the actual deployment domain.
+  url: 'https://a11y-context-project.vercel.app',
   baseUrl: '/',
 
   organizationName: 'jsweetdude',
@@ -112,9 +114,9 @@ const config = {
       },
 
       navbar: {
-        title: 'A11y Patterns',
+        title: 'A11y Context',
         logo: {
-          alt: 'Accessibility Pattern API Logo',
+          alt: 'A11y Context logo',
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
         },
@@ -129,25 +131,23 @@ const config = {
             to: '/guides',
             position: 'left',
           },
+          // Single framework for now — direct link instead of a dropdown of one.
+          // Restore the dropdown below when Android/iOS docs exist.
           {
-            type: 'dropdown',
-            label: 'Frameworks',
+            label: 'React (Web) Patterns',
+            to: '/web/react',
             position: 'left',
-            items: [
-              {
-                label: 'React (Web)',
-                to: '/web/react',
-              },
-              {
-                label: 'Android (Compose)',
-                to: '/android',
-              },
-              {
-                label: 'iOS (SwiftUI)',
-                to: '/ios',
-              },
-            ],
           },
+          // {
+          //   type: 'dropdown',
+          //   label: 'Frameworks',
+          //   position: 'left',
+          //   items: [
+          //     { label: 'React (Web)', to: '/web/react' },
+          //     { label: 'Android (Compose)', to: '/android' },
+          //     { label: 'iOS (SwiftUI)', to: '/ios' },
+          //   ],
+          // },
           {
             href: 'https://github.com/jsweetdude/accessibility-pattern-api',
             label: 'GitHub',
@@ -160,11 +160,12 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Frameworks',
+            title: 'Patterns',
             items: [
               { label: 'React (Web)', to: '/web/react' },
-              { label: 'Android (Compose)', to: '/android' },
-              { label: 'iOS (SwiftUI)', to: '/ios' },
+              // Restore when these platforms have published docs:
+              // { label: 'Android (Compose)', to: '/android' },
+              // { label: 'iOS (SwiftUI)', to: '/ios' },
             ],
           },
           {
@@ -185,7 +186,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Accessibility Pattern API. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} A11y Context Project. Built with Docusaurus.`,
       },
 
       prism: {

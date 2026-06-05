@@ -70,13 +70,12 @@ const sidebars = {
       label: 'Foundations',
     },
     {
-      type: 'doc',
-      id: 'component-gallery',
-      label: 'Component Gallery',
-    },
-    {
       type: 'category',
       label: 'Components',
+      // The category label itself links to the catalog page; the caret
+      // independently expands/collapses the component list.
+      // (component-gallery.md keeps its published slug /component-gallery.)
+      link: { type: 'doc', id: 'component-gallery' },
       collapsible: true,
       collapsed: false,
       // URL contract: /web/react/components/<p.id>
