@@ -19,7 +19,8 @@ Two- or three-state button that toggles between pressed and not pressed using `a
 
 ## Do Not Use When
 - Do not use when the control navigates to a new URL (use `link`).
-- Do not use when the control represents a persistent on/off system or application setting, such as "Enable notifications", "Dark mode" (use `switch`).
+- Do not use when the control represents a persistent on/off system or application setting, such as "Enable notifications", "Dark mode" (use `switch.basic`).
+- Do not use when the control records a value to submit with a form rather than toggling something in the current context (use `checkbox.basic`).
 - Do not use when the control opens a menu (use `menu.button`).
 
 ## Must Haves

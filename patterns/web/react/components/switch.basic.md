@@ -21,7 +21,8 @@ Two-state on/off control representing a persistent setting. Uses `role="switch"`
 
 ## Do Not Use When
 - Do not use when the control triggers an in-place action or transient feature toggle within the current context (use `button.toggle`).
-- Do not use when selecting one or more options from a group of related choices (use `checkbox`).
+- Do not use when the choice is a value submitted with a form rather than a setting that takes effect immediately (use `checkbox.basic`).
+- Do not use when selecting one or more options from a set of related choices (use `checkbox.group`).
 - Do not use when more than two states are required (use `button.toggle`).
 
 ## Must Haves
