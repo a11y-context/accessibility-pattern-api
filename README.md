@@ -1,5 +1,7 @@
 # accessibility-pattern-api
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
 A structured corpus of production-ready accessibility patterns for modern UI frameworks.
 Each pattern provides prescriptive guidance, a golden implementation, and acceptance checks —
 ready for AI context injection, design system documentation, or direct developer reference.
