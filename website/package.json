@@ -6,7 +6,8 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "gen:gallery": "node scripts/generate-component-gallery.js",
-    "prebuild": "node scripts/generate-component-gallery.js",
+    "gen:downloads": "node scripts/generate-skill-downloads.js",
+    "prebuild": "node scripts/generate-component-gallery.js && node scripts/generate-skill-downloads.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -26,7 +27,9 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.7.0",
-    "@docusaurus/types": "3.7.0"
+    "@docusaurus/types": "3.7.0",
+    "archiver": "^7.0.1",
+    "gray-matter": "^4.0.3"
   },
   "engines": {
     "node": ">=18.0"

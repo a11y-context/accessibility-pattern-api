@@ -11,7 +11,7 @@ A11y Context is a corpus of accessibility best practices written to be consumed 
 - **A Golden Pattern:** a minimal, tested reference implementation
 - **Acceptance Checks:** observable pass/fail behaviors a tester can verify with a keyboard and a screen reader
 
-The corpus is one source of truth with many consumption modes: fetch it over HTTP, copy it locally, query it through an MCP server, or index it into an enterprise RAG system. Browse it now: [Web / React patterns](/web/react).
+The corpus is one source of truth with many consumption modes: fetch it over HTTP, copy it locally, or index it into an enterprise RAG system. Browse it now: [Web / React patterns](/web/react).
 
 ## Why it exists
 

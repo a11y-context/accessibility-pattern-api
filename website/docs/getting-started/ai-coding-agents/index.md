@@ -14,7 +14,7 @@ The integration has three moving parts. Each exists because the previous one isn
 
 Building this for your environment means picking a value on three axes. A 48-run controlled experiment tested the combinations; the findings:
 
-**Retrieval transport: local files, HTTP, or MCP.** Output quality showed no significant difference across the three. They differ in cost and operational properties: HTTP retrieval was 30–40% cheaper in retrieval-side tokens than MCP; local files are fastest and work offline; MCP adds deterministic tool contracts and structured selection metadata. Details: [Retrieval Options](/getting-started/ai-coding-agents/retrieval-options).
+**Retrieval transport: local files or HTTP.** Output quality showed no significant difference. They differ in operational properties: HTTP needs network access but the corpus stays always-current; local files are fastest and work offline. Details: [Retrieval Options](/getting-started/ai-coding-agents/retrieval-options).
 
 **Processing: inline skill or subagent.** Overall pass rates were statistically indistinguishable (91.3% vs 90.9%), but the failure modes differ. Skills were better at component-level "Critical" checks (98.7% vs 89.3%) because the full pattern documentation stays in the working context. Subagents condense guidance into a brief, which loses component-specific nuance, but they were better at cross-component concerns like heading structure, and they isolate retrieval tokens from the main agent's context.
 
@@ -22,7 +22,7 @@ Building this for your environment means picking a value on three axes. A 48-run
 
 ## Recommended starting point
 
-**Rule + inline skill + HTTP retrieval.** It matched the best quality results in testing at the lowest operational complexity: no server to run, no MCP client support required, and the corpus is always current because it's fetched from this site.
+**Rule + inline skill + HTTP retrieval.** It matched the best quality results in testing at the lowest operational complexity: nothing to vendor locally, and the corpus is always current because it's fetched from this site.
 
 Setup:
 

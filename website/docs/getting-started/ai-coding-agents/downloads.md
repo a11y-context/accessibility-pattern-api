@@ -4,44 +4,74 @@ title: Downloads
 
 # Downloads
 
-Everything here is copy-in: no package manager, no installer. Add the files to your repo, commit, done.
+Ready-to-install skills for connecting your AI coding agent to the A11y Context corpus. Download a ZIP, unzip it into your AI tool's skills directory, and the skill is ready to use — the agent picks it up automatically when generating UI.
 
-## Rule files
+## How to install
 
-The always-on enforcement rule, per client and retrieval mode. Each file mandates retrieval-before-generation, the single-pattern selection discipline, and codebase guardrails (preserve the design system, minimal-change compliance, no scope creep).
+Each download is a folder containing a `SKILL.md` plus any supporting files. The skill's canonical name (declared in its frontmatter) is also the folder name, so the install target is straightforward:
 
-| Client | Mode | File |
-|---|---|---|
-| Claude Code | HTTP | *coming soon* |
-| Claude Code | MCP | *coming soon* |
-| Cursor | HTTP | *coming soon* |
-| Cursor | MCP | *coming soon* |
-| GitHub Copilot | HTTP | *coming soon* |
+| AI tool | Install location |
+|---|---|
+| Claude Code | `.claude/skills/` |
+| Cursor | `.cursor/skills/` |
+| GitHub Copilot (VSCode) | `.github/skills/` |
+| Opencode | `.opencode/skills/` |
+| Codex | `.agents/skills/` |
 
-## Retrieval skill
+```bash
+unzip a11y-context-web-react-http.zip -d .claude/skills/
+```
 
-The inline-skill implementation of the retrieval procedure: identify components → select via Use When / Do Not Use When → retrieve selected patterns + global rules → apply. Variants for HTTP and local retrieval.
+For org-level distribution, point your skills manager (Atlas, an internal registry, or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
+
+## Web / React
+
+Two variants. Pick based on whether the agent has network access and whether you want freshness-by-default.
+
+### A11y Context — Web React (HTTP)
+
+[**Download a11y-context-web-react-http.zip**](pathname:///downloads/a11y-context-web-react-http.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/web-react/http)
+
+The agent fetches patterns from this site at generation time. One file, no bundled corpus, always current.
+
+- **Always current** — pattern updates land on every consumer's next request; no manual refresh
+- **Smallest footprint** — a single `SKILL.md` file in your repo; the corpus lives on the docs site
+- **30–40% cheaper in retrieval-side tokens** than alternative transports in controlled testing
+
+**Needs:** network access from the agent (HTTP fetch to `https://a11y-context-project.vercel.app`).
+
+### A11y Context — Web React (Local)
+
+[**Download a11y-context-web-react-local.zip**](pathname:///downloads/a11y-context-web-react-local.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/web-react/local)
+
+The agent reads patterns from a copy of the corpus bundled with the skill. Fully offline.
+
+- **Works offline** — no network dependency; survives air-gapped or network-restricted environments
+- **Fastest retrieval** — local disk reads, no HTTP latency
+- **Pinned corpus version** — reproducible builds and predictable agent behavior; ideal when an organization wants control over when pattern updates roll out
+
+**Needs:** periodic refresh as the upstream corpus evolves. The bundled corpus carries a `catalog_revision`; check [Release Notes](/web/react/release-notes) and re-download to update.
+
+## iOS / SwiftUI
 
 *Coming soon.*
 
-## Retrieval subagent
-
-The subagent implementation: the main agent delegates; the subagent retrieves, condenses to a brief, and returns it. Trades some component-level nuance for main-context token isolation. Includes the memory-file convention observed to help across sessions.
+## Android / Compose
 
 *Coming soon.*
 
-## The corpus itself
+## Other consumption paths
 
-- Browse: [Web / React patterns](/web/react)
-- Machine index: `patterns.json` at the [GitHub repository](https://github.com/jsweetdude/accessibility-pattern-api) (`patterns/web/react/patterns.json`)
-- Clone for local mode: `git clone https://github.com/jsweetdude/accessibility-pattern-api`
+- **Browse the corpus directly:** [Web / React patterns](/web/react). Useful for QA testing, manual reference, and custom integrations.
+- **Clone the skills repo:** `git clone https://github.com/a11y-context/a11y-context-skills` — and copy any skill folder into your AI tool's skills directory.
+- **Clone the corpus repo:** `git clone https://github.com/a11y-context/accessibility-pattern-api` for the raw markdown patterns.
 
-## Verification prompt
+## Verification
 
-After installing a rule + skill/subagent, run this in a UI repo (note that it never mentions accessibility):
+After installing a skill, run this prompt in a UI repo (note: it never mentions accessibility):
 
 ```
 Add a toast notification that confirms when an item is saved.
 ```
 
-Pass criteria: the agent retrieves the toast pattern before writing code; the live region container is always mounted; the message is announced via role="status"; focus never moves to the toast; the toast auto-dismisses and the region is cleared.
+Pass criteria: the agent retrieves the toast pattern before writing code; the live region container is always mounted; the message is announced via `role="status"`; focus never moves to the toast; the toast auto-dismisses and the region is cleared.
