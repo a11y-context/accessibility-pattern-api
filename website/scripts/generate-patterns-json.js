@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 /**
- * Generates patterns/<stack>/patterns.json from the .md files in
- * patterns/<stack>/components/ plus a small catalog-meta.json config.
+ * Generates patterns/<platform>/<stack>/patterns.json from the .md files in
+ * patterns/<platform>/<stack>/components/ plus a small catalog-meta.json
+ * config. Runs once per stack dir found under patterns/ (any directory at
+ * platform/stack depth that contains a catalog-meta.json).
  *
  * patterns.json is a build artifact: authors only edit the .md files. The
  * JSON is regenerated to ensure selection_excerpt and per-pattern metadata
  * never drift from the prose. The file is still committed (so the MCP
  * server and other consumers can read it without running the build).
  *
- * What this script reads
- * ----------------------
- * - patterns/<stack>/catalog-meta.json — hand-edited top-level metadata
+ * What this script reads (per stack dir)
+ * ---------------------------------------
+ * - catalog-meta.json — hand-edited top-level metadata
  *   (catalog_revision, schema_version, stack, cache_ttl_seconds)
- * - patterns/<stack>/components/*.md — each pattern's frontmatter + body
- *   sections "## Use When" and "## Do Not Use When"
+ * - components/*.md — each pattern's frontmatter + body sections
+ *   "## Use When" and "## Do Not Use When"
  *
- * What this script writes
- * -----------------------
- * - patterns/<stack>/patterns.json — composed from the above
+ * What this script writes (per stack dir)
+ * -----------------------------------------
+ * - patterns.json — composed from the above
  *
  * Inclusion rules
  * ---------------
@@ -40,10 +42,27 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-const stackDir = path.resolve(__dirname, '../../patterns/web/react');
-const componentsDir = path.join(stackDir, 'components');
-const catalogMetaPath = path.join(stackDir, 'catalog-meta.json');
-const outputPath = path.join(stackDir, 'patterns.json');
+const patternsRoot = path.resolve(__dirname, '../../patterns');
+
+// A stack dir is any patterns/<platform>/<stack> directory containing a
+// catalog-meta.json. Discovered dynamically so new platforms/stacks (e.g.
+// android/compose) just need a catalog-meta.json + components/ to be picked
+// up — no script changes required.
+function findStackDirs(root) {
+  const stackDirs = [];
+  for (const platform of fs.readdirSync(root)) {
+    const platformDir = path.join(root, platform);
+    if (!fs.statSync(platformDir).isDirectory()) continue;
+    for (const stack of fs.readdirSync(platformDir)) {
+      const stackDir = path.join(platformDir, stack);
+      if (!fs.statSync(stackDir).isDirectory()) continue;
+      if (fs.existsSync(path.join(stackDir, 'catalog-meta.json'))) {
+        stackDirs.push(stackDir);
+      }
+    }
+  }
+  return stackDirs;
+}
 
 const REQUIRED_FRONTMATTER = [
   'id',
@@ -132,13 +151,16 @@ function processPattern(filePath) {
   };
 }
 
-function main() {
+function generateForStack(stackDir) {
+  const componentsDir = path.join(stackDir, 'components');
+  const catalogMetaPath = path.join(stackDir, 'catalog-meta.json');
+  const outputPath = path.join(stackDir, 'patterns.json');
+
   const catalogMeta = JSON.parse(fs.readFileSync(catalogMetaPath, 'utf8'));
 
-  const allFiles = fs
-    .readdirSync(componentsDir)
-    .filter((f) => f.endsWith('.md'))
-    .sort();
+  const allFiles = fs.existsSync(componentsDir)
+    ? fs.readdirSync(componentsDir).filter((f) => f.endsWith('.md')).sort()
+    : [];
 
   const allPatterns = allFiles.map((f) => processPattern(path.join(componentsDir, f)));
 
@@ -162,6 +184,16 @@ function main() {
     `[generate-patterns-json] Wrote ${published.length} pattern(s) to ${outputPath} ` +
       `(catalog_revision ${catalogMeta.catalog_revision})`
   );
+}
+
+function main() {
+  const stackDirs = findStackDirs(patternsRoot);
+  if (stackDirs.length === 0) {
+    throw new Error(`No stack dirs with catalog-meta.json found under ${patternsRoot}`);
+  }
+  for (const stackDir of stackDirs) {
+    generateForStack(stackDir);
+  }
 }
 
 main();
