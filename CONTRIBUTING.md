@@ -1,6 +1,6 @@
 # Contributing to A11y Context
 
-Thanks for considering a contribution. This document covers what belongs in the public corpus, the license terms your contribution will be released under, and the technical rules for pattern files.
+Thanks for considering a contribution. This document covers the license terms, the scope of the public corpus, how to author a pattern, and how to version your changes.
 
 ---
 
@@ -26,28 +26,69 @@ The corpus is WCAG-derived and standards-based. Contributions should be:
 - Foundational accessibility rules (focus management, color contrast, semantics, screen reader behavior, keyboard interaction)
 - Golden Patterns built from standard HTML, ARIA, or framework-standard primitives
 
-The canonical format for every pattern file is `schema/pattern-template.md`. Follow it exactly. Existing patterns under `patterns/web/react/components/` are good shape references.
+The canonical format for every pattern file is `schema/pattern-template.md`. The canonical conventions for filling in each section, prose voice, and boilerplate formulas live in `schema/style-guide.md`. Read both before authoring or revising a pattern. Existing patterns under `patterns/web/react/components/` are good shape references.
+
+---
+
+## Authoring a new pattern — high-level checklist
+
+Full checklist with rules in `schema/style-guide.md` § Definition of done.
+
+1. Pattern doc at `patterns/<stack>/components/<id>.md` (filename = full ID). All sections per the template in the canonical order.
+2. `patterns.json` entry with `selection_excerpt` copied verbatim from the doc.
+3. Catalog regeneration runs in `prebuild`; manual via `npm run gen:gallery` from `/website`.
+4. Release notes entry under the bumped catalog version + `catalog_revision` bump (see Versioning below).
+5. Lab demo in [`a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab), AT-tested.
+6. Site builds clean.
 
 ---
 
 ## Pattern technical rules
 
-These rules apply to every pattern file in `patterns/<stack>/components/`.
+Brief checklist; full conventions in `schema/style-guide.md`.
 
-1. Follow `pattern-template.md` exactly.
+1. Follow `schema/pattern-template.md` (format) and `schema/style-guide.md` (conventions) exactly.
 2. Golden Pattern code must be runnable with placeholders.
-3. Must Haves must be behavioral and testable.
-4. No opinionated styling requirements.
+3. Must Haves must be behavioral and testable. All Must Haves are required; do not phrase them with "may", "should", or "recommended" — those phrasings belong in Customizable.
+4. No opinionated styling requirements in the Golden Pattern.
 5. Do not invent ARIA beyond canonical pattern guidance.
 6. Every pattern must include Acceptance Checks.
 
-## Review criteria
+---
 
-- Is the pattern minimal?
-- Is it semantically correct?
-- Is focus behavior fully handled?
-- Would this pass keyboard + screen reader testing?
+## Versioning
 
-## Catalog update reminder
+The corpus uses semver (`MAJOR.MINOR.PATCH`) for both the catalog as a whole and each pattern individually.
 
-When adding or renaming a pattern, also update `patterns/<stack>/patterns.json`. The Docusaurus sidebar and the website's component gallery are generated from that file.
+### Catalog version
+
+`catalog_revision` in `patterns.json` is bumped on **every** release that ships any change, including typography-only sweeps. Catalog versions are dated in `release-notes.md`.
+
+### Per-pattern versions
+
+Each pattern's `latest_version` in `patterns.json` is bumped only when its **semantic content** changes:
+
+- **MAJOR (X+1.0.0)** — a Must Have is removed or fundamentally changed, the scope of `Use When` narrows, the pattern ID is renamed, or any breaking change for consumers
+- **MINOR (Y+1.0)** — a new Must Have is added, a Customizable item is added, an Acceptance Check is added, `selection_excerpt` aliases are expanded, an existing requirement is semantically clarified or reframed
+- **PATCH (Z+1)** — typo, wording fix, golden-pattern code clarification with no requirements change, single-pattern formatting fix
+- **No bump** — pure typography sweeps applied corpus-wide (e.g., a corpus-wide "Don't" → "Do not" normalization). These bump only `catalog_revision`.
+
+### Every corpus PR includes
+
+1. Appropriate `latest_version` bumps in `patterns.json` for each touched pattern.
+2. A `catalog_revision` bump.
+3. A new entry in `release-notes.md` under the bumped catalog version, with one line per changed pattern explaining the bump and the reason.
+
+PRs without aligned version bumps and release-notes entries will be flagged in review.
+
+### Working with Claude as your authoring pair
+
+If you use Claude Code (or an equivalent AI coding assistant) to author or revise patterns, the assistant should surface a versioning proposal for every corpus edit using the form **"X.Y.Z because <reason>"** and ask for your approval before suggesting a commit. The protocol is enforced for John's own sessions; external contributors are encouraged to follow the same shape.
+
+---
+
+## Where other contributions belong
+
+- **New accessibility patterns, pattern revisions, foundational rules** → this repo, this CONTRIBUTING.
+- **Installable consumption artifacts** (skills, rules, hooks, MCP configurations) → [`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills).
+- **Live testing demos** → [`jsweetdude/a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab).
