@@ -90,5 +90,10 @@ If you use Claude Code (or an equivalent AI coding assistant) to author or revis
 ## Where other contributions belong
 
 - **New accessibility patterns, pattern revisions, foundational rules** → this repo, this CONTRIBUTING.
-- **Installable consumption artifacts** (skills, rules, hooks, MCP configurations) → [`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills).
 - **Live testing demos** → [`jsweetdude/a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab).
+
+### What about the skills repo?
+
+[`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) ships the installable artifacts (skill folders for various AI coding agents) and bundles a snapshot of this corpus for the offline-local skill variant. It is **downstream of this repo** — bundled content is synced by the maintainer as part of each release, not edited directly.
+
+If you are contributing a pattern change here, do **not** also open a PR against `a11y-context-skills`. The maintainer will pick up the change as part of the next release sync. If you spot a bug in the skill infrastructure itself (the SKILL.md instructions, install layout, etc.), open an issue there; that part of the repo is open to contribution.
