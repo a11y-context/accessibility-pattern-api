@@ -94,6 +94,12 @@ Existing patterns under `patterns/web/react/components/` are good shape referenc
 
 Patterns and rules derived from WCAG 2.2 AA, WAI-ARIA, the ARIA Authoring Practices Guide (APG), and other public accessibility standards. Golden Patterns use standard HTML, ARIA, and framework-standard primitives.
 
+## `patterns.json` is generated
+
+The catalog file at `patterns/web/react/patterns.json` is **regenerated** by `website/scripts/generate-patterns-json.js` from the .md files in `components/` plus the top-level `catalog-meta.json`. The generator runs in `prebuild`. **Do not hand-edit `patterns.json`** — author the .md frontmatter and body sections only.
+
+Per-pattern `latest_version` lives in the .md frontmatter; `catalog_revision` lives in `patterns/web/react/catalog-meta.json`. Patterns with `status: draft` or `status: deprecated` are excluded from the generated catalog (use `draft` for in-progress work like new patterns being developed in the lab).
+
 ## Versioning — REQUIRED protocol for Claude
 
 The full convention (semver rules, what counts as MAJOR/MINOR/PATCH, what doesn't bump) lives in `CONTRIBUTING.md` § Versioning. The protocol below is the **behavioral version** for any Claude session working in this repo. **Do not skip it on corpus edits.**

@@ -30,7 +30,7 @@ Target standard: WCAG 2.2 Level AA + the ARIA Authoring Practices Guide (APG), w
 
 ## Frontmatter contract
 
-Every component file opens with YAML frontmatter. All seven fields, every time:
+Every component file opens with YAML frontmatter. All eight fields, every time:
 
 ```yaml
 ---
@@ -38,17 +38,25 @@ id: family.variant
 title: Human Name
 stack: web/react
 status: beta
+latest_version: 0.1.0
 tags: [noun, interaction-mechanism, domain-keyword]
 aliases: [synonym, jargon, what a developer would call it]
 summary: One sentence naming the component and its key accessibility mechanism.
 ---
 ```
 
+**The .md file is the single source of truth for everything in `patterns.json`.** The JSON is regenerated from frontmatter + body sections by `website/scripts/generate-patterns-json.js` during `npm run prebuild`. Do not hand-edit `patterns.json` — author the .md only.
+
 ### Field rules
 
 - **`id`** — Dot notation `family.variant` (`accordion.basic`, `carousel.dots`, `menu.account`). The family groups siblings; the variant disambiguates. Even a pattern with no current siblings gets a variant (`.basic`) so future siblings do not force a rename. IDs are a public contract once published; do not rename without a deprecation plan. The filename equals the full ID (`accordion.basic.md`).
-- **`title`** — Title Case human name. Parenthetical qualifier when the family name alone is ambiguous: "Dialog (Modal)", "Carousel (Dot Navigation)".
-- **`status`** — `beta` until promoted. New patterns enter as `beta`.
+- **`title`** — Title Case human name. Parenthetical or "with X" qualifier when the family name alone is ambiguous: "Dialog (Modal)", "Carousel with Dot Navigation", "Basic Button".
+- **`status`** — one of:
+  - `draft` — in-progress, **excluded** from `patterns.json` by the generator. Use this for patterns that exist as .md files but are not ready for the published catalog.
+  - `beta` — published in the catalog. Default state for a new pattern.
+  - `stable` — promoted from beta after significant production use.
+  - `deprecated` — retired; **excluded** from `patterns.json` by the generator.
+- **`latest_version`** — semver for this pattern (`0.1.0` for a new pattern). Bumped when the pattern's content changes per the rules in `CONTRIBUTING.md` § Versioning (MAJOR for breaking changes, MINOR for added requirements, PATCH for clarifications). This is the field consumers read.
 - **`tags`** — 3–7 lowercase kebab-case terms. Mix the component noun, its interaction mechanisms (`focus-trap`, `live-region`, `roving-tabindex`, `reduced-motion`, `disclosure`), and domain keywords (`form`, `navigation`, `ecommerce`).
 - **`aliases`** — 4–8 generous synonyms. Everything a developer or AI agent might call this thing, including streaming/ecommerce domain jargon (`shelf`, `rail`, `epg`, `marquee`, `hero carousel`, `avatar menu`). This field carries weight in MCP selection and RAG retrieval. When writing aliases, ask: what would a prompt say? A pattern named "Collection Row" must match "product card grid" and "product cards" too.
 - **`summary`** — Exactly one sentence, mechanism-dense. Pattern: *what it is* + *the load-bearing ARIA/interaction mechanism*. "Two-state on/off control representing a persistent setting. Uses `role='switch'` with `aria-checked`, or native checkbox semantics when applicable." This sentence is reused verbatim in `patterns.json` and the Component Gallery — write it to stand alone.
@@ -78,7 +86,7 @@ The Pattern ID line and Summary paragraph satisfy the RAG chunking requirement (
 - 1–4 bullets. Every bullet starts with "Use when".
 - Describes the **user-facing situation**, not the implementation: "Use when a control represents a persistent binary setting that remains on or off beyond the current interaction" — not "Use when you need `role='switch'`".
 - Include concrete examples in parentheses with quotes: (e.g., "Enable notifications", "Dark mode").
-- These bullets export verbatim to `patterns.json` as `selection_excerpt.use_when` — they are the AI's primary selection signal.
+- These bullets are extracted into `patterns.json` as `selection_excerpt.use_when` by the prebuild generator (backticks stripped, otherwise verbatim). They are the AI's primary selection signal — write them so a model holding only these bullets picks correctly.
 
 ### Do Not Use When
 
@@ -289,12 +297,13 @@ scope: [utility | page | layout | component | style]
 
 A new component is not done when the markdown is written. Full checklist:
 
-1. **Pattern doc** at `patterns/<stack>/components/<id>.md` (filename = full ID), all sections per the order above including the Pattern ID line and body summary.
-2. **`patterns.json` entry** — id, title, pattern_type, status `beta`, `latest_version` `0.1.0`, summary (verbatim from frontmatter), aliases, tags, `selection_excerpt` with `use_when` / `do_not_use_when` copied verbatim from the doc bullets, `source.path`. The website sidebar and the Components catalog page generate from this file at build time.
-3. **Catalog regeneration** — automatic via the website's `prebuild`; manual via `npm run gen:gallery` from `/website`.
-4. **Release notes entry** in `release-notes.md` under the bumped catalog version, plus a `catalog_revision` bump in `patterns.json`. See `CONTRIBUTING.md` § Versioning for the bump rules.
+1. **Pattern doc** at `patterns/<stack>/components/<id>.md` (filename = full ID), all sections per the order above including the Pattern ID line and body summary. Frontmatter includes `latest_version: 0.1.0` and `status: beta` (or `status: draft` if not ready for the catalog yet).
+2. **Catalog metadata bump** — increment `catalog_revision` in `patterns/<stack>/catalog-meta.json` (MINOR for a new pattern). `patterns.json` itself is regenerated automatically by `npm run prebuild` — do not hand-edit it. Run `npm run gen:patterns-json` from `/website` to verify the entry generates correctly.
+3. **Catalog page regeneration** — automatic via prebuild; manual via `npm run gen:gallery` from `/website`.
+4. **Release notes entry** in `release-notes.md` under the bumped catalog version. See `CONTRIBUTING.md` § Versioning for the bump rules.
 5. **Lab demo** (separate repo: [`a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab)) — component + route page + landing entry, tested with assistive technology before the Golden Pattern is finalized.
 6. **Build check**: the site builds clean (`onBrokenLinks: 'throw'` will catch reference mistakes).
+7. **Skills repo sync** — copy the new `.md` file plus the regenerated `patterns.json` and `global_rules.md` into [`a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) per the maintainer's release process.
 
 ---
 

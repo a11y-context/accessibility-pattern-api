@@ -8,6 +8,27 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.0 — 2026-06-28 (infrastructure)
+
+Infrastructure change: `patterns.json` is now **generated** from each pattern's `.md` frontmatter and `## Use When` / `## Do Not Use When` body sections by a prebuild script. Authors only edit the .md files; the JSON is a derived artifact (still committed so the MCP server and consumers can read it without running the build).
+
+**What changed:**
+
+- `latest_version` migrated to frontmatter on all 14 published patterns. Each .md is now the single source of truth for its catalog metadata.
+- New `patterns/web/react/catalog-meta.json` carries the hand-edited top-level metadata (`catalog_revision`, `schema_version`, `stack`, `cache_ttl_seconds`).
+- New `website/scripts/generate-patterns-json.js` (~120 lines) regenerates `patterns.json` from the .md files + `catalog-meta.json` during `npm run prebuild`. Run manually with `npm run gen:patterns-json` from `/website`.
+- Existing `patterns.json` inconsistencies normalized: bullet backticks stripped consistently in `selection_excerpt`, frontmatter titles propagated to the JSON output (Basic Button, Carousel with Dot Navigation, etc.).
+- `generated_at` field removed — no consumer used it and it complicated reproducible builds.
+
+**Status convention extended:**
+
+- `draft` — in-progress, **excluded** from the generated `patterns.json`. Currently applied to `checkbox.basic` and `checkbox.group` (authored but not yet published in the catalog).
+- `beta` — published in the catalog. Default state.
+- `stable` — promoted (not yet used).
+- `deprecated` — retired; excluded from the generated `patterns.json`.
+
+Per-pattern versions did not change in this release — the changes are infrastructure-only.
+
 ## 0.3.0 — 2026-06-28
 
 Author-conventions tightening pass. No new patterns; no breaking changes to pattern IDs, URLs, or required behaviors.

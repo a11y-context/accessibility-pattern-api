@@ -54,6 +54,17 @@ Brief checklist; full conventions in `schema/style-guide.md`.
 5. Do not invent ARIA beyond canonical pattern guidance.
 6. Every pattern must include Acceptance Checks.
 
+## `patterns.json` is generated — do not hand-edit it
+
+The catalog file at `patterns/<stack>/patterns.json` is **regenerated** from the .md files in `components/` plus a small `catalog-meta.json` config by `website/scripts/generate-patterns-json.js`. The generator runs in `npm run prebuild`. Author the .md only; the JSON updates automatically.
+
+What lives where:
+- `patterns/<stack>/components/<id>.md` — full source of truth for a pattern. Frontmatter carries `id`, `title`, `status`, `latest_version`, `summary`, `aliases`, `tags`. Body sections `## Use When` and `## Do Not Use When` become the JSON's `selection_excerpt`.
+- `patterns/<stack>/catalog-meta.json` — hand-edited top-level metadata (`catalog_revision`, `schema_version`, `stack`, `cache_ttl_seconds`). Bump `catalog_revision` here on every release.
+- `patterns/<stack>/patterns.json` — generated output; committed (so the MCP server and the website can read it without running the build).
+
+Patterns with `status: draft` or `status: deprecated` are excluded from the generated `patterns.json` automatically. Use `status: draft` for in-progress work that should not appear in the public catalog yet.
+
 ---
 
 ## Versioning
