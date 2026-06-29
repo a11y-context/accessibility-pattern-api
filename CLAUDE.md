@@ -93,9 +93,41 @@ Existing patterns under `patterns/web/react/components/` are good shape referenc
 
 Patterns and rules derived from WCAG 2.2 AA, WAI-ARIA, the ARIA Authoring Practices Guide (APG), and other public accessibility standards. Golden Patterns use standard HTML, ARIA, and framework-standard primitives.
 
-## Versioning
+## Versioning — REQUIRED protocol for Claude
 
-See `CONTRIBUTING.md` § Versioning for the contributor-facing rules. The vault's `01 - Projects/A11y-Context-Project/context-load.md` § Corpus Edit Protocol carries the behavioral version for Claude — surface a version-bump proposal on every corpus edit using the form "X.Y.Z because <reason>", and check contributor PRs for aligned bumps and release-notes entries.
+The full convention (semver rules, what counts as MAJOR/MINOR/PATCH, what doesn't bump) lives in `CONTRIBUTING.md` § Versioning. The protocol below is the **behavioral version** for any Claude session working in this repo. **Do not skip it on corpus edits.**
+
+### On every corpus edit (under `patterns/`)
+
+Before suggesting `git add`, `git commit`, or `git push`, surface a versioning decision for each touched pattern file. For each touched file, propose:
+
+1. **What changed** — one-line summary
+2. **Recommended `latest_version` change** — **X.Y.Z because <reason>** using the semver rules in CONTRIBUTING § Versioning (MAJOR: removed/breaking; MINOR: added Must Have / Customizable / Acceptance Check / aliases / semantic clarification; PATCH: typo/wording/clarification with no requirements change; no-bump: pure corpus-wide typography sweep)
+3. **Recommended `catalog_revision` bump** — always for any commit that touches the corpus
+4. **Release notes entry** — one line per changed pattern, ready to paste into `release-notes.md` under the new catalog version heading
+
+Example proposal form:
+
+> Before committing, recommend:
+> - `dialog.modal.latest_version`: `0.1.1` → `0.2.0` (MINOR) because the Customizable section was reframed and an inline `(required)` label was removed — semantic clarification of an existing Must Have.
+> - `catalog_revision`: `0.2.0` → `0.3.0`.
+> - Release notes entry under `## 0.3.0 — 2026-06-28`: "Dialog (Modal) → 0.2.0 — Customizable reframed to preferred-vs-fallback; (required) labels removed."
+>
+> Approve?
+
+### On contributor PRs
+
+When reviewing pull requests from contributors that touch the corpus, check:
+
+1. Each touched pattern's `latest_version` has been bumped appropriately for the kind of change.
+2. `catalog_revision` has been bumped.
+3. `release-notes.md` carries a new entry under the bumped catalog version with one line per changed pattern.
+
+If any of these are missing or wrong-category, write a PR review comment with the specific recommendation, e.g.:
+
+> `button.toggle.latest_version` was not bumped, but this PR adds a new Must Have. Recommend `0.2.0` → `0.3.0` (MINOR). Also add a release-notes entry under the bumped catalog version.
+
+**Do not commit or approve corpus changes — own or contributor — until version bumps and release notes are aligned.**
 
 ## Cross-repo context
 
