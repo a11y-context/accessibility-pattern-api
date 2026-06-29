@@ -82,8 +82,9 @@ Listed in `.gitignore`, repeated here for visibility:
 
 ## Pattern format and conventions
 
-Two canonical references, read both before authoring or revising a pattern:
+Three canonical references — **read all three before authoring or revising a pattern**:
 
+- **`CONTRIBUTING.md`** — license + contribution terms, scope (what fits the corpus), high-level authoring checklist, the versioning convention.
 - **`schema/pattern-template.md`** — the format (frontmatter contract, section order, bare template to copy).
 - **`schema/style-guide.md`** — the conventions (per-section guidance, prose rules, boilerplate formulas, Customizable typology, Golden Pattern code rules, definition of done, write-like-this examples).
 
