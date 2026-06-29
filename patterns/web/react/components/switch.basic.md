@@ -27,10 +27,10 @@ Two-state on/off control representing a persistent setting. Uses `role="switch"`
 
 ## Must Haves
 - The switch has `role="switch"`.
-- The switch should have an associated visible text label.
-- Ensure the switch has an accessible name that clearly describes its action. Often this is worded to be true when the switch is set to "on" (e.g., "Enable notifications").
-- The accessible name should be equivalent to the visible text label. Additional context may be added for screen reader users with `aria-label` or `aria-labelledby`, or offscreen text (i.e., `.sr-only`), when needed.
-  - If the accessible name extends beyond the visible text, ensure the visible text appears at the beginning of the accessible name.
+- The switch has an associated visible text label.
+- The switch has an accessible name that describes its action. Often this is worded to be true when the switch is set to "on" (e.g., "Enable notifications").
+- The accessible name is equivalent to the visible text label.
+- When additional context is needed beyond the visible text, add it via `aria-label`, `aria-labelledby`, or offscreen text (i.e., `.sr-only`). The visible text appears at the start of the accessible name.
 - When on, the switch has `aria-checked="true"`. When off, the switch has `aria-checked="false"`.
   - If the switch is implemented as `input[type="checkbox"]`, use the native `checked` attribute instead of `aria-checked`.
 - The switch must be focusable:
@@ -56,9 +56,9 @@ Two-state on/off control representing a persistent setting. Uses `role="switch"`
 - Whether multiple switches may be grouped.
 
 ## Don'ts
-- Don't use a switch for non-setting actions.
-- Don't omit `aria-checked` when using `div` or `button` with `role="switch"`.
-- Don't use both `checked` and `aria-checked` on `input[type="checkbox"]`.
+- Do not use a switch for non-setting actions.
+- Do not omit `aria-checked` when using `div` or `button` with `role="switch"`.
+- Do not use both `checked` and `aria-checked` on `input[type="checkbox"]`.
 - Do not use a switch to trigger actions; use it only for persistent on/off settings.
 
 ## Golden Pattern

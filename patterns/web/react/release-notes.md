@@ -6,50 +6,74 @@ slug: /release-notes
 
 # Release Notes
 
-## rev_2026-06-05 (catalog_revision rev_2026-06-05T12:00:00Z)
+Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
-Corpus strengthening informed by controlled experimentation (AIML 2026 study), plus catalog corrections. No new patterns; no breaking changes to pattern IDs or URLs.
+## 0.3.0 — 2026-06-28
+
+Author-conventions tightening pass. No new patterns; no breaking changes to pattern IDs, URLs, or required behaviors.
+
+**Conventions tightened across the corpus:**
+- Don't bullets standardized to "Do not" form. Section heading remains `## Don'ts`.
+- "(required)" inline labels removed — all Must Haves are required by definition.
+- Bold removed from inline attribute references; emphasis is reserved for prose, not code tokens.
+- Customizable sections recast using a preferred-vs-fallback framing where applicable (see Dialog Modal).
+- Accessible-name boilerplate reframed across multiple patterns: soft "may serve as" / "may be added" phrasings in Must Haves replaced with conditional Musts ("When X, do Y").
+
+**Components:**
+- Button → 0.2.0 — accessible-name boilerplate reframed.
+- Toggle Button → 0.2.0 — accessible-name boilerplate reframed.
+- Link → 0.2.0 — accessible-name boilerplate reframed.
+- Switch → 0.3.0 — accessible-name boilerplate reframed; "should have" tightened to "has" on the visible-label requirement.
+- Dialog (Modal) → 0.2.0 — Customizable reframed to preferred-vs-fallback (`<dialog>` preferred, `<div role="dialog">` fallback with conditions); "(required)" inline labels removed; Must Haves flattened.
+- Account Menu → 0.2.1 — bold removed from `aria-expanded` reference.
+
+All other patterns received the corpus-wide typography normalization (Don't → Do not) without per-pattern semantic changes; no per-pattern bumps.
+
+## 0.2.0 — 2026-06-05
+
+Corpus strengthening from controlled experimentation, plus catalog corrections. No new patterns; no breaking changes to pattern IDs or URLs. Per-pattern versions are now recorded retroactively for the changes that landed in this release.
 
 **Foundations:**
 - Focus States: added a strongly recommended two-layer focus ring (2px ring inside a 4px white background extension) that remains visible against any surrounding surface; a verified simple outline remains acceptable.
-- Heading Structure: footer link-group titles, when present, must be `<h2>` headings.
+- Heading Structure: footer link-group titles, when present, are `<h2>` headings.
 - Non-text Contrast: corrected misplaced bullets in Don'ts and Acceptance Checks.
 
 **Components:**
-- Account Menu: `aria-expanded` on the trigger elevated to a hard gate (bolded requirement, new Don't, strengthened acceptance check).
-- Carousels (both): non-visible slides must be unreachable by keyboard and screen readers (new Must Have + acceptance check); autoplay golden-pattern code cleaned up.
-- Collection Row: aliases expanded (product card grid, product cards, card row, media row); Don'ts clarified.
-- Navigation Menu: logo carries `aria-current="page"` on the homepage when no explicit Home link exists.
-- Switch: documented the customizable base element (`div`/`button`/`input[type="checkbox"]` with `role="switch"`) and the emerging native HTML switch control.
-- Dialog (Modal): golden pattern adds a Tab-wrapping fallback so focus stays contained even when no inert target exists.
-- Channel Guide Grid: rows and cells now expose `aria-rowindex`/`aria-colindex` for lazy-loading correctness.
-- Accordion: golden pattern notes that the demo's `<h3>` must match the surrounding heading hierarchy.
+- Accordion → 0.1.1 — golden pattern notes that the demo's `<h3>` must match the surrounding heading hierarchy.
+- Account Menu → 0.2.0 — `aria-expanded` on the trigger elevated to a hard gate (new Must Have, new Don't, strengthened acceptance check).
+- Carousel (Dot Navigation) → 0.2.0 — non-visible slides must be unreachable by keyboard and screen readers (new Must Have + acceptance check); autoplay golden-pattern code cleaned up.
+- Carousel (Thumbnail Navigation) → 0.2.0 — same non-visible-slides update.
+- Collection Row → 0.2.0 — aliases expanded (product card grid, product cards, card row, media row); Don'ts clarified.
+- Dialog (Modal) → 0.1.1 — golden pattern adds a Tab-wrapping fallback so focus stays contained even when no inert target exists.
+- Channel Guide Grid → 0.2.0 — rows and cells now expose `aria-rowindex` / `aria-colindex` for lazy-loading correctness.
+- Navigation Menu → 0.2.0 — logo carries `aria-current="page"` on the homepage when no explicit Home link exists.
+- Switch → 0.2.0 — Customizable expanded to document base-element options (`div` / `button` / `input[type="checkbox"]` with `role="switch"`) and the emerging native HTML switch control.
 
 **Catalog and formatting:**
 - Every pattern page now states its canonical Pattern ID and summary in visible text directly under the title (chunk-resilient retrieval).
 - The Components catalog page is generated from `patterns.json` at build time (no more manual drift).
-- Five pattern files renamed to full-ID filenames (`accordion.basic.md`, `switch.basic.md`, `collection-row.basic.md`, `link.basic.md`, `toast.basic.md`). Page URLs are unchanged — they derive from pattern IDs, not filenames.
+- Five pattern files renamed to full-ID filenames (`accordion.basic.md`, `switch.basic.md`, `collection-row.basic.md`, `link.basic.md`, `toast.basic.md`). Page URLs unchanged — they derive from pattern IDs, not filenames.
 - Golden patterns no longer import icon libraries; icon slots use placeholder spans corpus-wide.
 - Typographic quotes normalized to straight quotes; all golden-pattern fences use `jsx`.
 
-Per-pattern versions remain `0.1.0` for this revision.
+## 0.1.0 — 2026-02-17
 
-## rev_2026-02-17 (catalog_revision rev_2026-02-17T18:00:00Z)
+Initial beta release of the Web / React accessibility pattern corpus.
 
-Initial beta release of the React (Web) accessibility pattern corpus.
-
-**New patterns (beta):**
+**New patterns (beta, all at 0.1.0):**
 - Accordion
-- Basic Button
+- Account Menu
+- Button
 - Toggle Button
-- Carousel with Dot Navigation
-- Carousel with Thumbnail Navigation
+- Carousel (Dot Navigation)
+- Carousel (Thumbnail Navigation)
+- Channel Guide Grid
 - Collection Row
 - Dialog (Modal)
-- Channel Guide Grid
 - Link
+- Navigation Menu
+- Select
 - Switch
 - Toast
 
-All patterns are versioned at `0.1.0` and carry `status: beta`.
-Breaking changes will be communicated through catalog revision bumps.
+All patterns carry `status: beta`. Breaking changes will be communicated via catalog version bumps and per-pattern major version bumps.

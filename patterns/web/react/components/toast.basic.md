@@ -44,7 +44,7 @@ Temporary, non-blocking status message announced via live region. May include op
 
 ## Don'ts
 
-- Don't mount/unmount the live region container based on toast visibility.
+- Do not mount/unmount the live region container based on toast visibility.
 - Do not move focus into the toast when it appears.
 - Do not use `role="alertdialog"`.
 - The toast must not contain buttons or elements that require user action (use `snackbar` or `dialog` instead).

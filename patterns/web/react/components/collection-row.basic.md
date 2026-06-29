@@ -51,8 +51,8 @@ Horizontal product shelf with a heading, list semantics, and Prev/Next paging th
 - Items must at minimum have some "title" text that gives each item a name, but they are not required to also have metadata, like a price, or rating, etc.
 
 ## Don'ts
-- Don't let Tab from the last visible item move into out-of-view items; it must reach the Next button instead.
-- Don't split the item into multiple separate interactive elements (one item = one link).
+- Do not let Tab from the last visible item move into out-of-view items; it must reach the Next button instead.
+- Do not split the item into multiple separate interactive elements (one item = one link).
 - Do not rely solely on poster art or imagery to communicate the name of each item.
 
 ## Golden Pattern

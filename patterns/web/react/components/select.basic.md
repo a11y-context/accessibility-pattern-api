@@ -72,12 +72,12 @@ Native `<select>` elements are accessible out of the box. This pattern applies o
 - Optional grouping or separators, as long as listbox/option semantics remain correct and options remain navigable.
 
 ## Don'ts
-- Don't omit the visually hidden native `<select>` when this control participates in form submission or should support autofill.
-- Don't implement the trigger as a non-interactive element (e.g., `<div>`) without button semantics.
-- Don't use `role="menu"` / `role="menuitem"` for select options.
-- Don't make each option tabbable (avoid forcing users to Tab through options).
-- Don't leave the listbox visible while `aria-expanded="false"` (and vice versa).
-- Don't allow the custom UI and hidden `<select>` to get out of sync (options/value must match).
+- Do not omit the visually hidden native `<select>` when this control participates in form submission or should support autofill.
+- Do not implement the trigger as a non-interactive element (e.g., `<div>`) without button semantics.
+- Do not use `role="menu"` / `role="menuitem"` for select options.
+- Do not make each option tabbable (avoid forcing users to Tab through options).
+- Do not leave the listbox visible while `aria-expanded="false"` (and vice versa).
+- Do not allow the custom UI and hidden `<select>` to get out of sync (options/value must match).
 
 ## Golden Pattern
 ```jsx

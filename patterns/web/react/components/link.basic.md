@@ -25,9 +25,9 @@ Native link for navigation using `<a href>`. Supports optional context in the ac
 ## Must Haves
 - Use a native `<a>` element with an `href` whenever possible.
 - Ensure the link's purpose/destination is understandable from the link text alone, or from the link text plus programmatically determined context (e.g., `aria-label`, `aria-labelledby`, offscreen text).
-- Ensure the link has an accessible name that describes its purpose/destination.
-- For links with visible text, the inner text may serve as the accessible name. Additional context may be added using `aria-label`, `aria-labelledby`, or offscreen text when needed.
-- If the accessible name extends beyond the visible text, ensure the visible text appears at the beginning of the accessible name.
+- The link has an accessible name that describes its purpose or destination.
+- When the link has visible text, the visible text serves as the accessible name.
+- When additional context is needed beyond the visible text, add it via `aria-label`, `aria-labelledby`, or offscreen text. The visible text appears at the start of the accessible name.
 - For icon-only links, provide an accessible name using `aria-label` or `aria-labelledby`.
 - Icons within links must be decorative (`aria-hidden="true"`).
 - Keyboard activation must follow native link behavior: Enter activates; Space does not.
@@ -40,15 +40,15 @@ Native link for navigation using `<a href>`. Supports optional context in the ac
  - Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the link.
 
 ## Customizable
-- Links with visible text don't usually need additional context for screen reader users (though they might). If they do, then an `aria-label` or offscreen element should be used.
+- No accessibility-relevant variations beyond the Must Haves above.
 
 ## Don'ts
-- Don't style a link to look like plain text when it appears inline within a paragraph; inline links must be visually obvious (e.g., underlined).
-- Don't rely on color alone to indicate a link.
-- Don't use `<a>` without `href` for interactive behavior; it loses native link semantics and behaviors.
+- Do not style a link to look like plain text when it appears inline within a paragraph; inline links must be visually obvious (e.g., underlined).
+- Do not rely on color alone to indicate a link.
+- Do not use `<a>` without `href` for interactive behavior; it loses native link semantics and behaviors.
 - Do not use `role="link"` on non-link elements unless you cannot use a native `<a href>`. Native links provide browser behaviors ARIA cannot add automatically.
-  - Don't use `role="link"` unless you also implement the missing link behaviors (focus, Enter activation, navigation, and expected link affordances).
-- Don't permit Space to activate links.
+  - Do not use `role="link"` unless you also implement the missing link behaviors (focus, Enter activation, navigation, and expected link affordances).
+- Do not permit Space to activate links.
 
 ## Golden Pattern
 ```jsx

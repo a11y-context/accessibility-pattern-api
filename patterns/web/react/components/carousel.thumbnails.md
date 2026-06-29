@@ -39,9 +39,9 @@ Horizontally-advancing carousel (aka hero or marquee carousel) with thumbnail na
 - The contents of each slide are customizable. However, if they contain a title, then these should usually be `<h2>`.
 
 ## Don'ts
-- Don't auto-advance the slides without a visible Pause/Play control.
-- Don't ignore `prefers-reduced-motion: reduce`.
-- Don't keep moving while the user is interacting (focus inside carousel must pause autoplay).
+- Do not auto-advance the slides without a visible Pause/Play control.
+- Do not ignore `prefers-reduced-motion: reduce`.
+- Do not keep moving while the user is interacting (focus inside carousel must pause autoplay).
 
 ## Golden Pattern
 ```jsx

@@ -18,33 +18,15 @@ If you are contributing as part of work at another organization, confirm with th
 
 ---
 
-## Scope of the public corpus
+## Scope
 
-The corpus in this repository is intentionally **generic** and **publicly derivable**. It exists to serve any consumer — independent developers, design systems, AI coding assistants, enterprise teams — without entangling any one organization's internal practices.
-
-### What belongs in the public corpus
+The corpus is WCAG-derived and standards-based. Contributions should be:
 
 - Component patterns derived from WCAG, WAI-ARIA, the ARIA Authoring Practices Guide (APG), and other public normative sources
-- Implementation patterns common to the public web / React / Android / iOS ecosystems
 - Foundational accessibility rules (focus management, color contrast, semantics, screen reader behavior, keyboard interaction)
-- Generic golden patterns built from standard HTML, ARIA, or framework-standard components
-- General "Use When" / "Do Not Use When" criteria phrased without reference to any specific product, team, or organization
+- Golden Patterns built from standard HTML, ARIA, or framework-standard primitives
 
-### What does NOT belong in the public corpus
-
-- References to a specific organization's design system, component library, or framework wrapper
-- Internal product names, team names, application names, or infrastructure references
-- Content lifted or paraphrased from a proprietary internal knowledge base, Confluence space, wiki, or internal docs
-- Organization-specific conventions ("the way we do it here")
-- Patterns whose justification depends on internal context unavailable to the public
-
-**Rule of thumb:** if publishing the contribution as a public blog post tomorrow would require an internal review at your organization, it does not belong here. If you would happily cite the contribution as your own published work without checking with anyone, it does.
-
-### Where organization-specific content does belong
-
-Enterprise consumers should **fork this repository** into their own infrastructure and layer organization-specific content on top of the public corpus there. The public corpus is intended as the upstream baseline; downstream forks can extend it with org-specific patterns, design-system component references, and internal conventions without ever pushing that content back to the public repo.
-
-Generic improvements discovered while building an org-specific overlay (a new universally-applicable WCAG-derived pattern, a foundational rule that applies regardless of design system) are welcomed back upstream, subject to the same scope rules above and with appropriate clearance from your organization.
+The canonical format for every pattern file is `schema/pattern-template.md`. Follow it exactly. Existing patterns under `patterns/web/react/components/` are good shape references.
 
 ---
 

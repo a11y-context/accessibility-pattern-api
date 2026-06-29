@@ -81,14 +81,14 @@ A non-modal header navigation pattern that supports top-level links and optional
 - Whether the toggle is a caret icon button, text button, or combined button label (as long as the accessibility semantics above are met).
 
 ## Don'ts
-- Don't open sub-menus on hover only.
+- Do not open sub-menus on hover only.
   - If hover-to-open is supported for mouse users, sub-menus must also be operable via click and keyboard, and keyboard users must not be forced to tab through submenu items unless they intentionally open them.
-- Don't make a top-level item both a navigation link and the submenu toggle using the same element.
+- Do not make a top-level item both a navigation link and the submenu toggle using the same element.
   - If the parent has its own destination page and also has a submenu, use **parent link + separate toggle button**.
-- Don't use `role="menu"` / `role="menuitem"` unless you implement the full ARIA menu widget behavior (managed focus, arrow keys, typeahead).
-- Don't leave submenu content visible while `aria-expanded="false"` (and vice versa).
-- Don't strand focus by removing the currently focused submenu item without closing and allowing focus to move naturally.
-- Don't render sub-menus expanded/visible by default. They open only after the user activates the corresponding toggle.
+- Do not use `role="menu"` / `role="menuitem"` unless you implement the full ARIA menu widget behavior (managed focus, arrow keys, typeahead).
+- Do not leave submenu content visible while `aria-expanded="false"` (and vice versa).
+- Do not strand focus by removing the currently focused submenu item without closing and allowing focus to move naturally.
+- Do not render sub-menus expanded/visible by default. They open only after the user activates the corresponding toggle.
 
 ## Golden Pattern
 ```jsx

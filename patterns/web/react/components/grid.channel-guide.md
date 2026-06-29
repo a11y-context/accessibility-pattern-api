@@ -57,10 +57,10 @@ Interactive channel guide grid with one Tab stop and arrow-key navigation across
   - Selecting/tuning changes the selected row, but focus stays with the user's navigation.
 
 ## Don'ts
-- Don't make every cell a Tab stop.
-- Don't require Tab to move between cells.
-- Don't mix multiple interactive controls inside a cell in this basic pattern.
-- Don't conflate "selected channel" with "focused cell".
+- Do not make every cell a Tab stop.
+- Do not require Tab to move between cells.
+- Do not mix multiple interactive controls inside a cell in this basic pattern.
+- Do not conflate "selected channel" with "focused cell".
 - Do not use `<button role="gridcell">` or `<button role="columnheader">`.
 
 ## Golden Pattern

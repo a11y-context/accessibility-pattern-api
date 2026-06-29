@@ -42,11 +42,11 @@ A set of show/hide sections with heading-wrapped buttons controlling associated 
 - The heading level will usually be `h2`, but this is customizable and depends on the heading hierarchy of the surrounding page.
 
 ## Don'ts
-- Don't use non-focusable headers (e.g., `<div>` without proper button semantics) as the interactive control.
-- Don't make the panel visible while leaving `aria-expanded="false"` (and vice versa).
-- Don't remove panel content from the DOM in a way that breaks expected focus behavior (e.g., collapsing a panel while focus remains inside it without moving focus).
-- Don't use `role="heading"` without an `aria-level`.
-- Don't nest accordions within accordion panels.
+- Do not use non-focusable headers (e.g., `<div>` without proper button semantics) as the interactive control.
+- Do not make the panel visible while leaving `aria-expanded="false"` (and vice versa).
+- Do not remove panel content from the DOM in a way that breaks expected focus behavior (e.g., collapsing a panel while focus remains inside it without moving focus).
+- Do not use `role="heading"` without an `aria-level`.
+- Do not nest accordions within accordion panels.
 
 ## Golden Pattern
 ```jsx

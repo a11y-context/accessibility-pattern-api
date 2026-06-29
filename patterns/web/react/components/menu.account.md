@@ -28,7 +28,7 @@ A non-modal, button-invoked account menu that reveals a small list of links and 
 ## Must Haves
 - The invoking control is a native `<button>` (preferred), or `role="button"` only when a native button cannot be used.
   - If using `role="button"`, add `tabindex="0"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating.
-- The invoking button reflects open state of the menu with **`aria-expanded="true|false"`**. This state toggle is the core signal of the pattern; the implementation fails without it.
+- The invoking button reflects open state of the menu with `aria-expanded="true|false"`. This state toggle is the core signal of the pattern; the implementation fails without it.
 - The invoking button is associated to the menu container with `aria-controls="IDREF"`.
 - The menu content is shown/hidden in the DOM (for example via the `hidden` attribute) so that when closed, menu content cannot be reached by keyboard or screen readers.
 - When the menu opens, focus remains on the invoking button.
@@ -50,12 +50,12 @@ A non-modal, button-invoked account menu that reveals a small list of links and 
   - Optional label for the list (for example `aria-label="Account"` on the list, or wrap with a labeled container).
 
 ## Don'ts
-- Don't render the invoking button without `aria-expanded`; `aria-haspopup` alone does not convey open/closed state.
-- Don't make hover or pointer click the only way to open the menu; opening must also work with keyboard Enter and Space (native button activation).
-- Don't use `role="menu"` / `role="menuitem"` unless you implement the full keyboard and focus behavior expected of composite menu widgets.
-- Don't position the menu in the DOM far away from the trigger in a way that breaks focus order or causes screen readers to encounter the menu in an unexpected location.
-- Don't leave the menu visible or accessible to screen readers while `aria-expanded="false"` (and vice versa).
-- Don't close the menu in a way that strands focus (for example removing the focused element without moving focus).
+- Do not render the invoking button without `aria-expanded`; `aria-haspopup` alone does not convey open/closed state.
+- Do not make hover or pointer click the only way to open the menu; opening must also work with keyboard Enter and Space (native button activation).
+- Do not use `role="menu"` / `role="menuitem"` unless you implement the full keyboard and focus behavior expected of composite menu widgets.
+- Do not position the menu in the DOM far away from the trigger in a way that breaks focus order or causes screen readers to encounter the menu in an unexpected location.
+- Do not leave the menu visible or accessible to screen readers while `aria-expanded="false"` (and vice versa).
+- Do not close the menu in a way that strands focus (for example removing the focused element without moving focus).
 
 ## Golden Pattern
 ```jsx
