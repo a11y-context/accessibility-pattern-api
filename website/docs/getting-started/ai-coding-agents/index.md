@@ -1,31 +1,45 @@
 ---
-title: For AI Coding Agents
+title: Using with AI Coding Agents
 ---
 
-# Using the Corpus with AI Coding Agents
+# Using A11y Context with AI Coding Agents
 
-The integration has three moving parts. Each exists because the previous one isn't enough on its own.
+The integration has two moving parts:
 
-1. **The corpus** (the library): per-component accessibility specifications plus global rules, structured for selective retrieval.
-2. **A skill or subagent** (the librarian): the retrieval procedure. Look at the task, identify the components about to be built, evaluate each candidate pattern's `Use When` / `Do Not Use When`, retrieve only what applies, apply Must Haves and the Golden Pattern.
-3. **An always-on rule** (the trigger): a small instruction file, loaded in every session, that requires the agent to run the retrieval procedure before generating UI code. Without it, agents rarely consult guidance on their own (see [The Enforcement Rule](/getting-started/ai-coding-agents/enforcement-rule)).
+1. **The corpus** (the library): per-component accessibility specifications plus the [Foundations](/web/react/foundations) ruleset, structured for selective retrieval.
+2. **A skill or subagent** (the librarian): the retrieval procedure plus the invocation directive that gets it consulted. Look at the task, identify the components about to be built, evaluate each candidate pattern's `Use When` / `Do Not Use When`, retrieve only what applies, apply Must Haves and the Golden Pattern.
 
-## The three design decisions
+A skill or subagent does the librarian's job *only if it's actually invoked*. The skills published here carry an invocation directive in their `description` — phrasing engineered so the agent reaches for the skill on any UI-generation task without the user needing to remember.
 
-Building this for your environment means picking a value on three axes. A 48-run controlled experiment tested the combinations; the findings:
+## The two design decisions
 
-**Retrieval transport: local files or HTTP.** Output quality showed no significant difference. They differ in operational properties: HTTP needs network access but the corpus stays always-current; local files are fastest and work offline. Details: [Retrieval Options](/getting-started/ai-coding-agents/retrieval-options).
+Building this for your environment means picking a value on two axes. A 48-run controlled experiment tested the combinations:
+
+**Retrieval transport: HTTP or local files.** Output quality showed no significant difference. They differ in operational properties: HTTP needs network access but the corpus stays always-current; local files are fastest and work offline. Details: [Retrieval Options](/getting-started/ai-coding-agents/install/retrieval-options).
 
 **Processing: inline skill or subagent.** Overall pass rates were statistically indistinguishable (91.3% vs 90.9%), but the failure modes differ. Skills were better at component-level "Critical" checks (98.7% vs 89.3%) because the full pattern documentation stays in the working context. Subagents condense guidance into a brief, which loses component-specific nuance, but they were better at cross-component concerns like heading structure, and they isolate retrieval tokens from the main agent's context.
 
-**Enforcement: rule or self-discovery.** Not actually a choice. With a rule: 100% invocation. Without: 13% for skills, 53% for subagents. The rule is mandatory.
+## Why invocation matters
+
+In testing with the original (non-engineered) skill description, agents reached for the skill on their own only **13% of the time** (inline skill) or **53% of the time** (subagent). The corpus can't help if it's never consulted. With a separate enforcement rule loaded in every session, invocation jumped to **~100%** for both architectures.
+
+The skills published here have rule-like invocation phrasing engineered into the description itself, designed to make the skill self-enforcing without a separate rule file. For most environments this will be sufficient.
 
 ## Recommended starting point
 
-**Rule + inline skill + HTTP retrieval.** It matched the best quality results in testing at the lowest operational complexity: nothing to vendor locally, and the corpus is always current because it's fetched from this site.
+**Inline skill + HTTP retrieval.** Matches the best quality results in testing at the lowest operational complexity: nothing to vendor locally, the corpus is always current, and the skill's description handles invocation.
 
-Setup:
+Next: [Install](/getting-started/ai-coding-agents/install/) lays out the install paths (ZIP download, git clone, enterprise RAG indexing). Then [Verify it's working](/getting-started/ai-coding-agents/verification) with a test prompt.
 
-1. Add the [enforcement rule](/getting-started/ai-coding-agents/enforcement-rule) to your repo's AI-instructions location.
-2. Add the retrieval skill or subagent from [Downloads](/getting-started/ai-coding-agents/downloads).
-3. Verify: ask the agent to "implement a toast notification for this app," with no mention of accessibility. It should retrieve the toast pattern before writing code, and the output should match the pattern's Must Haves.
+## Optional: belt-and-suspenders with an enforcement rule
+
+For environments where guaranteed invocation matters more than operational simplicity — regulated industries, organizations with mixed AI tools whose skill-invocation behavior is inconsistent — adding a separate enforcement rule provides the defensible 100% invocation rate measured in the original experiment.
+
+The rule is a small instruction file loaded in every session that mandates the same procedure the skill encodes:
+
+1. Before generating UI code, run a pattern-selection pass.
+2. Select patterns using `Use When` / `Do Not Use When`.
+3. Retrieve each selected pattern once; retrieve Foundations when the task touches page structure, headings, landmarks, or focus-critical UI.
+4. Apply Must Haves and the Golden Pattern, then write the code.
+
+The original rule files (one per AI tool) are preserved in the archived variant repos. The `.claude/rules/a11y-policy.md` file in [`a11y-context-archive/claude-rule-skill-http`](https://github.com/a11y-context-archive/claude-rule-skill-http) is the rule used in the controlled experiment.

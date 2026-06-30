@@ -22,7 +22,7 @@ Each download is a folder containing a `SKILL.md` plus any supporting files. The
 unzip a11y-context-web-react-http.zip -d .claude/skills/
 ```
 
-For org-level distribution, point your skills manager (Atlas, an internal registry, or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
+For org-level distribution, point your internal skills registry (or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
 
 ## Web / React
 
@@ -66,12 +66,6 @@ The agent reads patterns from a copy of the corpus bundled with the skill. Fully
 - **Clone the skills repo:** `git clone https://github.com/a11y-context/a11y-context-skills` — and copy any skill folder into your AI tool's skills directory.
 - **Clone the corpus repo:** `git clone https://github.com/a11y-context/accessibility-pattern-api` for the raw markdown patterns.
 
-## Verification
+## Verifying installation
 
-After installing a skill, run this prompt in a UI repo (note: it never mentions accessibility):
-
-```
-Add a toast notification that confirms when an item is saved.
-```
-
-Pass criteria: the agent retrieves the toast pattern before writing code; the live region container is always mounted; the message is announced via `role="status"`; focus never moves to the toast; the toast auto-dismisses and the region is cleared.
+See [Verify it's working](/getting-started/ai-coding-agents/verification) for the test prompt and pass criteria.

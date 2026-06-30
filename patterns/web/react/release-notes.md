@@ -8,6 +8,25 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.1 — 2026-06-30
+
+Getting Started information-architecture cleanup; Foundations title/intro alignment; first run of the auto-sync workflow.
+
+**Site changes (Getting Started restructure):**
+- "For AI Coding Agents" renamed to "Using with AI Coding Agents" — clearer that the page is for human readers about using A11y Context with AI agents.
+- AI Coding Agents index page reframed: "two moving parts" (corpus + skill) replaces the prior three; "two design decisions" (transport + processing) replaces the prior three; new "Why invocation matters" section preserves the original 13% / 53% / 100% invocation data from the controlled experiment; recommended starting point is now "inline skill + HTTP."
+- Enforcement rule is presented as an **optional belt-and-suspenders** for environments requiring guaranteed invocation, with a link to the original rule file preserved in the archive org.
+- The standalone `enforcement-rule.md` page is deleted.
+- New `install/` subfolder consolidates the three install paths. `downloads.md`, `retrieval-options.md`, and `indexing-guidance.md` moved into `install/`. New `install/index.md` orients visitors to ZIP-download vs git-clone vs enterprise-RAG.
+- New top-level `verification.md` page (formerly a section inside downloads.md), with extended pass criteria and additional test prompts.
+- `downloads.md`: Atlas mention removed from the org-level distribution guidance.
+- `retrieval-options.md`: Enterprise RAG section now references skill-based invocation rather than the deleted rule mechanism.
+
+**Corpus changes:**
+- Foundations page H1 changed from "Global Rules (Baseline)" to "Foundations" with a new intro paragraph explaining what's covered (utilities, page-level structure, visual fundamentals). Aligns with the frontmatter title and the site navigation.
+
+No per-pattern semantic changes; per-pattern versions unchanged.
+
 ## 0.4.0 — 2026-06-28 (infrastructure)
 
 Infrastructure change: `patterns.json` is now **generated** from each pattern's `.md` frontmatter and `## Use When` / `## Do Not Use When` body sections by a prebuild script. Authors only edit the .md files; the JSON is a derived artifact (still committed so the MCP server and consumers can read it without running the build).
