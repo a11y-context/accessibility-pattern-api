@@ -98,6 +98,26 @@ If you use Claude Code (or an equivalent AI coding assistant) to author or revis
 
 ---
 
+## Your first contribution — walkthrough
+
+The bullet-point version of how to take a new pattern from idea to merged PR. Full conventions in `schema/style-guide.md`; full register checklist in style-guide § Definition of done.
+
+1. **Open an issue first** describing the pattern you want to add (use the "New pattern proposal" issue template). This is a chance to confirm the proposed pattern ID, scope, and sibling boundaries before you invest time drafting. New patterns are often connected to existing siblings via `Do Not Use When` redirects; sorting that out up front saves rework.
+2. **Branch.** If you have Write access, create a feature branch off `main` in this repo. If you don't, fork to your personal GitHub and branch in your fork.
+3. **Create the pattern file** at `patterns/web/react/components/<id>.md`. Copy the skeleton from `schema/pattern-template.md`. Set `status: draft` while you work — it keeps the pattern out of the generated `patterns.json` until you flip it to `beta`.
+4. **Author the content** per `schema/style-guide.md`. Pay particular attention to:
+   - Frontmatter completeness (all 8 fields, including `latest_version: 0.1.0` and `aliases` generous enough to match real prompts)
+   - Section order and `## Use When` / `## Do Not Use When` phrasing (these become the AI's selection signal in `selection_excerpt`)
+   - Must Haves phrased as imperatives, no "may" / "should" / "recommended" language
+5. **Build a lab demo** for AT verification in [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab). Test the pattern with a keyboard and screen reader before finalizing the Golden Pattern.
+6. **Flip to `status: beta`** when you're ready for the catalog.
+7. **Bump `catalog_revision`** in `patterns/web/react/catalog-meta.json` (MINOR — a new pattern is a feature addition).
+8. **Add a release notes entry** under the new catalog version in `patterns/web/react/release-notes.md`.
+9. **Run `npm run prebuild`** in `website/` to regenerate `patterns.json` and the component gallery. Commit the regenerated files.
+10. **Open a PR** using the PR template. CI will run the build; reviewers will check the pattern against the style guide and verify the lab demo. After merge, the skills repo gets synced as part of the maintainer's release process.
+
+If you hit anything unclear, comment on your issue or PR — questions are welcome.
+
 ## Where other contributions belong
 
 - **New accessibility patterns, pattern revisions, foundational rules** → this repo, this CONTRIBUTING.
