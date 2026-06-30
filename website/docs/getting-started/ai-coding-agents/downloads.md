@@ -22,7 +22,7 @@ Each download is a folder containing a `SKILL.md` plus any supporting files. The
 unzip a11y-context-web-react-http.zip -d .claude/skills/
 ```
 
-For org-level distribution, point your skills manager (Atlas, an internal registry, or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
+For org-level distribution, point your internal skills registry (or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
 
 ## Web / React
 

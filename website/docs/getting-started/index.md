@@ -21,7 +21,7 @@ This corpus exists to close that gap at the moment code is generated. In a contr
 
 ## Two ways to use it
 
-**[For AI coding agents](/getting-started/ai-coding-agents/)** is the primary use. An always-on rule directs the agent to identify the components it is about to build, retrieve only those patterns plus the global rules, and apply them before writing code.
+**[For AI coding agents](/getting-started/ai-coding-agents/)** is the primary use. A skill (or subagent) handles retrieval: identify the components about to be built, pull only the relevant patterns plus the Foundations ruleset, and apply them before writing code. The skill's description carries invocation guidance so the agent reaches for it without prompting.
 
 **[For QA and accessibility testing](/getting-started/qa-testing/)**, the same Must Haves and Acceptance Checks double as a component-aware test specification: a rulebook for automated harnesses and a script for manual AT verification.
 

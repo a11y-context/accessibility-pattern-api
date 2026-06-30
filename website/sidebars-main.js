@@ -35,11 +35,6 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'getting-started/ai-coding-agents/enforcement-rule',
-              label: 'The Enforcement Rule',
-            },
-            {
-              type: 'doc',
               id: 'getting-started/ai-coding-agents/retrieval-options',
               label: 'Retrieval Options',
             },

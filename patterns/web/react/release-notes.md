@@ -8,6 +8,20 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.1 — 2026-06-30
+
+Getting Started cleanup; Foundations page-title alignment; first run of the auto-sync workflow.
+
+**Site changes:**
+- AI Coding Agents pages reframed: removed the obsolete "always-on rule" mechanism. Skills now carry their invocation directive in the `description` (empirically reliable). The "two moving parts" framing replaces the prior three; "two design decisions" replaces the prior three. The standalone "Enforcement Rule" page has been deleted.
+- Downloads page: removed Atlas-specific mention from org-level distribution guidance.
+- Retrieval Options: Enterprise RAG section updated to reference skill-based invocation rather than the deleted rule mechanism.
+
+**Corpus changes:**
+- Foundations page H1 changed from "Global Rules (Baseline)" to "Foundations" to align with the page title and site navigation. Added a one-paragraph intro under the H1 explaining what Foundations covers.
+
+No per-pattern semantic changes; per-pattern versions unchanged.
+
 ## 0.4.0 — 2026-06-28 (infrastructure)
 
 Infrastructure change: `patterns.json` is now **generated** from each pattern's `.md` frontmatter and `## Use When` / `## Do Not Use When` body sections by a prebuild script. Authors only edit the .md files; the JSON is a derived artifact (still committed so the MCP server and consumers can read it without running the build).

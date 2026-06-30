@@ -14,7 +14,9 @@ apply_policy:
 
 ---
 
-# Global Rules (Baseline)
+# Foundations
+
+Baseline accessibility rules that apply across all UI work. These are the cross-cutting concerns no individual component pattern owns: utilities used by many patterns (`sr-only`), site-wide structure (headings, landmarks), and visual fundamentals (contrast, focus states).
 
 ## Rule: Offscreen Text Utility (sr-only)
 
