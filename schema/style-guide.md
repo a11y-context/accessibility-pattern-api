@@ -143,6 +143,12 @@ Failure modes — the anti-pattern catalog. Target the mistakes AI agents and de
 
 The canonical reference implementation. It is a **teaching artifact for AI consumption**, not production library code.
 
+Every Golden Pattern section opens with the same single-sentence framing line, on its own line between the `## Golden Pattern` heading and the code fence:
+
+> Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
+
+This line makes the contract explicit for human readers landing on a pattern page (hiring panel reviewers, contributors, anyone clicking through from the rendered docs site): the snippet demonstrates the behavior contract, not a production-realistic template. It lives outside the code fence so it does not consume retrieval tokens inside the snippet itself.
+
 Rules:
 
 - **Ideal HTML / semantic structure.** Use the standard element or canonical ARIA composition. No bespoke wrappers.
@@ -153,14 +159,14 @@ Rules:
 
 Code conventions:
 
-- Open with `"use client";` when the component has state or event handlers; omit for stateless demos.
-- `import * as React from "react";` as the import style.
+- Open with `"use client";` when the component has state, refs, effects, or event handlers; omit for stateless demos. The directive is a structural signal for Next.js App Router consumers (where Server Components are the default and using hooks without `"use client"` is a build error). Vite, Remix, CRA, and other consumers strip it.
+- **No React import statement.** Omit `import * as React from "react"` and `import { createPortal } from "react-dom"`. Hook and API names appear in the body using named-import style (`useState`, `useRef`, `useEffect`, `useCallback`, `useLayoutEffect`, `useId`, `useMemo`, `useContext`, `createContext`, `createPortal`) — never with the `React.` namespace prefix. The LLM consumer and any modern React engineer know the imports; the boilerplate adds noise without information.
 - One exported named function component. Name it `XDemo` for showcase-style demos (`SwitchDemo`, `ButtonBasicDemo`) or a reusable component name when the pattern IS a reusable component (`ModalDialog`, `CollectionRow`, `AccountMenu`).
 - Demo data as `const` arrays at the bottom of the block (`DEFAULT_ITEMS`, `ITEMS`) with realistic streaming/ecommerce-flavored content (show titles, products, channels). Realistic data teaches the AI what slots the pattern fills.
 - Layout-dependent patterns may use inline `style` objects for positioning and visible boundaries only — no design-system styling.
 - Visually-hidden helpers are inlined as `srOnly` style objects with a comment tying them to the global utility: `// Visually-hidden styles matching the global sr-only utility (global.sr-only).`
 - No CSS frameworks, no styled-components, no external dependencies — including icon libraries.
-- Stable prefixed kebab-case IDs (`acc-btn-overview`, `color-select-listbox`) in single-instance demos; `React.useId()` when the component is written as reusable.
+- Stable prefixed kebab-case IDs (`acc-btn-overview`, `color-select-listbox`) in single-instance demos; `useId()` when the component is written as reusable.
 - Comments only where they teach an accessibility decision: `{/* Live region is always mounted */}`, `// Capture the opener at the moment we open (so focus can be restored on close).`. No TODOs, no commented-out code, no framework tips unrelated to accessibility.
 - Fence language: ```jsx.
 

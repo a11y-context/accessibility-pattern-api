@@ -20,6 +20,10 @@ Golden Pattern presentation polish across all 14 components. Frames the snippets
 
 **No semantic changes.** No per-pattern version bumps — these are presentation-only edits to the snippets; the rules, prose, and acceptance checks are unchanged. The `"use client";` directive remains where applicable as a structural signal for Next.js App Router consumers.
 
+**Contributor docs updated to match:**
+- `schema/style-guide.md` § Golden Pattern: codified the framing-line requirement and rewrote the import/hook-call code conventions (no `import * as React`, no `React.` prefix, named-style hooks).
+- `schema/pattern-template.md`: framing-line guidance added to the Golden Pattern section description; the bare template at the bottom now includes the framing sentence.
+
 ## 0.4.1 — 2026-06-30
 
 Getting Started information-architecture cleanup; Foundations title/intro alignment; first run of the auto-sync workflow.
