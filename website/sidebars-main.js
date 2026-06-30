@@ -5,9 +5,11 @@
  * Docs root: website/docs/
  * routeBasePath: '/' — pages served at /getting-started/..., /troubleshooting/..., etc.
  *
- * Getting Started structure (reworked 2026-06): corpus-first framing with two
- * consumption branches — AI coding agents (generation-time) and QA/testing
- * (post-development). The earlier NPM-CLI install funnel was retired.
+ * Getting Started structure (reworked 2026-06-30): two-part framing — corpus +
+ * skill. Install/ subfolder consolidates the three install paths (ZIP, clone,
+ * enterprise RAG). Verification has its own page. The earlier enforcement-rule
+ * page was deleted; the rule is now mentioned in the AI coding agents index
+ * page as an optional belt-and-suspenders backup.
  */
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -28,30 +30,39 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'For AI Coding Agents',
+          label: 'Using with AI Coding Agents',
           collapsible: true,
           collapsed: false,
           link: { type: 'doc', id: 'getting-started/ai-coding-agents/index' },
           items: [
             {
-              type: 'doc',
-              id: 'getting-started/ai-coding-agents/enforcement-rule',
-              label: 'The Enforcement Rule',
+              type: 'category',
+              label: 'Install',
+              collapsible: true,
+              collapsed: false,
+              link: { type: 'doc', id: 'getting-started/ai-coding-agents/install/index' },
+              items: [
+                {
+                  type: 'doc',
+                  id: 'getting-started/ai-coding-agents/install/downloads',
+                  label: 'Downloads',
+                },
+                {
+                  type: 'doc',
+                  id: 'getting-started/ai-coding-agents/install/retrieval-options',
+                  label: 'Retrieval Options',
+                },
+                {
+                  type: 'doc',
+                  id: 'getting-started/ai-coding-agents/install/indexing-guidance',
+                  label: 'Enterprise RAG Indexing',
+                },
+              ],
             },
             {
               type: 'doc',
-              id: 'getting-started/ai-coding-agents/retrieval-options',
-              label: 'Retrieval Options',
-            },
-            {
-              type: 'doc',
-              id: 'getting-started/ai-coding-agents/indexing-guidance',
-              label: 'Enterprise RAG Indexing',
-            },
-            {
-              type: 'doc',
-              id: 'getting-started/ai-coding-agents/downloads',
-              label: 'Downloads',
+              id: 'getting-started/ai-coding-agents/verification',
+              label: "Verify It's Working",
             },
           ],
         },
