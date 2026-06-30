@@ -136,6 +136,18 @@ If any of these are missing or wrong-category, write a PR review comment with th
 
 **Do not commit or approve corpus changes — own or contributor — until version bumps and release notes are aligned.**
 
+## GitHub workflow surfaces
+
+When proposing PRs or filing issues in this repo, use the templates:
+
+- `.github/pull_request_template.md` — auto-loaded on every PR; carries the versioning + quality checklist. Make sure the version-bump items are checked off; CI catches misses but the checklist catches them earlier.
+- `.github/ISSUE_TEMPLATE/bug_report.md` — for inaccuracies or technical issues.
+- `.github/ISSUE_TEMPLATE/new_pattern_proposal.md` — for proposing a new component pattern; landing scope and sibling boundaries here before authoring saves rework.
+
+CI (`.github/workflows/build.yml`) runs prebuild + build on every PR and verifies `patterns.json` and `component-gallery.md` are in sync with the `.md` sources. Contributors must run `npm run prebuild` locally and commit the regenerated files before pushing — the drift check fails otherwise.
+
+`.github/CODEOWNERS` auto-assigns `@jsweetdude` as reviewer on every PR.
+
 ## Cross-repo context
 
 - **Skills monorepo:** [`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) — installable rule/skill artifacts. The Downloads page pulls from here at build time.

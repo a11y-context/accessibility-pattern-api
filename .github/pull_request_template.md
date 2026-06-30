@@ -30,6 +30,7 @@ Full contributor docs:
 - [ ] Followed `schema/pattern-template.md` (format) and `schema/style-guide.md` (conventions)
 - [ ] Build runs clean locally: `npm run build` in `website/` succeeds
 - [ ] For new patterns: a corresponding lab demo exists in [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) and has been AT-tested
+- [ ] For revisions to existing patterns: if the change affects behavior, semantics, or the Golden Pattern, the corresponding lab demo has been reviewed and updated (or noted in the PR as not needing update)
 
 ## Notes for reviewer
 
