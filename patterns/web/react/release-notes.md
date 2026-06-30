@@ -8,6 +8,18 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.2 — 2026-06-30
+
+Golden Pattern presentation polish across all 14 components. Frames the snippets for their actual audience (AI coding assistants) and modernizes React import style.
+
+**Changes to every component pattern:**
+- Added a single-sentence framing line above each `## Golden Pattern` heading: "Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative." Clarifies that snippets demonstrate *behavior contracts* (semantics, ARIA, focus, keyboard) rather than production-realistic styling, copy, or demo data.
+- Removed `import * as React from "react";` from every snippet. The LLM consumer doesn't need the reminder, and removing it lets the body switch to named-import style.
+- Stripped the `React.` namespace prefix from all hook calls in the snippet bodies: `React.useState` → `useState`, `React.useRef` → `useRef`, `React.useEffect` → `useEffect`, `React.useCallback` → `useCallback`, `React.useLayoutEffect` → `useLayoutEffect`, `React.useId` → `useId`, `React.useMemo` → `useMemo`, `React.useContext` → `useContext`, `React.createContext` → `createContext`. Matches contemporary React conventions.
+- `dialog.modal` additionally drops `import { createPortal } from "react-dom";` for the same reason; the `createPortal(...)` call remains in the body.
+
+**No semantic changes.** No per-pattern version bumps — these are presentation-only edits to the snippets; the rules, prose, and acceptance checks are unchanged. The `"use client";` directive remains where applicable as a structural signal for Next.js App Router consumers.
+
 ## 0.4.1 — 2026-06-30
 
 Getting Started information-architecture cleanup; Foundations title/intro alignment; first run of the auto-sync workflow.
