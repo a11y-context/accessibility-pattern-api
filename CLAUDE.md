@@ -160,12 +160,11 @@ The canonical workflow currently lives in John's vault at `authoring/authoring-w
 
 1. **Outline** — author identifies the component, its use cases, and its `Use When` / `Do Not Use When` boundaries
 2. **Pattern draft** — write the pattern markdown following `schema/pattern-template.md` and the style guide
-3. **Lab demo** — build a minimal interactive demo in the [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) repo for AT verification
-4. **AT testing** — author verifies with VoiceOver / NVDA / keyboard; iterates pattern + demo until both pass
-5. **Strip to golden** — reduce the lab demo to a minimal Golden Pattern fragment for inclusion in the pattern markdown
-6. **Register** — add to `patterns.json`; bump `catalog_revision`; verify the gallery rebuilds; commit
+3. **AT verification** — maintainer (or author with AT access) verifies the pattern with VoiceOver / NVDA / keyboard against a working implementation. Iterates the pattern markdown until behavior is correct.
+4. **Strip to golden** — reduce the verified implementation to a minimal Golden Pattern fragment for inclusion in the pattern markdown
+5. **Register** — add to `patterns.json`; bump `catalog_revision`; verify the gallery rebuilds; commit
 
-External contributors: follow [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the `schema/pattern-template.md` format. Reference existing patterns for shape.
+External contributors: follow [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the `schema/pattern-template.md` format. Reference existing patterns for shape. AT verification is handled by the maintainer as part of PR review.
 
 ## License
 
