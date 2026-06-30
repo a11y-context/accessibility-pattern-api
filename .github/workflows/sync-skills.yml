@@ -1,0 +1,26 @@
+name: Sync skills repo
+
+# Triggers on push to main when corpus content changes. Syncs the bundled
+# copy of patterns.json + global_rules.md + components/*.md into the skills
+# repo so its local-variant skill always reflects the latest corpus release.
+#
+# Requires a SKILLS_REPO_TOKEN repo secret (fine-grained PAT with
+# Contents: Read and write scope on a11y-context/a11y-context-skills).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'patterns/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout corpus
+        uses: actions/checkout@v4
+
+      - name: Sync to a11y-context-skills
+        env:
+          SKILLS_REPO_TOKEN: ${{ secrets.SKILLS_REPO_TOKEN }}
+        run: bash scripts/sync-skills-repo.sh
