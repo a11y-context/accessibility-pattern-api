@@ -26,14 +26,9 @@ The live site: [a11y-context-project.vercel.app](https://a11y-context-project.ve
   style-guide.md             ← canonical authoring conventions
 
 /website                     ← Docusaurus site (sourced from /patterns)
-  scripts/
-    generate-patterns-json.js     ← regenerates patterns.json on prebuild
-    generate-component-gallery.js ← regenerates the catalog table on prebuild
-    generate-skill-downloads.js   ← builds per-skill ZIPs from a11y-context-skills
+  scripts/                   ← prebuild generators
   docusaurus.config.js
-  sidebars-web-react.js
-  /src/pages/index.js
-  /src/css/custom.css
+  ...
 
 CLAUDE.md                    ← operating instructions for Claude sessions in this repo
 CONTRIBUTING.md              ← license, scope, versioning, first-contribution walkthrough
@@ -49,22 +44,13 @@ Top-level catalog metadata (`catalog_revision`, `schema_version`, etc.) lives in
 
 ## Adding or revising a pattern
 
-See [`CONTRIBUTING.md`](./CONTRIBUTING.md) § "Your first contribution — walkthrough" for the full 10-step path. The short version:
-
-1. Open an issue (use the "New pattern proposal" template) so we can confirm scope and sibling boundaries before drafting.
-2. Branch (or fork if you don't have Write access).
-3. Add or edit the `.md` file. Set `status: draft` while you work; flip to `beta` when ready.
-4. Bump `catalog_revision` in `catalog-meta.json` and add a release-notes entry.
-5. Run `npm run prebuild` from `website/` to regenerate `patterns.json` and the component gallery; commit the regenerated files.
-6. Open a PR using the PR template.
-
-CI runs the prebuild + build on every PR and fails the build if `patterns.json` is out of sync with the `.md` sources.
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) § "Your first contribution — walkthrough" for the full path. The short version: open an issue → branch → edit the `.md` → bump versions → run `npm run prebuild` → open PR. CI verifies the build and that `patterns.json` is in sync with the `.md` sources.
 
 ---
 
-## Running the site locally
+## Previewing your changes locally
 
-For contributors testing pattern changes against the rendered docs:
+To see your pattern edits render against the docs site:
 
 ```bash
 cd website
@@ -74,33 +60,13 @@ npm start          # http://localhost:3000
 
 Node ≥ 18 required.
 
-To verify a production build:
-
-```bash
-cd website
-npm run build      # runs prebuild generators then Docusaurus build
-npm run serve      # preview the built site locally
-```
-
----
-
-## Self-hosting (optional)
-
-This repo is Apache 2.0 — anyone can deploy a copy. The canonical site is hosted on Vercel; a fork can be deployed the same way:
-
-| Setting | Value |
-|---|---|
-| Root Directory | `website` |
-| Build Command | `npm run build` |
-| Output Directory | `build` |
-| Install Command | `npm install` |
-| Node version | 18 or 20 |
+You don't need to build the production site yourself — CI runs the production build on every PR. The canonical site lives at the URL above.
 
 ---
 
 ## Related repositories
 
-- [a11y-context/a11y-context-skills](https://github.com/a11y-context/a11y-context-skills) — installable AI coding assistant skills derived from this corpus (downstream; the maintainer syncs as part of each release).
+- [a11y-context/a11y-context-skills](https://github.com/a11y-context/a11y-context-skills) — installable AI coding assistant skills derived from this corpus (downstream; auto-synced by CI on every push to `main`).
 - [jsweetdude/a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) — testable lab demos used for AT verification during authoring.
 
 ## License
