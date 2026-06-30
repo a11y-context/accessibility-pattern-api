@@ -29,8 +29,7 @@ Full contributor docs:
 
 - [ ] **Followed `schema/pattern-template.md` (format) and `schema/style-guide.md` (conventions).** Spot-check against `button.basic.md` or `dialog.modal.md` if anything is unclear.
 - [ ] **Verified the site renders.** Ran `npm install && npm start` from `website/` and clicked through the changed pages.
-- [ ] **For new patterns: built a lab demo in [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) and AT-tested it** before finalizing the Golden Pattern.
-- [ ] **For revisions to existing patterns: reviewed the corresponding lab demo** to see if behavior changed and whether the demo needs an update. (Note "no demo update needed" if applicable.)
+- [ ] **AT verification (optional for contributors).** If you have access to assistive technology, verifying with VoiceOver / NVDA + keyboard against a working implementation is welcome. The maintainer runs AT verification as part of PR review either way.
 
 ## Notes for reviewer
 

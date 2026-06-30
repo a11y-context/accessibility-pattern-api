@@ -26,11 +26,6 @@ labels: new pattern
 
 <!-- WCAG criteria, APG patterns, design system examples, related issues. -->
 
-## Lab demo readiness
-
-- [ ] I plan to author a lab demo for AT testing
-- [ ] I'd like guidance on the lab demo structure
-
 ## Notes
 
 <!-- Anything else useful — known unknowns, scoping questions, prior discussion. -->

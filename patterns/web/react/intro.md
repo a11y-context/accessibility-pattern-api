@@ -35,4 +35,4 @@ The Golden Pattern code in each component file is a reference implementation, no
 
 This is deliberate. A fully-styled, fully-wired example would render beautifully on this site but it would also bloat what the agent has to load and reason over, embed visual-design choices that are not the corpus's job to make, and tempt readers to copy-paste production code instead of authoring it inside their own design system. The pattern is the spec; the agent applies it where the developer actually works.
 
-Live demos of these patterns — full styling, real handlers, verified with assistive technology — live in the [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) repo.
+Verification against assistive technology (keyboard navigation, screen readers) is performed by the project maintainer as part of pattern authoring and review.

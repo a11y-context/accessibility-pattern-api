@@ -38,7 +38,7 @@ Full checklist with rules in `schema/style-guide.md` § Definition of done.
 2. `patterns.json` entry with `selection_excerpt` copied verbatim from the doc.
 3. Catalog regeneration runs in `prebuild`; manual via `npm run gen:gallery` from `/website`.
 4. Release notes entry under the bumped catalog version + `catalog_revision` bump (see Versioning below).
-5. Lab demo in [`a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab), AT-tested.
+5. Assistive-technology verification — the maintainer runs AT testing against new patterns as part of the review process. Contributors don't need to provide a runnable demo; the pattern doc's Golden Pattern is what gets reviewed.
 6. Site builds clean.
 
 ---
@@ -109,19 +109,18 @@ The bullet-point version of how to take a new pattern from idea to merged PR. Fu
    - Frontmatter completeness (all 8 fields, including `latest_version: 0.1.0` and `aliases` generous enough to match real prompts)
    - Section order and `## Use When` / `## Do Not Use When` phrasing (these become the AI's selection signal in `selection_excerpt`)
    - Must Haves phrased as imperatives, no "may" / "should" / "recommended" language
-5. **Build a lab demo** for AT verification in [a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab). Test the pattern with a keyboard and screen reader before finalizing the Golden Pattern.
+5. **(Optional) Author your own working demo** in a sandbox of your choosing — CodeSandbox, StackBlitz, a private repo — and verify behavior with a keyboard and a screen reader. This is not required for the PR; the maintainer runs AT verification as part of review.
 6. **Flip to `status: beta`** when you're ready for the catalog.
 7. **Bump `catalog_revision`** in `patterns/web/react/catalog-meta.json` (MINOR — a new pattern is a feature addition).
 8. **Add a release notes entry** under the new catalog version in `patterns/web/react/release-notes.md`.
 9. **Run `npm run prebuild`** in `website/` to regenerate `patterns.json` and the component gallery. Commit the regenerated files.
-10. **Open a PR** using the PR template. CI will run the build; reviewers will check the pattern against the style guide and verify the lab demo. After merge, the skills repo gets synced as part of the maintainer's release process.
+10. **Open a PR** using the PR template. CI runs the build; the maintainer reviews the pattern against the style guide and runs AT verification before merge. After merge, the skills repo is auto-synced.
 
 If you hit anything unclear, comment on your issue or PR — questions are welcome.
 
 ## Where other contributions belong
 
 - **New accessibility patterns, pattern revisions, foundational rules** → this repo, this CONTRIBUTING.
-- **Live testing demos** → [`jsweetdude/a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab).
 
 ### What about the skills repo?
 

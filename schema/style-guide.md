@@ -301,7 +301,7 @@ A new component is not done when the markdown is written. Full checklist:
 2. **Catalog metadata bump** — increment `catalog_revision` in `patterns/<stack>/catalog-meta.json` (MINOR for a new pattern). `patterns.json` itself is regenerated automatically by `npm run prebuild` — do not hand-edit it. Run `npm run gen:patterns-json` from `/website` to verify the entry generates correctly.
 3. **Catalog page regeneration** — automatic via prebuild; manual via `npm run gen:gallery` from `/website`.
 4. **Release notes entry** in `release-notes.md` under the bumped catalog version. See `CONTRIBUTING.md` § Versioning for the bump rules.
-5. **Lab demo** (separate repo: [`a11y-pattern-lab`](https://github.com/jsweetdude/a11y-pattern-lab)) — component + route page + landing entry, tested with assistive technology before the Golden Pattern is finalized.
+5. **AT verification** — the pattern is tested with assistive technology (VoiceOver / NVDA + keyboard) against a working implementation before the Golden Pattern is finalized. This is the maintainer's responsibility for contributor PRs.
 6. **Build check**: the site builds clean (`onBrokenLinks: 'throw'` will catch reference mistakes).
 7. **Skills repo sync** — copy the new `.md` file plus the regenerated `patterns.json` and `global_rules.md` into [`a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) per the maintainer's release process.
 

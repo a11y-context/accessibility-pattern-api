@@ -67,7 +67,6 @@ You don't need to build the production site yourself — CI runs the production 
 ## Related repositories
 
 - [a11y-context/a11y-context-skills](https://github.com/a11y-context/a11y-context-skills) — installable AI coding assistant skills derived from this corpus (downstream; auto-synced by CI on every push to `main`).
-- [jsweetdude/a11y-pattern-lab](https://github.com/jsweetdude/a11y-pattern-lab) — testable lab demos used for AT verification during authoring.
 
 ## License
 
