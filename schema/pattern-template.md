@@ -36,13 +36,22 @@ Hard constraints. Anti-patterns the agent must never produce.
 
 ### `## Golden Pattern`
 
-The canonical reference implementation. Rules:
+The canonical reference implementation.
+
+**Section opens with the framing line.** Every Golden Pattern section places this single sentence on its own line, between the `## Golden Pattern` heading and the opening code fence, verbatim:
+
+> Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
+
+Rules for the snippet itself:
 
 - **Ideal HTML / semantic structure.** Use the standard element or canonical ARIA composition. No bespoke wrappers.
 - **Minimal JSX functionality — just enough to convey the UX and any dynamic behavior.** A state hook to show toggle behavior, an `onClick` with `alert()` to show the trigger fires, a conditional render to show what changes at runtime. The agent should be able to see what changes when the user interacts.
 - **No styling except what is required for understanding the behavior.** Strip Tailwind, CSS modules, design-system classes, color values. Keep only structural styling that carries behavioral meaning (e.g., `aria-hidden` on icon spans, `sr-only` for visually-hidden text). The Golden Pattern showcases *semantic and behavioral correctness*, not visual design.
 - **Use placeholders for things that would be real in production.** `[icon]` text or a `<span aria-hidden="true">` instead of importing an icon library; `alert()` or `console.log()` instead of a real handler; `// fetch data here` instead of a real fetch call.
 - **Multiple short variants in one snippet are encouraged** when they belong to the same pattern — text-only, icon+text, and icon-only buttons in one Golden Pattern is better than three pattern files. Each variant should be minimal.
+- **No React import statement.** Omit `import * as React from "react"` and `import { createPortal } from "react-dom"`. Use named-style hook calls (`useState`, `useRef`, `useEffect`, etc.) in the body — never with the `React.` namespace prefix. Keep `"use client";` at the top when the snippet uses state, refs, effects, or event handlers.
+
+See `schema/style-guide.md` § Golden Pattern → Code conventions for the full code-style contract (naming, demo data, comments, IDs).
 
 ### `## Customizable` (optional)
 
@@ -82,6 +91,8 @@ summary: <one sentence>
 - 
 
 ## Golden Pattern
+
+Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
 
 ​```<language>
 // canonical implementation
