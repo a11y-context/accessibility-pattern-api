@@ -30,6 +30,12 @@ Hard rejection criteria. Sibling patterns that look similar but require differen
 
 Non-negotiable WCAG 2.2 AA behaviors. Each bullet should be **observable** — testable with a keyboard and a screen reader. Prefer behavioral statements ("Tab moves focus to the next focusable control") over structural ones ("must have an aria-label") when the behavior is what matters.
 
+### `## Customizable` (optional)
+
+Acceptable variations the pattern allows. Include this section **only** when the pattern has known acceptable variations that an implementer might reasonably choose between — for example, "icon-only buttons may use either `aria-label` or a visually-hidden text span; both are acceptable." Omit the section entirely if no meaningful variations exist; Must Haves cover the non-negotiables.
+
+The section earns its place when the difference between "Must Have" and "personal preference" would otherwise be unclear to an implementer. If you find yourself writing "could also do X" in a Must Haves bullet, that's a Customizable item.
+
 ### `## Don'ts`
 
 Hard constraints. Anti-patterns the agent must never produce.
@@ -52,12 +58,6 @@ Rules for the snippet itself:
 - **No React import statement.** Omit `import * as React from "react"` and `import { createPortal } from "react-dom"`. Use named-style hook calls (`useState`, `useRef`, `useEffect`, etc.) in the body — never with the `React.` namespace prefix. Keep `"use client";` at the top when the snippet uses state, refs, effects, or event handlers.
 
 See `schema/style-guide.md` § Golden Pattern → Code conventions for the full code-style contract (naming, demo data, comments, IDs).
-
-### `## Customizable` (optional)
-
-Acceptable variations the pattern allows. Include this section **only** when the pattern has known acceptable variations that an implementer might reasonably choose between — for example, "icon-only buttons may use either `aria-label` or a visually-hidden text span; both are acceptable." Omit the section entirely if no meaningful variations exist; Must Haves cover the non-negotiables.
-
-The section earns its place when the difference between "Must Have" and "personal preference" would otherwise be unclear to an implementer. If you find yourself writing "could also do X" in a Must Haves bullet, that's a Customizable item.
 
 ### `## Acceptance Checks`
 
@@ -87,6 +87,9 @@ summary: <one sentence>
 ## Must Haves
 - 
 
+## Customizable
+- 
+
 ## Don'ts
 - 
 
@@ -97,9 +100,6 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ​```<language>
 // canonical implementation
 ​```
-
-## Customizable
-- 
 
 ## Acceptance Checks
 - 
