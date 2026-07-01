@@ -1,0 +1,119 @@
+{
+  "stack": "ios/swiftui",
+  "schema_version": "1.0.0",
+  "catalog_revision": "0.1.0",
+  "cache_ttl_seconds": 3600,
+  "patterns": [
+    {
+      "id": "button.basic",
+      "title": "Basic Button",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "SwiftUI Button that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns.",
+      "aliases": [
+        "btn",
+        "primary button",
+        "icon button",
+        "call to action",
+        "cta"
+      ],
+      "tags": [
+        "button",
+        "control",
+        "action",
+        "icon-button"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user triggers an immediate action (e.g., \"Save\", \"Continue\", \"Dismiss\")."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control represents an on/off pressed state (use button.toggle).",
+          "Do not use when the control navigates to a new screen (use NavigationLink, not Button)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/button.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "button.toggle",
+      "title": "Toggle Button",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "SwiftUI Button with two states (e.g. pressed/active) conveyed via either an accessible-name change or the .isSelected accessibility trait — never both.",
+      "aliases": [
+        "toggle button",
+        "pressed button"
+      ],
+      "tags": [
+        "button",
+        "toggle",
+        "pressed",
+        "selected",
+        "isSelected",
+        "mute-button"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a control toggles a feature or action within the current context (e.g., \"Mute\", \"Bold\", \"Pin\", \"Enable Closed Captioning\")."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control represents a persistent on/off system or application setting, such as \"Enable notifications\", \"Dark mode\" (use switch.basic).",
+          "Do not use when the control navigates to a new screen (use NavigationLink, not Button)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/button.toggle.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "switch.basic",
+      "title": "Switch",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Native SwiftUI Toggle representing a persistent on/off setting. The label and switch state merge into a single accessible element.",
+      "aliases": [
+        "toggle switch",
+        "preference toggle",
+        "settings toggle"
+      ],
+      "tags": [
+        "switch",
+        "toggle",
+        "settings",
+        "on-off",
+        "form-control"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., \"Enable notifications\", \"Dark mode\").",
+          "Use when the setting takes effect immediately when toggled, without requiring form submission.",
+          "Use when the control reflects the current state of a system or application preference."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control triggers an in-place action or transient feature toggle within the current context (use button.toggle).",
+          "Do not use when more than two states are required, or the state cycles through several values (use button.toggle)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/switch.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    }
+  ]
+}
