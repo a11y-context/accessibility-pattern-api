@@ -8,6 +8,18 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.3 — 2026-06-30
+
+Foundations focus rule updated with Windows High Contrast Mode support and refined two-layer ring geometry.
+
+**Foundations → Focus States:**
+- Primary two-layer focus snippet updated: `outline-offset` changed from `0` → `2px` so the white halo sits between the element and the colored ring (more surface-independent visibility on colored elements).
+- Added required `@media (forced-colors: active)` override snippet using the `Highlight` CSS system color and `box-shadow: none`. Support for Windows High Contrast Mode is now stated as required for any focus style, not optional.
+- Customizable and Don'ts updated with the forced-colors requirement.
+- Acceptance Checks: added a check that the focus indicator remains visible under forced-colors mode.
+
+No component patterns changed; the boilerplate focus formula referenced across all components continues to point at Foundations, so the update propagates by reference without touching any component file.
+
 ## 0.4.2 — 2026-06-30
 
 Golden Pattern presentation polish across all 14 components. Frames the snippets for their actual audience (AI coding assistants) and modernizes React import style.
