@@ -42,7 +42,7 @@ User-initiated blocking dialog. Uses the native `<dialog>` element with `.showMo
   - Background content is not focusable or reachable by keyboard or screen readers while open.
   - Body scroll is prevented while open.
 - Under native `<dialog>` + `.showModal()` (the Golden Pattern), these six behaviors are provided automatically by the browser. Under the manual `<div role="dialog">` fallback (Customizable → Manual fallback), each is the implementation's responsibility.
-- Focus indicators on the dialog surface, close button, and any focusable content follow the [Foundations focus rule](/foundations#focus-states).
+- Focus indicators on the dialog surface, close button, and any focusable content follow the [Foundations focus rule](/web/react/foundations#rule-focus-states).
 
 ## Customizable
 
