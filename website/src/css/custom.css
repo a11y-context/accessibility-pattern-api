@@ -33,15 +33,21 @@
 
 /**
  * Navbar vertical separator (between "Getting Started" and the platform links).
- * Injected as a type:'html' navbar item in docusaurus.config.js. Theme-adaptive
- * via --ifm-color-emphasis-300; desktop-only (hidden in the collapsed mobile menu).
+ * Injected as a type:'html' navbar item in docusaurus.config.js.
+ *
+ * display:inline-block is required: the item is an inline <span>, and browsers
+ * ignore width/height on inline elements — without it the 1px rule never forms
+ * and only the margin renders (a blank gap). Centered for both flex (desktop
+ * navbar) and inline-flow contexts. Theme-adaptive; desktop-only.
  */
 .navbar__separator {
+  display: inline-block;
   align-self: center;
+  vertical-align: middle;
   width: 1px;
-  height: 1.4rem;
-  margin: 0 0.5rem;
-  background-color: var(--ifm-color-emphasis-300);
+  height: 1.5rem;
+  margin: 0 0.75rem;
+  background-color: var(--ifm-color-emphasis-400);
 }
 
 @media (max-width: 996px) {
