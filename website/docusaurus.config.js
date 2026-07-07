@@ -11,7 +11,7 @@ const config = {
   url: 'https://a11y-context-project.vercel.app',
   baseUrl: '/',
 
-  organizationName: 'jsweetdude',
+  organizationName: 'a11y-context',
   projectName: 'accessibility-pattern-api',
 
   // Fail the build on broken internal links so Vercel catches regressions before deploy.
@@ -144,7 +144,7 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/jsweetdude/accessibility-pattern-api',
+            href: 'https://github.com/a11y-context/accessibility-pattern-api',
             label: 'GitHub',
             position: 'right',
           },
@@ -168,7 +168,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/jsweetdude/accessibility-pattern-api',
+                href: 'https://github.com/a11y-context/accessibility-pattern-api',
               },
               {
                 label: 'WCAG 2.2',
