@@ -2,8 +2,8 @@
 id: menu.account
 title: Account Menu
 stack: web/react
-status: beta
-latest_version: 0.2.1
+status: deprecated
+latest_version: 1.0.0
 tags: [menu, account, profile, disclosure, popover]
 aliases: [account dropdown, account menu, profile menu, user menu, avatar menu, settings menu]
 summary: A non-modal, button-invoked account menu that reveals a small list of links and optional actions. Uses aria-expanded plus DOM show/hide so keyboard users Tab into items and Esc closes.
@@ -14,6 +14,8 @@ summary: A non-modal, button-invoked account menu that reveals a small list of l
 Pattern ID: `menu.account`
 
 A non-modal, button-invoked account menu that reveals a small list of links and optional actions. Uses `aria-expanded` plus DOM show/hide so keyboard users Tab into items and Esc closes.
+
+**Deprecated.** This pattern was renamed to `navigation-menu.dropdown`. An account menu reveals a list of navigation links, so it is a navigation disclosure, not an ARIA menu, and the `menu.` family is reserved for genuine `role="menu"` command widgets. Use `navigation-menu.dropdown`. This ID is retained for backward compatibility and is excluded from the generated catalog.
 
 ## Use When
 - Use when providing a compact set of account-related destinations or actions (Profile, Settings, Billing, Sign out).

@@ -8,6 +8,36 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.6 — 2026-07-07
+
+**Dropdown and overlay component family — 9 new patterns (draft), plus a rename, a deprecation, and redirect reconciliation.**
+
+Nine new component patterns added as `status: draft` (excluded from `patterns.json` until AT-verified and promoted to beta). They establish a taxonomy for "dropdown"-shaped UI classified by interaction intent rather than visual shape, with strict Use When / Do Not Use When boundaries cross-referencing each sibling.
+
+**New patterns (all 0.1.0, draft):**
+- `navigation-menu.dropdown` — single-trigger dropdown of navigation links plus optional actions; disclosure semantics, never `role="menu"` or `aria-haspopup`.
+- `disclosure.basic` — foundational show/hide button plus content region.
+- `menu.basic` — button-triggered action menu (`role="menu"`, roving tabindex, full keyboard contract).
+- `menu.menubar` — desktop-application command bar (`role="menubar"`); cautionary, never for site navigation.
+- `select.native` — styled native `<select>`, the default single-value picker.
+- `combobox.autocomplete` — editable combobox with list filtering (`aria-activedescendant`).
+- `listbox.basic` — always-visible single-select or multi-select listbox.
+- `dialog.nonmodal` — non-modal dialog (no focus trap, no background inerting).
+- `tooltip.basic` — supplementary-text tooltip (`role="tooltip"`, hoverable, dismissible, persistent).
+
+**Renamed:**
+- `menu.button` → `menu.basic` (draft, never published). Aligns with the Menu vocabulary used across the ecosystem; H1 title is "Menu". All redirect references updated.
+
+**Deprecated:**
+- `menu.account` → 1.0.0, `status: deprecated`. An account menu is a navigation disclosure, not an ARIA menu; superseded by `navigation-menu.dropdown`. Excluded from the catalog.
+
+**Reconciled (published patterns):**
+- `navigation-menu.basic` → 0.3.0. Removed the `aria-haspopup` Must Have (a submenu of links is not a menu, so `aria-expanded` alone is the correct signal), removed it from the Golden Pattern toggles, and added a matching Don't. Fixed the stale `navigation-menu.menubar` redirect to `menu.menubar` and the form-value redirect to `select.native` / `combobox.autocomplete`.
+- `select.basic` → 0.2.0. Added a native-first Do Not Use When redirect to `select.native`; updated redirects to `combobox.autocomplete`, `listbox.basic`, and `navigation-menu.dropdown`.
+- `button.basic` → 0.2.1 and `button.toggle` → 0.2.1. Menu redirect target renamed to `menu.basic`.
+
+The 9 new families remain out of the published `patterns.json` (draft). Promoting them to beta after AT verification will ship the catalog's MINOR bump to 0.5.0.
+
 ## 0.4.5 — 2026-07-07
 
 **Dialog (Modal) → 0.3.1 — clarifications.**
