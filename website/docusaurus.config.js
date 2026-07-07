@@ -11,7 +11,7 @@ const config = {
   url: 'https://a11y-context-project.vercel.app',
   baseUrl: '/',
 
-  organizationName: 'jsweetdude',
+  organizationName: 'a11y-context',
   projectName: 'accessibility-pattern-api',
 
   // Fail the build on broken internal links so Vercel catches regressions before deploy.
@@ -126,25 +126,25 @@ const config = {
             to: '/getting-started',
             position: 'left',
           },
-          // Single platform for now — direct link instead of a dropdown of one.
-          // Restore the dropdown below when Android/iOS docs exist.
+          // Vertical separator dividing Getting Started from the platform links.
+          // Styled via .navbar__separator in src/css/custom.css.
           {
-            label: 'Web / React Patterns',
+            type: 'html',
+            position: 'left',
+            value: '<span class="navbar__separator" aria-hidden="true"></span>',
+          },
+          {
+            label: 'React (Web)',
             to: '/web/react',
             position: 'left',
           },
-          // {
-          //   type: 'dropdown',
-          //   label: 'Platforms',
-          //   position: 'left',
-          //   items: [
-          //     { label: 'Web / React', to: '/web/react' },
-          //     { label: 'Android / Compose', to: '/android' },
-          //     { label: 'iOS / SwiftUI', to: '/ios' },
-          //   ],
-          // },
           {
-            href: 'https://github.com/jsweetdude/accessibility-pattern-api',
+            label: 'SwiftUI (iOS)',
+            to: '/ios',
+            position: 'left',
+          },
+          {
+            href: 'https://github.com/a11y-context/accessibility-pattern-api',
             label: 'GitHub',
             position: 'right',
           },
@@ -168,7 +168,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/jsweetdude/accessibility-pattern-api',
+                href: 'https://github.com/a11y-context/accessibility-pattern-api',
               },
               {
                 label: 'WCAG 2.2',
