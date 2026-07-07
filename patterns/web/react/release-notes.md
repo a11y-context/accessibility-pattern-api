@@ -8,6 +8,15 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.5 — 2026-07-07
+
+**Dialog (Modal) → 0.3.1 — clarifications.**
+
+- **Must Have combined**: the `.showModal()` and `.close()` lifecycle endpoints are now expressed as one bullet — `Open with .showModal(), close with .close()`. Adds explicit language that unmounting the `<dialog>` while open (rather than calling `.close()`) does not restore focus to the invoker, because the browser's focus-restoration runs on `.close()` (or on the browser's implicit close from Esc's `cancel` event and from `<form method="dialog">` submits). Consolidates the "why showModal is required" and "why close is required" into a single lifecycle rule.
+- **Customizable trimmed**: replaced four H3 subsections with four flat top-level bullets (one level of nesting under Initial focus target). Cut the "why fall back" mini-taxonomy, the `<form method="dialog">` HTML example, and the `dialog.returnValue` prose. The manual-fallback behavior contract remains as a single dense bullet.
+
+No new Must Haves and no removals — PATCH bump reflects wording clarification and structural tightening.
+
 ## 0.4.4 — 2026-06-30
 
 **Dialog (Modal) → 0.3.0 — native-first rewrite.**
