@@ -11,12 +11,8 @@ summary: Native SwiftUI Toggle representing a persistent on/off setting. The lab
 
 # Switch
 
-Pattern ID: `switch.basic`
-
-Native SwiftUI `Toggle` representing a persistent on/off setting. The label and switch state merge into a single accessible element.
-
 ## Use When
-- Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., "Enable notifications", "Dark mode").
+- Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., "Enable notifications", "Dark mode"). Uses a native SwiftUI `Toggle`, whose label and switch state merge into a single accessible element.
 - Use when the setting takes effect immediately when toggled, without requiring form submission.
 - Use when the control reflects the current state of a system or application preference.
 
@@ -34,11 +30,10 @@ Native SwiftUI `Toggle` representing a persistent on/off setting. The label and 
 
 ## Customizable
 - A custom `.toggleStyle` may restyle appearance (color, shape, knob position) as long as it continues to wrap a real `Toggle` underneath, preserving native semantics rather than rebuilding the control from scratch.
-- The off-state fill color must maintain at least 3:1 contrast against its background — a plain light gray is a common offender.
+- The off-state fill color must maintain at least 3:1 contrast against the adjacent background to the control — a plain light gray is a common offender.
 
 ## Don'ts
 - Do not build a switch out of a custom `HStack` of `Text` plus a shape-based knob without grouping it. Without an explicit `Toggle` (or `.accessibilityElement(children: .combine)`), the label and the control become two disconnected accessibility elements instead of one combined name-and-state announcement.
-- Do not use a switch to trigger an in-place or transient action; use `button.toggle` for that.
 - Do not leave `.accessibilityValue` mismatched with the visible value text when the switch shows custom state wording instead of On/Off.
 - Do not rely on color alone (e.g., green vs. gray) to convey on/off state. The off state must remain visually distinguishable through sufficient contrast, not color alone.
 
@@ -66,9 +61,11 @@ struct SwitchBasicDemo: View {
 ```
 
 ## Acceptance Checks
-- Swipe to the switch with VoiceOver: the label, role, and on/off state are all announced together in a single read.
-- Double-tap with VoiceOver, or press Space/Return with an external keyboard: the switch toggles.
-- When the switch uses custom value text instead of On/Off, VoiceOver announces that custom value, not a stale or mismatched one.
-- Repeated switches sharing generic visible text are each announced with their own unique `.accessibilityLabel`.
-- The off state remains visually distinguishable without relying on color alone, and meets at least 3:1 contrast against its background.
-- Enable Voice Control and turn on "Show Names": the overlay label matches the switch's current accessible name, not a stale or generic one.
+
+All checks run in a UI test target via `xcodebuild test`. An element's `.label` is the accessible name (what VoiceOver speaks and Voice Control overlays); `.value` is the announced state.
+
+- The switch merges into a single element: `XCTAssertTrue(app.switches["Enable notifications"].exists)` (label + switch role + state are one element), and no separate static-text element duplicates the label as its own accessibility element.
+- Toggling flips the value: read `app.switches["Enable notifications"].value` (e.g. `"0"`), `.tap()`, then assert it changed (e.g. `"1"`). `.tap()` is the programmatic equivalent of a VoiceOver double-tap or Space/Return.
+- Custom value text: `XCTAssertEqual(app.switches["Display Mode"].value, "Light")`, `.tap()`, then `XCTAssertEqual(app.switches["Display Mode"].value, "Dark")` — the value tracks the visible custom wording, not generic On/Off.
+- Repeated switches: query each and assert their `.label`s are all distinct (none collide on generic text).
+- Contrast: `try app.performAccessibilityAudit(for: .contrast)` reports no failures for the switch. Whether the off state is distinguishable by more than color is a design/code-inspection check — there is no runtime audit for color-alone reliance.

@@ -11,16 +11,13 @@ summary: SwiftUI Button that triggers an action. Supports text-only, icon+text, 
 
 # Basic Button
 
-Pattern ID: `button.basic`
-
-SwiftUI `Button` that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns.
-
 ## Use When
-- Use when the user triggers an immediate action (e.g., "Save", "Continue", "Dismiss").
+- Use when the user triggers an immediate action and stays within the present screen, including opening popovers, modals, bottom sheets, etc. Supports text-only, icon+text, and icon-only labeling patterns.
 
 ## Do Not Use When
 - Do not use when the control represents an on/off pressed state (use `button.toggle`).
-- Do not use when the control navigates to a new screen (use `NavigationLink`, not `Button`).
+- Do not use when the control navigates to a new unique page/screen (use `NavigationLink` (`link.basic`), not `Button`).
+- Do not use when the control brings you out of the app completely.
 
 ## Must Haves
 - Use a native `Button` for built-in VoiceOver semantics, the `.isButton` trait, and Switch Control / external-keyboard activation.
@@ -80,12 +77,13 @@ struct ButtonBasicDemo: View {
 ```
 
 ## Acceptance Checks
-- Swipe to the button with VoiceOver: it is announced with the correct accessible name and the "Button" trait.
-- Double-tap with VoiceOver: the button activates.
-- Text-only button: VoiceOver announces the visible label (e.g., "Save, Button").
-- Icon+text button: VoiceOver announces the text label, not a separate icon description.
-- Icon-only button: VoiceOver announces the `.accessibilityLabel` (e.g., "Open settings, Button").
-- Disabled button: VoiceOver announces it as "dimmed" or "disabled" and double-tap does not fire the action.
-- Disabled button with Full Keyboard Access (or an external keyboard) enabled: Tab does not move focus to the button at all — it is skipped, not just inert.
-- Activating the button via an external keyboard (Space/Return) or Switch Control also fires the action.
-- Enable Voice Control and turn on "Show Names": the overlay label shown over the button matches its accessible name (not the word "Button" alone, and not empty for icon-only buttons).
+
+All checks run in a UI test target via `xcodebuild test` (no VoiceOver or GUI required). An element's `.label` is exactly what VoiceOver speaks and what Voice Control's "Show Names" overlays, so asserting `.label` covers all three.
+
+- Each button is queryable as a button, confirming the `.isButton` trait: `XCTAssertTrue(app.buttons["Save"].exists)`.
+- Text-only button: `XCTAssertEqual(app.buttons["Save"].label, "Save")`.
+- Icon+text button: `XCTAssertEqual(app.buttons["Download"].label, "Download")` and `XCTAssertEqual(app.buttons["Download"].images.count, 0)` — the icon must not surface as its own labeled element.
+- Icon-only button: `XCTAssertEqual(app.buttons["Open settings"].label, "Open settings")` and `XCTAssertFalse(app.buttons["Open settings"].label.contains("Button"))`.
+- Activation fires the action: `app.buttons["Save"].tap()`, then assert the observable result. `.tap()` routes through the same action as a VoiceOver double-tap, Space/Return, and Switch Control.
+- Disabled button is non-interactive: `XCTAssertFalse(app.buttons["Disabled"].isEnabled)` — a disabled element is not hit-tested and is skipped by keyboard focus.
+- Run `try app.performAccessibilityAudit()`: no failures. The `.sufficientElementDescription` audit flags any unlabeled icon-only button; `.elementDetection` flags an icon exposed as a separate element.

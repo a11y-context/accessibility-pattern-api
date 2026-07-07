@@ -11,16 +11,12 @@ summary: SwiftUI Button with two states (e.g. pressed/active) conveyed via eithe
 
 # Toggle Button
 
-Pattern ID: `button.toggle`
-
-SwiftUI `Button` with two states (e.g. pressed/active) conveyed via either an accessible-name change or the `.isSelected` accessibility trait — never both.
-
 ## Use When
-- Use when a control toggles a feature or action within the current context (e.g., "Mute", "Bold", "Pin", "Enable Closed Captioning").
+- Use when a control toggles a feature or action within the current context (e.g., "Mute", "Bold", "Pin", "Enable Closed Captioning"). Uses a SwiftUI `Button` with two states conveyed via either an accessible-name change or the `.isSelected` accessibility trait — never both.
 
 ## Do Not Use When
 - Do not use when the control represents a persistent on/off system or application setting, such as "Enable notifications", "Dark mode" (use `switch.basic`).
-- Do not use when the control navigates to a new screen (use `NavigationLink`, not `Button`).
+- Do not use when the control navigates to a new screen (use `NavigationLink` (`link.basic`), not `Button`).
 
 ## Must Haves
 - Use a native `Button` for built-in VoiceOver semantics and Switch Control / external-keyboard activation.
@@ -35,7 +31,11 @@ SwiftUI `Button` with two states (e.g. pressed/active) conveyed via either an ac
 
 ### Formatting toolbar exception
 - If the control is a formatting toggle in a toolbar (e.g., Bold/Italic/Underline), keep the accessible name stable (e.g., "Bold") and convey the pressed state with `.accessibilityAddTraits(isActive ? .isSelected : [])` instead of renaming it. VoiceOver appends "Selected" after the accessible name while the trait is present.
-- There is no "not selected" trait in SwiftUI's accessibility trait set — when the toggle is inactive, simply omit `.isSelected` rather than trying to add an antonym trait. Only add `.accessibilityValue("Not Selected")` in the rare case where silence alone would be ambiguous to the user.
+- There is no "not selected" trait in SwiftUI's accessibility trait set — when the toggle is inactive, simply omit `.isSelected` rather than trying to add an antonym trait. Add `.accessibilityValue("Not Selected")` for the inactive state only when the off state would otherwise be undiscoverable — which holds when **all** of these are true in the code:
+  - The accessible name is stable across states (the trait strategy, not the name-change strategy), so the name alone never conveys off.
+  - The control is rendered in isolation, not inside a visually grouped set of peer toggles (e.g., a `Picker`, segmented control, or an `HStack`/toolbar row of sibling formatting toggles) where the selected member is distinguishable by comparison.
+  - No other accessible signal exposes the state: there is no visible value/state text, no `.accessibilityValue` already set, and no surrounding labeled context that implies off.
+  - When any one of these is false, omit `.accessibilityValue` — the off state is already discoverable.
 
 ## Customizable
 - For most toggles (non-toolbar), the "next action" wording may be expressed via visible text (preferred when space allows) and/or `.accessibilityLabel` (required for icon-only).
@@ -91,9 +91,11 @@ struct ToggleButtonDemo: View {
 ```
 
 ## Acceptance Checks
-- Press Space/Return with an external keyboard, or double-tap with VoiceOver: the control toggles.
-- Name-change buttons: VoiceOver announces the updated label after toggling (e.g., "Mute, Button" becomes "Unmute, Button").
-- Icon-only name-change button: VoiceOver announces the updated `.accessibilityLabel` after toggling.
-- Toolbar `.isSelected` button: VoiceOver announces "Bold, Selected, Button" when active, and "Bold, Button" (no "Selected") when inactive.
-- Icons are not announced separately from the button's accessible name.
-- Enable Voice Control and turn on "Show Names": the overlay label matches the button's current accessible name, not a stale or generic one.
+
+All checks run in a UI test target via `xcodebuild test`. An element's `.label` is the accessible name (what VoiceOver speaks and Voice Control overlays); `.isSelected` reflects the `.isSelected` trait.
+
+- Toggling activates and updates state: `app.buttons["Mute"].tap()` (covers VoiceOver double-tap and Space/Return), then `XCTAssertTrue(app.buttons["Unmute"].exists)` and `XCTAssertFalse(app.buttons["Mute"].exists)` — the accessible name changed to the next action.
+- Icon-only name-change button: same before/after `.label` assertion on the icon-only button.
+- Toolbar `.isSelected` button: the name stays stable and the trait tracks state — `XCTAssertFalse(app.buttons["Bold"].isSelected)` initially, `.tap()`, then `XCTAssertTrue(app.buttons["Bold"].isSelected)`; `app.buttons["Bold"]` remains queryable throughout (no "Selected" baked into the name).
+- One state model, not both: a name-change button never also reports `isSelected == true`, and a toolbar button's `.label` never changes when toggled. This catches the conflicting "Unmute, Selected" antipattern programmatically.
+- Icon is not a separate element: `XCTAssertEqual(app.buttons["Mute"].images.count, 0)`, and `try app.performAccessibilityAudit()` reports no `.elementDetection` failures.
