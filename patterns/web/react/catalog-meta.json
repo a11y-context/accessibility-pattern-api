@@ -2,6 +2,6 @@
   "_comment": "Hand-edited top-level metadata for patterns.json. Bumped per the Versioning protocol when a release ships. The patterns.json output file is regenerated from this + the .md files in components/ by website/scripts/generate-patterns-json.js (runs in prebuild).",
   "stack": "web/react",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.4.4",
+  "catalog_revision": "0.4.5",
   "cache_ttl_seconds": 3600
 }
