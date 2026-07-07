@@ -126,23 +126,23 @@ const config = {
             to: '/getting-started',
             position: 'left',
           },
-          // Single platform for now — direct link instead of a dropdown of one.
-          // Restore the dropdown below when Android/iOS docs exist.
+          // Vertical separator dividing Getting Started from the platform links.
+          // Styled via .navbar__separator in src/css/custom.css.
           {
-            label: 'Web / React Patterns',
+            type: 'html',
+            position: 'left',
+            value: '<span class="navbar__separator" aria-hidden="true"></span>',
+          },
+          {
+            label: 'React (Web)',
             to: '/web/react',
             position: 'left',
           },
-          // {
-          //   type: 'dropdown',
-          //   label: 'Platforms',
-          //   position: 'left',
-          //   items: [
-          //     { label: 'Web / React', to: '/web/react' },
-          //     { label: 'Android / Compose', to: '/android' },
-          //     { label: 'iOS / SwiftUI', to: '/ios' },
-          //   ],
-          // },
+          {
+            label: 'SwiftUI (iOS)',
+            to: '/ios',
+            position: 'left',
+          },
           {
             href: 'https://github.com/jsweetdude/accessibility-pattern-api',
             label: 'GitHub',
