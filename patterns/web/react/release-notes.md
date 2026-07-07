@@ -8,6 +8,28 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.4 — 2026-06-30
+
+**Dialog (Modal) → 0.3.0 — native-first rewrite.**
+
+The Golden Pattern is now built on the native `<dialog>` element with `.showModal()` so the browser handles the modal contract — focus trap, background inertness, Escape dismissal, focus restoration, top-layer rendering, and body scroll lock. Resolves a long-standing inconsistency where the doc's Must Haves said `<dialog>` was preferred but the Golden Pattern shipped the manual `<div role="dialog">` variant.
+
+**New Must Haves:**
+- `.showModal()` is required to produce the modal contract — bare `<dialog>` in the DOM is non-modal.
+- Fluid dialog width so content reflows at 400% zoom (WCAG 1.4.10 Reflow). Prefer `max-width: min(<Npx>, 100%)`; do not set fixed widths that would exceed the 320-CSS-pixel viewport.
+- The invoking control on the page declares dialog-trigger semantics via `aria-haspopup="dialog"`.
+- Focus indicator reference points to the Foundations focus rule (from 0.4.3) instead of restating the outline spec inline.
+
+**Customizable restructured:**
+- Manual `<div role="dialog">` fallback documented as an explicit alternative for legacy target matrices, portal/top-layer conflicts, and specific stacking-context edge cases. Full behavior contract listed as manual-only Must Haves (focus trap, inert application root, body scroll lock with iOS Safari specificity, Escape, focus restoration, portal to `document.body`).
+- Backdrop click contract: default closes; may be intentionally disabled for destructive confirmations.
+- Initial focus target: three acceptable defaults (dialog surface, safe-default control, first interactive) with guidance on when to pick each.
+- `<form method="dialog">` variant documented for form-shaped confirmations that dismiss with a `returnValue`.
+
+**Don'ts updated** to add rendering `<dialog>` without `.showModal()` and setting fixed pixel widths that break reflow.
+
+**Golden Pattern** rewritten to native. Uses `useEffect` to imperatively open/close via `.showModal()` and `.close()`, listens for the browser's `cancel` (Escape) and `close` events, and handles backdrop click via target-check on the `<dialog>` element itself. No more manual focus trap, `inert` toggling, portal, or key listeners — all provided by the browser under `.showModal()`.
+
 ## 0.4.3 — 2026-06-30
 
 Foundations focus rule updated with Windows High Contrast Mode support and refined two-layer ring geometry.

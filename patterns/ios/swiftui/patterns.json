@@ -26,11 +26,12 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when the user triggers an immediate action (e.g., \"Save\", \"Continue\", \"Dismiss\")."
+          "Use when the user triggers an immediate action and stays within the present screen, including opening popovers, modals, bottom sheets, etc. Supports text-only, icon+text, and icon-only labeling patterns."
         ],
         "do_not_use_when": [
           "Do not use when the control represents an on/off pressed state (use button.toggle).",
-          "Do not use when the control navigates to a new screen (use NavigationLink, not Button)."
+          "Do not use when the control navigates to a new unique page/screen (use NavigationLink (link.basic), not Button).",
+          "Do not use when the control brings you out of the app completely."
         ]
       },
       "variants": [],
@@ -62,11 +63,11 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when a control toggles a feature or action within the current context (e.g., \"Mute\", \"Bold\", \"Pin\", \"Enable Closed Captioning\")."
+          "Use when a control toggles a feature or action within the current context (e.g., \"Mute\", \"Bold\", \"Pin\", \"Enable Closed Captioning\"). Uses a SwiftUI Button with two states conveyed via either an accessible-name change or the .isSelected accessibility trait — never both."
         ],
         "do_not_use_when": [
           "Do not use when the control represents a persistent on/off system or application setting, such as \"Enable notifications\", \"Dark mode\" (use switch.basic).",
-          "Do not use when the control navigates to a new screen (use NavigationLink, not Button)."
+          "Do not use when the control navigates to a new screen (use NavigationLink (link.basic), not Button)."
         ]
       },
       "variants": [],
@@ -98,7 +99,7 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., \"Enable notifications\", \"Dark mode\").",
+          "Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., \"Enable notifications\", \"Dark mode\"). Uses a native SwiftUI Toggle, whose label and switch state merge into a single accessible element.",
           "Use when the setting takes effect immediately when toggled, without requiring form submission.",
           "Use when the control reflects the current state of a system or application preference."
         ],
