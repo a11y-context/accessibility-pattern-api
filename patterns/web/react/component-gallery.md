@@ -18,7 +18,7 @@ Browse all accessibility patterns available for Web / React.
 | [Carousel with Dot Navigation](./components/carousel.dots.md) | Horizontally-advancing carousel (aka hero or marquee carousel) with 'dot' navigation, prev/next buttons, and pause behavior. |
 | [Carousel with Thumbnail Navigation](./components/carousel.thumbnails.md) | Horizontally-advancing carousel (aka hero or marquee carousel) with thumbnail navigation, prev/next buttons, and pause behavior. |
 | [Collection Row](./components/collection-row.basic.md) | Horizontal product shelf with a heading, list semantics, and Prev/Next paging that moves focus to newly revealed items. |
-| [Dialog (Modal)](./components/dialog.modal.md) | User-initiated blocking dialog that traps focus, inerts background content, and restores focus on close. |
+| [Dialog (Modal)](./components/dialog.modal.md) | User-initiated blocking dialog. Uses the native `<dialog>` element with .showModal() so the browser handles focus trap, background inertness, Escape dismissal, focus restoration, and top-layer rendering. |
 | [Channel Guide Grid](./components/grid.channel-guide.md) | Interactive channel guide grid with one Tab stop and arrow-key navigation across channels and time slots. |
 | [Link](./components/link.basic.md) | Native link for navigation using `<a href>`. Supports optional context in the accessible name, including "opens in new tab/window/dialog". |
 | [Account Menu](./components/menu.account.md) | A non-modal, button-invoked account menu that reveals a small list of links and optional actions. Uses aria-expanded plus DOM show/hide so keyboard users Tab into items and Esc closes. |
