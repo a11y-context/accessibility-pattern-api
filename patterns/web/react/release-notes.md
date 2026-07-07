@@ -8,6 +8,53 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.3 — 2026-06-30
+
+Foundations focus rule updated with Windows High Contrast Mode support and refined two-layer ring geometry.
+
+**Foundations → Focus States:**
+- Primary two-layer focus snippet updated: `outline-offset` changed from `0` → `2px` so the white halo sits between the element and the colored ring (more surface-independent visibility on colored elements).
+- Added required `@media (forced-colors: active)` override snippet using the `Highlight` CSS system color and `box-shadow: none`. Support for Windows High Contrast Mode is now stated as required for any focus style, not optional.
+- Customizable and Don'ts updated with the forced-colors requirement.
+- Acceptance Checks: added a check that the focus indicator remains visible under forced-colors mode.
+
+No component patterns changed; the boilerplate focus formula referenced across all components continues to point at Foundations, so the update propagates by reference without touching any component file.
+
+## 0.4.2 — 2026-06-30
+
+Golden Pattern presentation polish across all 14 components. Frames the snippets for their actual audience (AI coding assistants) and modernizes React import style.
+
+**Changes to every component pattern:**
+- Added a single-sentence framing line above each `## Golden Pattern` heading: "Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative." Clarifies that snippets demonstrate *behavior contracts* (semantics, ARIA, focus, keyboard) rather than production-realistic styling, copy, or demo data.
+- Removed `import * as React from "react";` from every snippet. The LLM consumer doesn't need the reminder, and removing it lets the body switch to named-import style.
+- Stripped the `React.` namespace prefix from all hook calls in the snippet bodies: `React.useState` → `useState`, `React.useRef` → `useRef`, `React.useEffect` → `useEffect`, `React.useCallback` → `useCallback`, `React.useLayoutEffect` → `useLayoutEffect`, `React.useId` → `useId`, `React.useMemo` → `useMemo`, `React.useContext` → `useContext`, `React.createContext` → `createContext`. Matches contemporary React conventions.
+- `dialog.modal` additionally drops `import { createPortal } from "react-dom";` for the same reason; the `createPortal(...)` call remains in the body.
+
+**No semantic changes.** No per-pattern version bumps — these are presentation-only edits to the snippets; the rules, prose, and acceptance checks are unchanged. The `"use client";` directive remains where applicable as a structural signal for Next.js App Router consumers.
+
+**Contributor docs updated to match:**
+- `schema/style-guide.md` § Golden Pattern: codified the framing-line requirement and rewrote the import/hook-call code conventions (no `import * as React`, no `React.` prefix, named-style hooks).
+- `schema/pattern-template.md`: framing-line guidance added to the Golden Pattern section description; the bare template at the bottom now includes the framing sentence.
+
+## 0.4.1 — 2026-06-30
+
+Getting Started information-architecture cleanup; Foundations title/intro alignment; first run of the auto-sync workflow.
+
+**Site changes (Getting Started restructure):**
+- "For AI Coding Agents" renamed to "Using with AI Coding Agents" — clearer that the page is for human readers about using A11y Context with AI agents.
+- AI Coding Agents index page reframed: "two moving parts" (corpus + skill) replaces the prior three; "two design decisions" (transport + processing) replaces the prior three; new "Why invocation matters" section preserves the original 13% / 53% / 100% invocation data from the controlled experiment; recommended starting point is now "inline skill + HTTP."
+- Enforcement rule is presented as an **optional belt-and-suspenders** for environments requiring guaranteed invocation, with a link to the original rule file preserved in the archive org.
+- The standalone `enforcement-rule.md` page is deleted.
+- New `install/` subfolder consolidates the three install paths. `downloads.md`, `retrieval-options.md`, and `indexing-guidance.md` moved into `install/`. New `install/index.md` orients visitors to ZIP-download vs git-clone vs enterprise-RAG.
+- New top-level `verification.md` page (formerly a section inside downloads.md), with extended pass criteria and additional test prompts.
+- `downloads.md`: Atlas mention removed from the org-level distribution guidance.
+- `retrieval-options.md`: Enterprise RAG section now references skill-based invocation rather than the deleted rule mechanism.
+
+**Corpus changes:**
+- Foundations page H1 changed from "Global Rules (Baseline)" to "Foundations" with a new intro paragraph explaining what's covered (utilities, page-level structure, visual fundamentals). Aligns with the frontmatter title and the site navigation.
+
+No per-pattern semantic changes; per-pattern versions unchanged.
+
 ## 0.4.0 — 2026-06-28 (infrastructure)
 
 Infrastructure change: `patterns.json` is now **generated** from each pattern's `.md` frontmatter and `## Use When` / `## Do Not Use When` body sections by a prebuild script. Authors only edit the .md files; the JSON is a derived artifact (still committed so the MCP server and consumers can read it without running the build).

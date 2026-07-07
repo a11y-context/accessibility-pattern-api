@@ -26,7 +26,7 @@ Copy the corpus (or just your stack's subtree) into the repo, for example into a
 Index this site into your organization's AI knowledge layer and let assistants retrieve chunks.
 
 - **Why:** fits organizations that already route all AI context through a managed retrieval system; no per-repo setup.
-- **Cost:** retrieval quality depends on chunking and tuning. The pattern pages are written to survive chunking (canonical ID and summary at the top of every page), but follow the [indexing guidance](./indexing-guidance.md). The enforcement rule is still required in this mode.
+- **Cost:** retrieval quality depends on chunking and tuning. The pattern pages are written to survive chunking (canonical ID and summary at the top of every page), but follow the [indexing guidance](./indexing-guidance.md). A skill or subagent with invocation guidance in its description is still recommended — RAG provides the chunks; the skill ensures the agent actually pulls them on UI-generation tasks.
 
 ## Choosing
 
