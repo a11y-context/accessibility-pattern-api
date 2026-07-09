@@ -2,7 +2,7 @@
 id: menu.basic
 title: Menu
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [menu, actions-menu, roving-tabindex, overflow-menu, kebab-menu, commands]
 aliases: [kebab menu, overflow menu, actions menu, three-dot menu, more menu, menu button, context menu button, command menu]

@@ -8,6 +8,12 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.0 — 2026-07-07
+
+**Promote the dropdown and overlay component family (9 patterns) from draft to beta.**
+
+The 9 patterns added as draft in 0.4.6 are promoted to `status: beta`, entering the published `patterns.json` (22 published), the component gallery, and the site: `navigation-menu.dropdown`, `disclosure.basic`, `menu.basic`, `menu.menubar`, `select.native`, `combobox.autocomplete`, `listbox.basic`, `dialog.nonmodal`, `tooltip.basic`. Per-pattern versions remain 0.1.0. Screen-reader (AT) verification is in progress; patterns will be patched as testing surfaces fixes.
+
 ## 0.4.6 — 2026-07-07
 
 **Dropdown and overlay component family — 9 new patterns (draft), plus a rename, a deprecation, and redirect reconciliation.**

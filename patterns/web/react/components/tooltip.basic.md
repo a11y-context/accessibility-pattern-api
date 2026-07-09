@@ -2,7 +2,7 @@
 id: tooltip.basic
 title: Tooltip
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [tooltip, aria-describedby, hover, focus, supplementary-label]
 aliases: [tooltip, hint, help bubble, info bubble, hover text, popup label, title text, describedby]

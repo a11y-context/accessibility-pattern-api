@@ -2,7 +2,7 @@
 id: listbox.basic
 title: Listbox
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [listbox, roving-tabindex, aria-activedescendant, multi-select, selection, form]
 aliases: [option list, select list, single-select list, multi-select list, transfer list source, inline listbox, choice list, selectable list]
