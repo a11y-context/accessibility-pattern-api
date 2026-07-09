@@ -55,3 +55,28 @@
     display: none;
   }
 }
+
+/**
+ * Dev-only "draft" badge on sidebar items.
+ * The `sidebar-draft-item` class is attached in sidebars-web-react.js only
+ * outside production, so this badge never renders on the deployed site. It
+ * marks patterns that are status:draft — visible locally, absent in prod.
+ */
+.sidebar-draft-item > .menu__link {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-draft-item > .menu__link::after {
+  content: "dev only";
+  margin-left: auto;
+  flex: 0 0 auto;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.05rem 0.4rem;
+  border-radius: 0.6rem;
+  background: #f59e0b;
+  color: #1a1a1a;
+}

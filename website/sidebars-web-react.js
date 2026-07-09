@@ -51,7 +51,54 @@ patternsJson.patterns.forEach((p) => {
   }
 });
 
-// ── 4. Build sidebar config ───────────────────────────────────────────────────
+// ── 4. Build component items (published catalog + dev-only drafts) ────────────
+
+const componentItems = patternsJson.patterns.map((p) => ({
+  type: 'doc',
+  id: `components/${p.id}`,
+  label: p.title,
+}));
+
+// In local development (`docusaurus start`), also surface `status: draft`
+// patterns so authors can read them rendered in the browser before they are
+// published. This never touches patterns.json — the committed catalog and the
+// MCP feed stay draft-free — and it is skipped in production builds (Vercel),
+// so drafts are never linked from the deployed site. Force-enable in any
+// environment with A11Y_SHOW_DRAFTS=1.
+const showDrafts =
+  process.env.NODE_ENV !== 'production' || process.env.A11Y_SHOW_DRAFTS === '1';
+
+if (showDrafts) {
+  const matter = require('gray-matter');
+  const componentsDir = path.resolve(__dirname, '../patterns/web/react/components');
+  const publishedIds = new Set(patternsJson.patterns.map((p) => p.id));
+
+  const draftItems = fs
+    .readdirSync(componentsDir)
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => matter.read(path.join(componentsDir, f)).data)
+    .filter((fm) => fm.status === 'draft' && !publishedIds.has(fm.id))
+    .sort((a, b) => String(a.id).localeCompare(String(b.id)))
+    .map((fm) => ({
+      type: 'doc',
+      id: `components/${fm.id}`,
+      label: fm.title,
+      // Styled into a "dev only" badge in src/css/custom.css. Only present
+      // here outside production, so the badge can never render on the
+      // deployed site.
+      className: 'sidebar-draft-item',
+    }));
+
+  if (draftItems.length) {
+    console.log(
+      `[sidebars-web-react] DEV: surfacing ${draftItems.length} draft pattern(s): ` +
+        draftItems.map((d) => d.id).join(', ')
+    );
+    componentItems.push(...draftItems);
+  }
+}
+
+// ── 5. Build sidebar config ───────────────────────────────────────────────────
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -81,11 +128,7 @@ const sidebars = {
       // URL contract: /web/react/components/<p.id>
       // Derived from: file in components/ dir + frontmatter id = components/<p.id>
       // No per-file slug needed — auto-derived is stable and matches p.id.
-      items: patternsJson.patterns.map((p) => ({
-        type: 'doc',
-        id: `components/${p.id}`,
-        label: p.title,
-      })),
+      items: componentItems,
     },
     {
       type: 'doc',
