@@ -88,6 +88,8 @@ Three canonical references — **read all three before authoring or revising a p
 - **`schema/pattern-template.md`** — the format (frontmatter contract, section order, bare template to copy).
 - **`schema/style-guide.md`** — the conventions (per-section guidance, prose rules, boilerplate formulas, Customizable typology, Golden Pattern code rules, definition of done, write-like-this examples).
 
+**Authoring an iOS/SwiftUI pattern?** Also read **`schema/ios-component-taxonomy.md`** — the full component list, the `family.variant` naming convention, the settled button/row/link family boundaries, and where each technique lands (component vs `global.*` rule). It keeps iOS families and names consistent across the corpus.
+
 Existing patterns under `patterns/web/react/components/` are good shape references. `button.basic.md`, `dialog.modal.md`, and `accordion.basic.md` cover the typical variations (simple component, focus-managed component, hierarchy-dependent component).
 
 ## What goes in the corpus
