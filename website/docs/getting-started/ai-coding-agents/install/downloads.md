@@ -1,12 +1,21 @@
 ---
-title: Downloads
+title: Install the Skill
 ---
 
-# Downloads
+# Install the Skill
 
-Ready-to-install skills for connecting your AI coding agent to the A11y Context corpus. Download a ZIP, unzip it into your AI tool's skills directory, and the skill is ready to use — the agent picks it up automatically when generating UI.
+The skill is the brain of every integration: it carries the invocation directive (so the agent reaches for the corpus on its own), the selection logic (decompose the request, pick patterns via Use When / Do Not Use When), and the retrieval step. There's **one skill variant per retrieval method** — they differ only in where the skill's retrieval step goes.
 
-## How to install
+| Skill variant | Retrieval | Download | Extra setup |
+|---|---|---|---|
+| **HTTP** (recommended) | fetches pattern pages from this site | [ZIP ↓](#a11y-context--web-react-http) | none |
+| **Local** | reads a bundled copy from disk | [ZIP ↓](#a11y-context--web-react-local) | none |
+| **MCP** | calls the MCP server's tools | *coming soon* | install the [MCP server](./mcp-server) |
+| **RAG** | queries your vector DB | *coming soon* | [index the corpus + fill config](./custom) |
+
+**HTTP and Local** are self-contained — download, unzip, done. **MCP and RAG** add a retrieval mechanism the skill points at (a server, or your vector DB), so each has an extra setup step on its own page. All four are the same brain; only the retrieval step differs.
+
+## How to install (HTTP & Local)
 
 Each download is a folder containing a `SKILL.md` plus any supporting files. The skill's canonical name (declared in its frontmatter) is also the folder name, so the install target is straightforward:
 
@@ -22,11 +31,21 @@ Each download is a folder containing a `SKILL.md` plus any supporting files. The
 unzip a11y-context-web-react-http.zip -d .claude/skills/
 ```
 
+The unzipped skill sits in your tool's skills directory:
+
+```text
+your-project/
+├── .claude/
+│   └── skills/
+│       └── a11y-context-web-react-http/
+│           └── SKILL.md
+├── src/
+└── package.json
+```
+
 For org-level distribution, point your internal skills registry (or a sanctioned fork) at the [a11y-context-skills repository](https://github.com/a11y-context/a11y-context-skills) directly rather than redistributing the ZIP.
 
 ## Web / React
-
-Two variants. Pick based on whether the agent has network access and whether you want freshness-by-default.
 
 ### A11y Context — Web React (HTTP)
 
@@ -52,9 +71,17 @@ The agent reads patterns from a copy of the corpus bundled with the skill. Fully
 
 **Needs:** periodic refresh as the upstream corpus evolves. The bundled corpus carries a `catalog_revision`; check [Release Notes](/web/react/release-notes) and re-download to update.
 
+### A11y Context — Web React (MCP)
+
+*Skill variant coming soon.* MCP retrieval pairs the skill (the brain) with the [MCP server](./mcp-server) (the retrieval mechanism). Install the server today; the packaged MCP skill lands shortly. Until then, the [HTTP skill](#a11y-context--web-react-http) is the drop-in equivalent.
+
+### A11y Context — Web React (RAG)
+
+*Skill variant coming soon.* RAG retrieval pairs the skill with your own vector DB. See [Custom / Enterprise RAG](./custom) for indexing and the config file. The packaged RAG skill (with its config scaffold) lands shortly.
+
 ## iOS / SwiftUI
 
-*Coming soon.*
+*Beta — coming soon.*
 
 ## Android / Compose
 
@@ -64,8 +91,7 @@ The agent reads patterns from a copy of the corpus bundled with the skill. Fully
 
 - **Browse the corpus directly:** [Web / React patterns](/web/react). Useful for QA testing, manual reference, and custom integrations.
 - **Clone the skills repo:** `git clone https://github.com/a11y-context/a11y-context-skills` — and copy any skill folder into your AI tool's skills directory.
-- **Clone the corpus repo:** `git clone https://github.com/a11y-context/accessibility-pattern-api` for the raw markdown patterns.
 
 ## Verifying installation
 
-See [Verify it's working](/getting-started/ai-coding-agents/verification) for the test prompt and pass criteria.
+See [Verify it's working](/getting-started/ai-coding-agents/verification) for the test prompts and pass criteria.
