@@ -318,7 +318,7 @@ scope: [utility | page | layout | component | style]
 
 A new component is not done when the markdown is written. Full checklist:
 
-1. **Pattern doc** at `patterns/<stack>/components/<id>.md` (filename = full ID), all sections per the order above including the Pattern ID line and body summary. Frontmatter includes `latest_version: 0.1.0` and `status: beta` (or `status: draft` if not ready for the catalog yet).
+1. **Pattern doc** at `patterns/<stack>/components/<id>.md` (filename = full ID), all sections per the order above including the Pattern ID line and body summary. Frontmatter includes `latest_version: 0.1.0` and `status: beta` (beta is the default for new patterns; the unmerged PR branch isolates WIP — see `CONTRIBUTING.md` § Status ladder).
 2. **Catalog metadata bump** — increment `catalog_revision` in `patterns/<stack>/catalog-meta.json` (MINOR for a new pattern). `patterns.json` itself is regenerated automatically by `npm run prebuild` — do not hand-edit it. Run `npm run gen:patterns-json` from `/website` to verify the entry generates correctly.
 3. **Catalog page regeneration** — automatic via prebuild; manual via `npm run gen:gallery` from `/website`.
 4. **Release notes entry** in `release-notes.md` under the bumped catalog version. See `CONTRIBUTING.md` § Versioning for the bump rules.

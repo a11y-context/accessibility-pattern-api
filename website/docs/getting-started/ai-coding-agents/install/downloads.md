@@ -10,12 +10,14 @@ The skill is the brain of every integration: it carries the invocation directive
 |---|---|---|---|
 | **HTTP** (recommended) | fetches pattern pages from this site | [ZIP ↓](#a11y-context--web-react-http) | none |
 | **Local** | reads a bundled copy from disk | [ZIP ↓](#a11y-context--web-react-local) | none |
-| **MCP** | calls the MCP server's tools | *coming soon* | install the [MCP server](./mcp-server) |
-| **RAG** | queries your vector DB | *coming soon* | [index the corpus + fill config](./custom) |
+| **MCP** | calls the MCP server's tools | [ZIP ↓](#a11y-context--web-react-mcp) | install the [MCP server](./mcp-server) |
+| **RAG** | queries your vector DB | [ZIP ↓](#a11y-context--web-react-rag) | [index the corpus + fill config](./custom) |
 
 **HTTP and Local** are self-contained — download, unzip, done. **MCP and RAG** add a retrieval mechanism the skill points at (a server, or your vector DB), so each has an extra setup step on its own page. All four are the same brain; only the retrieval step differs.
 
-## How to install (HTTP & Local)
+## How to install
+
+Every variant installs the same way — unzip into your tool's skills directory. MCP and RAG then need their one extra retrieval-setup step (the server, or the config + indexing), linked in the table above.
 
 Each download is a folder containing a `SKILL.md` plus any supporting files. The skill's canonical name (declared in its frontmatter) is also the folder name, so the install target is straightforward:
 
@@ -73,11 +75,19 @@ The agent reads patterns from a copy of the corpus bundled with the skill. Fully
 
 ### A11y Context — Web React (MCP)
 
-*Skill variant coming soon.* MCP retrieval pairs the skill (the brain) with the [MCP server](./mcp-server) (the retrieval mechanism). Install the server today; the packaged MCP skill lands shortly. Until then, the [HTTP skill](#a11y-context--web-react-http) is the drop-in equivalent.
+[**Download a11y-context-web-react-mcp.zip**](pathname:///downloads/a11y-context-web-react-mcp.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/web-react/mcp)
+
+The skill (the brain) whose retrieval step calls the MCP server's tools. The skill selects patterns; the server retrieves them.
+
+**Needs:** the [A11y Context MCP server](./mcp-server) configured in your MCP client. Install the skill and the server together.
 
 ### A11y Context — Web React (RAG)
 
-*Skill variant coming soon.* RAG retrieval pairs the skill with your own vector DB. See [Custom / Enterprise RAG](./custom) for indexing and the config file. The packaged RAG skill (with its config scaffold) lands shortly.
+[**Download a11y-context-web-react-rag.zip**](pathname:///downloads/a11y-context-web-react-rag.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/web-react/rag)
+
+The skill plus an `a11y-context.config.json` scaffold. Fill in your vector-DB endpoint and index name, then the skill queries your retrieval system.
+
+**Needs:** the A11y Context corpus indexed into your retrieval system, and the config filled in. See [Custom / Enterprise RAG](./custom).
 
 ## iOS / SwiftUI
 
