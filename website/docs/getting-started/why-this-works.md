@@ -24,7 +24,7 @@ Covering that for real requires per-component depth. This corpus gives every com
 
 Per-component depth creates the opposite problem: the full corpus injected into every session means thousands of lines of context the model must reason over, token cost on every request, and diluted attention on the rules that matter for the task at hand.
 
-The answer is **selective retrieval**. Before writing code, the agent looks at what it is about to build, identifies the components involved, and retrieves only those patterns, plus the global rules when the task touches page structure or focus-critical UI. A task that builds a product page pulls the collection row, button, and toast patterns; it does not pull the channel guide grid. Per-component depth, without corpus-sized context.
+The answer is **selective retrieval**. Before writing code, the agent looks at what it is about to build, identifies the components involved, and retrieves only those patterns — plus the Foundations ruleset, whose per-rule scope (utility, page, layout, component, style) determines which cross-cutting rules apply to the change. A task that builds a product page pulls the collection row, button, and toast patterns; it does not pull the channel guide grid. Per-component depth, without corpus-sized context.
 
 Every pattern page is written to make this work: self-contained, independently retrievable, with selection boundaries (`Use When` / `Do Not Use When`) the agent can evaluate without reading the full document.
 
