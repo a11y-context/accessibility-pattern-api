@@ -63,7 +63,18 @@ What lives where:
 - `patterns/<stack>/catalog-meta.json` — hand-edited top-level metadata (`catalog_revision`, `schema_version`, `stack`, `cache_ttl_seconds`). Bump `catalog_revision` here on every release.
 - `patterns/<stack>/patterns.json` — generated output; committed (so the MCP server and the website can read it without running the build).
 
-Patterns with `status: draft` or `status: deprecated` are excluded from the generated `patterns.json` automatically. Use `status: draft` for in-progress work that should not appear in the public catalog yet.
+Patterns with `status: draft` or `status: deprecated` are excluded from the generated `patterns.json` automatically.
+
+### Status ladder
+
+New patterns are authored **`beta` from the start** — your unmerged PR branch (not a status flag) is what keeps the work out of production until it's merged. What each status means:
+
+- **`draft`** — excluded from the catalog. Rarely needed under the beta-first flow; use only to deliberately keep a *merged* pattern out of the catalog (e.g., staged infrastructure).
+- **`beta`** — published in the catalog and structurally reviewed. Assistive-technology (AT) verification may still be in progress; beta patterns are patched as testing surfaces fixes. This is the default for new patterns.
+- **`stable`** — promoted from `beta` after significant production use.
+- **`deprecated`** — retired; excluded from the catalog, kept so existing pattern IDs still resolve.
+
+The lifecycle is: author `beta` on a branch → open a PR → the maintainer reviews against the style guide **and runs AT verification during review** → merge ships the pattern to production (as `beta`). There is no separate "flip to beta" or "publish" step.
 
 ---
 
@@ -104,17 +115,16 @@ The bullet-point version of how to take a new pattern from idea to merged PR. Fu
 
 1. **Open an issue first** describing the pattern you want to add (use the "New pattern proposal" issue template). This is a chance to confirm the proposed pattern ID, scope, and sibling boundaries before you invest time drafting. New patterns are often connected to existing siblings via `Do Not Use When` redirects; sorting that out up front saves rework.
 2. **Branch.** If you have Write access, create a feature branch off `main` in this repo. If you don't, fork to your personal GitHub and branch in your fork.
-3. **Create the pattern file** at `patterns/web/react/components/<id>.md`. Copy the skeleton from `schema/pattern-template.md`. Set `status: draft` while you work — it keeps the pattern out of the generated `patterns.json` until you flip it to `beta`.
+3. **Create the pattern file** at `patterns/web/react/components/<id>.md`. Copy the skeleton from `schema/pattern-template.md`. Set `status: beta` — new patterns are authored beta from the start; your unmerged PR branch is what keeps the work out of production until it's merged (see the Status ladder above).
 4. **Author the content** per `schema/style-guide.md`. Pay particular attention to:
    - Frontmatter completeness (all 8 fields, including `latest_version: 0.1.0` and `aliases` generous enough to match real prompts)
    - Section order and `## Use When` / `## Do Not Use When` phrasing (these become the AI's selection signal in `selection_excerpt`)
    - Must Haves phrased as imperatives, no "may" / "should" / "recommended" language
 5. **(Optional) Author your own working demo** in a sandbox of your choosing — CodeSandbox, StackBlitz, a private repo — and verify behavior with a keyboard and a screen reader. This is not required for the PR; the maintainer runs AT verification as part of review.
-6. **Flip to `status: beta`** when you're ready for the catalog.
-7. **Bump `catalog_revision`** in `patterns/web/react/catalog-meta.json` (MINOR — a new pattern is a feature addition).
-8. **Add a release notes entry** under the new catalog version in `patterns/web/react/release-notes.md`.
-9. **Run `npm run prebuild`** in `website/` to regenerate `patterns.json` and the component gallery. Commit the regenerated files.
-10. **Open a PR** using the PR template. CI runs the build; the maintainer reviews the pattern against the style guide and runs AT verification before merge. After merge, the skills repo is auto-synced.
+6. **Bump `catalog_revision`** in `patterns/web/react/catalog-meta.json` (MINOR — a new pattern is a feature addition).
+7. **Add a release notes entry** under the new catalog version in `patterns/web/react/release-notes.md`.
+8. **Run `npm run prebuild`** in `website/` to regenerate `patterns.json` and the component gallery. Commit the regenerated files.
+9. **Open a PR** using the PR template. CI runs the build; the maintainer reviews the pattern against the style guide and runs AT verification before merge. Merge ships the pattern to production (as `beta`); the skills repo is auto-synced.
 
 If you hit anything unclear, comment on your issue or PR — questions are welcome.
 
