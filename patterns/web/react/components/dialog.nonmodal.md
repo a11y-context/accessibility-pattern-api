@@ -2,7 +2,7 @@
 id: dialog.nonmodal
 title: "Dialog (Non-Modal)"
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [dialog, non-modal, overlay, popover, focus-restoration, modeless]
 aliases: [non-modal dialog, modeless dialog, non-blocking dialog, popover dialog, editor popover, composer panel, floating panel]

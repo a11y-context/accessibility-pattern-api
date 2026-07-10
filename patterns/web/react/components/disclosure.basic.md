@@ -2,7 +2,7 @@
 id: disclosure.basic
 title: Disclosure
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [disclosure, show-hide, expand-collapse, button, toggle]
 aliases: [disclosure, show more, expand collapse, expandable section, collapsible panel, reveal panel, toggle content, twisty]

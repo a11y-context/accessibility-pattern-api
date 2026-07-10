@@ -2,7 +2,7 @@
 id: select.native
 title: Native Select
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [select, native-select, form, form-control, dropdown, picker]
 aliases: [native select, html select, select element, dropdown, form select, single-select, option picker, select box]

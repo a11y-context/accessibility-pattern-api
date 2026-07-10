@@ -2,7 +2,7 @@
 id: navigation-menu.dropdown
 title: Navigation Dropdown
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [navigation, dropdown, disclosure, account-menu, avatar-menu, header]
 aliases: [account dropdown, user menu, avatar menu, profile menu, nav dropdown, links dropdown, account menu, header dropdown]

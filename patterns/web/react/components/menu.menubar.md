@@ -2,7 +2,7 @@
 id: menu.menubar
 title: Menubar
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [menubar, menu, roving-tabindex, command-bar, application, keyboard-navigation]
 aliases: [menu bar, application menu bar, command bar, app menu bar, editor menu bar, file edit view menu, desktop menu bar]

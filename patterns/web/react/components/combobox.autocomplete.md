@@ -2,7 +2,7 @@
 id: combobox.autocomplete
 title: Autocomplete Combobox
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [combobox, autocomplete, listbox, filter, aria-activedescendant, form, search]
 aliases: [typeahead, type-ahead, autosuggest, auto-suggest, search select, filterable dropdown, predictive input, combo box]
