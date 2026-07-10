@@ -104,7 +104,22 @@ The heart of the document. Non-negotiables for WCAG 2.2 AA conformance.
 - **One requirement per bullet.** Conditionals and elaborations go in nested sub-bullets, not run-on sentences. Maximum nesting depth: 2. Sub-bullets are used for exactly two purposes: **elaboration** of the parent bullet or **carve-out exception** to the parent. Parallel items at the same logical level are flat siblings.
 - **Every element, attribute, and value in backticks**, spelled exactly as in spec: `aria-expanded="true"`, `<button>`, `tabindex="0"`.
 - **Quote exact attribute–value pairs** when the value matters: `aria-haspopup="listbox"`, not "an appropriate haspopup value".
-- **Group with H3 subsections when bullets exceed ~12.** Canonical example: `navigation-menu.basic` uses `### Structure`, `### Toggle button semantics`, `### Sub-menu container`, `### Keyboard and closing behavior`, `### Multi-menu coordination`.
+- **Group Must Haves under canonical subsections by density, not by count.** Use `###` subsections only when the Must Haves are long enough that a flat list is hard to scan (rule of thumb ~10–12+ bullets) *and* at least two concerns each carry several bullets. A short list, a broad-but-shallow list (many concerns at one bullet each), or a list dominated by a single concern stays flat.
+  - **Closed vocabulary, canonical order.** When grouping, use only these subsection names, in this order, omitting any that don't apply. Five are core (nearly every interactive component); three are conditional (only when the component has that dimension):
+    - Core: `### Roles & structure`, `### Accessible name`, `### State & properties`, `### Keyboard`, `### Focus`.
+    - Conditional: `### Pointer & touch`, `### Motion & timing`, `### Dismissal`.
+  - **What each concern owns** (the tie-breakers):
+    - Roles & structure — elements and ARIA roles, containment and DOM order, position-in-set properties (`aria-rowindex`, `aria-posinset`), input-purpose (`autocomplete`, `type`, `inputmode`).
+    - Accessible name — naming each part (visible text, `aria-label`/`aria-labelledby`) plus `aria-describedby`.
+    - State & properties — dynamic states (`aria-expanded`, `aria-selected`, `aria-checked`, `aria-invalid`), static and wiring properties (`aria-modal`, `aria-haspopup`, `aria-controls`, `aria-activedescendant`), live-region politeness (`aria-live`), and that each state is distinguishable without color alone (see `global.use-of-color`).
+    - Keyboard — the key operation model while engaged, plus text-editing and caret effects for editable widgets.
+    - Focus — the whole focus lifecycle (capture the invoker, move focus in, restore focus on close), the `aria-activedescendant` highlight, modal background isolation (`inert`, scroll-lock), the visible focus indicator (see `global.focus-states`), and the focused element not being obscured (see `global.focus-not-obscured`).
+    - Pointer & touch — single-pointer alternatives to gestures, activation on the up-event, non-drag alternatives to drag.
+    - Motion & timing — pause/stop/hide, honoring `prefers-reduced-motion`, adjustable timings and auto-dismiss durations.
+    - Dismissal — what closes a transient overlay or mode (Esc, outside-click, focus-loss, backdrop, mutual-exclusion). The focus-return consequence is owned by Focus, not here.
+  - **Bullets name the part they govern**, so grouping by concern keeps DOM-locality (under Roles & structure: "The trigger is a native `<button>`; the container has `role="menu"`").
+  - **Ungrouped preamble.** A requirement that genuinely fits none of the eight may sit as an ungrouped bullet after `## Must Haves`, before the first `###` — kept rare. A growing preamble signals the requirement is global (`Foundations`), is not a Must Have, or is a real taxonomy gap.
+  - Do not invent part-based headers (`### Trigger`, `### Menu container`) or scenario headers (`### Multi-menu coordination`); those are the vocabulary drift the closed set exists to prevent.
 - **No bold on attribute names.** Backticks (code formatting) carry the semantic weight for code tokens; bold is reserved for prose emphasis, used sparingly.
 - **Preferred + alternative pairs.** When stating a preferred element with an acceptable fallback, mark the preferred one with `(preferred)` parenthetical: `<button>` (preferred), or `role="button"` only when a native button cannot be used.
 
