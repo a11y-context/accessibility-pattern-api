@@ -8,6 +8,24 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.1 — 2026-07-10
+
+**Canonical Must Haves structure — an eight-concern subsection vocabulary, a density-based grouping trigger, and two new Foundations rules. Structure-only; no requirement changes.**
+
+Replaces the old "group when bullets exceed ~12" heuristic, which had produced drift (the same concern appearing as `### Focus` vs `### Focus management`, `### Structure` vs `### Container` vs `### Menu container`, etc.).
+
+**Style guide (`schema/style-guide.md`):**
+- Grouping trigger changed from bullet-count to *density*: group Must Haves under subsections only when the list is long and at least two concerns each carry several bullets; otherwise stay flat, regardless of length.
+- Closed vocabulary in canonical order — five core (`### Roles & structure`, `### Accessible name`, `### State & properties`, `### Keyboard`, `### Focus`) and three conditional (`### Pointer & touch`, `### Motion & timing`, `### Dismissal`); use only those that apply, in order. Boundary tie-breakers documented (the whole focus lifecycle including restore-on-close is Focus; close triggers are Dismissal; `aria-modal` is State & properties; position-in-set and input-purpose are Roles & structure).
+
+**Foundations (`global/global_rules.md`):**
+- New `global.use-of-color` (WCAG 1.4.1) — a meaningful state must be distinguishable without relying on color alone.
+- New `global.focus-not-obscured` (WCAG 2.4.11) — the focused element must not be fully hidden by sticky or overlapping chrome.
+
+**Components restructured** (Must Haves relocated onto the canonical subsections; no requirement added, removed, or reworded): `menu.basic`, `menu.menubar`, `listbox.basic`, `combobox.autocomplete`, `navigation-menu.basic`. `dialog.modal` and `dialog.nonmodal` stay flat: their requirements concentrate in Focus, so the density trigger is not met (the rule working as intended).
+
+Structure-only change: `catalog_revision` bump only, no per-pattern `latest_version` bumps.
+
 ## 0.5.0 — 2026-07-07
 
 **Promote the dropdown and overlay component family (9 patterns) from draft to beta.**
