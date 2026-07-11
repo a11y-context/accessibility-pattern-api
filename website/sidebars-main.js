@@ -82,9 +82,16 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'getting-started/qa-testing/index',
+          type: 'category',
           label: 'QA & Accessibility Testing',
+          link: { type: 'doc', id: 'getting-started/qa-testing/index' },
+          items: [
+            {
+              type: 'doc',
+              id: 'getting-started/qa-testing/catalog',
+              label: 'Rule Catalog',
+            },
+          ],
         },
       ],
     },

@@ -1,0 +1,18 @@
+---
+title: Rule Catalog
+description: The categorized rule catalog — every web/react Must Have and Don't tagged by verification technique.
+---
+
+import QaCatalog from '@site/src/components/QaCatalog';
+
+# Categorized Rule Catalog
+
+This is the live view of [`qa-catalog.json`](https://github.com/a11y-context/accessibility-pattern-api/blob/main/patterns/web/react/qa-catalog.json) — the machine-readable classification that sits alongside `patterns.json` and feeds the `axe-a11y-context` harness. Every **Must Have** and **Don't** across the published web/react patterns is tagged with the verification technique(s) that can actually confirm it:
+
+- **Static** — checkable from source (a linter / AST rule).
+- **LLM eval** — semantic judgment on the code (a review agent).
+- **Runtime** — observable only when rendered and exercised (Playwright / DOM assertions).
+
+Filter by technique to see what each layer is responsible for, or expand a pattern to read its rules and the hint / question / assertion behind each one. Consumers can read the raw JSON directly to build their own harness.
+
+<QaCatalog />
