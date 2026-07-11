@@ -26,12 +26,12 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when the user triggers an immediate action and stays within the present screen, including opening popovers, modals, bottom sheets, etc. Supports text-only, icon+text, and icon-only labeling patterns."
+          "Use when the user triggers an immediate action and stays on the current screen (e.g., \"Save\", \"Add to List\", \"Play\"), including opening a popover, modal, or bottom sheet."
         ],
         "do_not_use_when": [
           "Do not use when the control represents an on/off pressed state (use button.toggle).",
-          "Do not use when the control navigates to a new unique page/screen (use NavigationLink (link.basic), not Button).",
-          "Do not use when the control brings you out of the app completely."
+          "Do not use when the control drills into a new in-app screen (use list.row).",
+          "Do not use when the control opens a URL or leaves the app (use link.basic)."
         ]
       },
       "variants": [],
@@ -48,7 +48,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "SwiftUI Button with two states (e.g. pressed/active) conveyed via either an accessible-name change or the .isSelected accessibility trait — never both.",
+      "summary": "SwiftUI Button with two states (e.g. pressed/active) conveyed via either an accessible-name change or the .isSelected accessibility trait, never both.",
       "aliases": [
         "toggle button",
         "pressed button"
@@ -63,11 +63,11 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when a control toggles a feature or action within the current context (e.g., \"Mute\", \"Bold\", \"Pin\", \"Enable Closed Captioning\"). Uses a SwiftUI Button with two states conveyed via either an accessible-name change or the .isSelected accessibility trait — never both."
+          "Use when a control toggles a feature or action within the current context (e.g., \"Mute\", \"Bold\", \"Pin\", \"Enable Closed Captioning\"). Uses a SwiftUI Button with two states conveyed via either an accessible-name change or the .isSelected accessibility trait, never both."
         ],
         "do_not_use_when": [
-          "Do not use when the control represents a persistent on/off system or application setting, such as \"Enable notifications\", \"Dark mode\" (use switch.basic).",
-          "Do not use when the control navigates to a new screen (use NavigationLink (link.basic), not Button)."
+          "Do not use when the control represents a persistent on/off system or application setting, such as \"Enable notifications\" or \"Dark mode\" (use switch.basic).",
+          "Do not use when the control drills into a new in-app screen (use list.row)."
         ]
       },
       "variants": [],
@@ -88,7 +88,9 @@
       "aliases": [
         "toggle switch",
         "preference toggle",
-        "settings toggle"
+        "settings toggle",
+        "Toggle",
+        "UISwitch"
       ],
       "tags": [
         "switch",

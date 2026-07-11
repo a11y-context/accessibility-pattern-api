@@ -9,14 +9,26 @@ This file is the canonical structure for every pattern file in `patterns/<stack>
 ### Frontmatter (required)
 
 - `id` — pattern identifier (e.g., `button.basic`). Used as the URL slug and the catalog key.
+- `title` — short human title (e.g., "Basic Button"). Matches the H1.
 - `stack` — platform path (e.g., `web/react`, `android/compose`, `ios/swiftui`)
 - `status` — `stable` | `beta` | `deprecated`
+- `latest_version` — semver for this pattern; start new patterns at `0.1.0`.
 - `tags` — short list of selection keywords surfaced to retrieval (e.g., `["button", "primary action", "form"]`)
+- `aliases` — 4–8 generous synonyms a developer or agent might use for this thing; carries weight in retrieval.
 - `summary` — one sentence describing the pattern, surfaced in the catalog page and in retrieval excerpts
 
 ### `# Pattern Title`
 
 Short human title (e.g., "Basic Button", "Modal Dialog"). Matches `title` in `patterns.json`.
+
+### Pattern ID line + summary paragraph (required, directly under the H1)
+
+Immediately under the H1, two elements in order:
+
+1. `` Pattern ID: `family.variant` `` on its own line.
+2. The frontmatter `summary`, repeated as a visible body paragraph (code tokens backticked for rendering).
+
+These satisfy the RAG chunking requirement — the canonical ID and summary appear in the first lines of every page. They are easy to omit, so they are part of the template below; do not drop them.
 
 ### `## Use When`
 
@@ -70,13 +82,20 @@ Observable pass/fail behaviors. These double as a test specification for QA. Eac
 ```
 ---
 id: <required>
+title: <required>
 stack: <required>
 status: stable | beta | deprecated
+latest_version: 0.1.0
 tags: []
+aliases: []
 summary: <one sentence>
 ---
 
 # <Pattern Title>
+
+Pattern ID: `<id>`
+
+<summary repeated as a visible sentence>
 
 ## Use When
 - 

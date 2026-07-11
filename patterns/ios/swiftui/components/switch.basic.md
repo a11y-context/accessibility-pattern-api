@@ -5,11 +5,15 @@ stack: ios/swiftui
 status: beta
 latest_version: 0.1.0
 tags: [switch, toggle, settings, on-off, form-control]
-aliases: [toggle switch, preference toggle, settings toggle]
+aliases: [toggle switch, preference toggle, settings toggle, Toggle, UISwitch]
 summary: Native SwiftUI Toggle representing a persistent on/off setting. The label and switch state merge into a single accessible element.
 ---
 
 # Switch
+
+Pattern ID: `switch.basic`
+
+Native SwiftUI `Toggle` representing a persistent on/off setting. The label and switch state merge into a single accessible element.
 
 ## Use When
 - Use when a control represents a persistent binary setting that remains on or off beyond the current interaction (e.g., "Enable notifications", "Dark mode"). Uses a native SwiftUI `Toggle`, whose label and switch state merge into a single accessible element.
@@ -25,19 +29,22 @@ summary: Native SwiftUI Toggle representing a persistent on/off setting. The lab
 - The switch has an accessible name that describes the setting. Often this is worded to be true when the switch is on (e.g., "Enable notifications").
 - When there is no unique visible label (e.g., repeated switches in a list sharing generic visual text), give each `Toggle` a unique, specific `.accessibilityLabel`.
 - When the on/off state is represented by visible value text other than "On"/"Off" (e.g., "Allowed"/"Blocked", "Dark"/"Light"), set `.accessibilityValue` to match so VoiceOver announces the correct state instead of defaulting to generic On/Off wording.
+- The off-state fill maintains at least 3:1 contrast against the adjacent background, so the off state is distinguishable by more than color (a plain light gray is a common offender).
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
 - Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
 
 ## Customizable
 - A custom `.toggleStyle` may restyle appearance (color, shape, knob position) as long as it continues to wrap a real `Toggle` underneath, preserving native semantics rather than rebuilding the control from scratch.
-- The off-state fill color must maintain at least 3:1 contrast against the adjacent background to the control — a plain light gray is a common offender.
 
 ## Don'ts
 - Do not build a switch out of a custom `HStack` of `Text` plus a shape-based knob without grouping it. Without an explicit `Toggle` (or `.accessibilityElement(children: .combine)`), the label and the control become two disconnected accessibility elements instead of one combined name-and-state announcement.
 - Do not leave `.accessibilityValue` mismatched with the visible value text when the switch shows custom state wording instead of On/Off.
-- Do not rely on color alone (e.g., green vs. gray) to convey on/off state. The off state must remain visually distinguishable through sufficient contrast, not color alone.
+- Do not rely on color alone (e.g., green vs. gray) to convey on/off state; the off state must remain distinguishable through sufficient contrast.
 
 ## Golden Pattern
+
+Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
+
 ```swift
 import SwiftUI
 
@@ -47,10 +54,10 @@ struct SwitchBasicDemo: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Native Toggle — label, switch, and state merge into one accessible element
+            // Native Toggle: label, switch, and state merge into one accessible element
             Toggle("Enable notifications", isOn: $notifications)
 
-            // Custom value text instead of On/Off — accessibilityValue must match
+            // Custom value text instead of On/Off; accessibilityValue must match
             Toggle(isOn: $displayMode) {
                 Text("Display Mode")
             }
@@ -62,10 +69,22 @@ struct SwitchBasicDemo: View {
 
 ## Acceptance Checks
 
-All checks run in a UI test target via `xcodebuild test`. An element's `.label` is the accessible name (what VoiceOver speaks and Voice Control overlays); `.value` is the announced state.
+Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
 
-- The switch merges into a single element: `XCTAssertTrue(app.switches["Enable notifications"].exists)` (label + switch role + state are one element), and no separate static-text element duplicates the label as its own accessibility element.
-- Toggling flips the value: read `app.switches["Enable notifications"].value` (e.g. `"0"`), `.tap()`, then assert it changed (e.g. `"1"`). `.tap()` is the programmatic equivalent of a VoiceOver double-tap or Space/Return.
-- Custom value text: `XCTAssertEqual(app.switches["Display Mode"].value, "Light")`, `.tap()`, then `XCTAssertEqual(app.switches["Display Mode"].value, "Dark")` — the value tracks the visible custom wording, not generic On/Off.
-- Repeated switches: query each and assert their `.label`s are all distinct (none collide on generic text).
-- Contrast: `try app.performAccessibilityAudit(for: .contrast)` reports no failures for the switch. Whether the off state is distinguishable by more than color is a design/code-inspection check — there is no runtime audit for color-alone reliance.
+**Traits & semantics**
+- The switch is a single accessible element carrying the switch trait, its name, and its on/off value; no separate static-text element duplicates the label.
+
+**VoiceOver**
+- VoiceOver speaks the setting name, the switch role, and the current state.
+- When custom value wording is used, VoiceOver announces that wording (e.g., "Dark"/"Light"), not generic On/Off.
+- Double-tapping flips the switch and the announced state updates.
+- Repeated switches each speak a distinct name.
+
+**Switch Control & Full Keyboard Access**
+- The switch is reachable and togglable via Switch Control and a hardware keyboard, with the state change announced.
+
+**Dynamic Type**
+- The switch's label scales with Dynamic Type and stays fully visible at accessibility text sizes.
+
+**Visual**
+- The off state is distinguishable from on by more than color, with the off-state fill meeting 3:1 contrast against its background.
