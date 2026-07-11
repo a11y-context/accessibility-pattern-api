@@ -29,24 +29,19 @@ The MCP client spawns the server as a local subprocess. Zero hosting — it runs
 
 ### Claude Code
 
-Add it with the CLI:
-
-```bash
-claude mcp add a11y-context -- npx -y @a11y-context/mcp-server
-```
-
-The pieces after `claude mcp add`:
-- **`a11y-context`** — the name you'll see in `/mcp` (your choice).
-- **`--`** — separates Claude's own flags from the command that launches the server.
-- **`npx -y @a11y-context/mcp-server`** — the command Claude runs to start the server.
-
-Add `--scope project` to write the config into your repo's `.mcp.json` (shareable with your team) instead of your personal user config:
+Run this **from your project's root directory** — the config is scoped to the directory you run it in. Use `--scope project` (recommended) so the server is written to a committed `.mcp.json`: A11y Context needs no secrets or per-user config, and every developer on the project wants it identically, so sharing it via the repo is the right default.
 
 ```bash
 claude mcp add --scope project a11y-context -- npx -y @a11y-context/mcp-server
 ```
 
-That produces a `.mcp.json` at your project root:
+The pieces after `claude mcp add`:
+- **`--scope project`** — writes the config to a `.mcp.json` at your repo root, committed and shared with your team. Omit it and the server is added only to your personal config for this project (private to you, no file in the repo) — fine for a solo "just trying it" run.
+- **`a11y-context`** — the name you'll see in `/mcp` (your choice).
+- **`--`** — separates Claude's own flags from the command that launches the server.
+- **`npx -y @a11y-context/mcp-server`** — the command Claude runs to start the server.
+
+`--scope project` produces a `.mcp.json` at your project root:
 
 ```text
 your-project/
@@ -72,6 +67,16 @@ Run `/mcp` in Claude Code to confirm `a11y-context` is listed and connected. (`/
 ### Cursor, Continue, Zed, other clients
 
 Add the same `mcpServers` block to the client's MCP config file (`.cursor/mcp.json` for Cursor; the equivalent for others). The `command` / `args` shape is identical.
+
+### Also install the MCP skill
+
+The server is only the retrieval half. To get intelligent pattern *selection*, also install the **MCP skill** (the brain) — download `a11y-context-web-react-mcp.zip` from the [Install page](./downloads) and unzip it into your tool's skills directory:
+
+```bash
+unzip a11y-context-web-react-mcp.zip -d .claude/skills/
+```
+
+The server answers tool calls; the skill is what makes the agent reach for those tools at the right time with the right patterns. Both live in your project — the server config in `.mcp.json`, the skill in `.claude/skills/`.
 
 ## Option B — HTTP (hosted or self-hosted)
 
