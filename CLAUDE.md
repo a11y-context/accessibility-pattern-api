@@ -98,7 +98,7 @@ Patterns and rules derived from WCAG 2.2 AA, WAI-ARIA, the ARIA Authoring Practi
 
 The catalog file at `patterns/web/react/patterns.json` is **regenerated** by `website/scripts/generate-patterns-json.js` from the .md files in `components/` plus the top-level `catalog-meta.json`. The generator runs in `prebuild`. **Do not hand-edit `patterns.json`** — author the .md frontmatter and body sections only.
 
-Per-pattern `latest_version` lives in the .md frontmatter; `catalog_revision` lives in `patterns/web/react/catalog-meta.json`. Patterns with `status: draft` or `status: deprecated` are excluded from the generated catalog (use `draft` for in-progress work like new patterns being developed in the lab).
+Per-pattern `latest_version` lives in the .md frontmatter; `catalog_revision` lives in `patterns/web/react/catalog-meta.json`. Patterns with `status: draft` or `status: deprecated` are excluded from the generated catalog. New patterns are authored **`status: beta` from the start** — the unmerged PR branch (not a status flag) isolates work in progress, so `draft` is rarely needed. See `CONTRIBUTING.md` § Status ladder.
 
 ## Versioning — REQUIRED protocol for Claude
 

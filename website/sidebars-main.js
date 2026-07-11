@@ -5,11 +5,16 @@
  * Docs root: website/docs/
  * routeBasePath: '/' — pages served at /getting-started/..., /troubleshooting/..., etc.
  *
- * Getting Started structure (reworked 2026-06-30): two-part framing — corpus +
- * skill. Install/ subfolder consolidates the three install paths (ZIP, clone,
- * enterprise RAG). Verification has its own page. The earlier enforcement-rule
- * page was deleted; the rule is now mentioned in the AI coding agents index
- * page as an optional belt-and-suspenders backup.
+ * Getting Started structure (preview 2026-07):
+ *   - "Install" subcategory relabeled "Integrations": one unified taxonomy for how
+ *     the corpus reaches the agent (skill HTTP/Local, MCP, custom/RAG, plus in-dev
+ *     OpenAI Assistants and LangChain). index.md is the "Choose an Integration"
+ *     decision page; each child is a self-contained what + setup. Retrieval-options
+ *     and indexing-guidance pages were merged in (retrieval into the skill download
+ *     page and the choose page; indexing into custom). The parallel "delivery"
+ *     folder was folded here — retrieval and delivery were the same axis.
+ *   - QA & Testing is a single page describing the axe-a11y-context approach + the
+ *     three-technique verification framework.
  */
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -37,7 +42,7 @@ const sidebars = {
           items: [
             {
               type: 'category',
-              label: 'Install',
+              label: 'Integrations',
               collapsible: true,
               collapsed: false,
               link: { type: 'doc', id: 'getting-started/ai-coding-agents/install/index' },
@@ -45,17 +50,27 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'getting-started/ai-coding-agents/install/downloads',
-                  label: 'Downloads',
+                  label: 'Skill — Download & Install',
                 },
                 {
                   type: 'doc',
-                  id: 'getting-started/ai-coding-agents/install/retrieval-options',
-                  label: 'Retrieval Options',
+                  id: 'getting-started/ai-coding-agents/install/mcp-server',
+                  label: 'MCP Server',
                 },
                 {
                   type: 'doc',
-                  id: 'getting-started/ai-coding-agents/install/indexing-guidance',
-                  label: 'Enterprise RAG Indexing',
+                  id: 'getting-started/ai-coding-agents/install/custom',
+                  label: 'Custom / Enterprise RAG',
+                },
+                {
+                  type: 'doc',
+                  id: 'getting-started/ai-coding-agents/install/openai-assistants',
+                  label: 'OpenAI Assistants',
+                },
+                {
+                  type: 'doc',
+                  id: 'getting-started/ai-coding-agents/install/langchain',
+                  label: 'LangChain',
                 },
               ],
             },
@@ -67,18 +82,9 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
-          label: 'For QA & Accessibility Testing',
-          collapsible: true,
-          collapsed: false,
-          link: { type: 'doc', id: 'getting-started/qa-testing/index' },
-          items: [
-            {
-              type: 'doc',
-              id: 'getting-started/qa-testing/automated-harness',
-              label: 'Building an Automated Harness',
-            },
-          ],
+          type: 'doc',
+          id: 'getting-started/qa-testing/index',
+          label: 'QA & Accessibility Testing',
         },
       ],
     },

@@ -1,40 +1,37 @@
 ---
-title: Install
+title: Choose an Integration
 ---
 
-# Install A11y Context
+# Choose an Integration
 
-Three install paths, depending on how you want to consume the corpus:
+Every integration has the same brain — a **skill** — and differs only in how that skill retrieves.
 
-## Quick start: download a ZIP
+## The skill is always there
 
-Best for individuals and most teams. Per-skill ZIPs are built from the [a11y-context-skills](https://github.com/a11y-context/a11y-context-skills) repo on every release. Pick a variant, download the ZIP, and unzip it into your AI tool's skills directory.
+When invoked, the skill decomposes the request into components, selects patterns via each candidate's `Use When` / `Do Not Use When`, retrieves the selected patterns, and applies them. That selection logic is the whole point, and it lives in the skill regardless of which integration you pick.
 
-→ [Downloads](/getting-started/ai-coding-agents/install/downloads)
+What changes between integrations is **step 4 — retrieval**: where the skill goes to fetch the patterns it selected. So each integration is a skill *variant* whose retrieval step targets a different mechanism.
 
-## Git clone
+| Retrieval mechanism | The skill's retrieval step | Where the address lives | Status |
+|---|---|---|---|
+| **[HTTP](./downloads)** | fetches pattern pages from this site | baked into the skill (our URL) | ✅ Available |
+| **[Local](./downloads)** | reads a bundled copy from disk | baked into the skill (bundled dir) | ✅ Available |
+| **[MCP tools](./mcp-server)** | calls the server's `get_pattern` tool | your MCP client config | ✅ Available |
+| **[Enterprise RAG](./custom)** | queries your vector DB | a config file you fill in | 🟡 In development |
 
-For developers who want to fork, customize, or track updates with `git pull`. Clone the skills repo and copy the relevant skill folder into your AI tool's skills directory.
+⚪ **Planned managed wrappers:** [OpenAI Assistants](./openai-assistants), [LangChain](./langchain), LlamaIndex, Anthropic Files API, Glean, Confluence Cloud AI, Azure AI Search / Vertex / Bedrock. [Open an issue](https://github.com/a11y-context/accessibility-pattern-api/issues) to influence priority.
 
-→ [Downloads § Alternative: clone the repo](/getting-started/ai-coding-agents/install/downloads)
+## What "where the address lives" means
 
-## Enterprise RAG
+- **HTTP and Local** — the address is baked into the skill we ship. Download and go; nothing to configure.
+- **MCP** — you also install the [MCP server](./mcp-server); the address lives in your MCP client config. The skill's retrieval step calls the server's tools.
+- **RAG** — the skill can't know your vector DB in advance, so the RAG skill variant ships with a config file you fill in at install (endpoint + index name). See [Custom / Enterprise RAG](./custom).
 
-For organizations that route AI context through a managed retrieval system. Index this site into your knowledge base and let assistants retrieve chunks.
+## Which one?
 
-→ [Retrieval Options § Enterprise RAG](/getting-started/ai-coding-agents/install/retrieval-options) and [Indexing Guidance](/getting-started/ai-coding-agents/install/indexing-guidance)
+- **Most teams: [Skill — HTTP](./downloads).** Best measured quality at the lowest complexity — nothing to vendor locally, always current, invocation handled by the skill's description. Recommended starting point.
+- **Offline or air-gapped: [Skill — Local](./downloads).** Fastest retrieval, no network; refresh periodically.
+- **MCP-native clients (Claude Code, Cursor, Continue, Zed): [MCP server](./mcp-server).** Deterministic tool-based retrieval, composable with your other MCP sources.
+- **Enterprise team with existing retrieval infrastructure: [Custom / Enterprise RAG](./custom).** Point your indexer at the public corpus and pair it with the RAG skill variant.
 
-## Picking between HTTP and Local
-
-For the ZIP and git-clone paths, two skill variants exist:
-
-- **HTTP (recommended starting point)** — small footprint (one `SKILL.md` file), always-current corpus, needs network access from the agent
-- **Local** — fully offline, fastest retrieval, requires periodic refresh as the upstream corpus evolves
-
-Details and operational tradeoffs: [Retrieval Options](/getting-started/ai-coding-agents/install/retrieval-options).
-
-## After installing
-
-Run a test prompt to confirm the skill is being invoked. The verification page walks through what to expect:
-
-→ [Verify it's working](/getting-started/ai-coding-agents/verification)
+Once you've picked, set it up on its page above, then [verify it's working](/getting-started/ai-coding-agents/verification).

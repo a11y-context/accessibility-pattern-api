@@ -8,10 +8,14 @@ A11y Context is a corpus of accessibility best practices written to be consumed 
 
 - **Use When / Do Not Use When:** selection boundaries, so the right pattern is chosen and sibling patterns are never blended
 - **Must Haves:** the non-negotiable semantics, ARIA wiring, focus behavior, and keyboard behavior for WCAG 2.2 AA conformance
+- **Customizable:** the acceptable variations, so the agent can tell a real design choice from a requirement
+- **Don'ts:** the anti-patterns to avoid
 - **A Golden Pattern:** a minimal, tested reference implementation
 - **Acceptance Checks:** observable pass/fail behaviors a tester can verify with a keyboard and a screen reader
 
 The corpus is one source of truth with many consumption modes: fetch it over HTTP, copy it locally, or index it into an enterprise RAG system. Browse it now: [Web / React patterns](/web/react).
+
+![Two flows compared. Without A11y Context: a user prompt goes to an AI coding agent and produces inaccessible code — about 12% WCAG pass. With A11y Context: the same prompt goes to an AI agent paired with the skill, which retrieves matching patterns, Foundations, and acceptance checks from the corpus, producing accessible code — 88 to 93% WCAG pass.](/img/with-without-a11y-context.png)
 
 ## Why it exists
 

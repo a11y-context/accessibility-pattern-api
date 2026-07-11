@@ -8,6 +8,17 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.2 — 2026-07-10
+
+**Backfill of the eight-concern Must Haves subheaders to the pre-0.5.0 patterns. Structure-only; no requirement changes.**
+
+Applied the canonical Must Haves subheader vocabulary (introduced in 0.5.1) to the older patterns that meet the density trigger. Two qualified:
+
+- `grid.channel-guide` → grouped under `### Roles & structure`, `### Keyboard`, `### Focus`.
+- `navigation-menu.dropdown` → grouped under `### Roles & structure`, `### Accessible name`, `### State & properties`, `### Focus`, `### Dismissal`.
+
+All other pre-0.5.0 patterns were assessed against the density rule (long list *and* at least two concerns each carrying several bullets) and correctly stay flat — including `dialog.modal` (Focus-dominated; its six-behavior contract is a single bullet, so no second concern carries several top-level bullets) and the button/link/toast family (short lists). Bullets moved verbatim; verified no requirement text changed. No per-pattern version bumps (structure-only, mirroring the 0.4.2 and 0.5.1 precedent).
+
 ## 0.5.1 — 2026-07-10
 
 **Canonical Must Haves structure — an eight-concern subsection vocabulary, a density-based grouping trigger, and two new Foundations rules. Structure-only; no requirement changes.**
