@@ -1,0 +1,12 @@
+{
+  "name": "axe-a11y-context-dialog-modal-reference",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reference Playwright spec for the dialog.modal runtime rules from qa-catalog.json.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
