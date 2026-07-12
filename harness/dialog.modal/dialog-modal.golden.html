@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>dialog.modal — golden reference</title>
+    <style>
+      /* Tall page so the scroll-lock assertion (rule 16) is meaningful. */
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        min-height: 300vh;
+        padding: 2rem;
+      }
+      /* Fluid width so content reflows at a 320px viewport (rules 6, 27). */
+      dialog {
+        max-width: min(560px, 100%);
+        border: 1px solid #888;
+        border-radius: 12px;
+        padding: 1rem;
+      }
+      /* Visible focus indicator on every focusable surface (rule 18). */
+      :focus-visible {
+        outline: 3px solid #0b57d0;
+        outline-offset: 2px;
+      }
+      /* Body scroll lock while a modal dialog is open (rule 16). Native
+         <dialog>.showModal() provides focus trap, Escape, focus return, and
+         background inertness for free, but NOT scroll lock — this is the
+         small, correct addition a golden implementation makes. */
+      html:has(dialog:modal) {
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Modal dialog — golden reference</h1>
+
+    <!-- Background control: must become unreachable while the dialog is open
+         (rules 15, 21). -->
+    <button id="background-btn" type="button">Background button</button>
+
+    <!-- Invoking control declares dialog-trigger semantics (aria-haspopup). -->
+    <button id="open-btn" type="button" aria-haspopup="dialog">Open dialog</button>
+
+    <!-- Accessible name via aria-labelledby -> visible <h2> (rule 4). -->
+    <dialog id="dialog" aria-labelledby="dialog-title">
+      <h2 id="dialog-title">Confirm action</h2>
+      <p>This is a modal dialog rendered with the native element.</p>
+      <input id="dialog-input" type="text" aria-label="A field inside the dialog" />
+      <button id="confirm-btn" type="button">Confirm</button>
+      <!-- Visible close control with an accessible name (rule 8). -->
+      <button id="close-btn" type="button" aria-label="Close dialog">×</button>
+    </dialog>
+
+    <script>
+      const dialog = document.getElementById('dialog');
+      const openBtn = document.getElementById('open-btn');
+      const closeBtn = document.getElementById('close-btn');
+
+      // Open with .showModal() (rule 1) — this is what produces the modal
+      // contract. Close with .close() (rule 2), which restores focus to the
+      // invoker (rules 14, 26).
+      openBtn.addEventListener('click', () => dialog.showModal());
+      closeBtn.addEventListener('click', () => dialog.close());
+
+      // Backdrop click closes: a click landing on the <dialog> element itself
+      // (its padding) rather than a content descendant is a backdrop dismiss.
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+    </script>
+  </body>
+</html>
