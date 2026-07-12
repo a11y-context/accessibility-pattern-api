@@ -1,35 +1,211 @@
 /**
- * Docusaurus classic theme — color overrides only.
+ * A11y Context — Docusaurus theme foundation.
  *
- * Light mode primary: #2563EB — 5.17:1 on white (WCAG AA ✓)
- * Dark mode primary:  #3B82F6 — 4.68:1 on dark bg (WCAG AA ✓)
- *                               3.67:1 as button bg w/ white text (WCAG AA large/UI ✓)
+ * Source of record: DESIGN-SYSTEM.md (this directory's ../../DESIGN-SYSTEM.md).
+ * Clarity-first, engineered, confident: grotesk display over humanist body,
+ * a single violet accent, generous space, borders over shadows.
+ *
+ * PHASE 1 = tokens + global CSS only. No React/theme-component changes.
+ *
+ * All colors below are documented AA-verified in the spec:
+ *   Light accent  #5B3FD6 — white text on it = 6.7:1 (AA normal ✓)
+ *   Light link    #4A34B8 — inline link text, deeper violet (AA on white ✓)
+ *   Dark  accent  #9C82F5 — used for emphasis/active on dark surfaces
+ *   Dark  link    #B9A6FA — inline link text (AA on dark bg ✓)
  */
 
-:root {
-  --ifm-color-primary:         #2563EB;
-  --ifm-color-primary-dark:    #1D55D8;
-  --ifm-color-primary-darker:  #1A4DC9;
-  --ifm-color-primary-darkest: #153FAA;
-  --ifm-color-primary-light:   #3B72F0;
-  --ifm-color-primary-lighter: #5585F3;
-  --ifm-color-primary-lightest: #80A8F8;
+/* ==========================================================================
+   1. Design tokens
+   ========================================================================== */
 
+:root {
+  /* --- Type ------------------------------------------------------------- */
+  --a11y-font-body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --a11y-font-display: 'Schibsted Grotesk', 'Hanken Grotesk', system-ui,
+    -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --a11y-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono',
+    Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* --- Radius (spec §4: 6 / 8 / 12 / pill) ----------------------------- */
+  --a11y-radius-sm: 6px;
+  --a11y-radius-md: 8px;
+  --a11y-radius-lg: 12px;
+  --a11y-radius-pill: 999px;
+
+  /* --- Color tokens: LIGHT (default) ----------------------------------- */
+  --a11y-bg: #f5f6f8; /* page canvas */
+  --a11y-surface: #ffffff; /* cards, panels, navbar */
+  --a11y-ink: #0e1116; /* primary text */
+  --a11y-muted: #5a6270; /* secondary text */
+  --a11y-border: #e2e4e8; /* lines, dividers, card borders */
+  --a11y-field-bg: #fbfbfc; /* inputs */
+
+  --a11y-accent: #5b3fd6; /* actions, emphasis, active, the mark */
+  --a11y-accent-hover: #4e36c0;
+  --a11y-accent-soft: #eceafb; /* accent tint backgrounds, inline code */
+  --a11y-link: #4a34b8; /* inline link TEXT — deeper violet, AA on white */
+
+  --a11y-success: #138a5e;
+  --a11y-warning: #b7791f;
+  --a11y-error: #c23b2e;
+  --a11y-info: #1e6fa8;
+
+  --a11y-code-surface: #f0f0f3; /* code BLOCK surface (spec §6) */
+  --a11y-code-inline-bg: var(--a11y-accent-soft);
+
+  /* Surface-aware double focus ring — light: inner white, outer accent */
+  --a11y-focus-ring: 0 0 0 2px var(--a11y-surface),
+    0 0 0 4px var(--a11y-accent);
+
+  /* ---------------------------------------------------------------------
+     Wire Infima to the tokens.
+     --------------------------------------------------------------------- */
+
+  /* Primary ramp → brand violet (light). Sensible darker/lighter steps. */
+  --ifm-color-primary: #5b3fd6;
+  --ifm-color-primary-dark: #553bc7;
+  --ifm-color-primary-darker: #5239c1;
+  --ifm-color-primary-darkest: #4b34b0;
+  --ifm-color-primary-light: #664cd9;
+  --ifm-color-primary-lighter: #6b52da;
+  --ifm-color-primary-lightest: #7862dd;
+
+  /* Fonts */
+  --ifm-font-family-base: var(--a11y-font-body);
+  --ifm-heading-font-family: var(--a11y-font-display);
+  --ifm-font-family-monospace: var(--a11y-font-mono);
+
+  /* Surfaces / text */
+  --ifm-background-color: var(--a11y-bg);
+  --ifm-background-surface-color: var(--a11y-surface);
+  --ifm-navbar-background-color: var(--a11y-surface);
+  --ifm-font-color-base: var(--a11y-ink);
+  --ifm-heading-color: var(--a11y-ink);
+  --ifm-color-content: var(--a11y-ink);
+  --ifm-color-content-secondary: var(--a11y-muted);
+
+  /* Links use the deeper violet, NOT the raw accent */
+  --ifm-link-color: var(--a11y-link);
+  --ifm-link-hover-color: var(--a11y-accent);
+
+  /* Borders / dividers */
+  --ifm-color-emphasis-300: var(--a11y-border);
+  --ifm-toc-border-color: var(--a11y-border);
+  --ifm-hr-border-color: var(--a11y-border);
+  --ifm-table-border-color: var(--a11y-border);
+
+  /* Radii */
+  --ifm-global-radius: var(--a11y-radius-md);
+  --ifm-card-border-radius: var(--a11y-radius-lg);
+  --ifm-code-border-radius: var(--a11y-radius-sm);
+  --ifm-alert-border-radius: var(--a11y-radius-md);
+
+  /* Inline code (code BLOCKS are themed via the Prism theme object) */
+  --ifm-code-background: var(--a11y-code-inline-bg);
+  --ifm-code-color: var(--a11y-ink);
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(37, 99, 235, 0.1);
+
+  /* Motion — subtle: ~150ms interactions, ~250ms theme (spec §5) */
+  --ifm-transition-fast: 150ms;
+  --ifm-transition-slow: 250ms;
+
+  --docusaurus-highlighted-code-line-bg: rgba(91, 63, 214, 0.1);
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary:         #3B82F6;
-  --ifm-color-primary-dark:    #2D74EE;
-  --ifm-color-primary-darker:  #2563EB;
-  --ifm-color-primary-darkest: #1D55D8;
-  --ifm-color-primary-light:   #5B9CF6;
-  --ifm-color-primary-lighter: #74ACF8;
-  --ifm-color-primary-lightest: #93BFFA;
+  /* --- Color tokens: DARK ----------------------------------------------- */
+  --a11y-bg: #0d1117;
+  --a11y-surface: #161b22;
+  --a11y-ink: #e8ebf0;
+  --a11y-muted: #8b95a3;
+  --a11y-border: #262c36;
+  --a11y-field-bg: #0f141b;
 
-  --docusaurus-highlighted-code-line-bg: rgba(59, 130, 246, 0.15);
+  --a11y-accent: #9c82f5;
+  --a11y-accent-hover: #b9a6fa;
+  --a11y-accent-soft: #23203a;
+  --a11y-link: #b9a6fa;
+
+  --a11y-code-surface: #0b0b0c; /* code BLOCK surface (spec §6) */
+  --a11y-code-inline-bg: var(--a11y-accent-soft);
+
+  /* Surface-aware double focus ring — dark: inner accent, outer bg */
+  --a11y-focus-ring: 0 0 0 2px var(--a11y-accent), 0 0 0 4px var(--a11y-bg);
+
+  /* Primary ramp → brand violet (dark). */
+  --ifm-color-primary: #9c82f5;
+  --ifm-color-primary-dark: #9179e4;
+  --ifm-color-primary-darker: #8c75dd;
+  --ifm-color-primary-darkest: #806bc9;
+  --ifm-color-primary-light: #a38bf6;
+  --ifm-color-primary-lighter: #a68ff6;
+  --ifm-color-primary-lightest: #ae99f7;
+
+  --docusaurus-highlighted-code-line-bg: rgba(156, 130, 245, 0.15);
 }
+
+/* ==========================================================================
+   2. Focus — surface-aware double ring on :focus-visible ONLY (spec §5)
+   ========================================================================== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+.navbar__link:focus-visible,
+.navbar__brand:focus-visible,
+.menu__link:focus-visible,
+.pagination-nav__link:focus-visible,
+.card:focus-visible,
+.button:focus-visible {
+  /* Transparent outline keeps a ring in Windows High Contrast Mode, where
+     box-shadow is dropped. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--a11y-focus-ring);
+}
+
+/* ==========================================================================
+   3. Code — block surfaces + inline code (spec §6)
+   ========================================================================== */
+
+/* Code BLOCK surface. The Prism theme object sets --prism-background-color
+   (#F0F0F3 light / #0B0B0C dark); this adds the spec's 1px border + radius. */
+.theme-code-block {
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-md);
+}
+
+/* Inline <code> (not inside <pre>): subtle accent-tint chip, sans-of-mono. */
+:not(pre) > code {
+  background-color: var(--a11y-code-inline-bg);
+  color: var(--a11y-ink);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-sm);
+}
+
+/* ==========================================================================
+   4. Motion — honor prefers-reduced-motion (spec §5, §7)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   5. Preserved: navbar separator (load-bearing) + dev-only draft badge
+   ========================================================================== */
 
 /**
  * Navbar vertical separator (between "Getting Started" and the platform links).
@@ -68,7 +244,7 @@
 }
 
 .sidebar-draft-item > .menu__link::after {
-  content: "dev only";
+  content: 'dev only';
   margin-left: auto;
   flex: 0 0 auto;
   font-size: 0.6rem;

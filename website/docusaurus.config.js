@@ -1,5 +1,9 @@
 // @ts-check
 
+// Custom AA-verified Prism code-block themes (see src/prism/a11yContextThemes.js
+// and DESIGN-SYSTEM.md §6). Light surface #F0F0F3 / dark surface #0B0B0C.
+const { light: prismLight, dark: prismDark } = require('./src/prism/a11yContextThemes');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'A11y Context',
@@ -28,6 +32,29 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  // Google Fonts (see DESIGN-SYSTEM.md §3):
+  //   Schibsted Grotesk 600–800 → display/headings
+  //   Hanken Grotesk   400–600  → body + all labels/UI (never mono)
+  //   JetBrains Mono   400–500  → code ONLY
+  // Preconnects go in headTags (correct rel); the font CSS is a stylesheet.
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+  ],
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Schibsted+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap',
+  ],
 
   presets: [
     [
@@ -185,8 +212,8 @@ const config = {
       },
 
       prism: {
-        theme: require('prism-react-renderer').themes.github,
-        darkTheme: require('prism-react-renderer').themes.dracula,
+        theme: prismLight,
+        darkTheme: prismDark,
         additionalLanguages: ['bash', 'json', 'yaml'],
       },
 
