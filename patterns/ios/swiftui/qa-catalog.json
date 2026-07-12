@@ -1,0 +1,1060 @@
+{
+  "stack": "ios/swiftui",
+  "catalog_revision": "0.1.0",
+  "components": {
+    "button.basic": {
+      "pattern_id": "button.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Button` for built-in VoiceOver semantics, the `.isButton` trait, and Switch Control / external-keyboard activation.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The interactive element is implemented as a `Button` (or a control vending button semantics), not `Text`/`Image` with `.onTapGesture` or a bare `.gesture`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the element is queryable via `.buttons[...]`, exposes the button trait in the accessibility tree, and `.tap()` fires the action.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The button has an accessible name that describes its purpose or action.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the button's accessible name (visible title or `.accessibilityLabel`) describe what the button does, rather than what it looks like or nothing at all?",
+          "runtime_check": "XCUITest: the button element's `label` is non-empty in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When the button has visible text, the visible text serves as the accessible name.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "A `Button` initialized with a text title carries no `.accessibilityLabel` override that replaces the visible text.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the button's `label` equals its visible title text.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When additional context is needed beyond the visible text, add it via `.accessibilityLabel`.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "An `.accessibilityLabel` modifier is present on the `Button` where a contextual label is required.",
+          "llm_eval_question": "Is the visible text alone ambiguous in this screen's context, and if so, does an `.accessibilityLabel` supply the missing context?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "The visible text appears at the start of the `.accessibilityLabel`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "When both the button title and `.accessibilityLabel` are string literals, the label string has the title string as its prefix.",
+          "llm_eval_question": "Does the `.accessibilityLabel` begin with the button's visible text before adding context?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "For icon-only buttons, provide an accessible name via `.accessibilityLabel`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Any `Button` whose only content is an `Image` (e.g., `Image(systemName:)`) carries an `.accessibilityLabel` or an accessible `Label` initializer.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the icon-only button's `label` is non-empty and is not the raw SF Symbol name.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When multiple buttons on the same screen share visible text (e.g., a repeated \"Edit\" button per row), give each one a unique, specific `.accessibilityLabel` (e.g., \"Edit Username\") so VoiceOver users can distinguish them.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Where buttons repeat visible text, does each `.accessibilityLabel` add context that genuinely distinguishes the targets (e.g., \"Edit Username\" vs. \"Edit Password\")?",
+          "runtime_check": "XCUITest: query all buttons on the rendered screen and assert no two repeated-action buttons expose identical `label` values.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Keep icons inside a button decorative to VoiceOver.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "No `.accessibilityLabel`, `.accessibilityAddTraits`, or un-hiding modifiers are applied to the `Image` inside the `Button`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the button is a single accessibility element; the icon does not appear as a separately focusable image element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "`Image(systemName:)` inside a `Button` is decorative by default; label the button as a whole rather than adding a separate `.accessibilityLabel` to the icon.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "`.accessibilityLabel` is attached to the `Button` (or its `Label`), not to the inner `Image`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "If the action is unavailable, disable the button with `.disabled(true)` so it becomes non-interactive and is announced as dimmed.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "When the code models the action as unavailable, is that state wired to `.disabled(...)` rather than to an opacity change or a no-op handler?",
+          "runtime_check": "XCUITest: with the action unavailable, the button's `isEnabled` is false and tapping does not fire the action.",
+          "device_human_check": "VoiceOver on a physical device announces the button with \"dimmed\" appended while it is disabled."
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "No explicit `.frame`/padding math yields an interactive area smaller than 44×44 pt (e.g., small fixed frames on icon buttons without compensating padding or `.contentShape`).",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the button's `frame` is at least 44×44 pt, and `performAccessibilityAudit(for: .hitRegion)` reports no hit-region issues.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "No custom `ButtonStyle` or modifier suppresses or clips the system focus indicator (e.g., focus effects disabled or the focus ring clipped by a container).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access (and VoiceOver) on a physical device, moving focus to the button shows the system focus indicator clearly in both light and dark mode."
+        },
+        {
+          "rule": "Do not include the word \"Button\" in `.accessibilityLabel`. VoiceOver already appends the \"Button\" trait, so this makes it announce \"Button, Button\".",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityLabel` string literals on buttons do not contain the word \"button\" (case-insensitive).",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: no button element's `label` in the accessibility tree contains the word \"Button\".",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not create icon-only buttons without an `.accessibilityLabel` (no unlabeled icons).",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag any `Button` whose content is only an `Image` and that lacks an `.accessibilityLabel` (or accessible `Label` initializer).",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: no button in the tree has an empty `label` or a raw SF Symbol identifier as its `label`.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not use an `.accessibilityLabel` that conflicts with (or is wildly different from) the visible label text.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the `.accessibilityLabel` say essentially the same thing as the visible text (plus context), rather than something conflicting or unrelated?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Accessible names should at least begin with the visible label.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "When both the visible title and `.accessibilityLabel` are string literals, the label has the visible title as its prefix.",
+          "llm_eval_question": "Does the accessible name begin with the visible label text?",
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "button.toggle": {
+      "pattern_id": "button.toggle",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Button` for built-in VoiceOver semantics and Switch Control / external-keyboard activation.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The toggle control is implemented as a `Button`, not `Text`/`Image` with `.onTapGesture` or a bare `.gesture`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the element is queryable via `.buttons[...]`, exposes the button trait, and `.tap()` fires the action.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The button has an accessible name that describes its purpose or action.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the toggle button's accessible name describe what activating it does, rather than what it looks like?",
+          "runtime_check": "XCUITest: the button element's `label` is non-empty in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Default strategy: represent state by changing the accessible name to the next action (e.g., \"Mute\" to \"Unmute\", \"Pin\" to \"Remove Pin\") via `.accessibilityLabel`.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "The `.accessibilityLabel` (or button title) is a state-conditional expression, not a constant string.",
+          "llm_eval_question": "Does each state's accessible name describe the action a tap will perform next (e.g., \"Mute\" while unmuted), not the current state?",
+          "runtime_check": "XCUITest: read the button's `label`, tap it, and assert the `label` changed to the opposite action.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When the button has visible text and no override is needed, the visible text serves as the accessible name.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "A `Button` with a state-driven visible text title carries no redundant `.accessibilityLabel` override diverging from it.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the button's `label` equals its visible title text in each state.",
+          "device_human_check": null
+        },
+        {
+          "rule": "For icon-only toggle buttons, provide an accessible name via `.accessibilityLabel` that reflects the current state's next action.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": "An icon-only toggle `Button` has a state-conditional `.accessibilityLabel`.",
+          "llm_eval_question": "Does the label name the next action for the current state, rather than the icon glyph or the current state?",
+          "runtime_check": "XCUITest: the button's `label` is non-empty and flips to the opposite action after tapping.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Keep icons inside a toggle button decorative to VoiceOver.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "No `.accessibilityLabel`, `.accessibilityAddTraits`, or un-hiding modifiers are applied to the `Image` inside the toggle `Button`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the toggle button is a single accessibility element; the icon does not appear as a separately focusable image element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Label the button as a whole, not the icon.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "`.accessibilityLabel` is attached to the `Button` (or its `Label`), not to the inner `Image`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "If the action is unavailable, disable the button with `.disabled(true)`.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "When the code models the action as unavailable, is that state wired to `.disabled(...)` rather than to an opacity change or a no-op handler?",
+          "runtime_check": "XCUITest: with the action unavailable, the button's `isEnabled` is false and tapping does not fire the action.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "No explicit `.frame`/padding math yields an interactive area smaller than 44×44 pt, particularly on icon-only toolbar toggles.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the button's `frame` is at least 44×44 pt, and `performAccessibilityAudit(for: .hitRegion)` reports no hit-region issues.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "No custom style or modifier suppresses or clips the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access (and VoiceOver) on a physical device, moving focus to the toggle shows the system focus indicator clearly in both light and dark mode."
+        },
+        {
+          "rule": "(Formatting toolbar exception) If the control is a formatting toggle in a toolbar (e.g., Bold/Italic/Underline), keep the accessible name stable (e.g., \"Bold\").",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": "The button's title/`.accessibilityLabel` is a constant, not conditional on the toggle state.",
+          "llm_eval_question": "Is this control a formatting toggle in a toolbar, and is its accessible name a stable, state-independent name (e.g., \"Bold\")?",
+          "runtime_check": "XCUITest: toggle the control and assert its `label` is identical before and after.",
+          "device_human_check": null
+        },
+        {
+          "rule": "(Formatting toolbar exception) Convey the pressed state with `.accessibilityAddTraits(isActive ? .isSelected : [])` instead of renaming it. VoiceOver appends \"Selected\" after the accessible name while the trait is present.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "`.accessibilityAddTraits` applies `.isSelected` conditionally on the live toggle state, and the label expression is not state-conditional.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: `isSelected` is true on the element when active and absent when inactive, verified across a tap.",
+          "device_human_check": "VoiceOver on device announces \"Selected\" after the stable name when active, and omits it when inactive."
+        },
+        {
+          "rule": "(Formatting toolbar exception) SwiftUI has no \"not selected\" trait. When the toggle is inactive, omit `.isSelected` rather than adding an antonym trait.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The inactive branch of the trait conditional resolves to an empty trait set; no antonym/\"not selected\" trait workaround is applied.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: when inactive, the element exposes no selected state and no substitute trait.",
+          "device_human_check": null
+        },
+        {
+          "rule": "(Formatting toolbar exception) Add `.accessibilityValue(\"Not Selected\")` for the inactive state only when the off state would otherwise be undiscoverable (the name is stable across states, the control is rendered in isolation rather than in a visually grouped set of peer toggles, and no other accessible signal exposes the state).",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityValue(\"Not Selected\")` appears only in the inactive branch, never unconditionally.",
+          "llm_eval_question": "If `.accessibilityValue(\"Not Selected\")` is present, do all three undiscoverability conditions hold? If it is absent, is the off state still discoverable through another accessible signal?",
+          "runtime_check": "XCUITest: when the exception applies, the inactive element's `value` reads \"Not Selected\" and the active element carries no such value.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not add the `.isSelected` trait to a toggle button that is also changing its accessible name to the next action. Pick one state model, not both; combining them produces conflicting, confusing announcements like \"Unmute, Selected\".",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag any `Button` that has both a state-conditional label/title and a conditional `.isSelected` trait.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: assert it is not the case that the element's `label` flips after tapping and the element also toggles `isSelected`.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not leave `.isSelected` stale, always applied, or never applied when using the toolbar trait strategy; it must track the live state.",
+          "source": "dont",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "`.accessibilityAddTraits(.isSelected)` is conditioned on the state variable, never applied as a constant.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: toggle repeatedly; `isSelected` in the accessibility tree matches the actual control state after every activation.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not ship icon-only toggle buttons without an accessible name.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag any icon-only toggle `Button` lacking an `.accessibilityLabel` (or accessible `Label` initializer).",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: no toggle button in the tree has an empty `label` or a raw SF Symbol identifier as its `label`.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not put state only in the icon's visual appearance. Screen reader users must get the state via the accessible-name change or the `.isSelected` trait, depending on which strategy is in use.",
+          "source": "dont",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "The state variable feeds an `.accessibilityLabel` change or a conditional `.isSelected` trait, not only the `Image` name, color, or fill variant.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: after tapping, either the element's `label` changes or `isSelected` toggles — some accessible state signal changes, not just the rendered icon.",
+          "device_human_check": null
+        }
+      ]
+    },
+    "switch.basic": {
+      "pattern_id": "switch.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use the native `Toggle` control rather than a custom composition.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The control is a `Toggle`, not a hand-rolled `HStack`/shape/gesture composition.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the element appears as a single switch (`.switches`) exposing an on/off `value` (1/0).",
+          "device_human_check": null
+        },
+        {
+          "rule": "Pass the label directly into the initializer (e.g., `Toggle(\"Enable notifications\", isOn: $binding)`) so the label, switch role, and on/off state merge into a single accessible element.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The label is supplied via the `Toggle` initializer (title string or label view), not as a sibling `Text` next to a label-less `Toggle`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: one accessibility element exposes both the name and the on/off value; the label is not a separate static-text element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The switch has an accessible name that describes the setting. Often this is worded to be true when the switch is on (e.g., \"Enable notifications\").",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the accessible name describe the setting being controlled, ideally phrased so it is true when the switch is on?",
+          "runtime_check": "XCUITest: the switch element's `label` is non-empty in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When there is no unique visible label (e.g., repeated switches in a list sharing generic visual text), give each `Toggle` a unique, specific `.accessibilityLabel`.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Where switches repeat generic visible text, does each `.accessibilityLabel` name the specific setting that switch controls?",
+          "runtime_check": "XCUITest: query all switches on the rendered screen; no two expose identical `label` values.",
+          "device_human_check": null
+        },
+        {
+          "rule": "When the on/off state is represented by visible value text other than \"On\"/\"Off\" (e.g., \"Allowed\"/\"Blocked\", \"Dark\"/\"Light\"), set `.accessibilityValue` to match so VoiceOver announces the correct state instead of defaulting to generic On/Off wording.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime",
+            "static"
+          ],
+          "static_hint": "A state-conditional `.accessibilityValue` modifier is present whenever custom value wording is rendered.",
+          "llm_eval_question": "Does the visible state wording differ from On/Off, and if so, does `.accessibilityValue` mirror the visible wording in both states?",
+          "runtime_check": "XCUITest: in each state, the switch's `value` matches the custom visible wording (e.g., \"Allowed\"/\"Blocked\"), not 1/0.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The off-state fill maintains at least 3:1 contrast against the adjacent background, so the off state is distinguishable by more than color (a plain light gray is a common offender).",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "When the off-state tint and adjacent background resolve to concrete color values (hex literals or asset-catalog tokens), compute the contrast ratio and require ≥3:1.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a physical device in both light and dark mode, verify the off-state fill measures ≥3:1 against the adjacent background and the off state reads without relying on hue."
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "No `.scaleEffect`/`.frame` shrinking reduces the switch's interactive area below 44×44 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the switch's `frame` is at least 44×44 pt, and `performAccessibilityAudit(for: .hitRegion)` reports no hit-region issues.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "No custom toggle style or modifier suppresses or clips the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access (and VoiceOver) on a physical device, moving focus to the switch shows the system focus indicator clearly in both light and dark mode."
+        },
+        {
+          "rule": "Do not build a switch out of a custom `HStack` of `Text` plus a shape-based knob without grouping it. Without an explicit `Toggle` (or `.accessibilityElement(children: .combine)`), the label and the control become two disconnected accessibility elements instead of one combined name-and-state announcement.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag an `HStack` of `Text` plus a shape/knob with a tap gesture that has neither a `Toggle` nor `.accessibilityElement(children: .combine)`.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest: the switch UI is one accessibility element carrying both name and state, not a text element plus a separate unnamed control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not leave `.accessibilityValue` mismatched with the visible value text when the switch shows custom state wording instead of On/Off.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval",
+            "runtime",
+            "static"
+          ],
+          "static_hint": "When the visible value strings and `.accessibilityValue` strings are literals, they match per state.",
+          "llm_eval_question": "In each state, does `.accessibilityValue` say the same thing as the visible value text rendered for that state?",
+          "runtime_check": "XCUITest: toggle through both states; the element's `value` equals the visible value text shown for each state.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not rely on color alone (e.g., green vs. gray) to convey on/off state; the off state must remain distinguishable through sufficient contrast.",
+          "source": "dont",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "Where colors are literal or token-resolvable, flag off-state fills that fall below 3:1 against the adjacent background (gray-on-light-gray is the classic offender).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a physical device in light and dark mode, confirm the on/off states are distinguishable without hue — the off-state fill meets ≥3:1 against its background."
+        }
+      ]
+    }
+  },
+  "foundations": {
+    "global.custom-control-representation": {
+      "rule_id": "global.custom-control-representation",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Any control drawn from primitives (shapes, `Canvas`, `Path`, raw gestures) rather than a native control exposes a hidden native equivalent through `.accessibilityRepresentation { }`",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": "Interactive views built from Shape/Canvas/Path/gesture primitives carry .accessibilityRepresentation { } in their modifier chain.",
+          "llm_eval_question": "Is this primitive-drawn view actually a control (something the user operates), so that it requires a native representation?",
+          "runtime_check": "The element appears in the XCUITest accessibility tree with the represented native control's role and traits.",
+          "device_human_check": null
+        },
+        {
+          "rule": "supplying an accessible name",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The representation's native control is constructed with a non-empty label.",
+          "llm_eval_question": "Does the supplied name describe the control's purpose?",
+          "runtime_check": "XCUITest reads a non-empty label on the element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "the current value (for a slider, stepper, or toggle)",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The representation binds the control's live value (e.g., Slider(value: $x)) rather than a constant.",
+          "llm_eval_question": null,
+          "runtime_check": "The element's accessibility value matches the visible state and updates after adjustment.",
+          "device_human_check": null
+        },
+        {
+          "rule": "the correct role and trait",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the chosen native representation's role match the interaction the custom control actually performs (slider for drag-adjust, toggle for binary state, button for tap)?",
+          "runtime_check": "The element exposes the expected traits in the accessibility tree (e.g., .adjustable for a slider representation); the .trait audit reports no failures.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Expose the control's actions through the `.accessibilityRepresentation` (WCAG 2.2 A 4.1.2 Name, Role, Value).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static",
+            "device-human"
+          ],
+          "static_hint": "The representation wires real handlers and bindings (button action, toggle binding), not empty closures.",
+          "llm_eval_question": null,
+          "runtime_check": "Activating or adjusting the element via XCUITest fires the same state change as direct touch.",
+          "device_human_check": "VoiceOver double-tap and swipe-adjust gestures operate the control."
+        },
+        {
+          "rule": "Bind the representation and the visible control to the same state so the announced value stays in sync as the user interacts.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "The representation and the drawn control reference the same @State/@Binding source; flag duplicated state or constant bindings.",
+          "llm_eval_question": null,
+          "runtime_check": "After interacting, the element's accessibility value matches the rendered state.",
+          "device_human_check": "VoiceOver announces the updated value immediately after each adjustment."
+        },
+        {
+          "rule": "For a control adjusted by dragging, add `.accessibilityAddTraits(.allowsDirectInteraction)` so a VoiceOver user can move it directly.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Drag-gesture-driven controls carry .accessibilityAddTraits(.allowsDirectInteraction).",
+          "llm_eval_question": "Is this control genuinely adjusted by continuous dragging (needing direct interaction), rather than by discrete taps?",
+          "runtime_check": null,
+          "device_human_check": "With VoiceOver running on a device, the user can drag the control directly and it responds."
+        },
+        {
+          "rule": "Do not ship a custom-drawn control with only a tap gesture and a visual label; it is unreachable and inoperable for VoiceOver, Switch Control, and Full Keyboard Access users.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "Flag Shape/Canvas/Path views with .onTapGesture and no accessibility modifiers (no .accessibilityRepresentation, no label + traits + actions).",
+          "llm_eval_question": null,
+          "runtime_check": "The .sufficientElementDescription and .trait audits fail, or the element is missing/unlabeled in the XCUITest accessibility tree.",
+          "device_human_check": "VoiceOver cannot reach or activate the control; Switch Control and Full Keyboard Access skip it."
+        },
+        {
+          "rule": "Do not hand-rebuild the contract with loose `.accessibilityLabel`, `.accessibilityValue`, and traits when a native representation supplies the role behaviors (adjustable actions, toggling) that loose traits alone do not.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Flag custom controls carrying .accessibilityLabel/.accessibilityValue/.accessibilityAddTraits stacks with no .accessibilityRepresentation or .accessibilityAdjustableAction.",
+          "llm_eval_question": "Does this hand-rebuilt stack actually deliver the role behaviors (adjustability, toggle semantics) a native representation would supply, or does it only announce them without implementing them?",
+          "runtime_check": null,
+          "device_human_check": "With VoiceOver, swipe-up/down adjust and double-tap toggle behave exactly as they would on the native control."
+        }
+      ]
+    },
+    "global.dynamic-type": {
+      "rule_id": "global.dynamic-type",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Use a built-in text style (`.body`, `.headline`, `.caption`) or a `Text` with no fixed point size, so text scales with the user's setting (WCAG 2.1 AA 1.4.4 Resize Text).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Text uses .font(.body/.headline/...) or no font modifier; flag .font(.system(size:)) and Font.custom without relativeTo:.",
+          "llm_eval_question": null,
+          "runtime_check": "The .dynamicType audit in performAccessibilityAudit() reports no failures across type sizes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Size any glyph-tracking dimension (icon size, control height, glyph padding) with `@ScaledMetric(relativeTo:)` rather than a fixed point value.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": "Flag fixed point values in .frame/.padding on icon and control layouts adjacent to text; require @ScaledMetric(relativeTo:)-backed values.",
+          "llm_eval_question": "Does this fixed dimension track a glyph (an icon beside text, a control height wrapping a label, glyph padding), making it a @ScaledMetric candidate, or is it genuinely layout-independent?",
+          "runtime_check": "In XCUITest at an accessibility text size, confirm the icon/control dimensions grew with the text rather than staying fixed.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Let text wrap and containers grow",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "Flag truncating .lineLimit and fixed-height frames on content text; containers should size intrinsically.",
+          "llm_eval_question": null,
+          "runtime_check": "The .textClipped audit reports no failures at enlarged type sizes.",
+          "device_human_check": "At the largest accessibility text size, text wraps and containers expand with no clipping or overlap on any screen."
+        },
+        {
+          "rule": "Place long content in a `ScrollView`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Screens whose content can exceed the viewport wrap it in ScrollView/List; flag fixed VStacks holding unbounded text.",
+          "llm_eval_question": "Is this content long (can exceed the viewport at accessibility sizes) and therefore required to live in a ScrollView?",
+          "runtime_check": null,
+          "device_human_check": "At the largest accessibility size, all content remains reachable by scrolling."
+        },
+        {
+          "rule": "For a `TextField` that can hold long input, use `axis: .vertical`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "TextField initializers for free-form fields include axis: .vertical.",
+          "llm_eval_question": "Can this field plausibly hold long input (notes, descriptions, addresses) such that it needs axis: .vertical, or is it inherently short (a code, a quantity)?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not set a fixed `.font(.system(size:))` on content text.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "AST/grep for .font(.system(size:)) — and Font.custom(_, size:) without relativeTo: — applied to Text.",
+          "llm_eval_question": "Is this fixed-size text content the user must read (violation), rather than a rare decorative glyph where fixed sizing could be acceptable?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not apply a truncating `.lineLimit()` to meaningful text",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": "Flag .lineLimit(n) applied to Text holding content.",
+          "llm_eval_question": "Is the truncated text meaningful content the user must read in full, or a deliberate preview/teaser pattern with a path to the full content?",
+          "runtime_check": "The .textClipped audit flags text clipped at enlarged sizes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not wrap meaningful text in a fixed-height frame that clips it when enlarged.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag .frame(height:)/.frame(maxHeight:) with clipping on containers holding Text.",
+          "llm_eval_question": null,
+          "runtime_check": "The .textClipped audit reports no failures at accessibility text sizes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not clamp the app's Dynamic Type range to protect a layout; fix the layout instead.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Grep/AST for .dynamicTypeSize(...) range clamps (e.g., ...DynamicTypeSize.large) and app-level maximumContentSizeCategory overrides.",
+          "llm_eval_question": "Is this Dynamic Type clamp protecting a layout (violation) rather than a documented, justified exception?",
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "global.focus-visible": {
+      "rule_id": "global.focus-visible",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Every interactive control shows a visible system focus indicator for Full Keyboard Access, external-keyboard, and Switch Control users. The default `Button`, `Toggle`, and other native control styles preserve this automatically.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Verify each interactive element is a native control (Button, Toggle, Picker, etc.) rendered through a system control style with no focus-suppressing custom style — native usage is the pass condition, since no audit covers focus-indicator visibility.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access (and separately Switch Control) enabled on a device, tab/scan to every control and confirm a visible focus indicator appears."
+        },
+        {
+          "rule": "Do not apply a custom style modifier (e.g., a `ButtonStyle` or `ToggleStyle` built with `PlainButtonStyle` or a bespoke shape) that suppresses the system focus indicator without restoring an equivalent visible focus treatment.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Flag .buttonStyle(.plain)/PlainButtonStyle and bespoke ButtonStyle/ToggleStyle conformances applied to interactive controls as review candidates.",
+          "llm_eval_question": "Does this custom style's source restore a visible focus treatment (e.g., drawing on focus state) equivalent to the system indicator it replaces?",
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on a device, confirm the custom-styled control still shows a visible focus indicator when focused."
+        }
+      ]
+    },
+    "global.navigation-focus": {
+      "rule_id": "global.navigation-focus",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Set a `navigationTitle` on every pushed screen so its screen change is announced by name (WCAG 2.2 A 2.4.3 Focus Order).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "Every navigationDestination/NavigationLink destination view sets .navigationTitle.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest asserts the navigation bar exists with a non-empty title after each push.",
+          "device_human_check": "VoiceOver announces the new screen by name on push."
+        },
+        {
+          "rule": "Let the system manage VoiceOver focus on a `NavigationStack` push; do not force focus to the back button or an arbitrary element.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Flag @AccessibilityFocusState writes in the onAppear/task of pushed screens, and UIAccessibility.post(notification: .screenChanged, argument:) calls carrying a target element.",
+          "llm_eval_question": "Does any focus manipulation on push override the system's placement, rather than serving a documented exception?",
+          "runtime_check": null,
+          "device_human_check": "On device, pushing a screen moves VoiceOver focus per the system default — not yanked to the back button or an arbitrary element."
+        },
+        {
+          "rule": "On pop, restore focus to the row that triggered the navigation by binding it with `@AccessibilityFocusState` and setting that focus when the pushed screen is dismissed, where the system does not restore it.",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Rows that trigger navigation bind @AccessibilityFocusState, and the code sets that focus when the pushed screen is dismissed.",
+          "llm_eval_question": "Does the restore target the specific row that triggered navigation, and is it applied only where the system fails to restore focus on its own?",
+          "runtime_check": null,
+          "device_human_check": "On a physical device (the Simulator does not honor @AccessibilityFocusState), popping returns VoiceOver focus to the triggering row."
+        },
+        {
+          "rule": "Do not push a screen with no title, which leaves the change without a clear spoken announcement.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime",
+            "device-human"
+          ],
+          "static_hint": "Flag pushed destination views lacking .navigationTitle.",
+          "llm_eval_question": null,
+          "runtime_check": "XCUITest finds an empty or missing navigation-bar title after push.",
+          "device_human_check": "VoiceOver's push announcement names the screen rather than announcing an unnamed change."
+        },
+        {
+          "rule": "Do not override the system's push-focus placement.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "device-human"
+          ],
+          "static_hint": "Flag focus-forcing on push: @AccessibilityFocusState set in a pushed screen's onAppear, or .screenChanged notifications posted with a target element.",
+          "llm_eval_question": "Does this code path change where VoiceOver focus lands on push compared to the system default?",
+          "runtime_check": null,
+          "device_human_check": "On device, VoiceOver focus lands where the system places it after each push."
+        }
+      ]
+    },
+    "global.semantic-color": {
+      "rule_id": "global.semantic-color",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Use semantic color for text and control surfaces: the design system's color tokens, or SwiftUI system colors (`.primary`, `.secondary`, `Color(.label)`, `Color(.systemBackground)`, `.tint`). These adapt to light and dark mode and are pre-vetted for contrast.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Allowlist check: colors applied to text and control chrome resolve to design-system tokens or SwiftUI semantic colors, not literals.",
+          "llm_eval_question": "Is every color applied to a text or control surface (as opposed to purely decorative art) drawn from the token set or system semantic colors?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Use native control styles (`.borderedProminent`, `.roundedBorder`, the system `Toggle`) so a control's border, track, and state fills inherit their contrast instead of being hand-drawn.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Controls use system styles (.borderedProminent, .roundedBorder, default Toggle); flag hand-drawn control chrome (shapes/strokes composing a control's border or track).",
+          "llm_eval_question": "Where control chrome is drawn by hand, is there a reason a native style could not serve, or is this a needless rebuild that forfeits inherited contrast?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Give any custom-drawn indicator (a selection outline, a custom toggle track) a semantic or design-token color rather than a fixed literal.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Flag fixed literals (Color.black/.white, Color(white:), hex/RGB initializers) on Shape fills and strokes; require token or semantic colors.",
+          "llm_eval_question": "Is this drawn element a meaningful indicator (selection outline, toggle track) — and therefore required to use a semantic/token color — rather than decoration?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not hardcode raw colors (`Color.black`, `Color.white`, or gray literals like `Color(white: 0.7)`) for text or control chrome; they do not adapt to the color scheme and often fail contrast.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": "Grep/AST for Color.black, Color.white, Color(white:), Color(red:green:blue:) applied via foregroundColor/foregroundStyle/tint/background to text or controls.",
+          "llm_eval_question": "Is the literal color applied to text or control chrome (violation) rather than to a decorative element where a fixed color may be acceptable?",
+          "runtime_check": "The .contrast audit in performAccessibilityAudit() catches downstream text-contrast failures, run in both light and dark mode.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not restyle a native control in a way that strips its default border, track, or state contrast.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval",
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Flag restyling modifiers on native controls (custom ToggleStyle/ButtonStyle, .tint with low-contrast values, .background/.border overrides) as review candidates.",
+          "llm_eval_question": "After this restyling, do the control's border, track, and state fills still carry their default contrast, or has the style stripped them?",
+          "runtime_check": null,
+          "device_human_check": "Measure the restyled control's border/track/state-fill contrast against adjacent colors in light and dark mode (3:1 minimum, WCAG 1.4.11) — non-text contrast has no automated audit."
+        },
+        {
+          "rule": "Do not convey a control's state (on/off, selected) by color alone; keep a shape, fill, or label difference as well.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval",
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Heuristic: flag state-conditional expressions whose branches differ only in a color argument (e.g., foregroundColor(isOn ? a : b)) with no accompanying shape, fill, icon, or label change.",
+          "llm_eval_question": "When this control changes state, does anything other than color change — a shape, fill, icon, or label?",
+          "runtime_check": null,
+          "device_human_check": "With grayscale color filters enabled on the device, confirm the on/off or selected state is still distinguishable."
+        }
+      ]
+    },
+    "global.touch-target-size": {
+      "rule_id": "global.touch-target-size",
+      "stack": "ios/swiftui",
+      "rules": [
+        {
+          "rule": "Every tappable control has a hit area of at least 24x24 points (WCAG 2.2 AA, 2.5.8 Target Size (Minimum)).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Flag tappable elements (Button, .onTapGesture) carrying an explicit .frame smaller than 24x24; absence of small fixed frames is only a weak pass — the actual hit area needs runtime measurement.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit(for: .hitRegion) reports no failures; XCUITest asserts each tappable element's frame is at least 24x24 points.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Inline targets within a run of text are exempt from this minimum.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "Detect inline-link constructs (Markdown links inside Text, AttributedString .link runs) to mark candidates for the exemption.",
+          "llm_eval_question": "Is this small target genuinely an inline link within a run of text (exempt), rather than a standalone control that merely renders as text?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "For icon-only controls where the visible glyph is smaller than 24x24, use `.frame(minWidth: 24, minHeight: 24)` on the tappable element to extend the hit area without resizing the glyph.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "For Buttons whose label is only an Image/systemImage, require .frame(minWidth: 24, minHeight: 24) (or larger) on the tappable element.",
+          "llm_eval_question": null,
+          "runtime_check": "Assert the icon-only control's element frame is at least 24x24 while the rendered glyph keeps its designed size; the .hitRegion audit passes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Prefer a 44x44 point hit area where layout allows, matching Apple's Human Interface Guidelines. Treat 44x44 as the target and 24x24 as the non-negotiable floor.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Advisory lint only: flag tappable frames sized between 24 and 44 points for review — a linter cannot decide whether layout allows 44.",
+          "llm_eval_question": "Where the layout has room, does this control extend its hit area to 44x44 — and if it stops short, is there a real layout constraint justifying it?",
+          "runtime_check": "Measure element frames in XCUITest: report controls between 24x24 and 44x44 as advisory; fail anything under 24x24.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not rely on the visible glyph size alone to satisfy the minimum; extend the frame, not the icon.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag icon-only tappables whose only sizing is a font or resizable modifier on the glyph (e.g., .font(.system(size: 28))) with no .frame or .contentShape extending the hit area.",
+          "llm_eval_question": null,
+          "runtime_check": "Assert the tappable element's frame — not just the rendered image size — meets the floor via the .hitRegion audit and frame measurement.",
+          "device_human_check": null
+        }
+      ]
+    }
+  }
+}
