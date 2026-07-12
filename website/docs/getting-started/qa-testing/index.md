@@ -42,7 +42,7 @@ Ships in three forms:
 - **ESLint variant** — the static-analyzable rules also compile to ESLint plugin form for author-time catching, before the code ever renders.
 - **GitHub Action** — runs the full check set on rendered PR previews, posts inline summary comments categorized by verification layer.
 
-**Categorized rule catalog.** Building `axe-a11y-context` requires classifying every corpus rule by verification technique. That classification ships as `qa-catalog.json` — a machine-readable artifact alongside `patterns.json` — that consumers can also use directly to build their own harnesses.
+**Categorized rule catalog.** Building `axe-a11y-context` requires classifying every corpus rule by verification technique. That classification ships as `qa-catalog.json` — a machine-readable artifact alongside `patterns.json` — that consumers can also use directly to build their own harnesses. **[Browse the live catalog →](./catalog)** — every published web/react Must Have and Don't, tagged and filterable by technique.
 
 ## On the roadmap
 

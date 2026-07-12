@@ -1,0 +1,234 @@
+.root {
+  margin: 1.5rem 0 2rem;
+}
+
+/* ── Stat bar ─────────────────────────────────────────────── */
+.statBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  min-width: 8rem;
+}
+.statNum {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ifm-color-primary);
+}
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ── Filter bar ───────────────────────────────────────────── */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.filterBtn {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.filterBtn:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+.filterBtn:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+.filterBtn[aria-pressed='true'] {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1rem;
+}
+
+/* ── Pattern sections ─────────────────────────────────────── */
+.patterns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.pattern {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  overflow: hidden;
+}
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  list-style-position: inside;
+}
+.summary:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
+}
+.patternId {
+  font-size: 0.95rem;
+  background: var(--ifm-color-emphasis-100);
+  padding: 0.1rem 0.45rem;
+  border-radius: 5px;
+}
+.count {
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  font-weight: 500;
+}
+.miniTally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-left: auto;
+}
+.miniTallyItem {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.groupHead {
+  margin: 0.75rem 1rem 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ifm-color-emphasis-600);
+}
+.ruleList {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0 1rem;
+}
+.rule {
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--ifm-color-emphasis-100);
+}
+.rule:first-child {
+  border-top: none;
+}
+.ruleHead {
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.ruleText {
+  flex: 1;
+  min-width: 60%;
+  line-height: 1.45;
+}
+.ruleDetail {
+  margin: 0.4rem 0 0;
+  padding: 0.5rem 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+.ruleDetail dt {
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ifm-color-emphasis-700);
+  margin-top: 0.35rem;
+}
+.ruleDetail dt:first-child {
+  margin-top: 0;
+}
+.ruleDetail dd {
+  margin: 0.1rem 0 0;
+  color: var(--ifm-color-emphasis-800);
+}
+
+/* ── Technique badges ─────────────────────────────────────── */
+.badges {
+  display: inline-flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+.badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.08rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.badge_static {
+  background: #e3f0ff;
+  color: #0b4f9c;
+  border-color: #b6d4f5;
+}
+.badge_llm_eval {
+  background: #f0e8ff;
+  color: #5b2ba6;
+  border-color: #d6c2f0;
+}
+.badge_runtime {
+  background: #fff2df;
+  color: #8a5200;
+  border-color: #f0d9b0;
+}
+
+.filter_static[aria-pressed='true'] {
+  background: #0b4f9c;
+  border-color: #0b4f9c;
+}
+.filter_llm_eval[aria-pressed='true'] {
+  background: #5b2ba6;
+  border-color: #5b2ba6;
+}
+.filter_runtime[aria-pressed='true'] {
+  background: #8a5200;
+  border-color: #8a5200;
+}
+
+/* ── Dark mode ────────────────────────────────────────────── */
+[data-theme='dark'] .badge_static {
+  background: #13324f;
+  color: #9cc7f5;
+  border-color: #1f4d78;
+}
+[data-theme='dark'] .badge_llm_eval {
+  background: #2c1f4a;
+  color: #c8aef0;
+  border-color: #43326b;
+}
+[data-theme='dark'] .badge_runtime {
+  background: #40300f;
+  color: #f0c987;
+  border-color: #63491a;
+}
