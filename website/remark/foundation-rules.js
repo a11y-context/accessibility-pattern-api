@@ -120,10 +120,8 @@ function stripQuotes(s) {
 function scopeMeta(scopes) {
   const children = [
     container('span', ['foundation-scope__label'], [{type: 'text', value: 'Scope'}]),
-    {type: 'text', value: ': '},
   ];
-  scopes.forEach((scope, i) => {
-    if (i > 0) children.push({type: 'text', value: ' · '});
+  scopes.forEach((scope) => {
     children.push(
       container('span', ['foundation-scope__badge'], [{type: 'text', value: scope}]),
     );
