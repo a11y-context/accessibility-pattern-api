@@ -15,7 +15,7 @@
  *     · Why This Works
  *   For AI Coding Agents
  *     · Overview            → ai-coding-agents/index
- *     · Retrieval Options   → collapsible; the "Choose an Integration" page is its link,
+ *     · Installation        → collapsible; the "Installation" page is its link,
  *                             the four transport/method pages are its children (kept in the
  *                             sidebar so nothing is orphaned — the mockup showed a single
  *                             leaf; we adapt to preserve the detail pages)
@@ -68,7 +68,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Retrieval Options',
+      label: 'Installation',
       // S3: plain-link category label — no caret, children always visible
       // (collapsible:false). The `gs-subcat` class neutralizes the top-level
       // category top-margin so it stays in the "For AI Coding Agents" rhythm
@@ -78,6 +78,16 @@ const sidebars = {
       collapsed: false,
       link: { type: 'doc', id: 'getting-started/ai-coding-agents/install/index' },
       items: [
+        {
+          type: 'doc',
+          id: 'getting-started/ai-coding-agents/install/http',
+          label: 'HTTP',
+        },
+        {
+          type: 'doc',
+          id: 'getting-started/ai-coding-agents/install/local',
+          label: 'Local',
+        },
         {
           type: 'doc',
           id: 'getting-started/ai-coding-agents/install/mcp-server',
