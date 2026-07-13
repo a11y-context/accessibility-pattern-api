@@ -148,6 +148,13 @@
   --a11y-border: #262c36;
   --a11y-field-bg: #0f141b;
 
+  /* Re-assert the page/surface backgrounds in dark. Infima declares its own
+     --ifm-background-color (#1b1b1d) inside [data-theme='dark'], which beats the
+     :root override — without this, the canvas renders #1b1b1d, not #0d1117. */
+  --ifm-background-color: var(--a11y-bg);
+  --ifm-background-surface-color: var(--a11y-surface);
+  --ifm-navbar-background-color: var(--a11y-surface);
+
   --a11y-accent: #9c82f5;
   --a11y-accent-hover: #b9a6fa;
   --a11y-accent-soft: #23203a;
@@ -262,6 +269,13 @@ summary:focus-visible,
    NOTE: the former .navbar__separator html item was removed — Version E has no
    separator between the primary links.
    ========================================================================== */
+
+/* Force the dark page canvas to #0d1117. Infima paints the html background via
+   its own html[data-theme='dark'] rule, which beats a bare token re-assertion —
+   so set it directly here (matches the same specificity, wins by load order). */
+html[data-theme='dark'] {
+  background-color: var(--a11y-bg);
+}
 
 /* N4: the fixed navbar's bottom edge — a 1px hairline on a frosted surface
    (Version E: border-bottom + blurred 92% surface, no drop shadow). */
