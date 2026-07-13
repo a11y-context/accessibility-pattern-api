@@ -152,7 +152,7 @@ enforcement-rule page yet — that card component style is kept for future reuse
 
 **Home** — left-aligned hero; proof stat framed as before→after ("Manual accessibility pass
 rate: 63% → 90%", "axe-core violations: −84%"); how-it-works three steps; framework cards
-(React (Web) — Available; SwiftUI (iOS) — Beta; Android (Compose) — Coming soon).
+(React (Web) — Available; SwiftUI (iOS) — Beta; Compose (Android) — Coming soon).
 
 ---
 

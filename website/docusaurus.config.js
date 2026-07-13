@@ -101,12 +101,18 @@ const config = {
         exclude: ['**/patterns.json'],
         // Show last-updated date from git
         showLastUpdateTime: true,
-        // Breadcrumbs for better navigation
-        breadcrumbs: true,
+        // Version E renders its own minimal "Components / {Name}" breadcrumb in the
+        // swizzled DocItem/Content, so the stock breadcrumb trail is disabled here.
+        breadcrumbs: false,
+        // Restructures component-pattern Markdown into the Version E section layout
+        // (Selection cards, website-only intro lines, reordered/renamed sections).
+        // Runs before Docusaurus' TOC/slug pass so the on-page TOC lists the six
+        // Version E sections. See website/remark/pattern-sections.js.
+        beforeDefaultRemarkPlugins: [require('./remark/pattern-sections')],
       },
     ],
 
-    // ── Android (Compose) ─────────────────────────────────────────────────────
+    // ── Compose (Android) ─────────────────────────────────────────────────────
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -147,18 +153,15 @@ const config = {
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
         },
+        // Version E navbar (see DESIGN-SYSTEM.md §6): no separator between the
+        // links; GitHub is an icon-only link (styled via .header-github-link in
+        // custom.css). The "v0.5" pill and the search combobox are rendered by
+        // the swizzled Navbar/Content (src/theme/Navbar/Content), not here.
         items: [
           {
             label: 'Getting Started',
             to: '/getting-started',
             position: 'left',
-          },
-          // Vertical separator dividing Getting Started from the platform links.
-          // Styled via .navbar__separator in src/css/custom.css.
-          {
-            type: 'html',
-            position: 'left',
-            value: '<span class="navbar__separator" aria-hidden="true"></span>',
           },
           {
             label: 'React (Web)',
@@ -172,44 +175,17 @@ const config = {
           },
           {
             href: 'https://github.com/a11y-context/accessibility-pattern-api',
-            label: 'GitHub',
             position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'A11y Context on GitHub',
           },
         ],
       },
 
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Patterns',
-            items: [
-              { label: 'Web / React', to: '/web/react' },
-              // Restore when these platforms have published docs:
-              // { label: 'Android / Compose', to: '/android' },
-              // { label: 'iOS / SwiftUI', to: '/ios' },
-            ],
-          },
-          {
-            title: 'Resources',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/a11y-context/accessibility-pattern-api',
-              },
-              {
-                label: 'WCAG 2.2',
-                href: 'https://www.w3.org/TR/WCAG22/',
-              },
-              {
-                label: 'ARIA Authoring Practices Guide',
-                href: 'https://www.w3.org/WAI/ARIA/apg/',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} A11y Context Project. Built with Docusaurus.`,
-      },
+      // NOTE: no `footer` config. The Version E footer (DESIGN-SYSTEM.md §6) is a
+      // slim single-row bar rendered entirely by the swizzled src/theme/Footer,
+      // which does not read themeConfig.footer. Adding footer links/copyright here
+      // would have no effect.
 
       prism: {
         theme: prismLight,
@@ -219,7 +195,9 @@ const config = {
 
       docs: {
         sidebar: {
-          hideable: true,
+          // Version E sidebar has no collapse affordance — drop the stock
+          // bottom-left « collapse control (DESIGN-SYSTEM.md §6).
+          hideable: false,
           autoCollapseCategories: false,
         },
       },
