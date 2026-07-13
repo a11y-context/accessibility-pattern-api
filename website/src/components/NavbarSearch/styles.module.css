@@ -1,0 +1,125 @@
+/**
+ * A11y Context — navbar search combobox styles.
+ * Matches the Version E mockup navbar search. Tokens from custom.css (§1).
+ */
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  width: 240px;
+  max-width: 240px;
+  padding: 0 12px;
+  background: var(--a11y-field-bg);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-md);
+  color: var(--a11y-muted);
+  flex-shrink: 1;
+}
+
+.search:focus-within {
+  border-color: var(--a11y-muted);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--a11y-font-body);
+  font-size: 13px;
+  color: var(--a11y-ink);
+}
+
+.input::placeholder {
+  color: var(--a11y-muted);
+  opacity: 1;
+}
+
+.kbd {
+  flex-shrink: 0;
+  font-family: var(--a11y-font-body);
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--a11y-muted);
+  border: 1px solid var(--a11y-border);
+  border-radius: 4px;
+  padding: 2px 5px;
+  background: var(--a11y-surface);
+}
+
+/* ---------- listbox popup ---------- */
+.listbox {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 400;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  min-width: 300px;
+  max-width: 380px;
+  max-height: 340px;
+  overflow-y: auto;
+  background: var(--a11y-surface);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  box-shadow: 0 12px 32px rgba(14, 17, 22, 0.16);
+}
+
+[data-theme='dark'] .listbox {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.option {
+  display: block;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-family: var(--a11y-font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--a11y-ink);
+  cursor: pointer;
+  scroll-margin-block: 6px;
+}
+
+.option:hover,
+.optionActive {
+  background: var(--a11y-accent-soft);
+  color: var(--a11y-link);
+}
+
+.empty {
+  padding: 10px;
+  font-family: var(--a11y-font-body);
+  font-size: 13px;
+  color: var(--a11y-muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hidden on narrow viewports (mockup parity) — patterns reachable via the
+   mobile sidebar. */
+@media (max-width: 996px) {
+  .search {
+    display: none;
+  }
+}

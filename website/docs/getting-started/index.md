@@ -1,32 +1,118 @@
 ---
-title: Getting Started
+title: What This Is
+sidebar_label: What This Is
+hide_title: true
+hide_table_of_contents: true
+description: A corpus of per-component accessibility specifications, written to be consumed by machines as much as by people.
 ---
 
-# What A11y Context Is
-
-A11y Context is a corpus of accessibility best practices written to be consumed by machines as well as people. Each component pattern specifies, in a stable structure:
-
-- **Use When / Do Not Use When:** selection boundaries, so the right pattern is chosen and sibling patterns are never blended
-- **Must Haves:** the non-negotiable semantics, ARIA wiring, focus behavior, and keyboard behavior for WCAG 2.2 AA conformance
-- **Customizable:** the acceptable variations, so the agent can tell a real design choice from a requirement
-- **Don'ts:** the anti-patterns to avoid
-- **A Golden Pattern:** a minimal, tested reference implementation
-- **Acceptance Checks:** observable pass/fail behaviors a tester can verify with a keyboard and a screen reader
-
-The corpus is one source of truth with many consumption modes: fetch it over HTTP, copy it locally, or index it into an enterprise RAG system. Browse it now: [Web / React patterns](/web/react).
-
-![Two flows compared. Without A11y Context: a user prompt goes to an AI coding agent and produces inaccessible code — about 12% WCAG pass. With A11y Context: the same prompt goes to an AI agent paired with the skill, which retrieves matching patterns, Foundations, and acceptance checks from the corpus, producing accessible code — 88 to 93% WCAG pass.](/img/with-without-a11y-context.png)
-
-## Why it exists
-
-AI coding assistants generate inaccessible UI by default. In [Microsoft's A11y LLM Eval Report](https://microsoft.github.io/a11y-llm-eval-report/), models generating UI code with no accessibility instructions passed automated WCAG checks **12% of the time on average**; the best-performing model managed 25%. And automated checks only catch about half of real accessibility failures, so actual performance is worse than those numbers suggest.
-
-This corpus exists to close that gap at the moment code is generated. In a controlled 48-run experiment, connecting AI coding agents to this corpus raised manual accessibility pass rates from **63% to 88–93%** (p < 0.001) and cut axe-core violations by **70–95%** (p < 0.02), compared to the same model working unassisted.
-
-## Two ways to use it
-
-**[Using with AI coding agents](/getting-started/ai-coding-agents/)** is the primary use. A skill (or subagent) handles retrieval: identify the components about to be built, pull only the relevant patterns plus the Foundations ruleset, and apply them before writing code. The skill's description carries invocation guidance so the agent reaches for it without prompting.
-
-**[For QA and accessibility testing](/getting-started/qa-testing/)**, the same Must Haves and Acceptance Checks double as a component-aware test specification: a rulebook for automated harnesses and a script for manual AT verification.
-
-Start with [Why This Works](/getting-started/why-this-works) if you want the reasoning before the setup.
+<div class="gs-landing">
+  <!-- page head -->
+  <div class="gs-page-head">
+    <span class="eyebrow">Getting started</span>
+    <h1 class="gs-page-title">Put the corpus to work.</h1>
+    <p class="gs-page-summary">A corpus of per-component accessibility specifications — selection boundaries, Must Haves, a tested golden pattern, and acceptance checks — written to be consumed by machines as much as by people.</p>
+  </div>
+  <!-- Two ways in -->
+  <section class="gs-block" aria-labelledby="gs-doors-heading">
+    <h2 class="gs-section-title" id="gs-doors-heading">Two ways in</h2>
+    <p class="gs-section-sub gs-section-sub--full">The same corpus serves both ends of the pipeline — generation and verification.</p>
+    <div class="door-grid">
+      <div class="door">
+        <div class="door-head">
+          <span class="door-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M7 6 3.5 10 7 14M13 6l3.5 4L13 14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div class="door-titles">
+            <div class="door-titleline"><h3>For AI coding agents</h3></div>
+            <p>Guidance at authoring time.</p>
+          </div>
+        </div>
+        <a class="door-link" href="/getting-started/ai-coding-agents/">
+          Get the agent set up
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9m0 0-3.2-3.2M12 8l-3.2 3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="door">
+        <div class="door-head">
+          <span class="door-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M6.8 10.2l2.2 2.2 4.4-4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div class="door-titles">
+            <div class="door-titleline">
+              <h3>For QA &amp; testing</h3>
+              <span class="tag-progress">In progress</span>
+            </div>
+            <p>The corpus as a test oracle.</p>
+          </div>
+        </div>
+        <a class="door-link" href="/getting-started/qa-testing/">
+          See how it works
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9m0 0-3.2-3.2M12 8l-3.2 3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- Retrieval options at a glance -->
+  <section class="gs-block" aria-labelledby="gs-retrieval-heading">
+    <h2 class="gs-section-title" id="gs-retrieval-heading">Retrieval options at a glance</h2>
+    <p class="gs-section-sub gs-section-sub--full">Four ways to get patterns in front of the agent — pick the one that matches your setup.</p>
+    <div class="ret-mini-grid">
+      <a class="ret-mini" href="/getting-started/ai-coding-agents/install/">
+        <span class="rm-name">HTTP retrieval
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10 10 4M6 4h4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Fetch at generation time, needs network.</p>
+      </a>
+      <a class="ret-mini" href="/getting-started/ai-coding-agents/install/">
+        <span class="rm-name">Local copy
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10 10 4M6 4h4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Clone into the repo, offline, needs refresh.</p>
+      </a>
+      <a class="ret-mini" href="/getting-started/ai-coding-agents/install/mcp-server">
+        <span class="rm-name">MCP
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10 10 4M6 4h4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Deterministic JSON contracts, most reliable.</p>
+      </a>
+      <a class="ret-mini" href="/getting-started/ai-coding-agents/install/custom">
+        <span class="rm-name">Enterprise RAG
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M4 10 10 4M6 4h4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Index into your org's knowledge layer.</p>
+      </a>
+    </div>
+  </section>
+  <!-- Downloads -->
+  <section class="gs-block" aria-labelledby="gs-downloads-heading">
+    <h2 class="gs-section-title" id="gs-downloads-heading">Downloads</h2>
+    <p class="gs-section-sub">Rules files, skill, and subagent — packaged per client (Claude Code, Cursor, Copilot). Copy in, done.</p>
+    <div class="dl-grid">
+      <div class="dl-card">
+        <h3>Claude Code</h3>
+        <p>Rules file · skill · subagent</p>
+        <a class="dl-btn" href="/getting-started/ai-coding-agents/install/downloads">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1.5v7.5m0 0L4 6.2M7 9l3-2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10.5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Download bundle<span class="sr-only"> for Claude Code</span>
+        </a>
+      </div>
+      <div class="dl-card">
+        <h3>Cursor</h3>
+        <p>Rules file · skill · subagent</p>
+        <a class="dl-btn" href="/getting-started/ai-coding-agents/install/downloads">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1.5v7.5m0 0L4 6.2M7 9l3-2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10.5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Download bundle<span class="sr-only"> for Cursor</span>
+        </a>
+      </div>
+      <div class="dl-card">
+        <h3>Copilot</h3>
+        <p>Rules file · skill · subagent</p>
+        <a class="dl-btn" href="/getting-started/ai-coding-agents/install/downloads">
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1.5v7.5m0 0L4 6.2M7 9l3-2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10.5v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Download bundle<span class="sr-only"> for Copilot</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

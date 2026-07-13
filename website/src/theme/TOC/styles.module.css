@@ -1,0 +1,22 @@
+/**
+ * Copied from the stock @theme/TOC styles (v3.7.0) so the swizzle keeps the
+ * sticky, scrollable positioning. Only src/theme/TOC/index.js changed (adds the
+ * "On This Page" heading); this file is unchanged from stock.
+ */
+
+.tableOfContents {
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  overflow-y: auto;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+@media (max-width: 996px) {
+  .tableOfContents {
+    display: none;
+  }
+
+  .docItemContainer {
+    padding: 0 0.3rem;
+  }
+}

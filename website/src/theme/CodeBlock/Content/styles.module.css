@@ -1,0 +1,121 @@
+/**
+ * Swizzled CodeBlock/Content styles (Version E chrome).
+ *
+ * Retains the stock pre/code layout classes (codeBlock, codeBlockLines,
+ * codeBlockContent) so Prism rendering, line numbering, and word-wrap keep
+ * working, and adds the toolbar (filename + language badge / wrap + copy).
+ * Colors come from the --a11y-code* tokens in custom.css (§1).
+ */
+
+/* ---------- toolbar ---------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  background: var(--a11y-codebar-bg);
+  border-bottom: 1px solid var(--a11y-codebar-border);
+  font-family: var(--a11y-font-body);
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.filename {
+  font-family: var(--a11y-font-body);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--a11y-code-filename);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.langBadge {
+  flex: none;
+  font-family: var(--a11y-font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--a11y-code-lang);
+  border: 1px solid var(--a11y-codebar-border);
+  border-radius: var(--a11y-radius-sm);
+  padding: 1px 7px;
+}
+
+.toolbarRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.codeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--a11y-font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--a11y-code-btn);
+  background: transparent;
+  border: 1px solid var(--a11y-code-btn-border);
+  border-radius: var(--a11y-radius-sm);
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.codeBtn:hover {
+  background: var(--a11y-code-btn-hover-bg);
+  border-color: var(--a11y-code-btn-hover-border);
+}
+
+.codeBtn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.codeBtn[aria-pressed='true'] {
+  color: var(--a11y-code-btn-pressed-color);
+  border-color: var(--a11y-code-btn-pressed-border);
+  background: var(--a11y-code-btn-pressed-bg);
+}
+
+/* ---------- code body (stock layout, preserved) ---------- */
+.codeBlockContent {
+  position: relative;
+  /* rtl:ignore */
+  direction: ltr;
+}
+
+.codeBlock {
+  --ifm-pre-background: var(--prism-background-color);
+  margin: 0;
+  padding: 0;
+  background: var(--prism-background-color);
+}
+
+.codeBlockLines {
+  font: inherit;
+  /* rtl:ignore */
+  float: left;
+  min-width: 100%;
+  padding: var(--ifm-pre-padding);
+}
+
+.codeBlockLinesWithNumbering {
+  display: table;
+  padding: var(--ifm-pre-padding) 0;
+}
+
+@media print {
+  .codeBlockLines {
+    white-space: pre-wrap;
+  }
+}

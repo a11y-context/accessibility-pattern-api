@@ -59,6 +59,14 @@ patternsJson.patterns.forEach((p) => {
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   iosSidebar: [
+    // Platform label at the top of the sidebar (Version E — DESIGN-SYSTEM.md §6).
+    // Styled via .a11y-sidebar-platform in src/css/custom.css.
+    {
+      type: 'html',
+      value: 'SwiftUI (iOS)',
+      className: 'a11y-sidebar-platform',
+      defaultStyle: true,
+    },
     // intro.md has frontmatter id "ios-intro" and slug "/" — renders at /ios
     {
       type: 'doc',
@@ -75,7 +83,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Components',
-      collapsible: true,
+      // S3: match sidebars-web-react.js — no expand/collapse caret. `collapsible:
+      // false` drops the toggle so the label reads as a plain, always-expanded
+      // group heading and the component list stays visible. (The iOS instance has
+      // no catalog/gallery doc, so unlike web-react the label carries no `link`;
+      // the caret-free, always-open behavior is identical.)
+      collapsible: false,
       collapsed: false,
       // URL contract: /ios/swiftui/components/<p.id>
       items: patternsJson.patterns.map((p) => ({
