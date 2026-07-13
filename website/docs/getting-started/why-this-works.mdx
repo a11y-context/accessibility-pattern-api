@@ -2,9 +2,25 @@
 title: Why This Works
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # Why This Works
 
 Most attempts to make AI write accessible code fail in predictable ways. The design of this system follows directly from those failures.
+
+<figure>
+  <ThemedImage
+    alt="Comparison of accessibility pass rates. Left: unassisted AI-generated UI passes automated accessibility checks about 12 percent of the time across eight frontier models. Right: with A11y Context applied at generation time, code reaches an 88 to 93 percent manual pass rate."
+    sources={{
+      light: useBaseUrl('/img/system-comparison-light.png'),
+      dark: useBaseUrl('/img/system-comparison-dark.png'),
+    }}
+  />
+  <figcaption>
+    Unassisted, AI-generated UI passes accessibility checks only ~12% of the time across eight frontier models (Microsoft A11y LLM Eval). With A11y Context applied at generation time, code reaches an 88–93% manual pass rate in our experiments.
+  </figcaption>
+</figure>
 
 ## AI is trained on inaccessible code
 
@@ -46,5 +62,7 @@ A controlled experiment (48 runs, 9 architecture variants, two-round e-commerce 
 - Manual accessibility pass rate: **63% → 88–93%** (p < 0.001)
 - Axe-core violations: **17 per run → 1–5** (70–95% reduction, p < 0.02)
 - The system occasionally outperformed its own documentation: one run produced a two-layer focus indicator design better than the documented pattern, now incorporated into [Foundations](/web/react/foundations)
+
+The 12% figure above is Microsoft's cross-model automated baseline; in our own controlled experiment the manual pass rate rose from 63% to 88–93%.
 
 The cost is real and worth stating: guided runs took roughly 2× the development time of unassisted runs. The trade is dozens of accessibility defects that never get written.

@@ -18,6 +18,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (id → presentation name); keeps the corpus
+// `title` original while the sidebar shows grouped names. See patternDisplayNames.json.
+const displayNames = require('./patternDisplayNames.json');
+
 // ── 1. Resolve and validate patterns.json ─────────────────────────────────────
 
 const swiftuiRoot = path.resolve(__dirname, '../patterns/ios/swiftui');
@@ -83,18 +87,18 @@ const sidebars = {
     {
       type: 'category',
       label: 'Components',
-      // S3: match sidebars-web-react.js — no expand/collapse caret. `collapsible:
-      // false` drops the toggle so the label reads as a plain, always-expanded
-      // group heading and the component list stays visible. (The iOS instance has
-      // no catalog/gallery doc, so unlike web-react the label carries no `link`;
-      // the caret-free, always-open behavior is identical.)
+      // The label links to the iOS catalog page (mirrors web-react). No caret
+      // (`collapsible: false`) so it reads as a plain link with the component list
+      // always visible. component-gallery.md has slug /swiftui/component-gallery,
+      // so its doc id resolves to swiftui/component-gallery.
+      link: { type: 'doc', id: 'swiftui/component-gallery' },
       collapsible: false,
       collapsed: false,
       // URL contract: /ios/swiftui/components/<p.id>
       items: patternsJson.patterns.map((p) => ({
         type: 'doc',
         id: `swiftui/components/${p.id}`,
-        label: p.title,
+        label: (displayNames['ios/swiftui'] || {})[p.id] || p.title,
       })),
     },
   ],

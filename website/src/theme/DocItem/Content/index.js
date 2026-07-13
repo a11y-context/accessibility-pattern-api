@@ -21,12 +21,22 @@ import {useDoc} from '@docusaurus/plugin-content-docs/client';
 import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
 import MDXContent from '@theme/MDXContent';
+import displayNames from '@site/patternDisplayNames.json';
+import Head from '@docusaurus/Head';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 // Eyebrow platform label, derived from the pattern's `stack` front matter.
 const STACK_LABELS = {
   'web/react': 'Web / React',
   'ios/swiftui': 'iOS / SwiftUI',
   'android/compose': 'Android / Compose',
+};
+
+// Catalog ("Components") page per stack, for the breadcrumb link. Stacks without
+// a gallery page fall through to a plain (unlinked) "Components" label.
+const GALLERY_HREF = {
+  'web/react': '/web/react/component-gallery',
+  'ios/swiftui': '/ios/swiftui/component-gallery',
 };
 
 /**
@@ -50,7 +60,7 @@ function useSyntheticTitle() {
  */
 function isPatternDoc(frontMatter) {
   return (
-    frontMatter.stack === 'web/react' &&
+    ['web/react', 'ios/swiftui', 'android/compose'].includes(frontMatter.stack) &&
     Boolean(frontMatter.summary) &&
     !frontMatter.slug
   );
@@ -59,14 +69,25 @@ function isPatternDoc(frontMatter) {
 export default function DocItemContent({children}) {
   const {frontMatter, metadata} = useDoc();
   const syntheticTitle = useSyntheticTitle();
+  const {siteConfig} = useDocusaurusContext();
 
   if (isPatternDoc(frontMatter)) {
-    const title = frontMatter.title || metadata.title;
+    const title =
+      (displayNames[frontMatter.stack] || {})[frontMatter.id] ||
+      frontMatter.title ||
+      metadata.title;
     const platform = STACK_LABELS[frontMatter.stack] || 'Web / React';
     return (
       <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>
+        <Head>
+          <title>{`${title} | ${siteConfig.title}`}</title>
+        </Head>
         <nav className="a11y-breadcrumb" aria-label="Breadcrumb">
-          <Link to="/web/react/component-gallery">Components</Link>
+          {GALLERY_HREF[frontMatter.stack] ? (
+            <Link to={GALLERY_HREF[frontMatter.stack]}>Components</Link>
+          ) : (
+            <span>Components</span>
+          )}
           <span className="a11y-breadcrumb-sep" aria-hidden="true">
             /
           </span>

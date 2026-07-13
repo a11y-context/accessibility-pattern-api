@@ -108,7 +108,14 @@ const config = {
         // (Selection cards, website-only intro lines, reordered/renamed sections).
         // Runs before Docusaurus' TOC/slug pass so the on-page TOC lists the six
         // Version E sections. See website/remark/pattern-sections.js.
-        beforeDefaultRemarkPlugins: [require('./remark/pattern-sections')],
+        // foundation-rules handles the /foundations page (hides rule `id`, renders
+        // `scope` as a meta line, renames "Don'ts" → "Donts"). It self-gates to
+        // foundation docs, so it's inert on component pages. See
+        // website/remark/foundation-rules.js.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
 
@@ -121,6 +128,13 @@ const config = {
         routeBasePath: 'android',
         sidebarPath: './sidebars-android.js',
         breadcrumbs: true,
+        // Future-proof: when Android/Compose patterns land they get the same Version E
+        // restructure + foundation transform. Both self-gate, so they're inert on the
+        // current coming-soon content.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
 
@@ -132,7 +146,17 @@ const config = {
         path: '../patterns/ios',
         routeBasePath: 'ios',
         sidebarPath: './sidebars-ios.js',
-        breadcrumbs: true,
+        exclude: ['**/patterns.json'],
+        // Version E renders its own "Components / {Name}" breadcrumb in the swizzled
+        // DocItem/Content, so the stock trail is disabled (matches web-react).
+        breadcrumbs: false,
+        // iOS component patterns get the same Version E section restructure as
+        // web-react (pattern-sections); foundation-rules handles the iOS Foundations
+        // page (id/scope yaml → scope meta, "Don'ts" → "Donts"). Both self-gate.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
   ],

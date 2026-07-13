@@ -10,6 +10,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (pattern id → presentation name). Keeps the
+// corpus `title` field clean (e.g. "Basic Button") while the sidebar/h1 show the
+// grouped display names (e.g. "Button (Basic)"). See website/patternDisplayNames.json.
+const displayNames = require('./patternDisplayNames.json');
+
 // ── 1. Resolve and validate patterns.json ─────────────────────────────────────
 
 const patternsPath = path.resolve(__dirname, '../patterns/web/react/patterns.json');
@@ -56,7 +61,7 @@ patternsJson.patterns.forEach((p) => {
 const componentItems = patternsJson.patterns.map((p) => ({
   type: 'doc',
   id: `components/${p.id}`,
-  label: p.title,
+  label: (displayNames['web/react'] || {})[p.id] || p.title,
 }));
 
 // In local development (`docusaurus start`), also surface `status: draft`
