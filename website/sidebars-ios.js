@@ -87,11 +87,11 @@ const sidebars = {
     {
       type: 'category',
       label: 'Components',
-      // S3: match sidebars-web-react.js — no expand/collapse caret. `collapsible:
-      // false` drops the toggle so the label reads as a plain, always-expanded
-      // group heading and the component list stays visible. (The iOS instance has
-      // no catalog/gallery doc, so unlike web-react the label carries no `link`;
-      // the caret-free, always-open behavior is identical.)
+      // The label links to the iOS catalog page (mirrors web-react). No caret
+      // (`collapsible: false`) so it reads as a plain link with the component list
+      // always visible. component-gallery.md has slug /swiftui/component-gallery,
+      // so its doc id resolves to swiftui/component-gallery.
+      link: { type: 'doc', id: 'swiftui/component-gallery' },
       collapsible: false,
       collapsed: false,
       // URL contract: /ios/swiftui/components/<p.id>

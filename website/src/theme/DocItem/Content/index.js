@@ -32,6 +32,13 @@ const STACK_LABELS = {
   'android/compose': 'Android / Compose',
 };
 
+// Catalog ("Components") page per stack, for the breadcrumb link. Stacks without
+// a gallery page fall through to a plain (unlinked) "Components" label.
+const GALLERY_HREF = {
+  'web/react': '/web/react/component-gallery',
+  'ios/swiftui': '/ios/swiftui/component-gallery',
+};
+
 /**
  * Stock synthetic-title logic: render an <h1> only when the author hasn't hidden
  * it and the Markdown has no top-level heading of its own.
@@ -76,8 +83,8 @@ export default function DocItemContent({children}) {
           <title>{`${title} | ${siteConfig.title}`}</title>
         </Head>
         <nav className="a11y-breadcrumb" aria-label="Breadcrumb">
-          {frontMatter.stack === 'web/react' ? (
-            <Link to="/web/react/component-gallery">Components</Link>
+          {GALLERY_HREF[frontMatter.stack] ? (
+            <Link to={GALLERY_HREF[frontMatter.stack]}>Components</Link>
           ) : (
             <span>Components</span>
           )}
