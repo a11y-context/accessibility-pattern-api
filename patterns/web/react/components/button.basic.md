@@ -1,6 +1,6 @@
 ---
 id: button.basic
-title: Basic Button
+title: Button (Basic)
 stack: web/react
 status: beta
 latest_version: 0.2.1
@@ -9,7 +9,7 @@ aliases: [btn, primary button, icon button, call to action, cta]
 summary: Native button that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns.
 ---
 
-# Basic Button
+# Button (Basic)
 
 Pattern ID: `button.basic`
 

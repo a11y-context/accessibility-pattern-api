@@ -108,7 +108,14 @@ const config = {
         // (Selection cards, website-only intro lines, reordered/renamed sections).
         // Runs before Docusaurus' TOC/slug pass so the on-page TOC lists the six
         // Version E sections. See website/remark/pattern-sections.js.
-        beforeDefaultRemarkPlugins: [require('./remark/pattern-sections')],
+        // foundation-rules handles the /foundations page (hides rule `id`, renders
+        // `scope` as a meta line, renames "Don'ts" → "Donts"). It self-gates to
+        // foundation docs, so it's inert on component pages. See
+        // website/remark/foundation-rules.js.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
 
@@ -133,6 +140,10 @@ const config = {
         routeBasePath: 'ios',
         sidebarPath: './sidebars-ios.js',
         breadcrumbs: true,
+        // The iOS Foundations page (patterns/ios/swiftui/global/global_rules.md)
+        // carries the same id/scope yaml blocks and "Don'ts" sub-headings, so it
+        // gets the same foundation-rules transform. See website/remark/foundation-rules.js.
+        beforeDefaultRemarkPlugins: [require('./remark/foundation-rules')],
       },
     ],
   ],

@@ -216,6 +216,23 @@ summary:focus-visible,
   box-shadow: var(--a11y-focus-ring);
 }
 
+/* Search combobox: render the focus ring on the OUTER div[role="search"]
+   wrapper (the visible field chrome), not the borderless inner <input>. A ring
+   drawn on the input would float inside the field; the wrapper is what reads as
+   the control. Paint the double ring on the wrapper when focus is within it, and
+   suppress it on the inner input. The wrapper selector (0,2,1) carries the ring;
+   the input override (0,2,2) beats the generic `input:focus-visible` rule above
+   (0,1,1) to remove it. */
+div[role='search']:focus-within {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--a11y-focus-ring);
+}
+div[role='search'] input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 /* ==========================================================================
    3. Code — block surfaces + inline code (spec §6)
    ========================================================================== */
@@ -410,6 +427,16 @@ html[data-theme='dark'] {
   margin: 0 0 0.25rem;
 }
 
+/* Sidebar nav inset — 32px of left padding on the menu so its links (and the
+   platform label / active accent bar) sit inset from the sidebar container's
+   left edge. Overrides the theme module's 0.5rem left pad (theme-classic
+   DocSidebar/Desktop/Content styles.module.css); we set only padding-left so the
+   module's scrollbar-gutter right:0 and 0.5rem top/bottom are preserved. The
+   two-class selector out-specifies the single-class module rule. */
+.theme-doc-sidebar-container .menu {
+  padding-left: 32px;
+}
+
 /* Menu links: humanist face, relative for the active accent bar. */
 .menu__link {
   position: relative;
@@ -502,6 +529,24 @@ html[data-theme='dark'] {
   border-radius: 0.6rem;
   background: #f59e0b;
   color: #1a1a1a;
+}
+
+/* ==========================================================================
+   6a. Doc layout row — center sidebar + main together (max-width 1360px)
+   theme-classic lays the sidebar (300px) + main out as a full-width flex row:
+   DocRoot/Layout/styles.module.css → `.docRoot { display: flex; width: 100% }`.
+   Main's inner `.container` caps + centers itself (~1140px), so on wide screens
+   the content drifts toward center while the sidebar stays pinned to the
+   viewport's left edge — a gap that widens with viewport width. Constrain the
+   whole row to the site content width (1360px, matching the footer) and center
+   it, so the sidebar's left edge aligns with the centered content block instead
+   of the window edge. Targets the hashed `.docRoot_*` class by attribute
+   substring; auto margins on the flex item absorb the free space to center it.
+   ========================================================================== */
+[class*='docRoot'] {
+  max-width: 1360px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ==========================================================================
@@ -619,8 +664,23 @@ h1.a11y-page-title {
 .markdown .pattern-section .section-sub {
   font-size: 15px;
   color: var(--a11y-muted);
-  max-width: 62ch;
   margin: 0 0 20px;
+  /* C2b: no reading-measure cap — the muted section intro line spans the full
+     content column (was max-width: 62ch). */
+}
+
+/* H3 subheaders inside Must Haves / Don'ts (and, once the remark plugin emits
+   them, Acceptance Checks): the remark output nests h3 labels within these
+   sections. Pin them to a compact sub-label scale instead of the default h3
+   heading size. The two-class-plus-type selector (0,2,1) out-specifies Infima's
+   bare `h3` and heading-margin rules (0,0,1), so no !important is needed. */
+.markdown .pattern-section--must-haves h3,
+.markdown .pattern-section--donts h3,
+.markdown .pattern-section--acceptance-checks h3 {
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
 }
 
 /* ---------- flat spec lists (Must Haves / Donts / Customizable): accent dot ---------- */
@@ -632,7 +692,7 @@ h1.a11y-page-title {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 .markdown .pattern-section--must-haves li,
 .markdown .pattern-section--donts li,
@@ -676,7 +736,7 @@ h1.a11y-page-title {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 /* Leaf check items — accent checkmark marker. */
 .markdown .pattern-section--acceptance-checks li {
@@ -764,6 +824,7 @@ h1.a11y-page-title {
   list-style: none;
   padding-left: 0;
   margin: 0;
+  margin-left: 1rem;
   display: flex;
   flex-direction: column;
   gap: 11px;

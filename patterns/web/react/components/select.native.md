@@ -1,6 +1,6 @@
 ---
 id: select.native
-title: Native Select
+title: Select (Basic)
 stack: web/react
 status: beta
 latest_version: 0.1.0
@@ -9,7 +9,7 @@ aliases: [native select, html select, select element, dropdown, form select, sin
 summary: A native select element styled with CSS, the default single-value form control; retains native keyboard, mobile, dismissal, and assistive-technology behavior.
 ---
 
-# Native Select
+# Select (Basic)
 
 Pattern ID: `select.native`
 

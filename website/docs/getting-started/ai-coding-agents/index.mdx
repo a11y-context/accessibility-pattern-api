@@ -2,6 +2,9 @@
 title: Using with AI Coding Agents
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # Using A11y Context with AI Coding Agents
 
 The integration has two moving parts:
@@ -11,7 +14,13 @@ The integration has two moving parts:
 
 A skill does the librarian's job *only if it's actually invoked*. The skills published here carry an invocation directive in their `description` — phrasing engineered so the agent reaches for the skill on any UI-generation task without the user needing to remember.
 
-![Architecture flow. A developer prompt invokes the AI coding agent on UI tasks. Inside the agent, the skill or subagent retrieves matching patterns from the A11y Context corpus — patterns.json, the pattern files, and Foundations. The agent then applies the Must Haves and Golden Pattern to produce the generated code.](/img/a11y-context-architecture.png)
+<ThemedImage
+  alt="Architecture flow. A developer prompt invokes the AI coding agent on UI tasks. Inside the agent, the skill or subagent retrieves matching patterns from the A11y Context corpus — patterns.json, the pattern files, and Foundations. The agent then applies the Must Haves and Golden Pattern to produce the generated code."
+  sources={{
+    light: useBaseUrl('/img/system-overview-light.png'),
+    dark: useBaseUrl('/img/system-overview-dark.png'),
+  }}
+/>
 
 ## The two design decisions
 

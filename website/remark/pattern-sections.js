@@ -27,6 +27,12 @@
  *   4. Reorders to Selection → Must Haves → Donts → Customizable → Golden Pattern
  *      → Acceptance Checks, wraps each in <section class="pattern-section …">, and
  *      injects a muted intro line under each H2.
+ *   5. Flattens the Acceptance Checks section: patterns author it as a NESTED list
+ *      (top-level group labels like "Keyboard" / "Screen Reader", each holding a
+ *      sub-list of checks). Each group becomes an <h3> — with the label normalized
+ *      so "Keyboard Activation" / "Controls (keyboard)" → "Keyboard" and screen-
+ *      reader variants → "Screen Reader" — followed by a FLAT <ul> of that group's
+ *      checks. No nested lists remain. Flat/ungrouped checklists pass through.
  *
  * IMPORTANT — the per-section intro lines below are WEBSITE-ONLY presentational
  * annotations for human readers. They are the exact copy from DESIGN-SYSTEM.md §6
@@ -100,6 +106,103 @@ function introNode(key) {
 /** A fresh H2 heading node with plain-text content (Docusaurus assigns the slug). */
 function h2(text) {
   return {type: 'heading', depth: 2, children: [{type: 'text', value: text}]};
+}
+
+// ── Acceptance Checks flattening ────────────────────────────────────────────
+// Patterns author "Acceptance Checks" as a nested list: top-level items are group
+// labels ("Keyboard", "Screen Reader", "Controls (keyboard):"…) each holding a
+// sub-list of checks. We flatten each group to an <h3> + a flat <ul> of its checks.
+
+/**
+ * Normalize an acceptance-check group label so it reads the same across patterns:
+ * keyboard variants ("Keyboard Activation", "Keyboard navigation", "Controls
+ * (keyboard)"…) collapse to "Keyboard"; screen-reader variants to "Screen Reader".
+ * Any other label (e.g. "Semantics", "Autoplay") is kept, minus a trailing colon.
+ * The word-boundary match keeps distinct labels like "Pointer + keyboard
+ * continuity" intact — only labels that *start* with "keyboard" collapse.
+ */
+function normalizeGroupLabel(raw) {
+  const s = String(raw)
+    .replace(/[:\s]+$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const low = s.toLowerCase();
+  if (/^keyboard\b/.test(low) || low === 'controls (keyboard)') return 'Keyboard';
+  if (/^screen[\s-]?reader\b/.test(low)) return 'Screen Reader';
+  return s;
+}
+
+/** A flat <ul> (mdast list) wrapping the given listItem nodes. Tight, so each
+ *  <li> renders as a leaf check and keeps the acceptance-check checkmark marker. */
+function flatList(items) {
+  return {type: 'list', ordered: false, spread: false, children: items};
+}
+
+/** True when a list's first item contains a nested sub-list — the "grouped" shape.
+ *  Gating on the first item leaves flat checklists (and lists whose only nesting is
+ *  an incidental sub-detail, e.g. button.basic's "Disabled button:") untouched. */
+function isGroupedList(list) {
+  const first = Array.isArray(list.children) ? list.children[0] : null;
+  return !!(
+    first &&
+    Array.isArray(first.children) &&
+    first.children.some((c) => c.type === 'list')
+  );
+}
+
+/** A non-heading <h3> group title (rendered via data.hName like selectionCard's
+ *  title, so it does NOT get a slug or a right-hand TOC entry). */
+function groupTitle(label) {
+  return container('h3', ['ac-group-title'], [{type: 'text', value: label}]);
+}
+
+/** Expand one grouped acceptance-checks list into a run of <h3> + flat-<ul> blocks.
+ *  Bare top-level checks (no nested list) are buffered into their own heading-less
+ *  <ul>, preserving authored order. */
+function expandGroupedList(list) {
+  const result = [];
+  let loose = [];
+  const flushLoose = () => {
+    if (loose.length) {
+      result.push(flatList(loose));
+      loose = [];
+    }
+  };
+  for (const item of list.children || []) {
+    const kids = Array.isArray(item.children) ? item.children : [];
+    const subList = kids.find((c) => c.type === 'list');
+    if (subList) {
+      flushLoose();
+      const label = normalizeGroupLabel(
+        kids
+          .filter((c) => c.type !== 'list')
+          .map(toText)
+          .join(' '),
+      );
+      result.push(groupTitle(label));
+      result.push(flatList(subList.children || []));
+    } else {
+      loose.push(item);
+    }
+  }
+  flushLoose();
+  return result;
+}
+
+/** Flatten the Acceptance Checks body's first grouped list into h3 + flat-ul
+ *  blocks. A non-grouped body is returned unchanged; non-list nodes keep position. */
+function expandAcceptanceChecks(body) {
+  const out = [];
+  let done = false;
+  for (const node of body) {
+    if (!done && node.type === 'list' && isGroupedList(node)) {
+      out.push(...expandGroupedList(node));
+      done = true;
+    } else {
+      out.push(node);
+    }
+  }
+  return out;
 }
 
 /** One Selection card: an <div class="sel-card …"> with a non-heading title + body. */
@@ -183,6 +286,11 @@ module.exports = function remarkPatternSections() {
                 .startsWith('Structural reference for AI coding assistants')
             ),
         );
+      }
+      // Flatten the authored "Keyboard / Screen Reader" group list into <h3> +
+      // flat <ul> blocks (see expandAcceptanceChecks). Ungrouped bodies pass through.
+      if (key === 'acceptance-checks') {
+        body = expandAcceptanceChecks(body);
       }
       sections.push(
         container(
