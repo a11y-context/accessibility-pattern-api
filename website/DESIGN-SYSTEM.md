@@ -59,6 +59,12 @@ medical brand.
 Inline body links use `--link` (the deeper violet), never the raw accent. Never signal
 state with color alone — pair with text, icon, or shape.
 
+**Link decoration:** inline body links are **underlined by default**, not on hover only —
+color alone must never be the sole affordance. The underline is scoped to rendered prose
+(`.markdown a`); navigation, sidebar, TOC, and breadcrumb chrome and custom landing links
+(cards, buttons) are excluded and manage their own affordance (active nav uses the straight
+underline in §6). Hover changes the color to `--accent` but leaves the underline in place.
+
 ---
 
 ## 3. Typography
