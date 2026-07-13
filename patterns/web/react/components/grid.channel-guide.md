@@ -1,6 +1,6 @@
 ---
 id: grid.channel-guide
-title: Grid (Channel Guide)
+title: Channel Guide Grid
 stack: web/react
 status: beta
 latest_version: 0.2.0

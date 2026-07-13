@@ -1,6 +1,6 @@
 ---
 id: select.basic
-title: Select (Custom Style)
+title: Select
 stack: web/react
 status: beta
 latest_version: 0.2.0

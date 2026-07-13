@@ -1,6 +1,6 @@
 ---
 id: button.basic
-title: Button (Basic)
+title: Basic Button
 stack: web/react
 status: beta
 latest_version: 0.2.1

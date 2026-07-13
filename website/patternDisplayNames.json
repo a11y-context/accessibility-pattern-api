@@ -1,0 +1,12 @@
+{
+  "button.basic": "Button (Basic)",
+  "button.toggle": "Button (Toggle)",
+  "carousel.dots": "Carousel (Dots)",
+  "carousel.thumbnails": "Carousel (Thumbnails)",
+  "combobox.autocomplete": "Combobox (Autocomplete)",
+  "grid.channel-guide": "Grid (Channel Guide)",
+  "navigation-menu.basic": "Navigation (Flat List)",
+  "navigation-menu.dropdown": "Navigation (Disclosure)",
+  "select.basic": "Select (Custom Style)",
+  "select.native": "Select (Basic)"
+}

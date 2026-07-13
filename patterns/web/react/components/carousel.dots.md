@@ -1,6 +1,6 @@
 ---
 id: carousel.dots
-title: Carousel (Dots)
+title: Carousel with Dot Navigation
 stack: web/react
 status: beta
 latest_version: 0.2.0

@@ -40,7 +40,7 @@
     },
     {
       "id": "button.basic",
-      "title": "Button (Basic)",
+      "title": "Basic Button",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.1",
@@ -78,7 +78,7 @@
     },
     {
       "id": "button.toggle",
-      "title": "Button (Toggle)",
+      "title": "Toggle Button",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.1",
@@ -115,7 +115,7 @@
     },
     {
       "id": "carousel.dots",
-      "title": "Carousel (Dots)",
+      "title": "Carousel with Dot Navigation",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.0",
@@ -157,7 +157,7 @@
     },
     {
       "id": "carousel.thumbnails",
-      "title": "Carousel (Thumbnails)",
+      "title": "Carousel with Thumbnail Navigation",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.0",
@@ -248,7 +248,7 @@
     },
     {
       "id": "combobox.autocomplete",
-      "title": "Combobox (Autocomplete)",
+      "title": "Autocomplete Combobox",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
@@ -429,7 +429,7 @@
     },
     {
       "id": "grid.channel-guide",
-      "title": "Grid (Channel Guide)",
+      "title": "Channel Guide Grid",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.0",
@@ -645,7 +645,7 @@
     },
     {
       "id": "navigation-menu.basic",
-      "title": "Navigation (Flat List)",
+      "title": "Navigation Menu",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.3.0",
@@ -687,7 +687,7 @@
     },
     {
       "id": "navigation-menu.dropdown",
-      "title": "Navigation (Disclosure)",
+      "title": "Navigation Dropdown",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
@@ -733,7 +733,7 @@
     },
     {
       "id": "select.native",
-      "title": "Select (Basic)",
+      "title": "Native Select",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
@@ -779,7 +779,7 @@
     },
     {
       "id": "select.basic",
-      "title": "Select (Custom Style)",
+      "title": "Select",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.2.0",

@@ -1,6 +1,6 @@
 ---
 id: carousel.thumbnails
-title: Carousel (Thumbnails)
+title: Carousel with Thumbnail Navigation
 stack: web/react
 status: beta
 latest_version: 0.2.0

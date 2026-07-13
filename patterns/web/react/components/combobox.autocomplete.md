@@ -1,6 +1,6 @@
 ---
 id: combobox.autocomplete
-title: Combobox (Autocomplete)
+title: Autocomplete Combobox
 stack: web/react
 status: beta
 latest_version: 0.1.0

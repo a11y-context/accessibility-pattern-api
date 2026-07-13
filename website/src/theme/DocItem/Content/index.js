@@ -21,6 +21,7 @@ import {useDoc} from '@docusaurus/plugin-content-docs/client';
 import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
 import MDXContent from '@theme/MDXContent';
+import displayNames from '@site/patternDisplayNames.json';
 
 // Eyebrow platform label, derived from the pattern's `stack` front matter.
 const STACK_LABELS = {
@@ -61,7 +62,7 @@ export default function DocItemContent({children}) {
   const syntheticTitle = useSyntheticTitle();
 
   if (isPatternDoc(frontMatter)) {
-    const title = frontMatter.title || metadata.title;
+    const title = displayNames[frontMatter.id] || frontMatter.title || metadata.title;
     const platform = STACK_LABELS[frontMatter.stack] || 'Web / React';
     return (
       <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>

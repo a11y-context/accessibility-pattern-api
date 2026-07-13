@@ -1,6 +1,6 @@
 ---
 id: navigation-menu.dropdown
-title: Navigation (Disclosure)
+title: Navigation Dropdown
 stack: web/react
 status: beta
 latest_version: 0.1.0

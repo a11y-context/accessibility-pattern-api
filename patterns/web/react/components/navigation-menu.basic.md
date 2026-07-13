@@ -1,6 +1,6 @@
 ---
 id: navigation-menu.basic
-title: Navigation (Flat List)
+title: Navigation Menu
 stack: web/react
 status: beta
 latest_version: 0.3.0

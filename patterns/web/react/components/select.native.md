@@ -1,6 +1,6 @@
 ---
 id: select.native
-title: Select (Basic)
+title: Native Select
 stack: web/react
 status: beta
 latest_version: 0.1.0

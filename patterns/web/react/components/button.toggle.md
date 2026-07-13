@@ -1,6 +1,6 @@
 ---
 id: button.toggle
-title: Button (Toggle)
+title: Toggle Button
 stack: web/react
 status: beta
 latest_version: 0.2.1
