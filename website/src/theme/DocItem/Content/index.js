@@ -50,7 +50,7 @@ function useSyntheticTitle() {
  */
 function isPatternDoc(frontMatter) {
   return (
-    frontMatter.stack === 'web/react' &&
+    ['web/react', 'ios/swiftui', 'android/compose'].includes(frontMatter.stack) &&
     Boolean(frontMatter.summary) &&
     !frontMatter.slug
   );
@@ -66,7 +66,11 @@ export default function DocItemContent({children}) {
     return (
       <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>
         <nav className="a11y-breadcrumb" aria-label="Breadcrumb">
-          <Link to="/web/react/component-gallery">Components</Link>
+          {frontMatter.stack === 'web/react' ? (
+            <Link to="/web/react/component-gallery">Components</Link>
+          ) : (
+            <span>Components</span>
+          )}
           <span className="a11y-breadcrumb-sep" aria-hidden="true">
             /
           </span>

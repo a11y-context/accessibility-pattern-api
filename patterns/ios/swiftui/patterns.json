@@ -79,6 +79,330 @@
       }
     },
     {
+      "id": "checkbox.basic",
+      "title": "Checkbox",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A checkbox built from a SwiftUI Toggle with a custom square toggle style, using accessibilityValue to announce Checked or Unchecked, since SwiftUI has no native checkbox control or trait.",
+      "aliases": [
+        "check box",
+        "tickbox",
+        "form checkbox",
+        "Toggle checkbox",
+        "agree checkbox",
+        "multi-select"
+      ],
+      "tags": [
+        "checkbox",
+        "form",
+        "selection",
+        "toggle",
+        "checkbox-group"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user selects an independent binary option that is submitted with a form rather than taking effect immediately (e.g., \"Accept Terms\", \"Remember me\"). Uses a SwiftUI Toggle with a custom square .toggleStyle, since SwiftUI has no native checkbox control.",
+          "Use when several such options form a group where any number may be selected (e.g., \"Preferred contact method(s)\": Email, Phone, Text)."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control is a persistent on/off setting that takes effect immediately (use switch.basic).",
+          "Do not use when the control toggles a feature in place within the current context (use button.toggle).",
+          "Do not use when exactly one option must be chosen from a mutually exclusive set (use radio.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/checkbox.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "dialog.alert",
+      "title": "Dialog (Alert)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI .alert modal that takes VoiceOver focus on presentation, with each action returning focus to the trigger because native alerts do not restore it automatically.",
+      "aliases": [
+        "alert",
+        "alert dialog",
+        "confirmation alert",
+        "popup alert",
+        "delete confirmation",
+        ".alert"
+      ],
+      "tags": [
+        "alert",
+        "dialog",
+        "modal",
+        "confirmation",
+        "destructive"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a brief, blocking message needs the user to acknowledge it or make a small choice before continuing (e.g., confirming a destructive action, acknowledging a required error). Uses the native SwiftUI .alert() modifier.",
+          "Use when the choice is a short set of clearly labeled actions (typically one to three)."
+        ],
+        "do_not_use_when": [
+          "Do not use when the content is a non-blocking sheet of choices tied to a specific control (use dialog.confirmation).",
+          "Do not use when the content is a larger form or multi-step flow (use dialog.modal).",
+          "Do not use when the message is a transient status that does not require acknowledgement (use global.announcements)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/dialog.alert.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "link.basic",
+      "title": "Link",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "SwiftUI Link that opens a URL or web view, exposing the link trait (with the redundant button trait removed) so VoiceOver signals that activating it leaves the app.",
+      "aliases": [
+        "hyperlink",
+        "url link",
+        "external link",
+        "Link",
+        "web link",
+        "open url"
+      ],
+      "tags": [
+        "link",
+        "url",
+        "hyperlink",
+        "external",
+        "navigation"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a standalone control opens a URL in the browser or an in-app web view, or otherwise leaves the current app context (e.g., \"View Weekly Ad\", \"Open Help Center\", \"Privacy Policy\"). Uses a native SwiftUI Link(destination:), whose link trait tells VoiceOver the control exits the app.",
+          "Use when the destination is a web address rather than an in-app screen."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control triggers an immediate action and stays on the current screen (use button.basic).",
+          "Do not use when the control drills into another in-app screen (use list.row).",
+          "Do not use when the hyperlink sits inline within a run of paragraph text (use link.inline)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/link.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "link.inline",
+      "title": "Inline Link",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A hyperlink embedded in a run of Text via an AttributedString .link run (preferred) or Markdown, reachable through the VoiceOver Links rotor but non-operable under Full Keyboard Access and Voice Control because of Apple platform defects.",
+      "aliases": [
+        "inline link",
+        "text link",
+        "hyperlink in text",
+        "AttributedString link",
+        "markdown link",
+        "in-paragraph link"
+      ],
+      "tags": [
+        "link",
+        "inline-link",
+        "hyperlink",
+        "attributed-string",
+        "markdown",
+        "text"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a hyperlink must appear inside a running sentence or paragraph, surrounded by static text (e.g., \"By continuing you agree to the Terms of Service.\"). Uses an AttributedString .link run (preferred) or Markdown inside a Text."
+        ],
+        "do_not_use_when": [
+          "Do not use when the link can stand as its own control or on its own line (use link.basic, which is fully operable with Full Keyboard Access and Voice Control).",
+          "Do not use when the target is an in-app screen rather than a URL (use list.row).",
+          "Do not use when the control performs an in-app action rather than opening a URL (use button.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/link.inline.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "list.row",
+      "title": "List Row (Navigable)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A NavigationLink rendered as a row in a List, where the whole row is one target that drills into another in-app screen and reads as a button to VoiceOver, with a decorative trailing disclosure chevron.",
+      "aliases": [
+        "navigation row",
+        "drill-in row",
+        "NavigationLink",
+        "settings row",
+        "disclosure row",
+        "list item"
+      ],
+      "tags": [
+        "list-row",
+        "navigation",
+        "navigationlink",
+        "drill-in",
+        "disclosure"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when tapping a row pushes another in-app screen and the whole row is the target (e.g., a \"Settings\" row that opens the Settings detail, a message that opens a thread). Uses a NavigationLink inside a List, so the row exposes the button trait and the system supplies the disclosure chevron.",
+          "Use when a scrolling set of such rows forms a navigable list (a settings list, an inbox, a menu of sections)."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control performs an in-place action and stays on the current screen (use button.basic).",
+          "Do not use when the control opens a URL or leaves the app (use link.basic).",
+          "Do not use when the row is a static, non-navigating list item (use list.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/list.row.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "select.menu",
+      "title": "Select (Menu)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A SwiftUI Picker with the menu style, a pop-up button that shows the current value and opens a list to choose one option, named by the Picker label text rather than an accessibilityLabel.",
+      "aliases": [
+        "picker",
+        "menu picker",
+        "dropdown",
+        "pop-up button",
+        "MenuPickerStyle",
+        "single select"
+      ],
+      "tags": [
+        "picker",
+        "select",
+        "dropdown",
+        "menu",
+        "single-choice"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user chooses one value from a fixed set and the current choice is shown on a compact pop-up button (e.g., \"Sort by\", \"Fruit\", \"Country\"). Uses a SwiftUI Picker with .pickerStyle(.menu).",
+          "Use when the option set is longer than fits a segmented control but does not need a full-screen wheel."
+        ],
+        "do_not_use_when": [
+          "Do not use when the items are commands or actions rather than a single selected value (use menu.basic).",
+          "Do not use when the choice is among two to five options that fit inline (use select.segmented).",
+          "Do not use when a spinning wheel of values is intended (use select.wheel).",
+          "Do not use when the value is free text the user types (use text-field.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/select.menu.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "slider.basic",
+      "title": "Slider",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI Slider that VoiceOver adjusts by swiping up or down, paired with single-tap controls so the value is adjustable without a drag gesture.",
+      "aliases": [
+        "range slider",
+        "volume slider",
+        "brightness slider",
+        "Slider",
+        "value slider"
+      ],
+      "tags": [
+        "slider",
+        "range",
+        "adjustable",
+        "value",
+        "continuous"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user adjusts a value across a continuous or stepped numeric range by moving a thumb between a minimum and maximum (e.g., \"Brightness\", \"Volume\", \"Speed\"). Uses a native SwiftUI Slider, which VoiceOver adjusts by swiping up or down."
+        ],
+        "do_not_use_when": [
+          "Do not use when the value changes in discrete single increments and a compact plus/minus control fits better (use stepper.basic).",
+          "Do not use when the choice is among a small fixed set of labeled options rather than a numeric range (use select.segmented).",
+          "Do not use when the control is a simple on/off setting (use switch.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/slider.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "stepper.basic",
+      "title": "Stepper",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI Stepper whose visible label text becomes its accessible name and which VoiceOver increments or decrements automatically, with no .adjustable trait to add.",
+      "aliases": [
+        "plus minus",
+        "quantity stepper",
+        "increment control",
+        "Stepper",
+        "counter"
+      ],
+      "tags": [
+        "stepper",
+        "increment",
+        "decrement",
+        "value",
+        "quantity"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user increases or decreases a value in discrete single increments with plus and minus controls (e.g., \"Tickets\", \"Copies\", \"Quantity\"). Uses a native SwiftUI Stepper, whose increment and decrement behavior is exposed to VoiceOver automatically."
+        ],
+        "do_not_use_when": [
+          "Do not use when the value spans a wide continuous range better suited to a thumb slider (use slider.basic).",
+          "Do not use when the choice is among labeled options rather than a number (use select.menu)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/stepper.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "switch.basic",
       "title": "Switch",
       "pattern_type": "component",
@@ -114,6 +438,48 @@
       "default_variant": null,
       "source": {
         "path": "components/switch.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "text-field.basic",
+      "title": "Text Field",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A single-line SwiftUI text field whose visible label is exposed to VoiceOver through the field title, an accessibility label, or LabeledContent, with keyboardType and textContentType set so the correct keyboard and AutoFill appear.",
+      "aliases": [
+        "textfield",
+        "text input",
+        "input field",
+        "secure field",
+        "email field",
+        "password field"
+      ],
+      "tags": [
+        "text-field",
+        "form",
+        "input",
+        "autofill",
+        "secure-field"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user enters a single line of free-form text such as a name, email address, or search query (e.g., \"Email\", \"Search\"). Uses a native SwiftUI TextField so the field exposes editable-text semantics, its label, and its typed value to VoiceOver.",
+          "Use when the entered value maps to a system AutoFill category such as credentials or contact details, so the keyboard can offer to fill it (e.g., \"Password\", \"One-Time Code\", \"Street Address\").",
+          "Use when the input has a natural on-screen keyboard tied to its data type, such as an email address or a numeric postal code."
+        ],
+        "do_not_use_when": [
+          "Do not use when the user enters more than one line of text, such as a message body or review (use text-editor.basic).",
+          "Do not use when the value is chosen from a fixed set of options rather than typed (use select.menu).",
+          "Do not use when the value is a date or time selected from a calendar or wheel (use date-picker.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/text-field.basic.md",
         "format": "markdown",
         "frontmatter": true
       }

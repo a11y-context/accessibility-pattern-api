@@ -1,7 +1,11 @@
 {
   "_comment": "Hand-edited top-level metadata for patterns.json. Bumped per the Versioning protocol when a release ships. The patterns.json output file is regenerated from this + the .md files in components/ by website/scripts/generate-patterns-json.js (runs in prebuild).",
+  "_comment_order_overrides": "Patterns default to alphabetical filename order (which also drives the sidebar). Each [earlierId, laterId] pair pins earlierId to appear immediately before laterId. select.native (\"Select (Basic)\") must precede select.basic (\"Select (Custom Style)\"), the reverse of the alphabetical select.basic/select.native. Unlisted patterns keep their alphabetical slot.",
   "stack": "web/react",
   "schema_version": "1.0.0",
   "catalog_revision": "0.5.2",
-  "cache_ttl_seconds": 3600
+  "cache_ttl_seconds": 3600,
+  "order_overrides": [
+    ["select.native", "select.basic"]
+  ]
 }
