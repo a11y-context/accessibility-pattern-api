@@ -192,6 +192,13 @@
   --docusaurus-highlighted-code-line-bg: rgba(156, 130, 245, 0.15);
 }
 
+/* Content links: underlined by default (same color; hover state unchanged).
+   Scoped to rendered markdown prose so nav/sidebar/TOC/breadcrumb chrome and the
+   custom-classed landing links (door-link, dl-btn, ret-mini) keep their own styling. */
+.markdown a:not(.hash-link):not(.card):not(.door-link):not(.dl-btn):not(.ret-mini) {
+  text-decoration: underline;
+}
+
 /* ==========================================================================
    2. Focus — surface-aware double ring on :focus-visible ONLY (spec §5)
    ========================================================================== */
