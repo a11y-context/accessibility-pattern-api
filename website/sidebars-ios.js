@@ -18,6 +18,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (id → presentation name); keeps the corpus
+// `title` original while the sidebar shows grouped names. See patternDisplayNames.json.
+const displayNames = require('./patternDisplayNames.json');
+
 // ── 1. Resolve and validate patterns.json ─────────────────────────────────────
 
 const swiftuiRoot = path.resolve(__dirname, '../patterns/ios/swiftui');
@@ -94,7 +98,7 @@ const sidebars = {
       items: patternsJson.patterns.map((p) => ({
         type: 'doc',
         id: `swiftui/components/${p.id}`,
-        label: p.title,
+        label: (displayNames['ios/swiftui'] || {})[p.id] || p.title,
       })),
     },
   ],

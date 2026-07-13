@@ -14,6 +14,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (id → presentation name), so the gallery
+// matches the sidebar/h1 while the corpus `title` stays original.
+const displayNames = require('../patternDisplayNames.json');
+
 const patternsDir = path.resolve(__dirname, '../../patterns/web/react');
 const patternsJsonPath = path.join(patternsDir, 'patterns.json');
 const galleryPath = path.join(patternsDir, 'component-gallery.md');
@@ -27,7 +31,8 @@ function renderSummary(summary) {
 }
 
 const rows = patterns.map(
-  (p) => `| [${p.title}](./${p.source.path}) | ${renderSummary(p.summary)} |`
+  (p) =>
+    `| [${(displayNames['web/react'] || {})[p.id] || p.title}](./${p.source.path}) | ${renderSummary(p.summary)} |`
 );
 
 const table = ['| Component | Summary |', '|-----------|---------|', ...rows].join('\n');

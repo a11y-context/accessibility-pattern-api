@@ -22,6 +22,8 @@ import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
 import MDXContent from '@theme/MDXContent';
 import displayNames from '@site/patternDisplayNames.json';
+import Head from '@docusaurus/Head';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 // Eyebrow platform label, derived from the pattern's `stack` front matter.
 const STACK_LABELS = {
@@ -60,12 +62,19 @@ function isPatternDoc(frontMatter) {
 export default function DocItemContent({children}) {
   const {frontMatter, metadata} = useDoc();
   const syntheticTitle = useSyntheticTitle();
+  const {siteConfig} = useDocusaurusContext();
 
   if (isPatternDoc(frontMatter)) {
-    const title = displayNames[frontMatter.id] || frontMatter.title || metadata.title;
+    const title =
+      (displayNames[frontMatter.stack] || {})[frontMatter.id] ||
+      frontMatter.title ||
+      metadata.title;
     const platform = STACK_LABELS[frontMatter.stack] || 'Web / React';
     return (
       <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>
+        <Head>
+          <title>{`${title} | ${siteConfig.title}`}</title>
+        </Head>
         <nav className="a11y-breadcrumb" aria-label="Breadcrumb">
           {frontMatter.stack === 'web/react' ? (
             <Link to="/web/react/component-gallery">Components</Link>

@@ -61,7 +61,7 @@ patternsJson.patterns.forEach((p) => {
 const componentItems = patternsJson.patterns.map((p) => ({
   type: 'doc',
   id: `components/${p.id}`,
-  label: displayNames[p.id] || p.title,
+  label: (displayNames['web/react'] || {})[p.id] || p.title,
 }));
 
 // In local development (`docusaurus start`), also surface `status: draft`
