@@ -199,6 +199,11 @@
   text-decoration: underline;
 }
 
+/* Every real link shows the pointer cursor (some resets drop it on styled links). */
+a[href] {
+  cursor: pointer;
+}
+
 /* ==========================================================================
    2. Focus — surface-aware double ring on :focus-visible ONLY (spec §5)
    ========================================================================== */
