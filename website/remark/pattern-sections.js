@@ -189,15 +189,35 @@ function expandGroupedList(list) {
   return result;
 }
 
-/** Flatten the Acceptance Checks body's first grouped list into h3 + flat-ul
- *  blocks. A non-grouped body is returned unchanged; non-list nodes keep position. */
+/** True when a paragraph is *only* a bold run — the "**Group label**" shape some
+ *  patterns (notably iOS/SwiftUI) use to head each check group instead of the
+ *  nested-list shape. Whitespace-only text siblings are ignored. */
+function isBoldLabelPara(node) {
+  if (!node || node.type !== 'paragraph' || !Array.isArray(node.children)) return false;
+  const kids = node.children.filter(
+    (c) => !(c.type === 'text' && /^\s*$/.test(c.value)),
+  );
+  return kids.length === 1 && kids[0].type === 'strong';
+}
+
+/** Flatten the Acceptance Checks body into h3 + flat-ul blocks. Handles two authored
+ *  shapes: (1) a single nested list whose top-level items are group labels, and
+ *  (2) a run of "**Group label**" paragraphs each followed by a flat checklist.
+ *  Both normalize to <h3 class="ac-group-title"> + flat <ul>. Non-group nodes (an
+ *  intro paragraph, an ungrouped checklist) keep their position unchanged. */
 function expandAcceptanceChecks(body) {
   const out = [];
   let done = false;
-  for (const node of body) {
+  for (let i = 0; i < body.length; i++) {
+    const node = body[i];
+    const next = body[i + 1];
     if (!done && node.type === 'list' && isGroupedList(node)) {
       out.push(...expandGroupedList(node));
       done = true;
+    } else if (isBoldLabelPara(node) && next && next.type === 'list') {
+      out.push(groupTitle(normalizeGroupLabel(toText(node))));
+      out.push(flatList(next.children || []));
+      i++; // consume the checklist paired with this label
     } else {
       out.push(node);
     }
