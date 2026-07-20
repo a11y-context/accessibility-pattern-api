@@ -1,7 +1,7 @@
 {
   "stack": "ios/swiftui",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.1.0",
+  "catalog_revision": "0.2.0",
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
@@ -330,7 +330,7 @@
       "title": "Slider",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "A native SwiftUI Slider that VoiceOver adjusts by swiping up or down, paired with single-tap controls so the value is adjustable without a drag gesture.",
       "aliases": [
         "range slider",
@@ -447,7 +447,7 @@
       "title": "Text Field",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.2.0",
       "summary": "A single-line SwiftUI text field whose visible label is exposed to VoiceOver through the field title, an accessibility label, or LabeledContent, with keyboardType and textContentType set so the correct keyboard and AutoFill appear.",
       "aliases": [
         "textfield",

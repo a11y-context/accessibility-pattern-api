@@ -3,7 +3,7 @@ id: slider.basic
 title: Slider
 stack: ios/swiftui
 status: beta
-latest_version: 0.1.0
+latest_version: 0.1.1
 tags: [slider, range, adjustable, value, continuous]
 aliases: [range slider, volume slider, brightness slider, Slider, value slider]
 summary: A native SwiftUI Slider that VoiceOver adjusts by swiping up or down, paired with single-tap controls so the value is adjustable without a drag gesture.
@@ -75,7 +75,8 @@ struct SliderBasicDemo: View {
                 } maximumValueLabel: {
                     Text("100")
                 }
-                .accessibilityValue("\(Int(brightness)) percent")
+                // Native Slider already announces a percentage for this range; add
+                // .accessibilityValue only when units differ (e.g., "72 degrees")
 
                 Button {
                     brightness = min(100, brightness + 10)

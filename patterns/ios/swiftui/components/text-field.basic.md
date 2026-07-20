@@ -3,7 +3,7 @@ id: text-field.basic
 title: Text Field
 stack: ios/swiftui
 status: beta
-latest_version: 0.1.0
+latest_version: 0.2.0
 tags: [text-field, form, input, autofill, secure-field]
 aliases: [textfield, text input, input field, secure field, email field, password field]
 summary: A single-line SwiftUI text field whose visible label is exposed to VoiceOver through the field title, an accessibility label, or LabeledContent, with keyboardType and textContentType set so the correct keyboard and AutoFill appear.
@@ -31,7 +31,7 @@ A single-line SwiftUI `TextField` whose visible label is exposed to VoiceOver th
 - Set `.keyboardType` to match the expected input (e.g., `.emailAddress`, `.numberPad`) so the correct software keyboard appears.
 - Set `.textContentType` to the matching semantic type (e.g., `.emailAddress`, `.password`, `.oneTimeCode`, `.postalCode`) so AutoFill and QuickType offer the right value.
 - Give the field a visible boundary that meets 3:1 non-text contrast against its background, e.g., `.textFieldStyle(.roundedBorder)` or `.border(.secondary)`; the default borderless `TextField` boundary can fall below 3:1.
-- When the field can show a validation error, expose the error text through `.accessibilityValue` and signal it with more than color, so VoiceOver announces the error and the state is not conveyed by color alone.
+- When the field can show a validation error, append the error text to the field's accessibility label dynamically (e.g., "Email, Enter a valid email address.") and signal it with more than color, so VoiceOver announces the error with the field name while the typed text remains the field's value, and the state is not conveyed by color alone.
   - Move VoiceOver focus to the errored field with `@AccessibilityFocusState` and `.accessibilityFocused` when validation fails on submit.
 - Support Dynamic Type: use a built-in text style so the field's label and text scale, and allow the label to wrap rather than truncate at accessibility sizes.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
@@ -50,6 +50,8 @@ A single-line SwiftUI `TextField` whose visible label is exposed to VoiceOver th
 - Do not include the control type in the label (e.g., `.accessibilityLabel("Email text field")`); VoiceOver already announces "Text Field", so this doubles it.
 - Do not leave `.keyboardType` and `.textContentType` unset on a field that maps to a known type; it suppresses the right keyboard and blocks AutoFill.
 - Do not signal a validation error with color alone.
+- Do not add error text to the `.accessibilityValue`; it replaces the typed text, so VoiceOver stops speaking the field's actual value.
+- Do not expose error text only through an `.accessibilityHint`; users can turn hints off in VoiceOver settings and would never hear the error.
 
 ## Golden Pattern
 
@@ -75,7 +77,8 @@ struct TextFieldDemo: View {
                 .textContentType(.emailAddress)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
-                .accessibilityValue(emailError ?? "")    // error is announced as the field's value
+                // Error appended to the label dynamically; the typed text stays the value
+                .accessibilityLabel(emailError.map { "Email, \($0)" } ?? "Email")
                 .accessibilityFocused($emailFocused)
 
             // Masked secret entry keeps the same labeling contract
@@ -128,7 +131,7 @@ Observable behaviors a tester verifies with iOS assistive technologies, grouped 
 **VoiceOver**
 - VoiceOver speaks each field's name from its title, `.accessibilityLabel`, or `LabeledContent` wrapper; the titleless ZIP field speaks "ZIP code", never silence or a blank name.
 - Double-tapping a field begins editing, including the `LabeledContent`-named field; this is the exact activation a vertical `LabeledContentStyle` breaks.
-- On submitting an invalid email, VoiceOver announces the error text carried on `.accessibilityValue`, and focus moves to the errored field.
+- On submitting an invalid email, VoiceOver announces the error text as part of the field's label, the typed text is still spoken as the field's value, and focus moves to the errored field.
 - The secure field does not speak its typed characters.
 
 **Switch Control & Full Keyboard Access**
