@@ -36,21 +36,21 @@ Legend: ✅ authored · ☆ recommended first wave.
 ### Links
 | ID | SwiftUI | What it is |
 |---|---|---|
-| `link.basic` ☆ | `Link(destination:)` | Opens a URL / webview (`.isLink`) |
-| `link.inline` ☆ | `Text` Markdown / `AttributedString` `.link` | Hyperlink inside a paragraph |
+| `link.basic` ✅ | `Link(destination:)` | Opens a URL / webview (`.isLink`) |
+| `link.inline` ✅ | `Text` Markdown / `AttributedString` `.link` | Hyperlink inside a paragraph |
 
 ### Navigation and rows
 | ID | SwiftUI | What it is |
 |---|---|---|
-| `list.row` ☆ | `NavigationLink` in a `List` | Navigable drill-in row (whole-row target + chevron) |
+| `list.row` ✅ | `NavigationLink` in a `List` | Navigable drill-in row (whole-row target + chevron) |
 | `tab-bar.basic` | `TabView` | Switch top-level app sections |
 | `toolbar.basic` | `.toolbar` | Nav/action bar items |
-| `menu.basic` | `Menu` | Pull-down list of commands |
+| `menu.basic` ✅ | `Menu` | Pull-down list of commands |
 
 ### Text input and forms
 | ID | SwiftUI | What it is |
 |---|---|---|
-| `text-field.basic` ☆ | `TextField` / `SecureField` | Single-line text entry |
+| `text-field.basic` ✅ | `TextField` / `SecureField` | Single-line text entry |
 | `form.validation` | error identification + focus-to-error | Form error handling |
 | `combobox.autocomplete` | `.searchable` + suggestions | Search field with suggestions |
 
@@ -58,26 +58,26 @@ Legend: ✅ authored · ☆ recommended first wave.
 | ID | SwiftUI | What it is |
 |---|---|---|
 | `switch.basic` ✅ | `Toggle` | Persistent on/off setting |
-| `checkbox.basic` ☆ | `Toggle` / `.isSelected` | Independent binary, form-submitted |
-| `radio.basic` | custom + `.isSelected` | One from a mutually exclusive set |
-| `select.menu` ☆ | `Picker(.menu)` | Pop-up single choice |
-| `select.segmented` | `Picker(.segmented)` | Segmented single choice (2 to 5) |
-| `select.wheel` | `Picker(.wheel)` | Wheel single choice |
-| `date-picker.basic` | `DatePicker` | Date or time |
+| `checkbox.basic` ✅ | `Toggle` / `.isSelected` | Independent binary, form-submitted |
+| `radio.basic` ✅ | custom + `.isSelected` | One from a mutually exclusive set |
+| `select.menu` ✅ | `Picker(.menu)` | Pop-up single choice |
+| `select.segmented` ✅ | `Picker(.segmented)` | Segmented single choice (2 to 5) |
+| `select.wheel` ✅ | `Picker(.wheel)` | Wheel single choice |
+| `date-picker.basic` ✅ | `DatePicker` | Date or time |
 | `listbox.basic` | `List` with selection | Multi-select list |
 
 ### Value adjusters
 | ID | SwiftUI | What it is |
 |---|---|---|
-| `slider.basic` ☆ | `Slider` | Continuous range (`accessibilityAdjustableAction`; no `.adjustable` trait) |
-| `stepper.basic` ☆ | `Stepper` | Discrete increment / decrement |
+| `slider.basic` ✅ | `Slider` | Continuous range (`accessibilityAdjustableAction`; no `.adjustable` trait) |
+| `stepper.basic` ✅ | `Stepper` | Discrete increment / decrement |
 
 ### Overlays and feedback
 | ID | SwiftUI | What it is |
 |---|---|---|
-| `dialog.alert` ☆ | `.alert` | Blocking message + actions |
-| `dialog.confirmation` | `.confirmationDialog` | Action sheet |
-| `dialog.modal` | `.sheet` / `.fullScreenCover` | Modal sheet |
+| `dialog.alert` ✅ | `.alert` | Blocking message + actions |
+| `dialog.confirmation` ✅ | `.confirmationDialog` | Action sheet |
+| `dialog.modal` ✅ | `.sheet` / `.fullScreenCover` | Modal sheet |
 | `dialog.nonmodal` | `.popover` | Popover |
 | `progress.basic` | `ProgressView` | Determinate / indeterminate status |
 
@@ -98,9 +98,9 @@ Later / niche: `drag-drop.basic`, `tip.basic` (TipKit).
 
 ## Foundations (`global.*` rules)
 
-Referenced by components, not authored as component pages. `touch-target-size` and `focus-visible` exist today.
+Referenced by components, not authored as component pages. Rules marked ✅ are authored in `global_rules.md` today.
 
-`touch-target-size` ✅ · `focus-visible` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` (`@AccessibilityFocusState`) · `meaningful-names` (WCAG 2.5.3) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` · `reading-order` · `navigation-focus` (push/pop focus) · `text-contrast` + `non-text-contrast` · `dynamic-type` · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
+`touch-target-size` ✅ · `focus-visible` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` ✅ (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` ✅ (`@AccessibilityFocusState`) · `meaningful-names` (WCAG 2.5.3) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` ✅ · `reading-order` · `navigation-focus` ✅ (push/pop focus) · `text-contrast` + `non-text-contrast` · `dynamic-type` ✅ · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
 
 Skipped: A11yCheck / SwiftLint / XCTestAccessibility (tooling), `AccessibilityDetection` (anti-pattern-adjacent), `AccessibilityIdentifier` (test hooks).
 

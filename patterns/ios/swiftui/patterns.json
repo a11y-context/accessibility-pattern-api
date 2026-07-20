@@ -120,6 +120,49 @@
       }
     },
     {
+      "id": "date-picker.basic",
+      "title": "Date Picker",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI DatePicker for choosing a date or time, whose accessible name is supplied per style — an accessibilityLabel for compact and default styles, but the visible DatePicker label text for graphical and wheel styles.",
+      "aliases": [
+        "DatePicker",
+        "date picker",
+        "time picker",
+        "calendar picker",
+        "compact date picker",
+        "graphical date picker",
+        "wheel date picker",
+        "date and time picker"
+      ],
+      "tags": [
+        "date-picker",
+        "time-picker",
+        "calendar",
+        "date-entry",
+        "form-control"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user selects a calendar date, a time, or a combined date and time from a native control (e.g., \"Start date\", \"Scheduled time\", \"Reservation\"). Uses a SwiftUI DatePicker with displayedComponents set to .date, .hourAndMinute, or both.",
+          "Use when the value must stay a valid date or time, optionally bounded to a range with the in: parameter."
+        ],
+        "do_not_use_when": [
+          "Do not use when the wheel spins through values that are not dates or times (use select.wheel).",
+          "Do not use when the user types the date or time as free text rather than picking it (use text-field.basic).",
+          "Do not use when the choice is among a few visible options that fit inline (use select.segmented)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/date-picker.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "dialog.alert",
       "title": "Dialog (Alert)",
       "pattern_type": "component",
@@ -156,6 +199,91 @@
       "default_variant": null,
       "source": {
         "path": "components/dialog.alert.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "dialog.confirmation",
+      "title": "Dialog (Confirmation)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI .confirmationDialog action sheet that takes VoiceOver focus on presentation, with each action returning focus to the trigger because native confirmation dialogs do not restore it automatically.",
+      "aliases": [
+        "action sheet",
+        "confirmation dialog",
+        ".confirmationDialog",
+        "actionSheet",
+        "delete confirmation",
+        "bottom sheet actions"
+      ],
+      "tags": [
+        "confirmation",
+        "action sheet",
+        "dialog",
+        "destructive",
+        "actions"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a control offers a short set of actions to confirm or choose from, presented as an action sheet anchored to that control (e.g., confirming a destructive delete, picking one of a few actions on an item). Uses the native SwiftUI .confirmationDialog(_:isPresented:titleVisibility:actions:message:) modifier.",
+          "Use when the choice is a small set of clearly labeled actions (typically two to four) plus a cancel."
+        ],
+        "do_not_use_when": [
+          "Do not use when a brief, blocking message needs the user to acknowledge it or make a small decision before continuing (use dialog.alert).",
+          "Do not use when the content is a larger form or multi-step task (use dialog.modal).",
+          "Do not use when the items are commands pulled down from a control rather than a one-time confirmation or choice (use menu.basic).",
+          "Do not use when the user is choosing a single persistent value rather than committing an action (use select.menu)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/dialog.confirmation.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "dialog.modal",
+      "title": "Dialog (Modal)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A native SwiftUI .sheet or .fullScreenCover modal that takes VoiceOver focus on presentation, carries a heading title and an explicit close control, and returns focus to the trigger via onDismiss because sheets do not restore it automatically.",
+      "aliases": [
+        "sheet",
+        "bottom sheet",
+        "modal sheet",
+        "full screen cover",
+        ".sheet",
+        ".fullScreenCover",
+        "presentationDetents"
+      ],
+      "tags": [
+        "sheet",
+        "modal",
+        "dialog",
+        "bottom sheet",
+        "full screen cover"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a self-contained task, form, or longer piece of content is presented in a modal that temporarily covers the current screen (e.g., compose, sign-up, a settings detail, a license agreement). Uses the native SwiftUI .sheet(isPresented:onDismiss:content:) modifier.",
+          "Use when the modal task is immersive enough to occupy the whole screen rather than a partial sheet (use .fullScreenCover(isPresented:onDismiss:content:))."
+        ],
+        "do_not_use_when": [
+          "Do not use when the content is a short blocking message that needs acknowledgement or a small choice (use dialog.alert).",
+          "Do not use when the content is a short set of actions tied to a specific control (use dialog.confirmation).",
+          "Do not use when the content is a small non-modal overlay anchored to a control (use dialog.nonmodal).",
+          "Do not use when the user is navigating in-app to a new screen rather than opening a modal (use list.row and a NavigationStack push per global.navigation-focus)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/dialog.modal.md",
         "format": "markdown",
         "frontmatter": true
       }
@@ -284,6 +412,89 @@
       }
     },
     {
+      "id": "menu.basic",
+      "title": "Menu",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A SwiftUI Menu that presents a pull-down list of command buttons, takes VoiceOver focus when opened, with commands carrying the destructive role where applicable.",
+      "aliases": [
+        "Menu",
+        "pull-down menu",
+        "overflow menu",
+        "ellipsis menu",
+        "more button",
+        "action menu"
+      ],
+      "tags": [
+        "menu",
+        "pull-down",
+        "commands",
+        "actions",
+        "overflow"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a trigger reveals a pull-down list of two or more commands the user runs (e.g., \"Duplicate\", \"Rename\", \"Delete\"), or an overflow \"more\" control that groups in-place actions. Uses a SwiftUI Menu with Button actions.",
+          "Use when collecting several in-place actions behind one compact control (an icon-only ellipsis or \"more\" button) keeps the primary UI uncluttered."
+        ],
+        "do_not_use_when": [
+          "Do not use when the user is choosing one persistent value from a set rather than running a command (use select.menu).",
+          "Do not use when a single one-time decision interrupts the task and must be acknowledged before continuing (use dialog.confirmation).",
+          "Do not use when there is a single, always-visible action (use button.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/menu.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "radio.basic",
+      "title": "Radio Button",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A mutually exclusive choice group built from custom Button elements, since SwiftUI has no native radio control, using the selected trait plus an accessibilityValue to announce the radio role and its checked or unchecked state.",
+      "aliases": [
+        "radio button",
+        "radio group",
+        "option button",
+        "single-select",
+        "mutually exclusive choice",
+        "custom radio"
+      ],
+      "tags": [
+        "radio",
+        "radio-group",
+        "selection",
+        "single-choice",
+        "mutually-exclusive"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when exactly one option must be chosen from a small, mutually exclusive set that stays fully visible as a list of selectable rows (e.g., \"Choose color\", \"Choose a size\"). Built from custom Button elements, since SwiftUI has no native radio control.",
+          "Use when the always-visible radio layout is preferred over a control that collapses the choices behind a pop-up."
+        ],
+        "do_not_use_when": [
+          "Do not use when any number of options in the group may be selected, including none (use checkbox.basic).",
+          "Do not use when the control is a single persistent on/off setting that takes effect immediately (use switch.basic).",
+          "Do not use when two to five options fit inline and each takes effect immediately on tap (use select.segmented).",
+          "Do not use when one choice is made from a longer set and a compact pop-up button is preferred over an expanded list (use select.menu)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/radio.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "select.menu",
       "title": "Select (Menu)",
       "pattern_type": "component",
@@ -321,6 +532,91 @@
       "default_variant": null,
       "source": {
         "path": "components/select.menu.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "select.segmented",
+      "title": "Select (Segmented)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A SwiftUI Picker with the segmented style, showing two to five mutually exclusive options inline where selecting one takes effect immediately, and which requires an accessibilityLabel matching its visible label plus accessibilityElement children contain to be named to VoiceOver.",
+      "aliases": [
+        "segmented control",
+        "segmented picker",
+        "Picker",
+        "SegmentedPickerStyle",
+        "UISegmentedControl",
+        "single select"
+      ],
+      "tags": [
+        "picker",
+        "select",
+        "segmented",
+        "single-choice",
+        "mutually-exclusive"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user picks one value from a small fixed set of two to five options that all stay visible at once (e.g., \"Day / Week / Month\", \"Red / Green / Blue\"). Uses a SwiftUI Picker with .pickerStyle(.segmented).",
+          "Use when the choice takes effect immediately and no confirmation step is needed.",
+          "Use when each option label is short enough that all segments fit inline without truncation."
+        ],
+        "do_not_use_when": [
+          "Do not use when there are more than five options, or the labels are too long to fit inline, or a compact single-value display is wanted (use select.menu).",
+          "Do not use when the intent is to spin through values on a rotating wheel (use select.wheel).",
+          "Do not use when the control is a single on/off setting (use switch.basic, or button.toggle for an in-context toggle).",
+          "Do not use when the segments switch between top-level sections of the app; that is the job of a tab bar, not a selection control."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/select.segmented.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "select.wheel",
+      "title": "Select (Wheel)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "A SwiftUI Picker with the wheel style, an always-visible spinning drum of values that requires an accessibilityLabel matching its visible label plus accessibilityElement(children:.contain) for VoiceOver to speak the name.",
+      "aliases": [
+        "picker",
+        "wheel picker",
+        "spinner",
+        "drum picker",
+        "WheelPickerStyle",
+        "single select"
+      ],
+      "tags": [
+        "picker",
+        "select",
+        "wheel",
+        "spinner",
+        "single-choice"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user chooses one value from a fixed set shown as an always-visible spinning drum the user scrolls in place (e.g., a quantity, a unit, a short list of options). Uses a SwiftUI Picker with .pickerStyle(.wheel).",
+          "Use when the option set is best browsed by scrolling and the wheel is meant to stay on screen rather than pop up."
+        ],
+        "do_not_use_when": [
+          "Do not use when the choice should collapse into a compact pop-up button that shows only the current value (use select.menu).",
+          "Do not use when the choice is among two to five options that fit inline as segments (use select.segmented).",
+          "Do not use when the value is a date or time (use date-picker.basic, which provides the correct wheel semantics and formatting).",
+          "Do not use when the items are commands or actions rather than a single selected value (use menu.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/select.wheel.md",
         "format": "markdown",
         "frontmatter": true
       }

@@ -115,3 +115,39 @@ scope: [layout, component]
 ### Don'ts
 - Do not push a screen with no title, which leaves the change without a clear spoken announcement.
 - Do not override the system's push-focus placement.
+
+## Rule: Announcements
+
+```yaml
+id: global.announcements
+scope: [layout, component]
+```
+
+### Must Haves
+- When a dynamic change updates on-screen content without moving focus (a status message, an updated cart count, an inline validation result, a passive confirmation), speak it to VoiceOver by posting an `AccessibilityNotification.Announcement("...")` so the user hears the change without losing their place (WCAG 2.1 AA, [4.1.3 Status Messages](https://www.w3.org/WAI/WCAG22/Understanding/status-messages)).
+- Post the announcement after the content actually appears, with a short delay (`DispatchQueue.main.asyncAfter(deadline: .now() + 0.1)`), so VoiceOver does not drop the message while it commits the view update.
+- Announce, rather than move focus, when the change is passive — informational content the user did not have to act on. Reserve moving focus (see `global.focus-management`) for content the user must interact with immediately, such as a newly presented overlay or a blocking error. This is the passive status-message path a component like `dialog.alert` redirects to when acknowledgement is not required.
+- In a UIKit-backed view, post the equivalent `UIAccessibility.post(notification: .announcement, argument:)`.
+
+### Don'ts
+- Do not update an on-screen status silently; showing new `Text` without posting an announcement leaves VoiceOver users unaware the state changed.
+- Do not move VoiceOver focus to a passive status message, which interrupts the user's place for information they did not choose to act on. Announce it instead.
+- Do not post the announcement with no delay in the same run loop as the state change; VoiceOver may drop it before it speaks.
+
+## Rule: Focus Management
+
+```yaml
+id: global.focus-management
+scope: [control, component]
+```
+
+### Must Haves
+- When content appears that the user must act on immediately — a modal overlay, a newly revealed section, an error that blocks progress — move VoiceOver focus to it with a property bound by `@AccessibilityFocusState`, so the user is placed on the new content rather than left where they were (WCAG 2.2 A [2.4.3 Focus Order](https://www.w3.org/WAI/WCAG22/Understanding/focus-order)).
+- When an overlay closes, restore VoiceOver focus to the control that opened it. Bind that trigger with `@AccessibilityFocusState` and set it true as the overlay dismisses. Native `.alert()`, `.confirmationDialog()`, `.sheet()`, `.fullScreenCover()`, and `.popover()` do not restore focus automatically, an Apple platform defect, so restore it explicitly — from each action's closure for alerts and confirmation dialogs, or from the `onDismiss:` handler for sheets and full-screen covers.
+- For a `TextField`, `@AccessibilityFocusState` does not return focus automatically after the keyboard is dismissed; restore it from the keyboard toolbar's Done button.
+- This rule covers overlays, dynamic content reveals, and text-field focus restoration. For an in-app push/pop `NavigationStack` transition, follow `global.navigation-focus` instead.
+
+### Don'ts
+- Do not leave VoiceOver focus stranded behind a dismissed overlay; without an explicit restore, focus can jump to the top of the screen or an arbitrary element.
+- Do not depend on `@AccessibilityFocusState` to return focus from a `Menu` or a `DatePicker`; it does not work with either, an Apple platform defect, so do not build a focus-restore contract around those controls.
+- Do not move focus to passive content that does not require action; announce it instead (see `global.announcements`).
