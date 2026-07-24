@@ -1,59 +1,521 @@
 /**
- * Docusaurus classic theme — color overrides only.
+ * A11y Context — Docusaurus theme foundation.
  *
- * Light mode primary: #2563EB — 5.17:1 on white (WCAG AA ✓)
- * Dark mode primary:  #3B82F6 — 4.68:1 on dark bg (WCAG AA ✓)
- *                               3.67:1 as button bg w/ white text (WCAG AA large/UI ✓)
+ * Source of record: DESIGN-SYSTEM.md (this directory's ../../DESIGN-SYSTEM.md).
+ * Clarity-first, engineered, confident: grotesk display over humanist body,
+ * a single violet accent, generous space, borders over shadows.
+ *
+ * Phase 1 established the tokens + global CSS below. The SHARED CHROME phase
+ * (Version E) then added the navbar/sidebar/code-block chrome in §5–§6 here,
+ * paired with swizzles in src/theme/ (Navbar/Content, CodeBlock/Content/String)
+ * and the search combobox in src/components/NavbarSearch.
+ *
+ * All colors below are documented AA-verified in the spec:
+ *   Light accent  #5B3FD6 — white text on it = 6.7:1 (AA normal ✓)
+ *   Light link    #4A34B8 — inline link text, deeper violet (AA on white ✓)
+ *   Dark  accent  #9C82F5 — used for emphasis/active on dark surfaces
+ *   Dark  link    #B9A6FA — inline link text (AA on dark bg ✓)
  */
 
-:root {
-  --ifm-color-primary:         #2563EB;
-  --ifm-color-primary-dark:    #1D55D8;
-  --ifm-color-primary-darker:  #1A4DC9;
-  --ifm-color-primary-darkest: #153FAA;
-  --ifm-color-primary-light:   #3B72F0;
-  --ifm-color-primary-lighter: #5585F3;
-  --ifm-color-primary-lightest: #80A8F8;
+/* ==========================================================================
+   1. Design tokens
+   ========================================================================== */
 
+:root {
+  /* --- Type ------------------------------------------------------------- */
+  --a11y-font-body: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --a11y-font-display: 'Schibsted Grotesk', 'Hanken Grotesk', system-ui,
+    -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --a11y-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono',
+    Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* --- Radius (spec §4: 6 / 8 / 12 / pill) ----------------------------- */
+  --a11y-radius-sm: 6px;
+  --a11y-radius-md: 8px;
+  --a11y-radius-lg: 12px;
+  --a11y-radius-pill: 999px;
+
+  /* --- Color tokens: LIGHT (default) ----------------------------------- */
+  --a11y-bg: #f5f6f8; /* page canvas */
+  --a11y-surface: #ffffff; /* cards, panels, navbar */
+  --a11y-ink: #0e1116; /* primary text */
+  --a11y-muted: #5a6270; /* secondary text */
+  --a11y-border: #e2e4e8; /* lines, dividers, card borders */
+  --a11y-field-bg: #fbfbfc; /* inputs */
+
+  --a11y-accent: #5b3fd6; /* actions, emphasis, active, the mark */
+  --a11y-accent-hover: #4e36c0;
+  --a11y-accent-soft: #eceafb; /* accent tint backgrounds, inline code */
+  --a11y-link: #4a34b8; /* inline link TEXT — deeper violet, AA on white */
+
+  --a11y-success: #138a5e;
+  --a11y-warning: #b7791f;
+  --a11y-error: #c23b2e;
+  --a11y-info: #1e6fa8;
+
+  --a11y-code-surface: #f0f0f3; /* code BLOCK surface (spec §6) */
+  --a11y-code-inline-bg: var(--a11y-accent-soft);
+
+  /* Code-block TOOLBAR chrome — light (Version E). The toolbar sits above the
+     #F0F0F3 code surface on a lighter (white) bar. All ≥4.5:1 on the bar. */
+  --a11y-codebar-bg: #ffffff;
+  --a11y-codebar-border: #e2e4e8;
+  --a11y-code-filename: #1f2328;
+  --a11y-code-lang: #5a6270;
+  --a11y-code-btn: #1f2328;
+  --a11y-code-btn-border: #e2e4e8;
+  --a11y-code-btn-hover-bg: #ececef;
+  --a11y-code-btn-hover-border: #c7cbd2;
+  --a11y-code-btn-pressed-color: #3f2ba0;
+  --a11y-code-btn-pressed-border: #5b3fd6;
+  --a11y-code-btn-pressed-bg: #eceafb;
+
+  /* Navbar height (Version E = 64px). */
+  --ifm-navbar-height: 4rem;
+
+  /* Navbar chrome (Version E §6): 24px horizontal gutters (stock is 1rem/16px),
+     and a hairline bottom border instead of a drop shadow ("borders over
+     shadows"). The border + backdrop blur live on .navbar in §5. */
+  --ifm-navbar-padding-horizontal: 1.5rem;
+  --ifm-navbar-shadow: none;
+
+  /* Surface-aware double focus ring — light: inner white, outer accent */
+  --a11y-focus-ring: 0 0 0 2px var(--a11y-surface),
+    0 0 0 4px var(--a11y-accent);
+
+  /* ---------------------------------------------------------------------
+     Wire Infima to the tokens.
+     --------------------------------------------------------------------- */
+
+  /* Primary ramp → brand violet (light). Sensible darker/lighter steps. */
+  --ifm-color-primary: #5b3fd6;
+  --ifm-color-primary-dark: #553bc7;
+  --ifm-color-primary-darker: #5239c1;
+  --ifm-color-primary-darkest: #4b34b0;
+  --ifm-color-primary-light: #664cd9;
+  --ifm-color-primary-lighter: #6b52da;
+  --ifm-color-primary-lightest: #7862dd;
+
+  /* Fonts */
+  --ifm-font-family-base: var(--a11y-font-body);
+  --ifm-heading-font-family: var(--a11y-font-display);
+  --ifm-font-family-monospace: var(--a11y-font-mono);
+
+  /* Surfaces / text */
+  --ifm-background-color: var(--a11y-bg);
+  --ifm-background-surface-color: var(--a11y-surface);
+  --ifm-navbar-background-color: var(--a11y-surface);
+  --ifm-font-color-base: var(--a11y-ink);
+  --ifm-heading-color: var(--a11y-ink);
+  --ifm-color-content: var(--a11y-ink);
+  --ifm-color-content-secondary: var(--a11y-muted);
+
+  /* Links use the deeper violet, NOT the raw accent */
+  --ifm-link-color: var(--a11y-link);
+  --ifm-link-hover-color: var(--a11y-accent);
+
+  /* Borders / dividers */
+  --ifm-color-emphasis-300: var(--a11y-border);
+  --ifm-toc-border-color: var(--a11y-border);
+  --ifm-hr-border-color: var(--a11y-border);
+  --ifm-table-border-color: var(--a11y-border);
+
+  /* Radii */
+  --ifm-global-radius: var(--a11y-radius-md);
+  --ifm-card-border-radius: var(--a11y-radius-lg);
+  --ifm-code-border-radius: var(--a11y-radius-sm);
+  --ifm-alert-border-radius: var(--a11y-radius-md);
+
+  /* Inline code (code BLOCKS are themed via the Prism theme object) */
+  --ifm-code-background: var(--a11y-code-inline-bg);
+  --ifm-code-color: var(--a11y-ink);
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(37, 99, 235, 0.1);
+
+  /* Motion — subtle: ~150ms interactions, ~250ms theme (spec §5) */
+  --ifm-transition-fast: 150ms;
+  --ifm-transition-slow: 250ms;
+
+  --docusaurus-highlighted-code-line-bg: rgba(91, 63, 214, 0.1);
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary:         #3B82F6;
-  --ifm-color-primary-dark:    #2D74EE;
-  --ifm-color-primary-darker:  #2563EB;
-  --ifm-color-primary-darkest: #1D55D8;
-  --ifm-color-primary-light:   #5B9CF6;
-  --ifm-color-primary-lighter: #74ACF8;
-  --ifm-color-primary-lightest: #93BFFA;
+  /* --- Color tokens: DARK ----------------------------------------------- */
+  --a11y-bg: #0d1117;
+  --a11y-surface: #161b22;
+  --a11y-ink: #e8ebf0;
+  --a11y-muted: #8b95a3;
+  --a11y-border: #262c36;
+  --a11y-field-bg: #0f141b;
 
-  --docusaurus-highlighted-code-line-bg: rgba(59, 130, 246, 0.15);
+  /* Re-assert the page/surface backgrounds in dark. Infima declares its own
+     --ifm-background-color (#1b1b1d) inside [data-theme='dark'], which beats the
+     :root override — without this, the canvas renders #1b1b1d, not #0d1117. */
+  --ifm-background-color: var(--a11y-bg);
+  --ifm-background-surface-color: var(--a11y-surface);
+  --ifm-navbar-background-color: var(--a11y-surface);
+
+  --a11y-accent: #9c82f5;
+  --a11y-accent-hover: #b9a6fa;
+  --a11y-accent-soft: #23203a;
+  --a11y-link: #b9a6fa;
+
+  --a11y-code-surface: #0b0b0c; /* code BLOCK surface (spec §6) */
+  --a11y-code-inline-bg: var(--a11y-accent-soft);
+
+  /* Code-block TOOLBAR chrome — dark (Version E). Toolbar bar is lighter than
+     the near-black (#0B0B0C) code surface. */
+  --a11y-codebar-bg: #262b33;
+  --a11y-codebar-border: #3b424d;
+  --a11y-code-filename: #dfe4ec;
+  --a11y-code-lang: #a6afbc;
+  --a11y-code-btn: #dfe4ec;
+  --a11y-code-btn-border: #3f4753;
+  --a11y-code-btn-hover-bg: #1c222b;
+  --a11y-code-btn-hover-border: #4a5361;
+  --a11y-code-btn-pressed-color: #e7eaf0;
+  --a11y-code-btn-pressed-border: #6e5cc9;
+  --a11y-code-btn-pressed-bg: #2a2748;
+
+  /* Surface-aware double focus ring — dark: inner accent, outer bg */
+  --a11y-focus-ring: 0 0 0 2px var(--a11y-accent), 0 0 0 4px var(--a11y-bg);
+
+  /* Primary ramp → brand violet (dark). */
+  --ifm-color-primary: #9c82f5;
+  --ifm-color-primary-dark: #9179e4;
+  --ifm-color-primary-darker: #8c75dd;
+  --ifm-color-primary-darkest: #806bc9;
+  --ifm-color-primary-light: #a38bf6;
+  --ifm-color-primary-lighter: #a68ff6;
+  --ifm-color-primary-lightest: #ae99f7;
+
+  --docusaurus-highlighted-code-line-bg: rgba(156, 130, 245, 0.15);
 }
 
-/**
- * Navbar vertical separator (between "Getting Started" and the platform links).
- * Injected as a type:'html' navbar item in docusaurus.config.js.
- *
- * display:inline-block is required: the item is an inline <span>, and browsers
- * ignore width/height on inline elements — without it the 1px rule never forms
- * and only the margin renders (a blank gap). Centered for both flex (desktop
- * navbar) and inline-flow contexts. Theme-adaptive; desktop-only.
- */
-.navbar__separator {
-  display: inline-block;
-  align-self: center;
-  vertical-align: middle;
-  width: 1px;
-  height: 1.5rem;
-  margin: 0 0.75rem;
-  background-color: var(--ifm-color-emphasis-400);
+/* Content links: underlined by default (same color; hover state unchanged).
+   Scoped to rendered markdown prose so nav/sidebar/TOC/breadcrumb chrome and the
+   custom-classed landing links (door-link, dl-btn, ret-mini) keep their own styling. */
+.markdown a:not(.hash-link):not(.card):not(.door-link):not(.dl-btn):not(.ret-mini) {
+  text-decoration: underline;
 }
 
-@media (max-width: 996px) {
-  .navbar__separator {
-    display: none;
+/* Every real link shows the pointer cursor (some resets drop it on styled links). */
+a[href] {
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   2. Focus — surface-aware double ring on :focus-visible ONLY (spec §5)
+   ========================================================================== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+.navbar__link:focus-visible,
+.navbar__brand:focus-visible,
+.menu__link:focus-visible,
+.pagination-nav__link:focus-visible,
+.card:focus-visible,
+.button:focus-visible {
+  /* Transparent outline keeps a ring in Windows High Contrast Mode, where
+     box-shadow is dropped. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--a11y-focus-ring);
+}
+
+/* Search combobox: render the focus ring on the OUTER div[role="search"]
+   wrapper (the visible field chrome), not the borderless inner <input>. A ring
+   drawn on the input would float inside the field; the wrapper is what reads as
+   the control. Paint the double ring on the wrapper when focus is within it, and
+   suppress it on the inner input. The wrapper selector (0,2,1) carries the ring;
+   the input override (0,2,2) beats the generic `input:focus-visible` rule above
+   (0,1,1) to remove it. */
+div[role='search']:focus-within {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--a11y-focus-ring);
+}
+div[role='search'] input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   3. Code — block surfaces + inline code (spec §6)
+   ========================================================================== */
+
+/* Code BLOCK surface. The Prism theme object sets --prism-background-color
+   (#F0F0F3 light / #0B0B0C dark); this adds the spec's 1px border + radius.
+   overflow:hidden clips the swizzled toolbar's top corners to the radius;
+   box-shadow removed per the "borders over shadows" rule (spec §4). */
+.theme-code-block {
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  overflow: hidden;
+  box-shadow: none;
+}
+
+/* Inline <code> (not inside <pre>): subtle accent-tint chip, sans-of-mono. */
+:not(pre) > code {
+  background-color: var(--a11y-code-inline-bg);
+  color: var(--a11y-ink);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-sm);
+  /* F (global): sit inline code on the surrounding text baseline. Infima's
+     `code` rule uses `vertical-align: middle` + 0.1rem vertical padding, which —
+     with the bordered chip — made the box taller than the line so inline code
+     rode low ("pushed down") and misaligned. Baseline-align it and use trimmed,
+     em-based padding so the chip hugs the text without shifting the line. Code
+     inside <pre> (blocks) is excluded by :not(pre) and keeps its own layout. */
+  vertical-align: baseline;
+  padding: 0.1em 0.4em;
+}
+
+/* ==========================================================================
+   4. Motion — honor prefers-reduced-motion (spec §5, §7)
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
+
+/* ==========================================================================
+   5. Navbar chrome (Version E — DESIGN-SYSTEM.md §6)
+   Structure (brand + "v0.5" pill, reordered right cluster) lives in the
+   swizzled src/theme/Navbar/Content; this is the styling.
+   NOTE: the former .navbar__separator html item was removed — Version E has no
+   separator between the primary links.
+   ========================================================================== */
+
+/* Force the dark page canvas to #0d1117. Infima paints the html background via
+   its own html[data-theme='dark'] rule, which beats a bare token re-assertion —
+   so set it directly here (matches the same specificity, wins by load order). */
+html[data-theme='dark'] {
+  background-color: var(--a11y-bg);
+}
+
+/* N4: the fixed navbar's bottom edge — a 1px hairline on a frosted surface
+   (Version E: border-bottom + blurred 92% surface, no drop shadow). */
+.navbar {
+  border-bottom: 1px solid var(--a11y-border);
+  background: color-mix(in srgb, var(--a11y-surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+}
+
+/* N1: element spacing — mark → wordmark 10px; brand → v0.5 pill 18px;
+   pill → primary links 18px (all Version E navbar gaps). */
+.navbar__logo {
+  height: 26px;
+  margin-right: 10px;
+}
+.navbar__brand {
+  margin-right: 18px;
+}
+
+/* Brand wordmark: Schibsted display face, weight 700. */
+.navbar__title {
+  font-family: var(--a11y-font-display);
+  font-weight: 700;
+  font-size: 1.0625rem; /* 17px */
+  letter-spacing: -0.01em;
+  color: var(--a11y-ink);
+}
+
+/* "v0.5" pill — rendered immediately right of the wordmark. */
+.navbar__version-chip {
+  flex-shrink: 0;
+  margin-left: 0;
+  margin-right: 18px; /* pill → primary links (E navbar gap) */
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--a11y-muted);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-pill);
+  padding: 2px 9px;
+  white-space: nowrap;
+}
+
+/* Primary links: humanist body face, muted until hover/active (E: 14px/500,
+   8px 12px hit area, 4px between adjacent links). */
+.navbar__link {
+  position: relative;
+  font-family: var(--a11y-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--a11y-muted);
+  padding: 8px 12px;
+  border-radius: var(--a11y-radius-md);
+}
+.navbar__items .navbar__link + .navbar__link {
+  margin-left: 4px;
+}
+.navbar__link:hover {
+  color: var(--a11y-ink);
+  background: var(--a11y-field-bg);
+}
+/* Active link — STRAIGHT horizontal underline (not a curved bottom border).
+   N2: sit the rule below the text (E offset: 12px insets, 3px from the box
+   bottom) so it clears the descenders instead of hugging the baseline. */
+.navbar__link--active {
+  color: var(--a11y-ink);
+  font-weight: 600;
+}
+.navbar__link--active::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 2px;
+  border-radius: 0;
+  background: var(--a11y-accent);
+}
+
+/* GitHub: label-less icon link (icon painted via CSS mask so it themes).
+   N1: search → GitHub 18px; GitHub → toggle 8px (E right-cluster gaps). */
+.header-github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin-left: 18px;
+  border-radius: var(--a11y-radius-md);
+}
+.navbar__color-mode-toggle {
+  margin-left: 8px;
+}
+.header-github-link:hover {
+  background: var(--a11y-field-bg);
+}
+.header-github-link::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: var(--a11y-muted);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.5 7.5 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23000' d='M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.5 7.5 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.header-github-link:hover::before {
+  background: var(--a11y-ink);
+}
+
+/* ==========================================================================
+   6. Doc sidebar chrome (Version E — DESIGN-SYSTEM.md §6)
+   Platform label at top; active item = curved (rounded) LEFT-border accent;
+   clear gap before the components group; no horizontal dividers.
+   ========================================================================== */
+
+/* Platform label ("React (Web)" / "SwiftUI (iOS)") — html sidebar item. */
+.menu .a11y-sidebar-platform {
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a11y-muted);
+  /* L: align the label's top edge with the content breadcrumb. The doc content
+     container has 40px top padding (§K); the sidebar menu contributes ~8px top
+     padding, so a 32px top pad here lands the label at ~40px — level with the
+     breadcrumb. (Was 0.25rem/4px, which sat ~28px too high.) */
+  padding: 32px 0.75rem 0.5rem;
+  margin: 0 0 0.25rem;
+}
+
+/* Sidebar nav inset — 32px of left padding on the menu so its links (and the
+   platform label / active accent bar) sit inset from the sidebar container's
+   left edge. Overrides the theme module's 0.5rem left pad (theme-classic
+   DocSidebar/Desktop/Content styles.module.css); we set only padding-left so the
+   module's scrollbar-gutter right:0 and 0.5rem top/bottom are preserved. The
+   two-class selector out-specifies the single-class module rule. */
+.theme-doc-sidebar-container .menu {
+  padding-left: 32px;
+}
+
+/* Menu links: humanist face, relative for the active accent bar. */
+.menu__link {
+  position: relative;
+  font-family: var(--a11y-font-body);
+  font-weight: 500;
+}
+
+/* Active item — accent-soft fill + CURVED (rounded) left-border accent bar. */
+.menu__link--active {
+  color: var(--a11y-ink);
+  font-weight: 600;
+  background: var(--a11y-accent-soft);
+}
+.menu__link--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: var(--a11y-radius-pill);
+  background: var(--a11y-accent);
+}
+
+/* S2/S3: category links ("Components", "Retrieval Options") are plain links that
+   are ALSO the group label. Two corrections:
+   1. No expand/collapse caret — handled by `collapsible: false` in the sidebar
+      config (sidebars-web-react.js / sidebars-main.js), which drops the caret
+      button entirely so the label reads unambiguously as a link. (Not hidden
+      globally here, so the iOS/Android collapsible sidebars keep their carets.)
+   2. A category must NOT inherit the active highlight just because one of its
+      CHILD pages is current. Docusaurus applies .menu__link--active to the
+      category label whenever a descendant is active; it flags the EXACT category
+      page separately with .menu__list-item-collapsible--active. So: neutralize
+      the label's active styling, then restore it only on the exact page.
+   (Order matters — the restore rules must follow the neutralize rules.) */
+.menu__list-item-collapsible > .menu__link--active {
+  background: transparent;
+  font-weight: 500;
+  color: var(--ifm-menu-color);
+}
+.menu__list-item-collapsible > .menu__link--active::before {
+  content: none;
+}
+.menu__list-item-collapsible--active > .menu__link {
+  color: var(--a11y-ink);
+  font-weight: 600;
+  background: var(--a11y-accent-soft);
+}
+.menu__list-item-collapsible--active > .menu__link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: var(--a11y-radius-pill);
+  background: var(--a11y-accent);
+}
+
+/* S1: clear vertical space before each top-level category group — the gap
+   between the "Foundations" leaf and the "Components" group (E: 24px). The
+   three selectors here (0,3,0) out-specify Infima's default item spacing
+   `.menu__list-item:not(:first-child) { margin-top: .25rem }` (0,2,0), which
+   was otherwise collapsing the gap to 4px. No horizontal divider rules used. */
+.theme-doc-sidebar-item-category-level-1.menu__list-item:not(:first-child) {
+  margin-top: 1.5rem;
 }
 
 /**
@@ -68,7 +530,7 @@
 }
 
 .sidebar-draft-item > .menu__link::after {
-  content: "dev only";
+  content: 'dev only';
   margin-left: auto;
   flex: 0 0 auto;
   font-size: 0.6rem;
@@ -79,4 +541,820 @@
   border-radius: 0.6rem;
   background: #f59e0b;
   color: #1a1a1a;
+}
+
+/* ==========================================================================
+   6a. Doc layout row — center sidebar + main together (max-width 1360px)
+   theme-classic lays the sidebar (300px) + main out as a full-width flex row:
+   DocRoot/Layout/styles.module.css → `.docRoot { display: flex; width: 100% }`.
+   Main's inner `.container` caps + centers itself (~1140px), so on wide screens
+   the content drifts toward center while the sidebar stays pinned to the
+   viewport's left edge — a gap that widens with viewport width. Constrain the
+   whole row to the site content width (1360px, matching the footer) and center
+   it, so the sidebar's left edge aligns with the centered content block instead
+   of the window edge. Targets the hashed `.docRoot_*` class by attribute
+   substring; auto margins on the flex item absorb the free space to center it.
+   ========================================================================== */
+[class*='docRoot'] {
+  max-width: 1360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==========================================================================
+   6b. Doc content shell padding (Version E — .shell in vE-refined/component.html)
+   The main doc content region gets Version E's .shell breathing room:
+   40px top / 32px left / 32px right / 120px bottom (24/20/96 on narrow screens).
+   Scoped to the doc <main> container (the CSS-module class name always begins
+   "docMainContainer") so the navbar, footer, and home-page .container blocks are
+   left alone.
+
+   K: that same container also carries Infima's utility classes
+   `padding-top--md` (padding-top: 1rem !important → 16px) and
+   `padding-bottom--lg` (padding-bottom: 2rem !important → 32px). Because those
+   are !important, they beat the non-!important shorthand below, so top/bottom
+   were rendering 16px/32px instead of 40px/120px. Left/right (32px) have no
+   competing utility and stay clean. We re-assert only the two contested edges
+   with !important; our selector's specificity beats the single-class utilities,
+   so the shell's 40/120 (24/96 on narrow) win.
+   ========================================================================== */
+main[class*='docMainContainer'] > .container {
+  padding: 40px 32px 120px;
+  padding-top: 40px !important;
+  padding-bottom: 120px !important;
+}
+@media (max-width: 996px) {
+  main[class*='docMainContainer'] > .container {
+    padding: 24px 20px 96px;
+    padding-top: 24px !important;
+    padding-bottom: 96px !important;
+  }
+}
+
+/* ==========================================================================
+   7. Component (pattern) page (Version E — DESIGN-SYSTEM.md §6)
+   The page-head (breadcrumb / eyebrow / H1 / summary) is rendered by the
+   swizzled src/theme/DocItem/Content; the section wrappers, website-only intro
+   lines, Selection cards, and list markers are emitted by the remark plugin
+   website/remark/pattern-sections.js. All selectors below use plain (non-CSS-
+   module) class names so both sources share them.
+   ========================================================================== */
+
+/* ---------- page head: breadcrumb / eyebrow / H1 / summary ---------- */
+.a11y-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--a11y-font-body);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--a11y-muted);
+  margin-bottom: 20px;
+}
+.a11y-breadcrumb a {
+  color: var(--a11y-muted);
+  text-decoration: none;
+}
+.a11y-breadcrumb a:hover {
+  color: var(--a11y-link);
+}
+.a11y-breadcrumb-sep {
+  color: var(--a11y-muted);
+}
+.a11y-breadcrumb-current {
+  color: var(--a11y-ink);
+  font-weight: 500;
+}
+
+.a11y-page-head {
+  padding-bottom: 18px;
+  margin-bottom: 44px;
+  border-bottom: 1px solid var(--a11y-border);
+}
+.a11y-eyebrow {
+  display: inline-block;
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a11y-link);
+  margin-bottom: 12px;
+}
+h1.a11y-page-title {
+  font-family: var(--a11y-font-display);
+  font-size: clamp(2rem, 4.5vw, 2.625rem); /* 32 → 42px */
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.a11y-page-summary {
+  margin: 18px 0 0;
+  font-size: 16px;
+  color: var(--a11y-muted);
+  /* C2: no reading-measure cap — the page summary spans the full content
+     column instead of wrapping at ~62ch. (The per-section intro lines below
+     keep their 62ch measure.) */
+}
+
+/* ---------- sections + website-only intro line ---------- */
+.markdown .pattern-section {
+  margin-bottom: 52px;
+}
+.markdown .pattern-section:last-child {
+  margin-bottom: 0;
+}
+.markdown .pattern-section > h2 {
+  font-family: var(--a11y-font-display);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 6px;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+}
+.markdown .pattern-section .section-sub {
+  font-size: 15px;
+  color: var(--a11y-muted);
+  margin: 0 0 0.7rem;
+  /* C2b: no reading-measure cap — the muted section intro line spans the full
+     content column (was max-width: 62ch). Bottom margin 0.7rem per design. */
+}
+
+/* Foundations: scope meta line (foundation-rules.js). 0.5rem below the rule H2,
+   1.5rem above the Must Haves H3; scope values as colored accent pills. */
+.markdown h2:has(+ .foundation-scope) {
+  margin-bottom: 0.5rem;
+}
+.foundation-scope {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 1.5rem;
+}
+/* The Must Haves H3 after the scope line carries its own large heading margin-top
+   (~30px) that would win the margin collapse; zero it so the scope's 1.5rem
+   margin-bottom is the exact gap. */
+.foundation-scope + h3 {
+  margin-top: 0;
+}
+.foundation-scope__label {
+  font-size: 13px;
+  color: var(--a11y-muted);
+}
+.foundation-scope__badge {
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--a11y-link);
+  background: var(--a11y-accent-soft);
+  padding: 2px 10px;
+  border-radius: var(--a11y-radius-pill);
+}
+
+/* H3 subheaders inside Must Haves / Don'ts (and, once the remark plugin emits
+   them, Acceptance Checks): the remark output nests h3 labels within these
+   sections. Pin them to a compact sub-label scale instead of the default h3
+   heading size. The two-class-plus-type selector (0,2,1) out-specifies Infima's
+   bare `h3` and heading-margin rules (0,0,1), so no !important is needed. */
+.markdown .pattern-section--must-haves h3,
+.markdown .pattern-section--donts h3,
+.markdown .pattern-section--acceptance-checks h3 {
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+
+/* ---------- flat spec lists (Must Haves / Donts / Customizable): accent dot ---------- */
+.markdown .pattern-section--must-haves ul,
+.markdown .pattern-section--donts ul,
+.markdown .pattern-section--customizable ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.markdown .pattern-section--must-haves li,
+.markdown .pattern-section--donts li,
+.markdown .pattern-section--customizable li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--a11y-ink);
+}
+.markdown .pattern-section--must-haves li::before,
+.markdown .pattern-section--donts li::before,
+.markdown .pattern-section--customizable li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--a11y-accent);
+}
+/* Nested sub-lists indent and use a hollow marker to stay distinct. */
+.markdown .pattern-section--must-haves li ul,
+.markdown .pattern-section--donts li ul,
+.markdown .pattern-section--customizable li ul {
+  margin: 10px 0 0;
+  gap: 8px;
+}
+.markdown .pattern-section--must-haves li ul li::before,
+.markdown .pattern-section--donts li ul li::before,
+.markdown .pattern-section--customizable li ul li::before {
+  background: transparent;
+  border: 1.5px solid var(--a11y-muted);
+}
+
+/* ---------- Acceptance Checks: checkmark markers ---------- */
+.markdown .pattern-section--acceptance-checks ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* Leaf check items — accent checkmark marker. */
+.markdown .pattern-section--acceptance-checks li {
+  position: relative;
+  padding-left: 28px;
+  font-size: 15px;
+  /* D: normal body weight, matching Must Haves / Don'ts. Grouped checks nest
+     leaf items inside the 600-weight group <li> (the `li:has(> ul)` rule below),
+     so without this the leaves INHERITED 600 and rendered too bold. The group
+     labels ("Keyboard" / "Screen Reader") keep 600 via that more-specific rule. */
+  font-weight: var(--ifm-font-weight-normal);
+  line-height: 1.55;
+  color: var(--a11y-ink);
+}
+.markdown .pattern-section--acceptance-checks li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--a11y-accent);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.55;
+}
+/* C4: grouped acceptance checks. A group-label row ("Keyboard" / "Screen
+   Reader") is a list item that CONTAINS a nested list. Render it as a plain
+   label — no checkmark, flush left, medium weight — and add clear vertical
+   space before its list of checks. Leaf checks (no nested list) keep the
+   checkmark above. A flat, ungrouped list is unaffected. */
+.markdown .pattern-section--acceptance-checks li:has(> ul) {
+  padding-left: 0;
+  font-weight: 600;
+}
+.markdown .pattern-section--acceptance-checks li:has(> ul)::before {
+  content: none;
+}
+.markdown .pattern-section--acceptance-checks li > ul {
+  margin-top: 12px;
+}
+/* A little more separation between the two groups (only when grouped). */
+.markdown .pattern-section--acceptance-checks > ul:has(> li > ul) {
+  gap: 22px;
+}
+
+/* ---------- Selection: two stacked cards ---------- */
+.markdown .selection-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.markdown .sel-card {
+  background: var(--a11y-surface);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  padding: 20px;
+}
+.markdown .sel-card-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--a11y-font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 14px;
+  color: var(--a11y-ink);
+}
+.markdown .sel-card-title::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.markdown .sel-card.sel-use .sel-card-title::before {
+  background: var(--a11y-success);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'%3E%3Ccircle cx='9' cy='9' r='7.2' stroke='%23000' stroke-width='1.7'/%3E%3Cpath d='M5.8 9.2l2.2 2.2 4.2-4.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'%3E%3Ccircle cx='9' cy='9' r='7.2' stroke='%23000' stroke-width='1.7'/%3E%3Cpath d='M5.8 9.2l2.2 2.2 4.2-4.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.markdown .sel-card.sel-alt .sel-card-title::before {
+  background: var(--a11y-accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M4.5 6h9m0 0-2.6-2.6M13.5 6l-2.6 2.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13.5 12h-9m0 0 2.6-2.6M4.5 12l2.6 2.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M4.5 6h9m0 0-2.6-2.6M13.5 6l-2.6 2.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13.5 12h-9m0 0 2.6-2.6M4.5 12l2.6 2.6' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.markdown .sel-card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.markdown .sel-card li {
+  position: relative;
+  /* E: indent the items further right (was 18px). 22px + the 2px marker inset
+     gives the same 14px marker→text gap the Must Haves list uses, so the two
+     list styles read consistently. */
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--a11y-ink);
+}
+.markdown .sel-card li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  /* E: vertically center the marker on the FIRST line of its text. 0.775em is
+     half the 1.55 line-height (the first line box's mid-point); translateY(-50%)
+     then centers the marker box on it — robust across font metrics and correct
+     for multi-line items (was a fixed top:0.6em that rode slightly low). */
+  top: 0.775em;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid var(--a11y-muted);
+  border-radius: 2px;
+}
+
+/* ---------- right-hand TOC: minimal Version E styling ---------- */
+/* T1: "On This Page" heading above the TOC list (E .toc-heading), rendered by
+   the swizzled src/theme/TOC. */
+.a11y-toc-heading {
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a11y-muted);
+  margin: 0 0 12px;
+}
+.table-of-contents {
+  font-family: var(--a11y-font-body);
+  font-size: 13px;
+}
+/* B: the scroll-active section is cued by a LEFT ACCENT BAR *in addition to*
+   color — never color alone (WCAG 1.4.1 Use of Color). Every link carries a 2px
+   transparent left border pulled onto the rail (margin-left:-1px over the
+   container's 1px hairline); the active item — toggled by Docusaurus's built-in
+   scroll-spy via .table-of-contents__link--active — paints that border the accent
+   color and deepens the text weight/color. Ported from the vE-refined mockup's
+   .toc-list treatment (component.html): border-left rail + active accent bar. */
+.table-of-contents__left-border {
+  border-left: 1px solid var(--a11y-border);
+  /* Drop Infima's 0.5rem list inset so the bar can sit on the rail; the text
+     inset is restored by the link's padding-left below. */
+  padding-left: 0;
+}
+.table-of-contents li {
+  margin: 0;
+}
+.table-of-contents__link {
+  color: var(--a11y-muted);
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  padding: 6px 0 6px 16px;
+}
+.table-of-contents__link:hover {
+  color: var(--a11y-link);
+}
+.table-of-contents__link--active {
+  color: var(--a11y-link);
+  border-left-color: var(--a11y-accent);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   7. Getting Started SECTION (Version E — DESIGN-SYSTEM.md §6)
+
+   The landing ("Put the corpus to work.", docs/getting-started/index.md) is a
+   doc page with `hide_table_of_contents` + `hide_title`, so it keeps the LEFT
+   section sidebar and drops the right-hand TOC. Its body is a single raw-HTML
+   block wrapped in `.gs-landing`; the components below (`.door`, `.ret-mini`,
+   `.dl-card`, `.dl-btn`, `.tag-progress`) are written as reusable card classes.
+
+   The section sidebar's group headings are `type: 'html'` items in
+   sidebars-main.js styled by `.gs-side-heading`.
+   Ported 1:1 from design-mockups/vE-refined/getting-started.html, retokenized
+   onto the site's --a11y-* variables.
+   ========================================================================== */
+
+/* --- extra tokens used only by this section (warning tint + card shadow) --- */
+:root {
+  --a11y-warn-ink: #8a5a12;
+  --a11y-warn-soft: #fbf1dd;
+  --a11y-warn-dot: #b7791f;
+  --a11y-shadow-card: 0 1px 2px rgba(14, 17, 22, 0.04);
+}
+[data-theme='dark'] {
+  --a11y-warn-ink: #e0a857;
+  --a11y-warn-soft: #332711;
+  --a11y-warn-dot: #e0a857;
+  --a11y-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* --- "In progress" badge — reusable (door card + section-sidebar heading) --- */
+.tag-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--a11y-font-body);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--a11y-warn-ink);
+  background: var(--a11y-warn-soft);
+  border: 1px solid color-mix(in srgb, var(--a11y-warn-dot) 34%, transparent);
+  border-radius: var(--a11y-radius-pill);
+  padding: 2px 8px 2px 7px;
+}
+.tag-progress::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--a11y-radius-pill);
+  background: var(--a11y-warn-dot);
+}
+
+/* --- section sidebar: group headings + separator (main docs only) --------- */
+.gs-heading-item {
+  list-style: none;
+  margin: 1.5rem 0 0;
+}
+.gs-heading-item--first {
+  /* L: match the platform-label sidebars — drop the first section heading to
+     ~40px so it aligns with the "Home / Getting Started" breadcrumb (menu ~8px
+     top pad + 32px here = 40px). */
+  margin-top: 32px;
+}
+.gs-side-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a11y-muted);
+  padding: 0 0.75rem;
+  margin-bottom: 0.375rem;
+}
+.gs-side-heading .tag-progress {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.gs-sep-item {
+  list-style: none;
+  margin: 1.25rem 0 0;
+}
+.gs-side-sep {
+  border: 0;
+  border-top: 1px solid var(--a11y-border);
+  margin: 0 0.75rem;
+}
+/* Retrieval Options subcategory: neutralize the S1 level-1 group gap so it sits
+   in the normal item rhythm between Overview and Downloads. Four selectors
+   (0,4,0) so this wins over the S1 rule (0,3,0). */
+.gs-subcat.theme-doc-sidebar-item-category-level-1.menu__list-item:not(:first-child) {
+  margin-top: 0.25rem;
+}
+
+/* --- landing: page head --------------------------------------------------- */
+.gs-landing {
+  max-width: 900px;
+}
+.gs-landing .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--a11y-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--a11y-link);
+}
+.gs-page-head {
+  padding-bottom: 24px;
+  margin-bottom: 44px;
+  border-bottom: 1px solid var(--a11y-border);
+}
+.gs-page-head .eyebrow {
+  margin-bottom: 14px;
+}
+.gs-landing .gs-page-title {
+  font-family: var(--a11y-font-display);
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--a11y-ink);
+  margin: 0;
+}
+.gs-landing .gs-page-summary {
+  margin: 18px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  color: var(--a11y-muted);
+  /* C2: full content-column width (no ~64ch reading-measure cap). The landing
+     already caps overall width via .gs-landing (max-width: 900px). */
+}
+
+/* --- landing: section blocks --------------------------------------------- */
+.gs-block {
+  margin-bottom: 56px;
+}
+.gs-block:last-child {
+  margin-bottom: 0;
+}
+.gs-landing .gs-section-title {
+  font-family: var(--a11y-font-display);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--a11y-ink);
+  margin: 0 0 6px;
+}
+.gs-landing .gs-section-sub {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--a11y-muted);
+  max-width: 62ch;
+  margin: 0 0 22px;
+}
+.gs-landing .gs-section-sub--full {
+  max-width: none;
+}
+
+/* --- landing: doors (two ways in) ---------------------------------------- */
+.door-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+.door {
+  display: flex;
+  flex-direction: column;
+  background: var(--a11y-surface);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  padding: 26px 28px;
+  box-shadow: var(--a11y-shadow-card);
+}
+.door-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.door-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--a11y-accent-soft);
+  color: var(--a11y-link);
+}
+.door-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.door-titles {
+  flex: 1;
+  min-width: 0;
+}
+.door-titleline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.gs-landing .door h3 {
+  font-family: var(--a11y-font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--a11y-ink);
+  margin: 0;
+}
+.gs-landing .door p {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--a11y-muted);
+}
+.door-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--a11y-link);
+}
+.door-link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+.door-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --- landing: retrieval options at a glance (mini cards) ------------------ */
+.ret-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+.ret-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: var(--a11y-surface);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  padding: 16px 18px;
+  text-decoration: none;
+  box-shadow: var(--a11y-shadow-card);
+  transition: border-color var(--ifm-transition-fast) ease;
+}
+.ret-mini:hover {
+  border-color: var(--a11y-accent);
+  text-decoration: none;
+}
+.rm-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--a11y-font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--a11y-ink);
+}
+.rm-name svg {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  color: var(--a11y-muted);
+}
+.ret-mini:hover .rm-name svg {
+  color: var(--a11y-link);
+}
+.gs-landing .ret-mini p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--a11y-muted);
+}
+
+/* --- landing: downloads --------------------------------------------------- */
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+.dl-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  background: var(--a11y-surface);
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-lg);
+  padding: 22px 24px;
+  box-shadow: var(--a11y-shadow-card);
+}
+.gs-landing .dl-card h3 {
+  font-family: var(--a11y-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--a11y-ink);
+  margin: 0;
+}
+.gs-landing .dl-card p {
+  margin: 0;
+  font-size: 0.84375rem;
+  line-height: 1.5;
+  color: var(--a11y-muted);
+}
+.dl-btn {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-md);
+  background: var(--a11y-surface);
+  color: var(--a11y-ink);
+  font-size: 0.84375rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.dl-btn:hover {
+  border-color: var(--a11y-accent);
+  background: var(--a11y-accent-soft);
+  color: var(--a11y-ink);
+  text-decoration: none;
+}
+.dl-btn svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--a11y-link);
+}
+
+/* screen-reader-only text used inside the download buttons */
+.gs-landing .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   8. Footer (Version E slim bar) + tag rendering
+   ========================================================================== */
+
+/* F1: the slim single-row footer rendered by the swizzled src/theme/Footer.
+   Ported verbatim from the Version E footer (.site-footer / .footer-inner /
+   .footer-brand / .footer-meta in design-mockups/vE-refined/*.html): a 1px top
+   hairline on the surface, brand mark + wordmark left, meta line right. */
+.a11y-footer {
+  border-top: 1px solid var(--a11y-border);
+  background: var(--a11y-surface);
+}
+.a11y-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 30px 32px;
+}
+.a11y-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--a11y-font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--a11y-ink);
+}
+.a11y-footer-brand svg {
+  color: var(--a11y-accent);
+}
+.a11y-footer-meta {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--a11y-muted);
+}
+
+/* C5: no tag pages exist in this site — hide the Docusaurus doc-footer tags row
+   site-wide so pattern pages don't render an orphaned "Tags" section. */
+.theme-doc-footer-tags-row {
+  display: none;
 }

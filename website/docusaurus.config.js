@@ -1,5 +1,9 @@
 // @ts-check
 
+// Custom AA-verified Prism code-block themes (see src/prism/a11yContextThemes.js
+// and DESIGN-SYSTEM.md §6). Light surface #F0F0F3 / dark surface #0B0B0C.
+const { light: prismLight, dark: prismDark } = require('./src/prism/a11yContextThemes');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'A11y Context',
@@ -28,6 +32,29 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  // Google Fonts (see DESIGN-SYSTEM.md §3):
+  //   Schibsted Grotesk 600–800 → display/headings
+  //   Hanken Grotesk   400–600  → body + all labels/UI (never mono)
+  //   JetBrains Mono   400–500  → code ONLY
+  // Preconnects go in headTags (correct rel); the font CSS is a stylesheet.
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+  ],
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Schibsted+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap',
+  ],
 
   presets: [
     [
@@ -74,12 +101,25 @@ const config = {
         exclude: ['**/patterns.json'],
         // Show last-updated date from git
         showLastUpdateTime: true,
-        // Breadcrumbs for better navigation
-        breadcrumbs: true,
+        // Version E renders its own minimal "Components / {Name}" breadcrumb in the
+        // swizzled DocItem/Content, so the stock breadcrumb trail is disabled here.
+        breadcrumbs: false,
+        // Restructures component-pattern Markdown into the Version E section layout
+        // (Selection cards, website-only intro lines, reordered/renamed sections).
+        // Runs before Docusaurus' TOC/slug pass so the on-page TOC lists the six
+        // Version E sections. See website/remark/pattern-sections.js.
+        // foundation-rules handles the /foundations page (hides rule `id`, renders
+        // `scope` as a meta line, renames "Don'ts" → "Donts"). It self-gates to
+        // foundation docs, so it's inert on component pages. See
+        // website/remark/foundation-rules.js.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
 
-    // ── Android (Compose) ─────────────────────────────────────────────────────
+    // ── Compose (Android) ─────────────────────────────────────────────────────
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -88,6 +128,13 @@ const config = {
         routeBasePath: 'android',
         sidebarPath: './sidebars-android.js',
         breadcrumbs: true,
+        // Future-proof: when Android/Compose patterns land they get the same Version E
+        // restructure + foundation transform. Both self-gate, so they're inert on the
+        // current coming-soon content.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
 
@@ -99,7 +146,17 @@ const config = {
         path: '../patterns/ios',
         routeBasePath: 'ios',
         sidebarPath: './sidebars-ios.js',
-        breadcrumbs: true,
+        exclude: ['**/patterns.json'],
+        // Version E renders its own "Components / {Name}" breadcrumb in the swizzled
+        // DocItem/Content, so the stock trail is disabled (matches web-react).
+        breadcrumbs: false,
+        // iOS component patterns get the same Version E section restructure as
+        // web-react (pattern-sections); foundation-rules handles the iOS Foundations
+        // page (id/scope yaml → scope meta, "Don'ts" → "Donts"). Both self-gate.
+        beforeDefaultRemarkPlugins: [
+          require('./remark/pattern-sections'),
+          require('./remark/foundation-rules'),
+        ],
       },
     ],
   ],
@@ -120,18 +177,15 @@ const config = {
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
         },
+        // Version E navbar (see DESIGN-SYSTEM.md §6): no separator between the
+        // links; GitHub is an icon-only link (styled via .header-github-link in
+        // custom.css). The "v0.5" pill and the search combobox are rendered by
+        // the swizzled Navbar/Content (src/theme/Navbar/Content), not here.
         items: [
           {
             label: 'Getting Started',
             to: '/getting-started',
             position: 'left',
-          },
-          // Vertical separator dividing Getting Started from the platform links.
-          // Styled via .navbar__separator in src/css/custom.css.
-          {
-            type: 'html',
-            position: 'left',
-            value: '<span class="navbar__separator" aria-hidden="true"></span>',
           },
           {
             label: 'React (Web)',
@@ -145,54 +199,29 @@ const config = {
           },
           {
             href: 'https://github.com/a11y-context/accessibility-pattern-api',
-            label: 'GitHub',
             position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'A11y Context on GitHub',
           },
         ],
       },
 
-      footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Patterns',
-            items: [
-              { label: 'Web / React', to: '/web/react' },
-              // Restore when these platforms have published docs:
-              // { label: 'Android / Compose', to: '/android' },
-              // { label: 'iOS / SwiftUI', to: '/ios' },
-            ],
-          },
-          {
-            title: 'Resources',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/a11y-context/accessibility-pattern-api',
-              },
-              {
-                label: 'WCAG 2.2',
-                href: 'https://www.w3.org/TR/WCAG22/',
-              },
-              {
-                label: 'ARIA Authoring Practices Guide',
-                href: 'https://www.w3.org/WAI/ARIA/apg/',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} A11y Context Project. Built with Docusaurus.`,
-      },
+      // NOTE: no `footer` config. The Version E footer (DESIGN-SYSTEM.md §6) is a
+      // slim single-row bar rendered entirely by the swizzled src/theme/Footer,
+      // which does not read themeConfig.footer. Adding footer links/copyright here
+      // would have no effect.
 
       prism: {
-        theme: require('prism-react-renderer').themes.github,
-        darkTheme: require('prism-react-renderer').themes.dracula,
+        theme: prismLight,
+        darkTheme: prismDark,
         additionalLanguages: ['bash', 'json', 'yaml'],
       },
 
       docs: {
         sidebar: {
-          hideable: true,
+          // Version E sidebar has no collapse affordance — drop the stock
+          // bottom-left « collapse control (DESIGN-SYSTEM.md §6).
+          hideable: false,
           autoCollapseCategories: false,
         },
       },

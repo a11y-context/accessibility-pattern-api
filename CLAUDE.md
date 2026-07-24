@@ -23,19 +23,29 @@ patterns/                            ← corpus (source of truth)
     component-gallery.md             ← generated from patterns.json (prebuild)
     foundations.md
     release-notes.md
+  ios/swiftui/                       ← LIVE stack (SwiftUI components, beta)
+    patterns.json                    ← machine index (generated)
+    components/                      ← one .md per SwiftUI component
+    global/global_rules.md           ← Foundations
+    component-gallery.md             ← generated from patterns.json (prebuild)
   android/                           ← stub (Coming soon)
-  ios/                               ← stub (Coming soon)
 
 website/                             ← Docusaurus site (sourced from patterns/)
   docs/
     getting-started/                 ← Getting Started + AI-coding-agents branch + QA-testing branch
     troubleshooting/
+  DESIGN-SYSTEM.md                   ← A11y Context design system (theme source of record)
+  patternDisplayNames.json           ← id → display name per stack (presentation only; corpus title stays original)
   src/pages/index.js                 ← landing page
-  src/css/custom.css                 ← theme
+  src/css/custom.css                 ← theme tokens + component CSS
+  src/theme/                         ← swizzled components (Navbar, CodeBlock, DocItem page-head, TOC, Footer)
+  src/components/NavbarSearch/       ← search combobox
+  remark/                            ← build-time markdown transforms (see § Presentation layer)
   static/                            ← static assets served at site root
     downloads/                       ← generated ZIPs (prebuild; gitignored)
   scripts/
-    generate-component-gallery.js    ← prebuild: regenerates component-gallery.md
+    generate-patterns-json.js        ← prebuild: regenerates each stack's patterns.json from its .md
+    generate-component-gallery.js    ← prebuild: regenerates every stack's component-gallery.md
     generate-skill-downloads.js      ← prebuild: clones skills repo, builds ZIPs
   .skills-cache/                     ← clone target for skills monorepo (gitignored)
   docusaurus.config.js
@@ -55,7 +65,9 @@ README.md
 | Update a global / foundational rule | `patterns/<stack>/global_rules.md` |
 | Site content (Getting Started, troubleshooting, etc.) | `website/docs/<section>/...` |
 | Landing-page copy | `website/src/pages/index.js` |
-| Site theme | `website/src/css/custom.css` |
+| Site theme / design system | `website/DESIGN-SYSTEM.md` (spec) → `website/src/css/custom.css` + `website/src/theme/` swizzles |
+| Component display name (sidebar / h1 grouped label) | `website/patternDisplayNames.json` — NOT the corpus `title` |
+| On-page pattern layout (Selection cards, section order, intro lines) | `website/remark/pattern-sections.js` — build-time; not authored in the `.md` |
 | Build pipeline change | `website/scripts/` + wire into `website/package.json` `prebuild` |
 
 **Do NOT hand-edit:**
@@ -70,6 +82,18 @@ README.md
 2. `generate-skill-downloads.js` — clones [`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) into `website/.skills-cache/`, walks `skills/<platform>/<variant>/`, reads each SKILL.md frontmatter to determine the canonical name, generates `static/downloads/<canonical-name>.zip`
 
 Both run automatically on Vercel build. Run manually with `npm run gen:gallery` or `npm run gen:downloads`.
+
+## Presentation layer (site theme) — build-time; do NOT author into the corpus
+
+The site's look is a **standalone design system** — `website/DESIGN-SYSTEM.md` is the source of record — applied via CSS tokens (`custom.css`), swizzled Docusaurus components (`src/theme/`), and two **build-time remark transforms**. The key thing to understand before touching a pattern or the site:
+
+- **`website/remark/pattern-sections.js`** restructures each component pattern's raw Markdown into the on-page layout at build time: merges `Use When` / `Do Not Use When` into "Selection" cards, injects website-only intro lines, reorders/renames sections, drops the H1 + "Pattern ID" line, restructures Acceptance Checks into `h3` + lists. **Authors write the plain 7-H2 pattern Markdown per `schema/pattern-template.md`; the site injects the presentation.** Never hand-author the on-page structure into the `.md`, and note the `.md` still carries the raw H1 / Pattern ID line (dropped only in the render).
+- **`website/remark/foundation-rules.js`** transforms Foundations pages (hides each rule's `id`, renders `scope` as pills, "Don'ts" → "Donts").
+- The swizzled `src/theme/DocItem/Content/index.js` renders the page-head (eyebrow / breadcrumb / H1 / summary) from front matter.
+
+**Gotcha — register the remark plugins on EVERY platform docs instance** in `docusaurus.config.js` (`beforeDefaultRemarkPlugins`). Missing one leaves that platform's pages unstyled (raw Pattern ID, no cards) — this is how iOS was silently broken for a while. All platform instances (`web-react`, `ios`, `android`) must carry both plugins.
+
+**Display names.** `website/patternDisplayNames.json` maps `stack → { pattern-id → display name }` (e.g. `button.basic` → "Button (Basic)"). The sidebar, the h1/breadcrumb, the browser tab title, and the generated gallery read it, falling back to the corpus `title`. **This keeps the machine-readable corpus `title` original** — never rename a pattern's corpus `title` for a display tweak; add a `patternDisplayNames.json` entry instead. The map is platform-scoped because ids repeat across stacks (web `button.basic` ≠ iOS `button.basic`).
 
 ## What never to commit
 

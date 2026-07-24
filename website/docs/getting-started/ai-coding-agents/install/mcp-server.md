@@ -6,14 +6,14 @@ title: MCP Server
 
 **Model Context Protocol (MCP) is Anthropic's open standard for connecting AI agents to context sources.** The A11y Context MCP server exposes the corpus as MCP tools that any MCP-compatible agent can call.
 
-**Repository:** [`a11y-context/accessibility-pattern-mcp`](https://github.com/a11y-context/accessibility-pattern-mcp)
+**Server repo:** [`a11y-context/accessibility-pattern-mcp`](https://github.com/a11y-context/accessibility-pattern-mcp)
 
 ## Server + skill: two pieces
 
-MCP is a **retrieval mechanism**, not a replacement for the skill. Two pieces work together:
+MCP is a **retrieval mechanism**, not a replacement for the skill. Two pieces work together, and you install both:
 
-1. **The MCP server** provides the retrieval tools. Install it in your MCP client.
-2. **The skill** provides the brain — invocation, and the selection logic that decides *which* patterns to fetch before calling the server's tools.
+1. **The skill** provides the brain — invocation, and the selection logic that decides *which* patterns to fetch. Same brain as every other integration; only its retrieval step differs.
+2. **The MCP server** provides the retrieval tools the skill calls once it has selected pattern IDs.
 
 The server exposes three tools:
 
@@ -23,13 +23,41 @@ The server exposes three tools:
 
 Retrieval is deterministic — the skill selects by ID from a small structured catalog, not by embedding similarity. No drift, no embedding cost.
 
-## Option A — Local (stdio)
+## Step 1 — Install the skill
+
+The skill is the brain, and it's required no matter which transport you pick below.
+
+**Download:** [a11y-context-web-react-mcp.zip ↓](./downloads#a11y-context--web-react-mcp)
+
+Unzip it into your tool's skills directory — the same one-step install as every other variant:
+
+```bash
+unzip a11y-context-web-react-mcp.zip -d .claude/skills/
+```
+
+Unlike the HTTP and Local variants, the MCP skill carries **only the brain** — the catalog and Foundations rules come from the server's tools at retrieval time, so nothing is bundled alongside it:
+
+```text
+your-project/
+├── .claude/
+│   └── skills/
+│       └── a11y-context-web-react-mcp/
+│           └── SKILL.md          # brain: invocation + selection, retrieves via MCP tools
+├── src/
+└── package.json
+```
+
+Install locations for other tools (Cursor, Copilot, Codex, …) are on the [Downloads page](./downloads).
+
+## Step 2 — Add the MCP server
+
+The skill selects patterns; the server answers the retrieval calls. Add the server one of two ways — pick the transport that matches your client.
+
+### Local (stdio)
 
 The MCP client spawns the server as a local subprocess. Zero hosting — it runs on your machine. The bundled corpus refreshes with each server release, the same model as the Local skill.
 
-### Claude Code
-
-Run this **from your project's root directory** — the config is scoped to the directory you run it in. Use `--scope project` (recommended) so the server is written to a committed `.mcp.json`: A11y Context needs no secrets or per-user config, and every developer on the project wants it identically, so sharing it via the repo is the right default.
+**Claude Code.** Run this **from your project's root directory** — the config is scoped to the directory you run it in. Use `--scope project` (recommended) so the server is written to a committed `.mcp.json`: A11y Context needs no secrets or per-user config, and every developer on the project wants it identically, so sharing it via the repo is the right default.
 
 ```bash
 claude mcp add --scope project a11y-context -- npx -y @a11y-context/mcp-server
@@ -64,21 +92,9 @@ your-project/
 
 Run `/mcp` in Claude Code to confirm `a11y-context` is listed and connected. (`/mcp` shows your *configured* servers and lets you check status — you add the server first, then it appears there.)
 
-### Cursor, Continue, Zed, other clients
+**Cursor, Continue, Zed, other clients.** Add the same `mcpServers` block to the client's MCP config file (`.cursor/mcp.json` for Cursor; the equivalent for others). The `command` / `args` shape is identical.
 
-Add the same `mcpServers` block to the client's MCP config file (`.cursor/mcp.json` for Cursor; the equivalent for others). The `command` / `args` shape is identical.
-
-### Also install the MCP skill
-
-The server is only the retrieval half. To get intelligent pattern *selection*, also install the **MCP skill** (the brain) — download `a11y-context-web-react-mcp.zip` from the [Install page](./downloads) and unzip it into your tool's skills directory:
-
-```bash
-unzip a11y-context-web-react-mcp.zip -d .claude/skills/
-```
-
-The server answers tool calls; the skill is what makes the agent reach for those tools at the right time with the right patterns. Both live in your project — the server config in `.mcp.json`, the skill in `.claude/skills/`.
-
-## Option B — HTTP (hosted or self-hosted)
+### HTTP (hosted or self-hosted)
 
 For clients that connect by URL rather than spawning a subprocess — enterprise setups, remote agents, hosted-agent platforms.
 
@@ -90,7 +106,7 @@ Health check: `GET /health` returns `{"ok":true,"contract_version":"v1"}`. You c
 
 ## When MCP, when a skill is simpler
 
-Be honest about the fit. Most MCP servers wrap data that is live, changing, high-cardinality, or side-effectful — databases, APIs, file systems, ticketing systems. A11y Context is the opposite: a static, versioned corpus of a couple dozen documents. That's at the simpler end of what MCP is for, and for the core case the [HTTP skill](./downloads) fetches the same content with **zero infrastructure** — no server to run, no config beyond the skill file.
+Be honest about the fit. Most MCP servers wrap data that is live, changing, high-cardinality, or side-effectful — databases, APIs, file systems, ticketing systems. A11y Context is the opposite: a static, versioned corpus of a couple dozen documents. That's at the simpler end of what MCP is for, and for the core case the [HTTP skill](./http) fetches the same content with **zero infrastructure** — no server to run, no config beyond the skill file.
 
 So MCP here is a deliberate option, not the default. Reach for it when its specific properties earn the extra piece:
 
@@ -99,7 +115,7 @@ So MCP here is a deliberate option, not the default. Reach for it when its speci
 - You want the tools **callable by any agent**, including ones that don't have the skill installed.
 - You want deterministic, ID-based tool calls rather than an HTTP fetch inside the skill.
 
-If none of those apply, the HTTP skill is the simpler, recommended choice — and produces the same output quality measured in testing.
+If none of those apply, the [HTTP skill](./http) is the simpler, recommended choice — and produces the same output quality measured in testing.
 
 ## Why MCP over vector RAG (if you've chosen a retrieval server)
 
@@ -109,4 +125,4 @@ If none of those apply, the HTTP skill is the simpler, recommended choice — an
 
 ## Verifying
 
-After adding the server and restarting your client, run the prompts on [Verify It's Working](/getting-started/ai-coding-agents/verification). The agent should call `list_patterns` then `get_pattern` before generating UI code.
+After installing the skill and adding the server, restart your client, then run the prompts on [Verify It's Working](/getting-started/ai-coding-agents/verification). The agent should call `list_patterns` then `get_pattern` before generating UI code.

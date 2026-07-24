@@ -1,0 +1,56 @@
+/**
+ * Version E ColorModeToggle (N3). A clean 36×36 bordered button on the surface,
+ * not the stock circular clean-btn. Values ported from the Version E
+ * .theme-toggle rule (design-mockups/vE-refined/*.html).
+ *
+ * Icon convention: show the TARGET mode's icon — moon in light mode, sun in dark
+ * mode — driven by [data-theme] on <html> (Docusaurus stamps it there).
+ */
+
+.toggle {
+  display: inline-flex;
+}
+
+.toggleButton {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  border: 1px solid var(--a11y-border);
+  border-radius: var(--a11y-radius-md);
+  background: var(--a11y-surface);
+  color: var(--a11y-muted);
+  cursor: pointer;
+  transition: color var(--ifm-transition-fast) ease,
+    border-color var(--ifm-transition-fast) ease;
+}
+
+.toggleButton:hover {
+  color: var(--a11y-ink);
+  border-color: var(--a11y-muted);
+}
+
+.toggleIcon {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+/* Show the target-mode icon: hide the moon in dark, the sun in light. */
+[data-theme='dark'] .iconMoon {
+  display: none;
+}
+[data-theme='light'] .iconSun {
+  display: none;
+}
+
+.toggleButtonDisabled {
+  cursor: not-allowed;
+}

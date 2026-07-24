@@ -13,7 +13,9 @@
  * What this script reads (per stack dir)
  * ---------------------------------------
  * - catalog-meta.json — hand-edited top-level metadata
- *   (catalog_revision, schema_version, stack, cache_ttl_seconds)
+ *   (catalog_revision, schema_version, stack, cache_ttl_seconds) plus an
+ *   optional `order_overrides` array of [earlierId, laterId] pairs that pins
+ *   display order for specific patterns against the default alphabetical sort
  * - components/*.md — each pattern's frontmatter + body sections
  *   "## Use When" and "## Do Not Use When"
  *
@@ -171,12 +173,41 @@ function generateForStack(stackDir) {
     console.log(`[generate-patterns-json] Skipping ${p.id} (status: ${p.status})`);
   }
 
+  // Display order defaults to alphabetical filename order (the .sort() above),
+  // which also drives the sidebar (built from patterns.json). catalog-meta.json
+  // may carry `order_overrides`: an array of [earlierId, laterId] pairs, each a
+  // constraint "earlierId must appear immediately before laterId". Used where
+  // display order must diverge from filename order — e.g. "Select (Basic)"
+  // (select.native) must precede "Select (Custom Style)" (select.basic), the
+  // reverse of what select.native.md / select.basic.md alphabetize to. Patterns
+  // not named keep their alphabetical slot, so newly added patterns need no
+  // config change.
+  let ordered = published;
+  if (Array.isArray(catalogMeta.order_overrides)) {
+    ordered = [...published];
+    for (const [earlierId, laterId] of catalogMeta.order_overrides) {
+      const from = ordered.findIndex((p) => p.id === earlierId);
+      const to = ordered.findIndex((p) => p.id === laterId);
+      if (from === -1 || to === -1) {
+        console.warn(
+          `[generate-patterns-json] order_overrides: skipped [${earlierId}, ${laterId}] ` +
+            `in ${stackDir} — ${from === -1 ? earlierId : laterId} is not a published pattern`
+        );
+        continue;
+      }
+      if (from < to) continue; // earlierId already precedes laterId
+      const [moved] = ordered.splice(from, 1);
+      const insertAt = ordered.findIndex((p) => p.id === laterId);
+      ordered.splice(insertAt, 0, moved);
+    }
+  }
+
   const output = {
     stack: catalogMeta.stack,
     schema_version: catalogMeta.schema_version,
     catalog_revision: catalogMeta.catalog_revision,
     cache_ttl_seconds: catalogMeta.cache_ttl_seconds,
-    patterns: published,
+    patterns: ordered,
   };
 
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2) + '\n');

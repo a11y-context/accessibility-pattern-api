@@ -18,6 +18,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (id → presentation name); keeps the corpus
+// `title` original while the sidebar shows grouped names. See patternDisplayNames.json.
+const displayNames = require('./patternDisplayNames.json');
+
 // ── 1. Resolve and validate patterns.json ─────────────────────────────────────
 
 const swiftuiRoot = path.resolve(__dirname, '../patterns/ios/swiftui');
@@ -59,6 +63,14 @@ patternsJson.patterns.forEach((p) => {
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   iosSidebar: [
+    // Platform label at the top of the sidebar (Version E — DESIGN-SYSTEM.md §6).
+    // Styled via .a11y-sidebar-platform in src/css/custom.css.
+    {
+      type: 'html',
+      value: 'SwiftUI (iOS)',
+      className: 'a11y-sidebar-platform',
+      defaultStyle: true,
+    },
     // intro.md has frontmatter id "ios-intro" and slug "/" — renders at /ios
     {
       type: 'doc',
@@ -75,13 +87,18 @@ const sidebars = {
     {
       type: 'category',
       label: 'Components',
-      collapsible: true,
+      // The label links to the iOS catalog page (mirrors web-react). No caret
+      // (`collapsible: false`) so it reads as a plain link with the component list
+      // always visible. component-gallery.md has slug /swiftui/component-gallery,
+      // so its doc id resolves to swiftui/component-gallery.
+      link: { type: 'doc', id: 'swiftui/component-gallery' },
+      collapsible: false,
       collapsed: false,
       // URL contract: /ios/swiftui/components/<p.id>
       items: patternsJson.patterns.map((p) => ({
         type: 'doc',
         id: `swiftui/components/${p.id}`,
-        label: p.title,
+        label: (displayNames['ios/swiftui'] || {})[p.id] || p.title,
       })),
     },
   ],

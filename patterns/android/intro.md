@@ -1,10 +1,10 @@
 ---
 id: android-intro
-title: Android (Compose)
+title: Compose (Android)
 slug: /
 ---
 
-# Android (Compose)
+# Compose (Android)
 
 Accessibility patterns for Android Jetpack Compose are coming soon.
 

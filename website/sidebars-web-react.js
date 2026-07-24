@@ -10,6 +10,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// Website-layer display-name overrides (pattern id → presentation name). Keeps the
+// corpus `title` field clean (e.g. "Basic Button") while the sidebar/h1 show the
+// grouped display names (e.g. "Button (Basic)"). See website/patternDisplayNames.json.
+const displayNames = require('./patternDisplayNames.json');
+
 // ── 1. Resolve and validate patterns.json ─────────────────────────────────────
 
 const patternsPath = path.resolve(__dirname, '../patterns/web/react/patterns.json');
@@ -56,7 +61,7 @@ patternsJson.patterns.forEach((p) => {
 const componentItems = patternsJson.patterns.map((p) => ({
   type: 'doc',
   id: `components/${p.id}`,
-  label: p.title,
+  label: (displayNames['web/react'] || {})[p.id] || p.title,
 }));
 
 // In local development (`docusaurus start`), also surface `status: draft`
@@ -103,6 +108,14 @@ if (showDrafts) {
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   webReactSidebar: [
+    // Platform label at the top of the sidebar (Version E — DESIGN-SYSTEM.md §6).
+    // Styled via .a11y-sidebar-platform in src/css/custom.css.
+    {
+      type: 'html',
+      value: 'React (Web)',
+      className: 'a11y-sidebar-platform',
+      defaultStyle: true,
+    },
     // intro.md has slug "/" — renders at /web/react
     {
       type: 'doc',
@@ -119,11 +132,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Components',
-      // The category label itself links to the catalog page; the caret
-      // independently expands/collapses the component list.
+      // S3: the category label is a plain link to the catalog page. No caret —
+      // `collapsible: false` drops the expand/collapse toggle so the label reads
+      // unambiguously as a link, and the component list stays always visible.
       // (component-gallery.md keeps its published slug /component-gallery.)
       link: { type: 'doc', id: 'component-gallery' },
-      collapsible: true,
+      collapsible: false,
       collapsed: false,
       // URL contract: /web/react/components/<p.id>
       // Derived from: file in components/ dir + frontmatter id = components/<p.id>
