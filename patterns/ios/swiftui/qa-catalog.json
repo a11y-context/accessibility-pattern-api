@@ -425,6 +425,1178 @@
         }
       ]
     },
+    "checkbox.basic": {
+      "pattern_id": "checkbox.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Build the checkbox from a native `Toggle` with a custom `.toggleStyle` that draws the square box and checkmark (e.g., `square` when unchecked, `checkmark.square` when checked), rather than a `Button` or a bare tap gesture, so it keeps the underlying control semantics and stays operable by Switch Control and Full Keyboard Access.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Checkbox is a `Toggle` with a custom `.toggleStyle`, not a `Button` or bare `.onTapGesture`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Switch Control and Full Keyboard Access can reach and toggle the checkbox."
+        },
+        {
+          "rule": "The checkbox has an accessible name matching its visible label; pass the label into the `Toggle` (e.g., `Toggle(\"Accept Terms\", isOn: $accepted)` or the label closure).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Label text is passed into the `Toggle` initializer or label closure.",
+          "llm_eval_question": "Does the checkbox's accessible name match its visible label?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Override the announced value with `.accessibilityValue(isChecked ? \"Checked\" : \"Unchecked\")` so VoiceOver speaks Checked or Unchecked instead of the default On or Off.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityValue` is set to \"Checked\"/\"Unchecked\".",
+          "llm_eval_question": null,
+          "runtime_check": "The element's accessibilityValue reads \"Checked\" or \"Unchecked\", not \"On\"/\"Off\".",
+          "device_human_check": null
+        },
+        {
+          "rule": "For a checkbox group, label the container: apply `.accessibilityElement(children: .contain)` and an `.accessibilityLabel` matching the visible group heading, so VoiceOver announces the group name when focus first enters it (WCAG 1.3.1).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Group container carries `.accessibilityElement(children: .contain)` and an `.accessibilityLabel`.",
+          "llm_eval_question": "Does the group's accessibility label match its visible heading?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "The checked and unchecked states are distinguishable by more than color: the box glyph itself changes (empty square versus checkmark), not only a color fill (per `global.semantic-color`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Checked vs unchecked render different glyphs (e.g., square vs checkmark.square), not only a color change.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Checked and unchecked are distinguishable without relying on color, in light and dark."
+        },
+        {
+          "rule": "Let the box glyph scale with the label under Dynamic Type; size it with the surrounding font (e.g., `.imageScale`) rather than a fixed point frame that would clip at large sizes.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Glyph sized relative to the font (e.g., `.imageScale`), not a fixed-point frame.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .dynamicType/.textClipped failure for the checkbox at accessibility sizes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not build a checkbox from a `Button` that swaps a checkmark image; VoiceOver then announces \"Button\" with no Checked or Unchecked value, and the state is invisible to screen reader users.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Checkbox is not implemented as a `Button` swapping an image.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver announces the checkbox with a Checked/Unchecked value, not just \"Button\"."
+        },
+        {
+          "rule": "Do not leave the checkbox announcing the default On or Off; set `.accessibilityValue` to Checked or Unchecked.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityValue` overrides the default On/Off.",
+          "llm_eval_question": null,
+          "runtime_check": "accessibilityValue reads \"Checked\"/\"Unchecked\", not \"On\"/\"Off\".",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not omit the group label on a set of related checkboxes; without `.accessibilityElement(children: .contain)` plus `.accessibilityLabel`, VoiceOver users do not hear what the group is for.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Grouped checkboxes have a container with `.accessibilityElement(children: .contain)` + `.accessibilityLabel`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver announces the group's purpose when focus enters it."
+        },
+        {
+          "rule": "Do not convey the checked state by color alone; change the box glyph.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "State is conveyed by a glyph change, not color alone.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Checked state is perceivable without color."
+        },
+        {
+          "rule": "Do not fix the glyph to a static point size that fails to scale with Dynamic Type.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Glyph is not pinned to a fixed point size.",
+          "llm_eval_question": null,
+          "runtime_check": ".dynamicType audit passes for the checkbox glyph at accessibility sizes.",
+          "device_human_check": null
+        }
+      ]
+    },
+    "dialog.alert": {
+      "pattern_id": "dialog.alert",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use the native `.alert(_:isPresented:actions:message:)` modifier so the alert is a real modal that takes VoiceOver focus on presentation and blocks interaction with the rest of the screen until it is dismissed.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Alert is presented via the native `.alert(...)` modifier, not a custom overlay.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On presentation VoiceOver focus moves into the alert and the background is not interactive."
+        },
+        {
+          "rule": "Provide the primary question or statement as the alert title, and any supporting detail in the `message:` closure.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Alert has a title; supporting detail is in the `message:` closure.",
+          "llm_eval_question": "Is the primary question/statement the title, with only supporting detail in the message?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Return VoiceOver focus to the trigger on dismissal: bind the trigger with `@AccessibilityFocusState` and set it true inside every alert action's closure, because native alerts do not restore focus automatically (WCAG 2.4.3).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Trigger is bound with `@AccessibilityFocusState` and set in every action closure.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a device, dismissing the alert by any action returns VoiceOver focus to the trigger (the Simulator does not honor @AccessibilityFocusState)."
+        },
+        {
+          "rule": "Give each action a specific label and the correct role: `.cancel` for the dismissive action and `.destructive` for a destructive one, so VoiceOver and the system present them correctly.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Each action uses the correct role (`.cancel`/`.destructive`).",
+          "llm_eval_question": "Does each action have a specific label and the role matching its meaning?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Keep the action set short and the labels self-explanatory out of context (e.g., \"Delete\", \"Cancel\"), not \"OK\"/\"Yes\"/\"No\" where the outcome is ambiguous.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Are the action labels self-explanatory out of context (not ambiguous \"OK\"/\"Yes\"/\"No\")?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not build a custom view as a faux alert (a conditional `VStack` overlay); it does not receive VoiceOver focus on display, does not block the background, and does not restore focus on close. Use the native `.alert()`, or `dialog.modal` for a richer custom modal.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "No faux-alert `VStack`/overlay standing in for a native alert.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The alert takes VoiceOver focus, blocks the background, and restores focus — behaviors a faux overlay lacks."
+        },
+        {
+          "rule": "Do not omit focus return; without `@AccessibilityFocusState` set in each action, VoiceOver focus is lost when the alert closes, which is a gap in the native control.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Every action closure sets the `@AccessibilityFocusState` binding.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver focus is not lost when the alert closes."
+        },
+        {
+          "rule": "Do not rely on color alone to signal a destructive action; use the `.destructive` role and a clear label, not only red text.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Destructive action uses the `.destructive` role, not only red text.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The destructive action is distinguishable without relying on color."
+        },
+        {
+          "rule": "Do not put lengthy content, forms, or many controls in an alert; use `dialog.modal` for that.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the alert limited to a short prompt and a small action set (no forms or many controls)?",
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "link.basic": {
+      "pattern_id": "link.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Link(destination:)` so the control exposes the link trait and opens the URL through the system.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Control is a native `Link(destination:)`.",
+          "llm_eval_question": null,
+          "runtime_check": "The element exposes the link trait in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The link has an accessible name that describes its specific destination or purpose. When the link has visible text, the visible text serves as the accessible name.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "Link derives its name from visible text or an explicit label.",
+          "llm_eval_question": "Does the link's accessible name describe its specific destination or purpose?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Remove the redundant button trait when VoiceOver announces the link as \"Button, Link\": apply `.accessibilityRemoveTraits(.isButton)` so it announces only as a link. SwiftUI has historically added the button trait to `Link` alongside the link trait.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityRemoveTraits(.isButton)` is applied to the `Link`.",
+          "llm_eval_question": null,
+          "runtime_check": "The element exposes the link trait but not the button trait.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Link text meets 4.5:1 contrast against its background in both light and dark appearances. Use an accent or tint color vetted for both appearances (per `global.semantic-color`); the default link tint can fall below 4.5:1.",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "Link color is a semantic/vetted token, not the raw default tint, where computable.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Link text meets 4.5:1 against its background in both light and dark."
+        },
+        {
+          "rule": "When the link sits inline with, or directly adjacent to, static text, distinguish it by more than color, e.g., `.underline()` on the label.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Adjacent-to-text links carry a non-color distinction (e.g., `.underline()`).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The link is distinguishable from adjacent text without relying on color."
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not implement a link as a `Button` that calls `UIApplication.shared.open(url)`; VoiceOver then announces \"Button\" instead of \"Link\", hiding that the control leaves the app.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Link is not a `Button` calling `UIApplication.shared.open`.",
+          "llm_eval_question": null,
+          "runtime_check": "The element exposes the link trait, not (only) the button trait.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not use generic link text (\"Click here\", \"here\", \"Read more\", \"Learn more\") that does not describe the destination; the accessible name must be specific.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the link text specific to its destination rather than generic (\"here\", \"read more\")?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not rely on color alone to mark a link placed among static text; add an underline or other non-color distinction.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Inline-with-text links carry a non-color distinction.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The link is perceivable among static text without color."
+        },
+        {
+          "rule": "Do not leave the default button trait in place when it produces a \"Button, Link\" announcement.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityRemoveTraits(.isButton)` removes the redundant button trait.",
+          "llm_eval_question": null,
+          "runtime_check": "The element does not expose both button and link traits.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not include the word \"Link\" in the accessible name; VoiceOver already appends the link trait.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "Accessible name does not contain the word \"Link\".",
+          "llm_eval_question": "Does the accessible name avoid restating the control type (\"Link\")?",
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "link.inline": {
+      "pattern_id": "link.inline",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Build the inline link with an `AttributedString` whose run sets `.link` to the URL, in preference to Markdown, because only `AttributedString` can also carry an underline to distinguish the link without color.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Inline link is an `AttributedString` run with `.link` set, not a Markdown link.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Distinguish the inline link from surrounding text by more than color: set `.underlineStyle` on the `AttributedString` run. Markdown inline links cannot be underlined or restyled, so they cannot satisfy this on their own.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "The link run sets `.underlineStyle` (or another non-color distinction).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The inline link is distinguishable from surrounding text without color."
+        },
+        {
+          "rule": "The link run text is specific to its destination; avoid generic runs like \"here\" or \"click here\".",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the inline link run text specific to its destination rather than generic?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Link text meets 4.5:1 contrast against its background in light and dark appearances (per `global.semantic-color`); the default inline link tint can fall below 4.5:1.",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "Link run color is a vetted/semantic token where computable.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Inline link text meets 4.5:1 against its background in light and dark."
+        },
+        {
+          "rule": "Provide a fully operable alternative to the same destination for keyboard and Voice Control users. `AttributedString` and Markdown inline links are not focusable under Full Keyboard Access and not targetable by Voice Control Show Names or Show Numbers, an Apple platform defect. Supply a standalone `link.basic` to the same URL, or keep destinations that must be operable out of inline links.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "A standalone `link.basic` to the same URL exists, or the destination is not delivered only via an inline link.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "A Full Keyboard Access / Voice Control user can reach the destination through an operable alternative."
+        },
+        {
+          "rule": "Keep each inline link's text meaningful on its own, because VoiceOver users reach inline links through the Links rotor, which lists them by name out of surrounding context.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the inline link's text meaningful on its own, out of surrounding context (as heard in the Links rotor)?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not rely on an inline link as the only way to reach a destination that keyboard or Voice Control users must operate; the platform defect leaves it unreachable for them without a standalone alternative.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Operable destinations are not delivered solely through an inline link.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Keyboard and Voice Control users can operate the destination via an alternative."
+        },
+        {
+          "rule": "Do not distinguish an inline link by color alone; set an underline via `AttributedString`.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "The link run carries an underline (or other non-color distinction).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The inline link is perceivable without color."
+        },
+        {
+          "rule": "Do not use Markdown inline links when conformance depends on distinguishing the link without color, since Markdown links cannot be underlined or given a different text style than the surrounding run.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "No Markdown inline link is used where a non-color distinction is required.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not use generic inline link text (\"here\", \"click here\", \"read more\") that is not meaningful in the Links rotor.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the inline link text meaningful (not generic) when listed in the Links rotor?",
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "list.row": {
+      "pattern_id": "list.row",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a `NavigationLink` inside a `List` (or `Form`) so the whole row is a single accessible element with the button trait, and the system renders the decorative trailing disclosure chevron.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Row is a `NavigationLink` inside a `List`/`Form`.",
+          "llm_eval_question": null,
+          "runtime_check": "The row is a single accessible element exposing the button trait.",
+          "device_human_check": null
+        },
+        {
+          "rule": "The row has an accessible name describing its destination, taken from the row's visible label. When the row shows a title plus secondary text (subtitle or trailing value), they read together as one name.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "Row name derives from its visible label(s); title plus secondary text combine into one name.",
+          "llm_eval_question": "Does the row's accessible name describe its destination, reading title and secondary text together?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "The row reads as a button, not a link. `NavigationLink` carries the button trait, not `.isLink`. Do not describe an in-app drill-in row as a \"link\".",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the row presented and described as a button (not a \"link\")?",
+          "runtime_check": "The row exposes the button trait, not the link trait.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Keep the disclosure chevron decorative; do not give it a separate accessible element or label. Inside a `List`, `NavigationLink` supplies and hides it automatically.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "No separate accessible element/label is added to the chevron.",
+          "llm_eval_question": null,
+          "runtime_check": "The chevron is not exposed as its own accessibility element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Follow the push and pop focus contract in `global_rules.md` (`global.navigation-focus`): the destination sets a `navigationTitle`, the system manages VoiceOver focus on push, and focus returns to this row on pop.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Destination sets a `navigationTitle`; push-focus is not overridden.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a device, pushing announces the destination and popping returns VoiceOver focus to this row."
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not build a drill-in row from `Text` or an `HStack` with an `.onTapGesture`; it exposes no button trait, is unreachable and inoperable for Switch Control and Full Keyboard Access, and leaves focus unmanaged so VoiceOver can land behind the pushed screen.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Row is not a `Text`/`HStack` with `.onTapGesture`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Switch Control and Full Keyboard Access can operate the row, and focus is managed on push."
+        },
+        {
+          "rule": "Do not call a navigable row a \"link\" in its accessible name; VoiceOver announces it as a button, and \"link\" misleads users about where it goes.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the row's accessible name avoid calling it a \"link\"?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not add a separate accessible element or label to the disclosure chevron.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Chevron has no separate accessible element/label.",
+          "llm_eval_question": null,
+          "runtime_check": "The chevron is not a separate accessibility element.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not split a rich row into multiple sibling accessibility elements (title, subtitle, and chevron each focusable); combine them into one.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Row combines its parts into one accessibility element (e.g., no per-subview focusability).",
+          "llm_eval_question": null,
+          "runtime_check": "The row is a single accessibility element, not multiple siblings.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not force VoiceOver focus to the back button or the destination title on push; let the system manage it, per `global.navigation-focus`.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "No code forces focus to the back button/title on push.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On push, system-managed VoiceOver focus is left intact."
+        }
+      ]
+    },
+    "select.menu": {
+      "pattern_id": "select.menu",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Picker` with `.pickerStyle(.menu)` so it exposes the pop-up button role, the current value, and the option list to VoiceOver and Switch Control.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Control is a `Picker` with `.pickerStyle(.menu)`.",
+          "llm_eval_question": null,
+          "runtime_check": "The control exposes the pop-up button role and its current value in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Name the picker with the `Picker` label text (`Picker(\"Fruit\", selection: $fruit)`), which becomes the accessible name for the menu and default styles.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "`Picker` is given non-empty label text.",
+          "llm_eval_question": "Does the Picker's label text serve as an accessible name that describes the choice?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not add an `.accessibilityLabel` to a menu-style or default-style `Picker`; it suppresses VoiceOver speaking the selected value when the picker is closed. The wheel and segmented styles are the opposite case, covered by `select.wheel` and `select.segmented`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "No `.accessibilityLabel` on a menu-/default-style `Picker`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With the picker closed, VoiceOver speaks the selected value."
+        },
+        {
+          "rule": "Each option has clear, distinct text so the choices are distinguishable in the pop-up list.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is each option's text clear and distinct from the others?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "After the value changes, return VoiceOver focus to the picker with `@AccessibilityFocusState` and `.accessibilityFocused`, because `Picker` has no dismissal callback to restore focus (WCAG 2.4.3).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Picker is bound with `@AccessibilityFocusState` + `.accessibilityFocused` and refocused on change.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a device, after selecting a value VoiceOver focus returns to the picker."
+        },
+        {
+          "rule": "Provide a visible indication of what is being chosen when the on-button value alone does not convey it (WCAG 3.3.2); the `Picker` label text can serve this, or a separate `Text` can precede the picker.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "A visible label (`Picker` label or preceding `Text`) indicates what is being chosen.",
+          "llm_eval_question": "Is it visibly clear what the picker chooses, beyond the on-button value?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not add `.accessibilityLabel` to a menu-style or default-style `Picker`; it stops VoiceOver from announcing the selected value when closed. Name it through the `Picker` label text instead.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "No `.accessibilityLabel` on a menu-/default-style `Picker`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Closed, VoiceOver still announces the selected value."
+        },
+        {
+          "rule": "Do not leave the `Picker` label empty (`Picker(\"\", ...)`) on a menu style; VoiceOver then has no accessible name.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "`Picker` label text is non-empty on a menu style.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not use a value `Picker` for a list of commands or actions; that is a `menu.basic`.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the picker choose a value rather than perform commands/actions (which belong in menu.basic)?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not omit focus return after selection; without `@AccessibilityFocusState`, VoiceOver focus can jump away from the picker when the value changes.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Focus is restored via `@AccessibilityFocusState` after selection.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver focus does not jump away from the picker on value change."
+        }
+      ]
+    },
+    "slider.basic": {
+      "pattern_id": "slider.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Slider` so VoiceOver exposes the adjustable behavior automatically (swipe up or down to change the value) and Switch Control can adjust it. SwiftUI has no `.adjustable` trait to add; the native control provides adjustability, and a custom-drawn slider gets it from `accessibilityAdjustableAction` (per `global.custom-control-representation`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control is a native `Slider` (or a custom control with `accessibilityAdjustableAction`).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver can adjust the value with swipe up/down and Switch Control can adjust it."
+        },
+        {
+          "rule": "The slider has a specific accessible name. Supply it with the `Slider` label closure (`Slider(value:in:) { Text(\"Brightness\") }`), whose text becomes the accessible name, or pair a visible `Text` label with `.accessibilityLabel`. A bare `Slider` has no inherent label.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Slider name comes from the label closure or a paired `.accessibilityLabel` (not bare).",
+          "llm_eval_question": "Does the slider have a specific accessible name describing what it controls?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Set `.accessibilityValue` to a meaningful value with units when the default percentage is not self-explanatory (e.g., \"$50\", \"Medium\", \"72 degrees\").",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "`.accessibilityValue` is set where the default percentage is not self-explanatory.",
+          "llm_eval_question": "Does the announced value carry meaningful units rather than a bare percentage?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Provide a single-tap alternative to the drag gesture so the value can be changed without a path-based gesture (WCAG 2.5.1): decrement and increment buttons, or a paired `Stepper` and `TextField` for fine and direct control.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "A single-tap alternative (increment/decrement buttons or a paired Stepper/TextField) is present.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The value can be changed without a drag/path-based gesture."
+        },
+        {
+          "rule": "Icon-only increment and decrement buttons each need an `.accessibilityLabel` (e.g., \"Decrease brightness\", \"Increase brightness\").",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Each icon-only increment/decrement button has an `.accessibilityLabel`.",
+          "llm_eval_question": "Does each icon-only step button have a clear accessible name?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Give repeated sliders on one screen unique accessible names.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Are repeated sliders on the screen distinguishable by unique accessible names?",
+          "runtime_check": "No two sliders on the same screen expose an identical accessible name.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not add a `.adjustable` trait; SwiftUI has no such trait (it exists only in UIKit). For a custom slider, confer adjustability with `.accessibilityAdjustableAction`, not a trait.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "No `.adjustable` trait; custom sliders use `.accessibilityAdjustableAction`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not ship a slider adjustable only by dragging; provide a single-tap alternative (WCAG 2.5.1).",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "A non-drag single-tap alternative exists.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The slider is operable without a drag gesture."
+        },
+        {
+          "rule": "Do not leave the slider without a visible label and an accessible name.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Slider has a visible label and an accessible name.",
+          "llm_eval_question": "Does the slider have a visible label and accessible name?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not leave `.accessibilityValue` at the default percentage when the value carries meaningful units the user needs (e.g., currency, temperature).",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "`.accessibilityValue` reflects meaningful units, not a bare default percentage.",
+          "llm_eval_question": "Does the announced value use meaningful units where the raw percentage is insufficient?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not create icon-only increment or decrement buttons without accessible names.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Icon-only step buttons carry `.accessibilityLabel`s.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        }
+      ]
+    },
+    "stepper.basic": {
+      "pattern_id": "stepper.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "Use a native `Stepper` so its increment and decrement behavior is exposed to VoiceOver and operable by Switch Control automatically. SwiftUI has no `.adjustable` trait to add; a custom increment control gets its behavior from `accessibilityAdjustableAction` (per `global.custom-control-representation`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control is a native `Stepper` (or a custom control with `accessibilityAdjustableAction`).",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver and Switch Control can increment/decrement the value."
+        },
+        {
+          "rule": "Give the stepper an accessible name from its visible label using the label closure (`Stepper(value: $tickets) { Text(\"Tickets: \\(tickets)\") }`), whose text becomes the accessible name. A manual `.accessibilityLabel` is unnecessary in this case.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Stepper name comes from its label closure.",
+          "llm_eval_question": "Does the stepper's accessible name describe what it adjusts?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "When the stepper's visible label is empty (e.g., the count is shown in a separate `Text` or `TextField`), add an `.accessibilityLabel` so the stepper is still named.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "A titleless `Stepper` carries an `.accessibilityLabel`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "When the current value is not part of the label text, set `.accessibilityValue` so VoiceOver announces the value along with the name.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "`.accessibilityValue` is set when the value is not in the label text.",
+          "llm_eval_question": null,
+          "runtime_check": "The stepper exposes its current value in the accessibility tree.",
+          "device_human_check": null
+        },
+        {
+          "rule": "For a wide range, pair the stepper with a `TextField` for direct entry so users are not forced to tap many times; give the paired field the same accessible name.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Wide-range steppers pair a `TextField` for direct entry, sharing the accessible name.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "A user can enter a large value directly rather than tapping repeatedly."
+        },
+        {
+          "rule": "Give repeated steppers on one screen unique accessible names.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Are repeated steppers distinguishable by unique accessible names?",
+          "runtime_check": "No two steppers on the same screen expose an identical accessible name.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not add a `.adjustable` trait; SwiftUI has none (it is a UIKit trait). A native `Stepper` provides the behavior, and a custom control uses `.accessibilityAdjustableAction`.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "No `.adjustable` trait; native `Stepper` or `.accessibilityAdjustableAction` provides the behavior.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not ship a `Stepper` with an empty label and no `.accessibilityLabel`; VoiceOver then announces no name.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "A titleless `Stepper` has an `.accessibilityLabel`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver announces a name for the stepper."
+        },
+        {
+          "rule": "Do not force a large value to be reached only by repeated taps; pair a `TextField` for direct entry on wide ranges.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Wide-range steppers offer direct entry via a paired `TextField`.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "Large values are reachable without many repeated taps."
+        },
+        {
+          "rule": "Do not leave the value undiscoverable to VoiceOver; put it in the label text or `.accessibilityValue`.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Current value is in the label text or `.accessibilityValue`.",
+          "llm_eval_question": null,
+          "runtime_check": "The stepper's value is present in the accessibility tree.",
+          "device_human_check": null
+        }
+      ]
+    },
     "switch.basic": {
       "pattern_id": "switch.basic",
       "catalog_revision": "0.1.0",
@@ -562,6 +1734,202 @@
           "llm_eval_question": null,
           "runtime_check": null,
           "device_human_check": "On a physical device in light and dark mode, confirm the on/off states are distinguishable without hue — the off-state fill meets ≥3:1 against its background."
+        }
+      ]
+    },
+    "text-field.basic": {
+      "pattern_id": "text-field.basic",
+      "catalog_revision": "0.1.0",
+      "rules": [
+        {
+          "rule": "The field has an accessible name matching its visible label, supplied by the `TextField` title, an `.accessibilityLabel` on a titleless field, or a `LabeledContent` wrapper.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Field name comes from the `TextField` title, `.accessibilityLabel`, or `LabeledContent`.",
+          "llm_eval_question": "Does the field's accessible name match its visible label?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "When a `LabeledContent` supplies the name, do not also add an `.accessibilityLabel`; the wrapper already provides the name and a second one overrides it.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "No `.accessibilityLabel` is added when a `LabeledContent` already supplies the name.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Set `.keyboardType` to match the expected input (e.g., `.emailAddress`, `.numberPad`) so the correct software keyboard appears.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "`.keyboardType` matches the expected input type.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The correct software keyboard appears for the field."
+        },
+        {
+          "rule": "Set `.textContentType` to the matching semantic type (e.g., `.emailAddress`, `.password`, `.oneTimeCode`, `.postalCode`) so AutoFill and QuickType offer the right value.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "`.textContentType` matches the field's semantic type.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "AutoFill / QuickType offer the right value for the field."
+        },
+        {
+          "rule": "Give the field a visible boundary that meets 3:1 non-text contrast against its background, e.g., `.textFieldStyle(.roundedBorder)` or `.border(.secondary)`; the default borderless `TextField` boundary can fall below 3:1.",
+          "source": "must_have",
+          "techniques": [
+            "device-human",
+            "static"
+          ],
+          "static_hint": "Field has a visible boundary style (e.g., `.roundedBorder`), not the borderless default.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The field boundary meets 3:1 non-text contrast in light and dark."
+        },
+        {
+          "rule": "When the field can show a validation error, expose the error text through `.accessibilityValue` and signal it with more than color, so VoiceOver announces the error and the state is not conveyed by color alone.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Validation error text is exposed via `.accessibilityValue` and signalled beyond color.",
+          "llm_eval_question": null,
+          "runtime_check": "On validation failure the field's accessibilityValue includes the error text.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Move VoiceOver focus to the errored field with `@AccessibilityFocusState` and `.accessibilityFocused` when validation fails on submit.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Errored field is bound with `@AccessibilityFocusState`/`.accessibilityFocused` and focused on failure.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "On a device, submitting with an error moves VoiceOver focus to the errored field."
+        },
+        {
+          "rule": "Support Dynamic Type: use a built-in text style so the field's label and text scale, and allow the label to wrap rather than truncate at accessibility sizes.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Field uses a built-in text style; label wraps rather than truncating.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .dynamicType/.textClipped failure for the field at accessibility sizes.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "static"
+          ],
+          "static_hint": "Tappable control uses a native control or a frame at least 24x24 pt.",
+          "llm_eval_question": null,
+          "runtime_check": "performAccessibilityAudit reports no .hitRegion failures for the control.",
+          "device_human_check": null
+        },
+        {
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Control renders through a native control style that preserves the system focus indicator.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "With Full Keyboard Access on, a visible focus indicator appears on the control."
+        },
+        {
+          "rule": "Do not rely on a placeholder as the only label; the placeholder disappears once the user types, can fall below text contrast, and leaves the field with no accessible name for VoiceOver.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Field has a real label, not only a placeholder.",
+          "llm_eval_question": "Does the field have an accessible name independent of its placeholder?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not wrap the field in a `LabeledContent` styled to stack its label vertically above the field (a custom vertical `LabeledContentStyle`); VoiceOver then cannot double-tap to activate the field and Voice Control cannot target it by name, due to a known Apple bug.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "No custom vertical `LabeledContentStyle` wraps the field.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "VoiceOver can activate the field and Voice Control can target it by name."
+        },
+        {
+          "rule": "Do not add an `.accessibilityLabel` on top of a `LabeledContent`-supplied name; the extra label overrides the paired one and can desync from the visible text.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "No `.accessibilityLabel` over a `LabeledContent`-supplied name.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not include the control type in the label (e.g., `.accessibilityLabel(\"Email text field\")`); VoiceOver already announces \"Text Field\", so this doubles it.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval",
+            "static"
+          ],
+          "static_hint": "Accessible name does not contain \"text field\"/control-type wording.",
+          "llm_eval_question": "Does the label avoid restating the control type (\"Text Field\")?",
+          "runtime_check": null,
+          "device_human_check": null
+        },
+        {
+          "rule": "Do not leave `.keyboardType` and `.textContentType` unset on a field that maps to a known type; it suppresses the right keyboard and blocks AutoFill.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "`.keyboardType` and `.textContentType` are set on known-type fields.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The right keyboard appears and AutoFill works for the field."
+        },
+        {
+          "rule": "Do not signal a validation error with color alone.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "device-human"
+          ],
+          "static_hint": "Validation error is signalled by text/icon, not color alone.",
+          "llm_eval_question": null,
+          "runtime_check": null,
+          "device_human_check": "The error state is perceivable without color."
         }
       ]
     }
