@@ -4848,151 +4848,126 @@
         "runtime_check": null
       },
       {
-        "rule": "The switch has an associated visible text label.",
+        "rule": "The switch has a visible text label, either programmatically associated with the control (`label[for]`) or matched by an accessible name on the control (`aria-label` or `aria-labelledby`).",
         "source": "must_have",
         "techniques": [
           "static",
           "runtime"
         ],
-        "static_hint": "A label element/text is programmatically associated (label[for], aria-labelledby, or wrapping label).",
+        "static_hint": "A label mechanism is present: label[for], a resolving aria-labelledby, aria-label, or a wrapping label.",
         "llm_eval_question": null,
-        "runtime_check": "Assert the label text is rendered visible."
+        "runtime_check": "Compute the switch's accessible name; assert it is non-empty and derives from the visible label."
       },
       {
-        "rule": "The switch has an accessible name that describes its action. Often this is worded to be true when the switch is set to \"on\" (e.g., \"Enable notifications\").",
+        "rule": "The accessible name begins with the visible label text, and may append a short amount of additional context for screen reader users (via `aria-label`, `aria-labelledby`, or offscreen `.sr-only` text).",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "static",
+          "llm-eval"
+        ],
+        "static_hint": "Any aria-label begins with the visible label text.",
+        "llm_eval_question": "If context is appended beyond the visible label, is it brief and clarifying rather than verbose or redundant?",
+        "runtime_check": "Compute the accessible name; assert it begins with the visible label text.",
+        "confidence": "advisory"
+      },
+      {
+        "rule": "The accessible name describes the setting the switch controls, worded so it is true when the switch is on (e.g., \"Enable notifications\").",
         "source": "must_have",
         "techniques": [
           "llm-eval",
           "static"
         ],
         "static_hint": "Switch has a non-empty accessible name source.",
-        "llm_eval_question": "Does the name describe the setting being controlled, phrased so it is true when on (e.g., \"Enable notifications\"), rather than being vague or stateful (\"On\")?",
+        "llm_eval_question": "Does the name describe the setting being controlled, phrased so it reads true when on (e.g., \"Enable notifications\"), rather than vague or stateful (\"On\")?",
         "runtime_check": null
       },
       {
-        "rule": "The accessible name is equivalent to the visible text label.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "No aria-label diverging from the visible label text.",
-        "llm_eval_question": null,
-        "runtime_check": "Compute the switch's accessible name; assert it matches the visible label."
-      },
-      {
-        "rule": "When additional context is needed beyond the visible text, add it via `aria-label`, `aria-labelledby`, or offscreen text (i.e., `.sr-only`).",
-        "source": "must_have",
-        "techniques": [
-          "llm-eval",
-          "static"
-        ],
-        "static_hint": "Extra context is delivered via approved mechanisms.",
-        "llm_eval_question": "Where the visible label alone is ambiguous, is distinguishing context added through an approved mechanism?",
-        "runtime_check": null
-      },
-      {
-        "rule": "The visible text appears at the start of the accessible name.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Any aria-label starts with the visible label text.",
-        "llm_eval_question": null,
-        "runtime_check": "Assert the computed accessible name begins with the visible label text."
-      },
-      {
-        "rule": "When on, the switch has `aria-checked=\"true\"`. When off, the switch has `aria-checked=\"false\"`.",
-        "source": "must_have",
-        "techniques": [
-          "runtime",
-          "static"
-        ],
-        "static_hint": "Non-native switch carries aria-checked bound to state.",
-        "llm_eval_question": null,
-        "runtime_check": "Toggle the switch; assert aria-checked (or native checked) flips in sync with the visible state."
-      },
-      {
-        "rule": "If the switch is implemented as `input[type=\"checkbox\"]`, use the native `checked` attribute instead of `aria-checked`.",
+        "rule": "The switch's on/off state is exposed via `aria-checked` (`\"true\"`/`\"false\"`), or via the native `checked` property when the switch is an `input[type=\"checkbox\"]`.",
         "source": "must_have",
         "techniques": [
           "static"
         ],
-        "static_hint": "Checkbox-based switches use checked and carry no aria-checked.",
+        "static_hint": "The switch carries aria-checked, or (for input[type=checkbox]) uses the native checked property; exactly one of the two conveys state.",
         "llm_eval_question": null,
         "runtime_check": null
       },
       {
-        "rule": "The switch must be focusable: Native input (i.e., `input[type=\"checkbox\"]`) is focusable by default.",
+        "rule": "The exposed state stays in sync with the switch as it toggles.",
         "source": "must_have",
         "techniques": [
           "runtime"
         ],
         "static_hint": null,
         "llm_eval_question": null,
-        "runtime_check": "Tab to the switch; assert it receives focus."
+        "runtime_check": "Toggle the switch; assert aria-checked (or native checked) flips in sync with the visible state each time."
       },
       {
-        "rule": "Non-native elements must include `tabIndex=\"0\"`.",
+        "rule": "The switch is focusable so Tab and Shift+Tab reach it: a native `input[type=\"checkbox\"]` is focusable by default; a non-native element (`div`/`button` with `role=\"switch\"`) must include `tabIndex=\"0\"`.",
         "source": "must_have",
         "techniques": [
-          "static"
-        ],
-        "static_hint": "div/button-based switches (non-natively-focusable elements) carry tabindex=\"0\".",
-        "llm_eval_question": null,
-        "runtime_check": null
-      },
-      {
-        "rule": "Tab/Shift+Tab moves focus to the switch.",
-        "source": "must_have",
-        "techniques": [
+          "static",
           "runtime"
         ],
-        "static_hint": null,
+        "static_hint": "Switch is a natively focusable element, or a non-native element carrying tabindex=\"0\".",
         "llm_eval_question": null,
-        "runtime_check": "Tab forward and Shift+Tab backward through the page; assert the switch is reached in both directions."
+        "runtime_check": "Tab and Shift+Tab through the page; assert the switch receives focus in both directions."
       },
       {
         "rule": "Space toggles the switch.",
         "source": "must_have",
         "techniques": [
-          "runtime"
+          "runtime",
+          "llm-eval",
+          "static"
         ],
-        "static_hint": null,
-        "llm_eval_question": null,
+        "static_hint": "Native control, or a keydown handler covering Space is attached to the switch element.",
+        "llm_eval_question": "Tracing the key handler, does pressing Space toggle the switch state (and preventDefault the page scroll)?",
         "runtime_check": "Focus the switch and press Space; assert the state toggles."
       },
       {
-        "rule": "Enter toggles the switch. Exception: If using native input `input[type=\"checkbox\"]`, then only Space toggles the switch, not Enter.",
+        "rule": "Enter toggles the switch. Exception: a native `input[type=\"checkbox\"]` toggles with Space only, not Enter.",
         "source": "must_have",
         "techniques": [
-          "runtime"
+          "runtime",
+          "llm-eval",
+          "static"
         ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "For non-checkbox implementations, press Enter and assert the state toggles; for checkbox implementations, assert Space toggles and Enter is not required."
+        "static_hint": "For non-checkbox implementations a keydown handler covering Enter is attached; checkbox implementations correctly omit Enter handling.",
+        "llm_eval_question": "Tracing the handler, does Enter toggle for non-checkbox switches, and is Enter correctly not required for input[type=checkbox]?",
+        "runtime_check": "For non-checkbox implementations press Enter and assert toggle; for checkbox implementations assert Space toggles and Enter is not required."
       },
       {
-        "rule": "If multiple switches are presented as a labeled set: Use `fieldset` with `legend`, or Wrap in `role=\"group\"` with `aria-labelledby`.",
+        "rule": "If multiple switches are presented as a labeled set, group them with `fieldset` + `legend` or `role=\"group\"` + `aria-labelledby`.",
         "source": "must_have",
         "techniques": [
           "static",
           "llm-eval"
         ],
-        "static_hint": "Switch groups are wrapped in fieldset+legend or role=\"group\"+aria-labelledby.",
-        "llm_eval_question": "Are these switches presented as a labeled set, and if so, is the group structure present?",
+        "static_hint": "A related set of switches is wrapped in fieldset+legend or role=\"group\"+aria-labelledby.",
+        "llm_eval_question": "Do these switches form a related set, and if so is the group structure present?",
         "runtime_check": null
       },
       {
-        "rule": "If additional descriptive static text is relevant to a switch or switch group, associate it using `aria-describedby`.",
+        "rule": "The group's label describes the purpose of the set (WCAG 2.4.6).",
         "source": "must_have",
         "techniques": [
-          "llm-eval",
-          "static"
+          "llm-eval"
         ],
-        "static_hint": "Descriptive text elements are referenced by aria-describedby on the switch or group.",
-        "llm_eval_question": "Is there rendered helper/description text for a switch that is not programmatically associated via aria-describedby?",
+        "static_hint": null,
+        "llm_eval_question": "Does the group's legend or aria-label describe the purpose of the switch set, rather than being generic or missing?",
+        "runtime_check": null,
+        "confidence": "advisory"
+      },
+      {
+        "rule": "Associate any additional descriptive static text with the switch via `aria-describedby` on the switch element itself. Do not place `aria-describedby` on a `fieldset` or group container, which screen readers announce unreliably; put group-level context in the `legend`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "llm-eval"
+        ],
+        "static_hint": "Any aria-describedby is on the switch element (a focusable control) with a resolving id; flag aria-describedby placed on a fieldset/group container.",
+        "llm_eval_question": "Is there rendered helper/description text for the switch that is not programmatically associated via aria-describedby on the switch?",
         "runtime_check": null
       },
       {
@@ -5002,29 +4977,20 @@
           "runtime",
           "static"
         ],
-        "static_hint": "No outline suppression without :focus-visible replacement on the switch.",
+        "static_hint": "No outline suppression without a :focus-visible replacement on the switch.",
         "llm_eval_question": null,
         "runtime_check": "Keyboard-focus the switch; assert a visible focus indicator renders."
       },
       {
-        "rule": "Do not use a switch for non-setting actions.",
+        "rule": "Do not use a switch for non-setting actions; use it only for persistent on/off settings.",
         "source": "dont",
         "techniques": [
           "llm-eval"
         ],
         "static_hint": null,
         "llm_eval_question": "Does this control represent a persistent on/off setting, or is it being used for a one-shot action or navigation (which should be a button)?",
-        "runtime_check": null
-      },
-      {
-        "rule": "Do not omit `aria-checked` when using `div` or `button` with `role=\"switch\"`.",
-        "source": "dont",
-        "techniques": [
-          "static"
-        ],
-        "static_hint": "Flag role=\"switch\" on div/button without aria-checked.",
-        "llm_eval_question": null,
-        "runtime_check": null
+        "runtime_check": null,
+        "confidence": "advisory"
       },
       {
         "rule": "Do not use both `checked` and `aria-checked` on `input[type=\"checkbox\"]`.",
@@ -5032,18 +4998,8 @@
         "techniques": [
           "static"
         ],
-        "static_hint": "Flag aria-checked on a checkbox input that already uses checked.",
+        "static_hint": "Flag a checkbox input that carries both the native checked property and aria-checked.",
         "llm_eval_question": null,
-        "runtime_check": null
-      },
-      {
-        "rule": "Do not use a switch to trigger actions; use it only for persistent on/off settings.",
-        "source": "dont",
-        "techniques": [
-          "llm-eval"
-        ],
-        "static_hint": null,
-        "llm_eval_question": "Does toggling this switch fire an action (submit, navigate, send) rather than persisting a setting state?",
         "runtime_check": null
       }
     ]
