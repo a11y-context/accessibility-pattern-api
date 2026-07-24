@@ -101,6 +101,13 @@ const sidebars = {
         label: (displayNames['ios/swiftui'] || {})[p.id] || p.title,
       })),
     },
+    {
+      type: 'doc',
+      // release-notes.md has slug /swiftui/release-notes; the doc id resolves
+      // to swiftui/release-notes (mirrors web-react's Release Notes entry).
+      id: 'swiftui/release-notes',
+      label: 'Release Notes',
+    },
   ],
 };
 
