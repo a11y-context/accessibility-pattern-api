@@ -1770,223 +1770,6 @@
       }
     ]
   },
-  "popover.basic": {
-    "pattern_id": "popover.basic",
-    "catalog_revision": "0.5.2",
-    "rules": [
-      {
-        "rule": "The dialog surface uses `role=\"dialog\"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Surface is role=\"dialog\" or a native <dialog> whose open path uses `.show()`/the `open` attribute; flag any `.showModal()` call.",
-        "llm_eval_question": null,
-        "runtime_check": "Open the dialog; assert it does NOT match the `:modal` pseudo-class and the page behind remains interactive."
-      },
-      {
-        "rule": "The dialog has an accessible name via `aria-labelledby` (preferred), referencing a visible title element (e.g., `<h2 id=\"...\">`), or `aria-label`.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Dialog surface carries a non-empty aria-label, or aria-labelledby whose IDREF resolves to a title element inside the dialog.",
-        "llm_eval_question": null,
-        "runtime_check": "If aria-labelledby is used, assert the referenced title element is rendered visible while the dialog is open."
-      },
-      {
-        "rule": "Focus moves into the dialog on open, landing on the dialog container or its first interactive control.",
-        "source": "must_have",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "Activate the trigger; assert document.activeElement is the dialog container or its first interactive control."
-      },
-      {
-        "rule": "Esc closes the dialog, regardless of where focus currently sits, since focus is not trapped and may have moved into the page.",
-        "source": "must_have",
-        "techniques": [
-          "runtime",
-          "static"
-        ],
-        "static_hint": "Esc handler is bound at the document level, not only on the dialog surface.",
-        "llm_eval_question": null,
-        "runtime_check": "Open the dialog, Tab focus out into the page, press Esc; assert the dialog closes even though focus was outside it."
-      },
-      {
-        "rule": "Focus is restored to the invoking element on close.",
-        "source": "must_have",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "Open from the trigger, close the dialog; assert document.activeElement is the original invoking element."
-      },
-      {
-        "rule": "Capture the invoking element at open time, and restore focus with `requestAnimationFrame` after the dialog is unmounted.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Open handler stores document.activeElement (or the trigger ref); close path calls focus() on it inside requestAnimationFrame.",
-        "llm_eval_question": null,
-        "runtime_check": "Close the dialog; assert focus lands on the invoker on the frame after unmount (not stranded on <body> due to restoring before removal)."
-      },
-      {
-        "rule": "The dialog does not trap focus. Tab and Shift+Tab move out of the dialog into the rest of the page, which stays interactive.",
-        "source": "must_have",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus moves into the page and page controls remain clickable/focusable."
-      },
-      {
-        "rule": "The dialog does not set `aria-modal=\"true\"`",
-        "source": "must_have",
-        "techniques": [
-          "static"
-        ],
-        "static_hint": "No aria-modal=\"true\" on the dialog surface.",
-        "llm_eval_question": null,
-        "runtime_check": null
-      },
-      {
-        "rule": "The dialog does not apply `inert` to the background.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "No code sets `inert` on the app root, body, or background containers when this dialog opens.",
-        "llm_eval_question": null,
-        "runtime_check": "With the dialog open, assert background elements are focusable and have no inert ancestor."
-      },
-      {
-        "rule": "Provide a visible close control. Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Dialog contains a close control that is a native <button>, or role=\"button\" as documented fallback.",
-        "llm_eval_question": null,
-        "runtime_check": "With the dialog open, assert the close control is rendered visible."
-      },
-      {
-        "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
-        "source": "must_have",
-        "techniques": [
-          "static"
-        ],
-        "static_hint": "Every role=\"button\" close control also carries tabindex=\"0\".",
-        "llm_eval_question": null,
-        "runtime_check": null
-      },
-      {
-        "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-        "source": "must_have",
-        "techniques": [
-          "runtime",
-          "static"
-        ],
-        "static_hint": "role=\"button\" element has key handlers covering Enter and Space.",
-        "llm_eval_question": null,
-        "runtime_check": "Focus the role=\"button\" close control, press Enter, then Space; assert each closes the dialog."
-      },
-      {
-        "rule": "ensuring Space prevents page scrolling while activating the control",
-        "source": "must_have",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" control; assert activation occurs and the page does not scroll."
-      },
-      {
-        "rule": "The close control has an accessible name that describes its purpose or action (e.g., `aria-label=\"Close\"`).",
-        "source": "must_have",
-        "techniques": [
-          "static",
-          "llm-eval"
-        ],
-        "static_hint": "Close control has a non-empty accessible name source.",
-        "llm_eval_question": "Does the close control's name convey the close action rather than being generic or icon-descriptive?",
-        "runtime_check": null
-      },
-      {
-        "rule": "Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the trigger, the close control, and any focusable content within the dialog.",
-        "source": "must_have",
-        "techniques": [
-          "runtime",
-          "static"
-        ],
-        "static_hint": "No outline suppression without :focus-visible replacement on the trigger, close control, or dialog content.",
-        "llm_eval_question": null,
-        "runtime_check": "Keyboard-focus the trigger, close control, and each focusable descendant; assert a visible focus indicator renders on each."
-      },
-      {
-        "rule": "Do not set `aria-modal=\"true\"` on a non-modal dialog; it falsely tells assistive technology the background is inert.",
-        "source": "dont",
-        "techniques": [
-          "static"
-        ],
-        "static_hint": "Flag aria-modal=\"true\" on the non-modal dialog surface.",
-        "llm_eval_question": null,
-        "runtime_check": null
-      },
-      {
-        "rule": "Do not trap focus within the dialog.",
-        "source": "dont",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus exits into the page instead of cycling back inside."
-      },
-      {
-        "rule": "Do not apply `inert` to, or otherwise block, the background content.",
-        "source": "dont",
-        "techniques": [
-          "static",
-          "runtime"
-        ],
-        "static_hint": "Flag inert application, full-screen blocking overlays, or pointer-events:none on background containers tied to this dialog's open state.",
-        "llm_eval_question": null,
-        "runtime_check": "With the dialog open, click and focus background controls; assert they respond normally."
-      },
-      {
-        "rule": "Do not omit focus restoration; closing the dialog must return focus to the element that invoked it.",
-        "source": "dont",
-        "techniques": [
-          "runtime"
-        ],
-        "static_hint": null,
-        "llm_eval_question": null,
-        "runtime_check": "Close the dialog by each supported path; assert document.activeElement is the invoking element after each."
-      },
-      {
-        "rule": "Do not bind Esc only to a container-level handler on the dialog surface; once focus leaves the untrapped dialog, that handler stops firing and Esc no longer closes.",
-        "source": "dont",
-        "techniques": [
-          "runtime",
-          "static"
-        ],
-        "static_hint": "Flag an Esc keydown handler attached only to the dialog element with no document-level listener.",
-        "llm_eval_question": null,
-        "runtime_check": "Open the dialog, move focus into the page outside it, press Esc; assert the dialog still closes."
-      }
-    ]
-  },
   "disclosure.basic": {
     "pattern_id": "disclosure.basic",
     "catalog_revision": "0.5.2",
@@ -4316,6 +4099,223 @@
       }
     ]
   },
+  "popover.basic": {
+    "pattern_id": "popover.basic",
+    "catalog_revision": "0.5.2",
+    "rules": [
+      {
+        "rule": "The dialog surface uses `role=\"dialog\"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Surface is role=\"dialog\" or a native <dialog> whose open path uses `.show()`/the `open` attribute; flag any `.showModal()` call.",
+        "llm_eval_question": null,
+        "runtime_check": "Open the dialog; assert it does NOT match the `:modal` pseudo-class and the page behind remains interactive."
+      },
+      {
+        "rule": "The dialog has an accessible name via `aria-labelledby` (preferred), referencing a visible title element (e.g., `<h2 id=\"...\">`), or `aria-label`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Dialog surface carries a non-empty aria-label, or aria-labelledby whose IDREF resolves to a title element inside the dialog.",
+        "llm_eval_question": null,
+        "runtime_check": "If aria-labelledby is used, assert the referenced title element is rendered visible while the dialog is open."
+      },
+      {
+        "rule": "Focus moves into the dialog on open, landing on the dialog container or its first interactive control.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Activate the trigger; assert document.activeElement is the dialog container or its first interactive control."
+      },
+      {
+        "rule": "Esc closes the dialog, regardless of where focus currently sits, since focus is not trapped and may have moved into the page.",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "static"
+        ],
+        "static_hint": "Esc handler is bound at the document level, not only on the dialog surface.",
+        "llm_eval_question": null,
+        "runtime_check": "Open the dialog, Tab focus out into the page, press Esc; assert the dialog closes even though focus was outside it."
+      },
+      {
+        "rule": "Focus is restored to the invoking element on close.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Open from the trigger, close the dialog; assert document.activeElement is the original invoking element."
+      },
+      {
+        "rule": "Capture the invoking element at open time, and restore focus with `requestAnimationFrame` after the dialog is unmounted.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Open handler stores document.activeElement (or the trigger ref); close path calls focus() on it inside requestAnimationFrame.",
+        "llm_eval_question": null,
+        "runtime_check": "Close the dialog; assert focus lands on the invoker on the frame after unmount (not stranded on <body> due to restoring before removal)."
+      },
+      {
+        "rule": "The dialog does not trap focus. Tab and Shift+Tab move out of the dialog into the rest of the page, which stays interactive.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus moves into the page and page controls remain clickable/focusable."
+      },
+      {
+        "rule": "The dialog does not set `aria-modal=\"true\"`",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "No aria-modal=\"true\" on the dialog surface.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The dialog does not apply `inert` to the background.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "No code sets `inert` on the app root, body, or background containers when this dialog opens.",
+        "llm_eval_question": null,
+        "runtime_check": "With the dialog open, assert background elements are focusable and have no inert ancestor."
+      },
+      {
+        "rule": "Provide a visible close control. Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Dialog contains a close control that is a native <button>, or role=\"button\" as documented fallback.",
+        "llm_eval_question": null,
+        "runtime_check": "With the dialog open, assert the close control is rendered visible."
+      },
+      {
+        "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Every role=\"button\" close control also carries tabindex=\"0\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "static"
+        ],
+        "static_hint": "role=\"button\" element has key handlers covering Enter and Space.",
+        "llm_eval_question": null,
+        "runtime_check": "Focus the role=\"button\" close control, press Enter, then Space; assert each closes the dialog."
+      },
+      {
+        "rule": "ensuring Space prevents page scrolling while activating the control",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" control; assert activation occurs and the page does not scroll."
+      },
+      {
+        "rule": "The close control has an accessible name that describes its purpose or action (e.g., `aria-label=\"Close\"`).",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "llm-eval"
+        ],
+        "static_hint": "Close control has a non-empty accessible name source.",
+        "llm_eval_question": "Does the close control's name convey the close action rather than being generic or icon-descriptive?",
+        "runtime_check": null
+      },
+      {
+        "rule": "Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the trigger, the close control, and any focusable content within the dialog.",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "static"
+        ],
+        "static_hint": "No outline suppression without :focus-visible replacement on the trigger, close control, or dialog content.",
+        "llm_eval_question": null,
+        "runtime_check": "Keyboard-focus the trigger, close control, and each focusable descendant; assert a visible focus indicator renders on each."
+      },
+      {
+        "rule": "Do not set `aria-modal=\"true\"` on a non-modal dialog; it falsely tells assistive technology the background is inert.",
+        "source": "dont",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Flag aria-modal=\"true\" on the non-modal dialog surface.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Do not trap focus within the dialog.",
+        "source": "dont",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus exits into the page instead of cycling back inside."
+      },
+      {
+        "rule": "Do not apply `inert` to, or otherwise block, the background content.",
+        "source": "dont",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Flag inert application, full-screen blocking overlays, or pointer-events:none on background containers tied to this dialog's open state.",
+        "llm_eval_question": null,
+        "runtime_check": "With the dialog open, click and focus background controls; assert they respond normally."
+      },
+      {
+        "rule": "Do not omit focus restoration; closing the dialog must return focus to the element that invoked it.",
+        "source": "dont",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Close the dialog by each supported path; assert document.activeElement is the invoking element after each."
+      },
+      {
+        "rule": "Do not bind Esc only to a container-level handler on the dialog surface; once focus leaves the untrapped dialog, that handler stops firing and Esc no longer closes.",
+        "source": "dont",
+        "techniques": [
+          "runtime",
+          "static"
+        ],
+        "static_hint": "Flag an Esc keydown handler attached only to the dialog element with no document-level listener.",
+        "llm_eval_question": null,
+        "runtime_check": "Open the dialog, move focus into the page outside it, press Esc; assert the dialog still closes."
+      }
+    ]
+  },
   "select.basic": {
     "pattern_id": "select.basic",
     "catalog_revision": "0.5.2",
@@ -5001,6 +5001,333 @@
         "static_hint": "Flag a checkbox input that carries both the native checked property and aria-checked.",
         "llm_eval_question": null,
         "runtime_check": null
+      }
+    ]
+  },
+  "tabs.basic": {
+    "pattern_id": "tabs.basic",
+    "catalog_revision": "0.7.0",
+    "rules": [
+      {
+        "rule": "The set of tabs is contained in an element with `role=\"tablist\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "A container element carries role=\"tablist\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Each tab has `role=\"tab\"` and is contained within the tablist.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Every element with role=\"tab\" is a descendant of the role=\"tablist\" container.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Each tab uses a native `<button>` as its base element (preferred), or a non-native element with `role=\"tab\"` only when a native button cannot be used.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Each role=\"tab\" element is a <button>, or a non-native element carrying role=\"tab\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "If a non-native element is used, add `tabindex` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the tab.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Non-native tab elements carry a tabindex attribute and a keydown handler covering Enter and Space with preventDefault on Space.",
+        "llm_eval_question": null,
+        "runtime_check": "Focus a non-native tab and press Space; assert the tab activates and the page scroll position is unchanged."
+      },
+      {
+        "rule": "Each panel is an element with `role=\"tabpanel\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "One element with role=\"tabpanel\" exists per tab.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Exactly one tabpanel is displayed at a time.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Activate each tab in turn; after each activation assert exactly one role=\"tabpanel\" element is visible."
+      },
+      {
+        "rule": "Each tabpanel is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that when hidden, its content cannot be reached by keyboard or screen readers.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Inactive tabpanels carry the hidden attribute, display: none, or are not rendered; they are not merely positioned offscreen.",
+        "llm_eval_question": null,
+        "runtime_check": "With one tab selected, assert every other tabpanel is absent from the accessibility tree and that no element inside it can receive focus via Tab."
+      },
+      {
+        "rule": "A vertically stacked tablist has `aria-orientation=\"vertical\"`; a horizontal tablist omits the attribute.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "llm-eval"
+        ],
+        "static_hint": "aria-orientation=\"vertical\" is present when the tablist is laid out vertically and absent when it is laid out horizontally.",
+        "llm_eval_question": "When the layout cannot be resolved from the markup alone, do the applied styles render the tablist vertically, and does the attribute match?",
+        "runtime_check": null
+      },
+      {
+        "rule": "The tablist has an accessible name, via `aria-labelledby` referencing a visible heading when one exists, otherwise via `aria-label`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "The role=\"tablist\" element carries aria-labelledby or aria-label; any aria-labelledby target id exists in the document.",
+        "llm_eval_question": null,
+        "runtime_check": "Compute the tablist's accessible name; assert it is non-empty."
+      },
+      {
+        "rule": "Each tab's visible text is contained in its accessible name, and appears at the start of it when additional context is appended.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Any aria-label on a tab begins with that tab's visible text rather than replacing it.",
+        "llm_eval_question": null,
+        "runtime_check": "Compute each tab's accessible name; assert it starts with the tab's visible text (WCAG 2.5.3 Label in Name)."
+      },
+      {
+        "rule": "Each tabpanel has `aria-labelledby` referencing the `id` of its tab.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Every role=\"tabpanel\" carries aria-labelledby whose value is the id of its corresponding role=\"tab\" element.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The selected tab has `aria-selected=\"true\"` and every other tab has `aria-selected=\"false\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "aria-selected is bound on every role=\"tab\" element to an expression that resolves to \"true\" for exactly one tab and \"false\" for the rest.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The `\"false\"` value is set explicitly, including on a tab that holds focus without being selected under manual activation.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "No branch renders a role=\"tab\" element without an aria-selected attribute.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Each tab has `aria-controls` referencing the `id` of its tabpanel.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Every role=\"tab\" carries aria-controls whose value is the id of its role=\"tabpanel\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The selected tab is distinguishable from unselected tabs by more than color (e.g., weight, an underline, or an icon), per `global.use-of-color`.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Compare computed styles of the selected and an unselected tab; assert at least one non-color property differs (font-weight, border, text-decoration, or an added child element)."
+      },
+      {
+        "rule": "The tab set implements one activation model consistently (see Customizable for choosing one).",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "When runtime cannot exercise the component, do the arrow-key path and the click path resolve to the same activation model?",
+        "runtime_check": "Arrow to an adjacent tab and record whether selection changed; click a third tab and record the same. Assert both paths agree on whether focus alone selects."
+      },
+      {
+        "rule": "Under automatic activation, arrow-key movement also selects the newly focused tab and displays its panel.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Under automatic activation, press Right Arrow; assert the newly focused tab has aria-selected=\"true\" and its panel is the visible one."
+      },
+      {
+        "rule": "Under manual activation, arrow-key movement changes focus only, and the selected tab and displayed panel do not change until Enter or Space.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Under manual activation, arrow to an unselected tab and assert aria-selected and the visible panel are unchanged; press Enter and assert both update."
+      },
+      {
+        "rule": "Right Arrow and Left Arrow move focus between tabs and wrap at the ends.",
+        "source": "must_have",
+        "techniques": [
+          "runtime",
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "When runtime cannot exercise the component, do the ArrowRight and ArrowLeft branches move focus one tab in each direction and wrap at both ends?",
+        "runtime_check": "Focus the first tab; press Left Arrow and assert focus is on the last tab; press Right Arrow and assert focus returns to the first."
+      },
+      {
+        "rule": "In a vertical tablist, Down Arrow performs as Right Arrow and Up Arrow performs as Left Arrow.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "In a vertical tablist, press Down Arrow and Up Arrow; assert focus moves to the next and previous tab respectively."
+      },
+      {
+        "rule": "A horizontal tablist leaves Up and Down Arrow alone so the page can still scroll.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "In a horizontal tablist, focus a tab and press Down Arrow; assert focus does not move and the page scroll position changes."
+      },
+      {
+        "rule": "Home moves focus to the first tab and End moves focus to the last tab.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "From a middle tab, press Home and assert focus is on the first tab; press End and assert focus is on the last tab."
+      },
+      {
+        "rule": "Enter or Space activates the focused tab when it was not already activated on focus.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Under manual activation, arrow to an unselected tab and press Enter; assert its panel becomes visible. Repeat with Space."
+      },
+      {
+        "rule": "Tab moves focus out of the tablist to the next element in the page tab sequence, never to another tab.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Exactly one tab is bound to tabindex=\"0\"; all others are bound to tabindex=\"-1\".",
+        "llm_eval_question": null,
+        "runtime_check": "Focus a tab and press Tab; assert focus leaves the tablist and does not land on another role=\"tab\" element."
+      },
+      {
+        "rule": "The selected tab has `tabindex=\"0\"` and every other tab has `tabindex=\"-1\"`, so the tablist is a single Tab stop.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "tabindex on each tab is bound to the selection state, resolving to 0 for the selected tab and -1 for the rest.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "When the tabpanel's content begins with a non-focusable element, the tabpanel has `tabindex=\"0\"`, so that Tab from the tablist reaches the panel content instead of skipping past it.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Tabpanels whose first content element is not natively focusable carry tabindex=\"0\".",
+        "llm_eval_question": null,
+        "runtime_check": "With a panel whose content starts non-focusable, focus the selected tab and press Tab; assert focus lands on the tabpanel element."
+      },
+      {
+        "rule": "Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the tabs and around the tabpanel when it is focusable.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "No stylesheet rule sets outline: none or outline: 0 on the tabs or the tabpanel without providing a replacement indicator.",
+        "llm_eval_question": null,
+        "runtime_check": "Focus each tab and the focusable tabpanel; assert a visible focus indicator is present in the computed styles."
+      },
+      {
+        "rule": "The focus indicator on a focused tab is distinguishable from the selected-tab styling.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Under manual activation, arrow to an unselected tab; assert its computed focus styling differs from the selected tab's styling."
+      },
+      {
+        "rule": "Do not leave a tabpanel visible while its tab has `aria-selected=\"false\"` (and vice versa).",
+        "source": "dont",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "After each tab activation, assert the visible tabpanel is the one referenced by the tab whose aria-selected is \"true\", and no other panel is visible."
+      },
+      {
+        "rule": "Do not derive arrow-key movement from the selected tab's index instead of the focused tab's index.",
+        "source": "dont",
+        "techniques": [
+          "llm-eval",
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Does the arrow-key handler compute the next index from the index of the tab that currently has focus, rather than from the selected-tab state variable?",
+        "runtime_check": "Under manual activation, arrow twice in one direction from the selected tab; assert focus advanced two tabs rather than returning to the first neighbor."
+      },
+      {
+        "rule": "Do not move focus off the activated tab.",
+        "source": "dont",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Activate each tab by click and by Enter; assert document.activeElement remains that role=\"tab\" element and the document URL is unchanged."
       }
     ]
   },
