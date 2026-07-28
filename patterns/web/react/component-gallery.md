@@ -32,6 +32,7 @@ Browse all accessibility patterns available for Web / React.
 | [Select (Basic)](./components/select.native.md) | A native select element styled with CSS, the default single-value form control; retains native keyboard, mobile, dismissal, and assistive-technology behavior. |
 | [Select (Custom Style)](./components/select.basic.md) | A custom-styled form select that matches native `<select>` behavior using a button trigger + listbox popup, and a visually hidden native `<select>` for form submission and browser autofill. |
 | [Switch](./components/switch.basic.md) | Two-state on/off control representing a persistent setting. Uses role="switch" with aria-checked, or native checkbox semantics when applicable. |
+| [Tabs](./components/tabs.basic.md) | Same-page sections where one panel is visible at a time, using role="tablist", role="tab", and role="tabpanel" with aria-selected, a roving tabindex, and arrow-key traversal. |
 | [Toast](./components/toast.basic.md) | Temporary, non-blocking status message announced via live region. May include optional dismiss control. Disappears automatically. |
 | [Tooltip](./components/tooltip.basic.md) | A brief supplementary text label shown on hover and focus of its trigger; uses role="tooltip" referenced by aria-describedby, and is hoverable, dismissible, and persistent. |
 

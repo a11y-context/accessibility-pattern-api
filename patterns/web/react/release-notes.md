@@ -8,6 +8,13 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.7.0 — 2026-07-27
+
+**New pattern: Tabs.**
+
+- `tabs.basic` → 0.1.0 — initial pattern. Same-page view switching with `role="tablist"`, roving tabindex keyed to selection, and wrapping arrow-key traversal. The activation model is a Must Have rather than a preference: whichever model is used must be implemented consistently, with automatic activation appropriate only when panels display without noticeable latency. The explicit `aria-selected="false"` on a focused-but-unselected tab is required so user agents do not report the focused tab as selected. Horizontal tablists deliberately leave Up and Down Arrow alone so the page can still scroll, per APG.
+- `qa-catalog.json` → 31 classified rules for `tabs.basic` (static 17 / runtime 21 / llm-eval 4), the first pattern derived under the ordered-escalation technique model: `techniques` is cheapest-first, and later entries are fallbacks that run only when the primary is indeterminate. The remaining web and iOS patterns still use the previous "tag all that apply" semantics and are queued for re-derive.
+
 ## 0.6.0 — 2026-07-24
 
 **Overlay family split: the non-modal dialog becomes Popover, and the modal dialog becomes the family's default member.**
