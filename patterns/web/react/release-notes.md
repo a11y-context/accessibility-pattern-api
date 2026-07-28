@@ -8,6 +8,24 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.12.0 — 2026-07-27
+
+**QA catalog: first re-derive batch — `button.basic`, `link.basic`, `select.native`, `collection-row.basic`, `dialog.basic`.** No pattern `.md` changed — classification only. These five carried the heaviest pre-escalation classifications remaining; 91 rules become 58.
+
+| pattern | before | after |
+|---|---|---|
+| `button.basic` | 16 rules, 38% llm-eval, 1.69 avg | 9 rules, 22%, 1.44 |
+| `link.basic` | 19 rules, 26%, 1.58 | 12 rules, 17%, 1.50 |
+| `select.native` | 11 rules, 27%, 1.55 | 6 rules, 0%, 1.17 |
+| `collection-row.basic` | 17 rules, 24%, 1.59 | 14 rules, 7%, 1.43 |
+| `dialog.basic` | 28 rules, 21%, 1.68 | 17 rules, 0%, 1.41 |
+
+Most of the reduction is Don'ts that invert a Must Have already captured, and `llm-eval` tags that restated a runtime assertion in prose. `select.native` and `dialog.basic` come out with no `llm-eval` at all, which is the honest answer for them: one is a native form control whose requirements are entirely structural, and the other is an element choice plus six observable behaviors. Nothing in either turns on judgment.
+
+Two rules flagged in 0.11.0 as possible Foundations restatements are resolved here and dropped: `dialog.basic`'s "Focus indicators … follow the Foundations focus rule" (a restatement by reference) and `button.basic`'s "Do not hide focus outlines without providing a strong custom focus style."
+
+Corpus totals: 509 component rules, 11% `llm-eval`. Fifteen blocks remain at `0.5.2` and are queued for the next batches.
+
 ## 0.11.0 — 2026-07-27
 
 **QA catalog: web/react gains a `foundations` section, and the duplicated focus-state check is relocated into it.** No pattern `.md` changed — classification only.

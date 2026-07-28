@@ -1,6 +1,6 @@
 {
   "stack": "web/react",
-  "catalog_revision": "0.11.0",
+  "catalog_revision": "0.12.0",
   "components": {
     "accordion.basic": {
       "pattern_id": "accordion.basic",
@@ -178,7 +178,7 @@
     },
     "button.basic": {
       "pattern_id": "button.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.12.0",
       "rules": [
         {
           "rule": "Use a native `<button>` for built-in semantics and keyboard behavior.",
@@ -186,61 +186,30 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "The control is a native <button> element.",
+          "static_hint": "Control is a native <button>; a div/span with role=\"button\" is the documented fallback and only valid where a native button cannot be used.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "A custom implementation with `role=\"button\"` is appropriate only when a native button cannot be used.",
+          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "Detect role=\"button\" on non-button elements as the trigger for review.",
-          "llm_eval_question": "Given the surrounding code, is there a genuine constraint (e.g., third-party wrapper, unavoidable markup restriction) that prevented using a native <button>?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If role=\"button\" is used instead of a native <button>, add tabindex=\"0\"",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every role=\"button\" element carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" element has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" element, press Enter, then Space; assert each activates the button's action."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
+            "static",
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" element; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "The button has an accessible name that describes its purpose or action.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
           "static_hint": "Button has a non-empty accessible name source (text content, aria-label, or aria-labelledby).",
-          "llm_eval_question": "Does the button's accessible name describe its purpose or action (e.g., \"Save changes\") rather than being generic (\"Click here\", \"Button\") or icon-descriptive (\"Gear\")?",
+          "llm_eval_question": "Does the accessible name describe what the button does, rather than naming the icon or being generic (\"Click here\", \"Submit\")?",
           "runtime_check": null
         },
         {
@@ -250,31 +219,30 @@
             "static",
             "runtime"
           ],
-          "static_hint": "No aria-label/aria-labelledby that replaces or omits the visible text on text-bearing buttons.",
+          "static_hint": "No aria-label or aria-labelledby overrides the button's visible text content.",
           "llm_eval_question": null,
-          "runtime_check": "Compute the button's accessible name in the rendered accessibility tree; assert it matches (or contains, per the context rule) the visible text."
+          "runtime_check": "Compute the accessible name; assert it equals the visible text content."
         },
         {
           "rule": "When additional context is needed beyond the visible text, add it via `aria-label`, `aria-labelledby`, or offscreen text.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
-          "static_hint": "Where extra context exists, it is delivered via aria-label, aria-labelledby, or a visually-hidden text element — not title or a bare icon.",
-          "llm_eval_question": "Where the visible text is ambiguous across the page (e.g., multiple \"Edit\" buttons), does the code add distinguishing context through an approved mechanism?",
+          "static_hint": "Added context uses aria-label, aria-labelledby, or offscreen text — not title, and not text removed from the accessibility tree.",
+          "llm_eval_question": "Is the visible text alone ambiguous among similar buttons on the screen, and if so, has distinguishing context been added?",
           "runtime_check": null
         },
         {
           "rule": "The visible text appears at the start of the accessible name.",
           "source": "must_have",
           "techniques": [
-            "static",
             "runtime"
           ],
-          "static_hint": "Any aria-label on a text-bearing button starts with the visible text string; aria-labelledby lists the visible-text element's ID first.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Assert the computed accessible name begins with the button's rendered visible text."
+          "runtime_check": "Compute the accessible name; assert it begins with the button's visible text."
         },
         {
           "rule": "For icon-only buttons, provide an accessible name using `aria-label` or `aria-labelledby`.",
@@ -282,7 +250,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Buttons with no text content carry a non-empty aria-label or a resolving aria-labelledby.",
+          "static_hint": "A button whose only content is an icon carries aria-label or aria-labelledby.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -292,64 +260,19 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon elements (svg, img, icon spans) inside buttons carry aria-hidden=\"true\" (or focusable=\"false\"/empty alt as applicable).",
+          "static_hint": "Icon elements inside a button carry aria-hidden=\"true\" and contribute no accessible text.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "If the action is unavailable, disable the button using the native `disabled` attribute. (It becomes unfocusable and non-interactive.)",
+          "rule": "If the action is unavailable, disable the button using the native `disabled` attribute.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "llm-eval",
-            "runtime"
-          ],
-          "static_hint": "Unavailable state is expressed with the native disabled attribute, not aria-disabled or CSS-only styling.",
-          "llm_eval_question": "When the code models an unavailable action, does it disable the native button rather than leaving it clickable or faking disabled state visually?",
-          "runtime_check": "With the button disabled, assert it is unfocusable via Tab and clicks do not fire its action."
-        },
-        {
-          "rule": "Do not build a button out of a `<div>` or `<span>` with `role=\"button\"` unless you absolutely must; native `<button>` is the baseline.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "Flag div/span with role=\"button\".",
-          "llm_eval_question": "Is there a compelling documented constraint justifying the non-native button, or was native <button> viable?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not create icon-only buttons without an accessible name (no unlabeled icons).",
-          "source": "dont",
-          "techniques": [
             "static"
           ],
-          "static_hint": "Flag buttons whose only content is an icon and that have no aria-label/aria-labelledby.",
+          "static_hint": "Unavailable state uses the native disabled attribute, not aria-disabled paired with a click guard.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Do not use `aria-label` that conflicts with (or is wildly different from) the visible label text. Accessible names should at least begin with the visible label.",
-          "source": "dont",
-          "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "String check: aria-label on a text-bearing button starts with the visible text.",
-          "llm_eval_question": "Does the aria-label semantically match the visible label (same action, visible text at the start), or would a voice-control user saying the visible label fail to match?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not hide focus outlines without providing a strong custom focus style.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag outline:none/outline:0 on the button without accompanying :focus-visible replacement styles.",
-          "llm_eval_question": null,
-          "runtime_check": "Keyboard-focus the button; assert a visible indicator is rendered despite any outline overrides."
         }
       ]
     },
@@ -1294,7 +1217,7 @@
     },
     "collection-row.basic": {
       "pattern_id": "collection-row.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.12.0",
       "rules": [
         {
           "rule": "Use a visible heading, typically an `<h2>`, above the row.",
@@ -1303,9 +1226,9 @@
             "static",
             "runtime"
           ],
-          "static_hint": "A heading element (typically <h2>) precedes the row container in the DOM.",
+          "static_hint": "A heading element precedes the row container.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the heading is rendered visible above the row (not offscreen or hidden)."
+          "runtime_check": "Assert the heading renders visible above the row."
         },
         {
           "rule": "Use list semantics for the row: `ul` with `li` items.",
@@ -1313,72 +1236,60 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Row items are <li> children of a <ul>, with no role overrides stripping list semantics.",
+          "static_hint": "The row is a <ul> whose direct children are <li> elements.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "Each item must comprise a single focus stop: in other words, consist of a single link `<a>`",
+          "rule": "Each item must comprise a single focus stop: in other words, consist of a single link `<a>`.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Each <li> contains exactly one <a> and no other focusable/interactive elements.",
+          "static_hint": "Each <li> contains exactly one interactive element, an <a>; flag nested buttons or additional links inside an item.",
           "llm_eval_question": null,
-          "runtime_check": "Tab across the row; assert each visible item consumes exactly one tab stop."
+          "runtime_check": "Tab through the row; assert focus stops once per item."
         },
         {
-          "rule": "A visual element (image, poster, thumbnail, or media preview).",
+          "rule": "Each item contains a visual element (image, poster, thumbnail, or media preview).",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Each item link contains an <img>/<picture>/video-preview element.",
+          "static_hint": "Each item link contains an image or media element.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "A visible title that identifies the item.",
-          "source": "must_have",
-          "techniques": [
-            "llm-eval",
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Each item link contains a text element for the title (not only an image).",
-          "llm_eval_question": "Does the title text actually identify the item (show name, product name), not a generic caption?",
-          "runtime_check": "Assert the title element is rendered visible within each item."
-        },
-        {
-          "rule": "Optional visible metadata (e.g., price, episode number, rating).",
-          "source": "must_have",
-          "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "If metadata is rendered, it lives inside the item link (part of the single focus stop), not as a separate interactive element.",
-          "llm_eval_question": "If metadata is present, is it visible text inside the item link rather than hidden or split into its own control?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Each item link must have an accessible name composed of: title + metadata (optional) via `aria-labelledby`",
+          "rule": "Each item contains a visible title that identifies the item.",
           "source": "must_have",
           "techniques": [
             "static",
             "llm-eval"
           ],
-          "static_hint": "Each item link carries aria-labelledby whose IDREFs resolve to the title element (first) and metadata element(s).",
-          "llm_eval_question": "Does the composed name read as title followed by metadata, matching what the item visually presents?",
+          "static_hint": "Each item link renders a text title element.",
+          "llm_eval_question": "Does the visible title identify the item on its own, rather than relying on the poster art?",
           "runtime_check": null
         },
         {
-          "rule": "Each item link should expose position context (e.g., \"3 of 18\") as supplemental information: Provide an offscreen \"X of Y\" element.",
+          "rule": "Each item link must have an accessible name composed of: title + metadata (optional) via `aria-labelledby`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Each item link carries aria-labelledby referencing its title element, and the metadata element when present.",
+          "llm_eval_question": null,
+          "runtime_check": "Compute each item link's accessible name; assert it contains the visible title."
+        },
+        {
+          "rule": "Provide an offscreen \"X of Y\" element.",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Each item contains a visually-hidden element whose text matches an \"X of Y\" pattern.",
+          "static_hint": "Each item renders an offscreen element carrying position text in an \"X of Y\" form.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1386,43 +1297,43 @@
           "rule": "Reference it via `aria-describedby`.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Each item link's aria-describedby IDREF resolves to its offscreen \"X of Y\" element (not aria-labelledby).",
+          "static_hint": "Each item link's aria-describedby references its offscreen position element.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert each item's aria-describedby IDREF resolves to the rendered position element."
         },
         {
           "rule": "The position must reflect the item's index within the full set, not just the currently visible subset.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "\"X of Y\" values are computed from the full data set length, not the rendered page slice.",
-          "llm_eval_question": null,
-          "runtime_check": "Page forward with Next; assert the revealed items' position text continues the global index (e.g., \"7 of 18\") and Y stays the full-set count."
-        },
-        {
-          "rule": "Next button on the right edge of the row container (vertically centered)",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "A Next <button> exists within the row container.",
-          "llm_eval_question": null,
-          "runtime_check": "Assert the Next button's bounding box sits at the row container's right edge and is vertically centered against it."
-        },
-        {
-          "rule": "Previous button on the left edge when not on the first page",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "On the first page, assert no Previous button is shown; after paging forward, assert a Previous button renders at the container's left edge."
+          "runtime_check": "Page to the end of the row; assert the last item's position text reads its index within the full set (e.g., \"18 of 18\"), not its index among the visible items."
+        },
+        {
+          "rule": "Next button on the right edge of the row container (vertically centered).",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "A Next paging control is rendered within the row container.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Previous button on the left edge when not on the first page.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "A Previous paging control is rendered within the row container.",
+          "llm_eval_question": null,
+          "runtime_check": "On the first page assert the Previous control is absent or non-focusable; after paging forward assert it is present."
         },
         {
           "rule": "Activating Next moves focus to the first newly revealed item (left-most visible link).",
@@ -1432,7 +1343,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With items 1–6 visible, activate Next; assert document.activeElement is item 7's link (the left-most newly revealed item)."
+          "runtime_check": "Activate Next; assert document.activeElement is the first item revealed by that page turn."
         },
         {
           "rule": "Activating Previous moves focus to the last newly revealed item (right-most visible link).",
@@ -1442,7 +1353,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "After paging forward, activate Previous; assert focus lands on the right-most item of the newly revealed page."
+          "runtime_check": "Activate Previous; assert document.activeElement is the last item revealed by that page turn."
         },
         {
           "rule": "Do not let Tab from the last visible item move into out-of-view items; it must reach the Next button instead.",
@@ -1452,29 +1363,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus the last visible item and press Tab; assert focus lands on the Next button, never on an out-of-view item link."
-        },
-        {
-          "rule": "Do not split the item into multiple separate interactive elements (one item = one link).",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag <li> items containing more than one focusable element (extra buttons/links inside the card).",
-          "llm_eval_question": null,
-          "runtime_check": "Tab across the row; assert each item consumes exactly one tab stop."
-        },
-        {
-          "rule": "Do not rely solely on poster art or imagery to communicate the name of each item.",
-          "source": "dont",
-          "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "Each item has a visible text title element, not just an image with (or without) alt text.",
-          "llm_eval_question": "Would a sighted user need to recognize the artwork to know what the item is, i.e., is there no visible text title?",
-          "runtime_check": null
+          "runtime_check": "Focus the last visible item and press Tab; assert focus lands on the Next button and never on an item scrolled out of view."
         }
       ]
     },
@@ -1774,39 +1663,39 @@
     },
     "dialog.basic": {
       "pattern_id": "dialog.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.12.0",
       "rules": [
         {
-          "rule": "Use the native `<dialog>` element (preferred). When `<dialog>` cannot be used, `<div role=\"dialog\">` is the documented fallback — see Customizable → Manual fallback.",
+          "rule": "Use the native `<dialog>` element (preferred). When `<dialog>` cannot be used, `<div role=\"dialog\">` is the documented fallback.",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Dialog surface element is a native <dialog>, or (fallback path) a <div> with role=\"dialog\". Flag any other element/role combination.",
+          "static_hint": "Dialog surface is a native <dialog>, or a <div role=\"dialog\"> taking the documented fallback path.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "Open with `.showModal()`. A `<dialog>` present in the DOM without `.showModal()` is non-modal — no focus trap, no background inertness, no `aria-modal`, no top-layer rendering.",
+          "rule": "Open with `.showModal()`.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "AST contains a `.showModal()` call on the dialog ref/element in the open path; flag `.show()` or setting the `open` attribute directly.",
+          "static_hint": "The open path calls .showModal() on the dialog element; flag .show() or setting the open attribute directly.",
           "llm_eval_question": null,
-          "runtime_check": "Activate the trigger; assert the dialog is open and matches the `:modal` pseudo-class (modal state, top layer)."
+          "runtime_check": "Activate the trigger; assert the dialog is open and matches the :modal pseudo-class."
         },
         {
-          "rule": "Close with `.close()`. Unmounting a `<dialog>` while open (rather than calling `.close()`) leaves focus stranded because the browser's focus-restoration to the invoker runs on `.close()`. Both lifecycle endpoints must be exercised.",
+          "rule": "Close with `.close()`.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "AST contains a `.close()` call in the close path; flag close handlers that only unmount/conditionally render the dialog away without calling `.close()` first.",
+          "static_hint": "The close path calls .close(); flag handlers that only unmount or conditionally render the dialog away.",
           "llm_eval_question": null,
-          "runtime_check": "Open the dialog, activate the close control; assert the dialog is closed AND focus has returned to the invoking element (stranded focus on <body> indicates unmount-without-close)."
+          "runtime_check": "Open the dialog and close it; assert it reports closed rather than being removed from the DOM while open."
         },
         {
           "rule": "Dialog surface has an accessible name via `aria-labelledby` (preferred) or `aria-label`.",
@@ -1814,7 +1703,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Dialog element carries `aria-labelledby` or `aria-label` with a non-empty value.",
+          "static_hint": "The dialog element carries aria-labelledby or a non-empty aria-label.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1825,73 +1714,51 @@
             "static",
             "runtime"
           ],
-          "static_hint": "The `aria-labelledby` IDREF resolves to an element inside the dialog that is a heading/title element with a matching `id`.",
+          "static_hint": "The aria-labelledby IDREF matches an element authored inside the dialog.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, the referenced element exists in the DOM and is visible (not display:none, visibility:hidden, or zero-size)."
+          "runtime_check": "With the dialog open, assert the referenced element exists and is visible."
         },
         {
-          "rule": "If a description is rendered, it is referenced by `aria-describedby`. Do not rely on incidental reading order.",
-          "source": "must_have",
-          "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "If `aria-describedby` is present, its IDREF resolves to an existing element inside the dialog.",
-          "llm_eval_question": "Does the dialog render descriptive/explanatory text, and if so, is that text the element referenced by `aria-describedby` (rather than left to incidental reading order)?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Dialog width is fluid so content reflows at 400% zoom (WCAG 1.4.10 Reflow).",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Dialog surface CSS uses a fluid width constraint (e.g., `max-width: min(<Npx>, 100%)` or percentage/viewport-relative width), not a fixed `width: <Npx>`.",
-          "llm_eval_question": null,
-          "runtime_check": "Set viewport to 320 CSS pixels wide (simulating 400% zoom), open the dialog; assert no horizontal scrolling and dialog content reflows within the viewport."
-        },
-        {
-          "rule": "Prefer `max-width: min(<Npx>, 100%)`; do not set fixed pixel widths that would exceed the 320-CSS-pixel viewport at 400% zoom.",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "No `width` or `min-width` declaration on the dialog surface with a fixed pixel value > 320px; `max-width` uses the `min(<Npx>, 100%)` pattern or equivalent fluid constraint.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Provide a visible close control (`<button type=\"button\">`).",
+          "rule": "If a description is rendered, it is referenced by `aria-describedby`.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Dialog contains a native <button> with `type=\"button\"` serving as the close control.",
+          "static_hint": "Descriptive content inside the dialog is referenced by aria-describedby rather than left to reading order.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, the close button is visible in the rendered layout (nonzero size, not hidden)."
+          "runtime_check": "Assert the aria-describedby IDREF resolves to the rendered description element."
         },
         {
-          "rule": "Close control has an accessible name (e.g., `aria-label=\"Close dialog\"`).",
+          "rule": "Dialog width is fluid so content reflows at 400% zoom (WCAG 1.4.10 Reflow).",
           "source": "must_have",
           "techniques": [
             "static",
-            "llm-eval"
+            "runtime"
           ],
-          "static_hint": "The close button has a non-empty accessible name source: text content, `aria-label`, or `aria-labelledby` (flag icon-only buttons with none).",
-          "llm_eval_question": "Does the close button's accessible name convey the close action (e.g., \"Close dialog\") rather than being empty, generic, or describing only the icon (e.g., \"X\")?",
-          "runtime_check": null
+          "static_hint": "The dialog surface uses a fluid max-width (e.g., min(Npx, 100%)); flag a fixed pixel width above 320px.",
+          "llm_eval_question": null,
+          "runtime_check": "At a 320 CSS pixel wide viewport, open the dialog; assert no horizontal scrolling and the surface fits the viewport."
+        },
+        {
+          "rule": "Provide a visible close control (`<button type=\"button\">`) with an accessible name (e.g., `aria-label=\"Close dialog\"`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The dialog contains a <button type=\"button\"> close control carrying an accessible name.",
+          "llm_eval_question": null,
+          "runtime_check": "With the dialog open, assert the close control is rendered visible and has a non-empty accessible name."
         },
         {
           "rule": "The invoking control declares dialog-trigger semantics — apply `aria-haspopup=\"dialog\"` to the trigger element.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "llm-eval"
+            "static"
           ],
-          "static_hint": "An element carries `aria-haspopup=\"dialog\"` (exact value \"dialog\", not \"true\").",
-          "llm_eval_question": "Is the element carrying `aria-haspopup=\"dialog\"` the actual control whose activation opens the dialog?",
+          "static_hint": "The trigger element carries aria-haspopup=\"dialog\".",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
@@ -1902,7 +1769,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Activate the trigger; assert `document.activeElement` is inside the dialog (the dialog itself or a descendant)."
+          "runtime_check": "Activate the trigger; assert document.activeElement is the dialog or a descendant."
         },
         {
           "rule": "Focus is trapped within the dialog while open.",
@@ -1912,7 +1779,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, press Tab repeatedly past the last focusable element and Shift+Tab before the first; assert focus always remains within the dialog and never lands on background content."
+          "runtime_check": "With the dialog open, Tab and Shift+Tab past the first and last focusable elements; assert focus never reaches a background control."
         },
         {
           "rule": "Escape closes the dialog.",
@@ -1922,7 +1789,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, press Escape; assert the dialog is closed."
+          "runtime_check": "With the dialog open, press Escape; assert the dialog closes."
         },
         {
           "rule": "Focus returns to the invoking element on close.",
@@ -1932,7 +1799,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Open the dialog from the trigger, close it (via close button and via Escape); assert `document.activeElement` is the original trigger element."
+          "runtime_check": "Open and close the dialog by each supported path; assert document.activeElement is the invoking element after every close."
         },
         {
           "rule": "Background content is not focusable or reachable by keyboard or screen readers while open.",
@@ -1942,7 +1809,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, attempt to Tab to background controls and programmatically `.focus()` a background element; assert focus cannot land there, and assert background content is excluded from the accessibility tree (inert or aria-hidden effective state)."
+          "runtime_check": "With the dialog open, Tab and programmatically focus a background control; assert focus cannot land there and the background is excluded from the accessibility tree."
         },
         {
           "rule": "Body scroll is prevented while open.",
@@ -1952,128 +1819,28 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "On a page taller than the viewport, open the dialog and attempt to scroll (wheel/keyboard); assert `window.scrollY`/body scroll position does not change while the dialog is open."
-        },
-        {
-          "rule": "Under native `<dialog>` + `.showModal()` (the Golden Pattern), these six behaviors are provided automatically by the browser. Under the manual `<div role=\"dialog\">` fallback (Customizable → Manual fallback), each is the implementation's responsibility.",
-          "source": "must_have",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Detect which variant is in use: native <dialog> with `.showModal()` vs. `<div role=\"dialog\">`. If the fallback variant, require presence of explicit implementations (focus trap logic, Escape handler, inert/isolation, scroll lock, focus restoration).",
-          "llm_eval_question": null,
-          "runtime_check": "For the manual fallback variant, run the full six-point behavior contract checks (focus-in on open, trap, Escape, focus return, background unreachable, scroll lock) — none are provided for free."
-        },
-        {
-          "rule": "Focus indicators on the dialog surface, close button, and any focusable content follow the Foundations focus rule.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "No CSS that suppresses focus visibility without replacement (e.g., `outline: none` / `outline: 0` on focusable elements with no `:focus-visible` styles).",
-          "llm_eval_question": null,
-          "runtime_check": "Keyboard-focus the dialog surface, the close button, and each focusable descendant; assert a visible focus indicator is rendered on each (computed outline/box-shadow/border change on focus)."
-        },
-        {
-          "rule": "Do not render `<dialog>` without calling `.showModal()` and expect modal behavior. A bare `<dialog>` produces a non-modal reveal with none of the modal contract.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag a <dialog> opened via `.show()`, via the `open` attribute in markup, or via toggling `open` in code, when the pattern is presented as a modal.",
-          "llm_eval_question": null,
-          "runtime_check": "Open the dialog; assert it matches `:modal` and that background content is inert — a bare <dialog> fails both."
-        },
-        {
-          "rule": "Do not implement the manual `<div role=\"dialog\">` fallback without every one of its Must Haves. Partial implementations produce broken screen-reader announcements and stranded focus.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime",
-            "llm-eval"
-          ],
-          "static_hint": "If `<div role=\"dialog\">` is detected, require the full static checklist: `aria-modal`, accessible name, close button, aria-haspopup on trigger, no fixed widths, inert handling code present.",
-          "llm_eval_question": "Given this is the manual fallback, does the implementation address every Must Have from the ruleset, or are any silently missing?",
-          "runtime_check": "Run the complete six-point behavior contract plus name/description announcements against the fallback implementation; any single failure confirms a partial implementation."
-        },
-        {
-          "rule": "Do not rely on `aria-modal=\"true\"` to block background interaction; it is announcement metadata, not an interaction gate. Background isolation is a separate implementation concern.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "llm-eval"
-          ],
-          "static_hint": null,
-          "llm_eval_question": "Does the code implement a real background-isolation mechanism (inert on the app root, focus trap, or native `.showModal()`), or is `aria-modal=\"true\"` the only thing standing between the user and the background?",
-          "runtime_check": "With the dialog open, Tab and programmatically focus background elements; assert they are unreachable — proving isolation holds independently of the `aria-modal` attribute."
+          "runtime_check": "On a page taller than the viewport, open the dialog and attempt to scroll; assert the scroll position does not change."
         },
         {
           "rule": "Do not render the manual fallback inside containers that create clipping or stacking contexts (e.g., `overflow: hidden/auto`, `transform`).",
           "source": "dont",
           "techniques": [
-            "runtime",
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The fallback dialog is portalled to document.body rather than rendered inside a transformed or overflow-clipped ancestor.",
+          "llm_eval_question": null,
+          "runtime_check": "With the fallback open, walk its ancestors and assert none apply overflow clipping or a transform; assert the dialog renders unclipped and is the topmost hit-testable element at its own coordinates."
+        },
+        {
+          "rule": "Do not inert `document.body` or `document.documentElement` on the manual fallback; inert only the application content root.",
+          "source": "dont",
+          "techniques": [
             "static"
           ],
-          "static_hint": "Fallback dialog is rendered/portaled to <body> (or equivalent top-level node) rather than nested inside components whose styles declare `overflow: hidden/auto` or `transform`.",
+          "static_hint": "inert is applied to the application content root; flag inert set on body or documentElement.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, walk its DOM ancestors and assert none have computed `overflow: hidden/auto/scroll` or a non-none `transform`; assert the dialog is fully visible and unclipped in the viewport."
-        },
-        {
-          "rule": "Do not rely on `z-index` alone to \"make it work.\"",
-          "source": "dont",
-          "techniques": [
-            "llm-eval",
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": "Is the dialog's layering strategy structural (top layer via `.showModal()`, or a portal to the document root), or is the implementation just stacking a large `z-index` on a nested element and hoping?",
-          "runtime_check": "With the dialog open, assert it is the topmost hit-testable element at its own coordinates (elementFromPoint over the dialog returns the dialog or a descendant) and is not obscured or clipped by other stacking contexts."
-        },
-        {
-          "rule": "Do not inert `document.body` or `document.documentElement` on the manual fallback.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag code that sets `inert` (property or attribute) on `document.body` or `document.documentElement`.",
-          "llm_eval_question": null,
-          "runtime_check": "With the fallback dialog open, assert `document.body.inert` and `document.documentElement.inert` are false, and that the dialog's own controls remain focusable (inerting body would disable the dialog too)."
-        },
-        {
-          "rule": "Inert only the application content root.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Inert is applied to the app content root element (e.g., `#root` / `#app` / main content wrapper), a sibling of the dialog's mount point.",
-          "llm_eval_question": null,
-          "runtime_check": "With the fallback dialog open, assert the app content root has `inert` (its controls unfocusable and out of the accessibility tree) while the dialog subtree remains fully interactive."
-        },
-        {
-          "rule": "Do not omit focus restoration; closing a dialog must return the user to the element that invoked it.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Open the dialog from the trigger, close it by each supported path (close button, Escape); assert `document.activeElement` is the invoking element after every close path."
-        },
-        {
-          "rule": "Do not set fixed pixel widths on the dialog surface that exceed the 320-CSS-pixel viewport at 400% zoom.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag `width`, `min-width`, or non-fluid `max-width` declarations on the dialog surface with fixed pixel values > 320px.",
-          "llm_eval_question": null,
-          "runtime_check": "At a 320-CSS-pixel-wide viewport, open the dialog; assert its rendered width does not exceed the viewport and no horizontal scrollbar appears."
+          "runtime_check": null
         }
       ]
     },
@@ -2504,7 +2271,7 @@
     },
     "link.basic": {
       "pattern_id": "link.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.12.0",
       "rules": [
         {
           "rule": "Use a native `<a>` element with an `href` whenever possible.",
@@ -2512,29 +2279,19 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Link controls are <a> elements with a non-empty href.",
+          "static_hint": "Link is an <a> carrying a non-empty href; flag <a> without href and role=\"link\" on other elements.",
           "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Ensure the link's purpose/destination is understandable from the link text alone, or from the link text plus programmatically determined context (e.g., `aria-label`, `aria-labelledby`, offscreen text).",
-          "source": "must_have",
-          "techniques": [
-            "llm-eval"
-          ],
-          "static_hint": null,
-          "llm_eval_question": "Given the link text and its programmatic context, would a user know where this link goes — or is it an ambiguous \"Read more\"/\"Click here\" with no accessible disambiguation?",
           "runtime_check": null
         },
         {
           "rule": "The link has an accessible name that describes its purpose or destination.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
-          "static_hint": "Link has a non-empty accessible name source (text, aria-label, aria-labelledby).",
-          "llm_eval_question": "Does the accessible name describe the destination or purpose rather than being generic or a raw URL?",
+          "static_hint": "Link has a non-empty accessible name source.",
+          "llm_eval_question": "Does the accessible name identify where the link goes, rather than being generic (\"here\", \"read more\", \"learn more\")?",
           "runtime_check": null
         },
         {
@@ -2544,31 +2301,30 @@
             "static",
             "runtime"
           ],
-          "static_hint": "No aria-label/aria-labelledby replacing the visible text on text-bearing links.",
+          "static_hint": "No aria-label or aria-labelledby overrides the link's visible text content.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the computed accessible name matches (or begins with) the rendered link text."
+          "runtime_check": "Compute the accessible name; assert it equals the visible text content."
         },
         {
           "rule": "When additional context is needed beyond the visible text, add it via `aria-label`, `aria-labelledby`, or offscreen text.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
-          "static_hint": "Extra context is delivered via approved mechanisms, not title attributes alone.",
-          "llm_eval_question": "Where identical link texts appear (e.g., several \"Details\" links), does each get distinguishing programmatic context?",
+          "static_hint": "Added context uses aria-label, aria-labelledby, or offscreen text.",
+          "llm_eval_question": "Would the link text be ambiguous when read out of context (e.g., in a screen reader's links list), and if so, has context been added?",
           "runtime_check": null
         },
         {
           "rule": "The visible text appears at the start of the accessible name.",
           "source": "must_have",
           "techniques": [
-            "static",
             "runtime"
           ],
-          "static_hint": "Any aria-label on a text-bearing link starts with the visible text; aria-labelledby lists the visible-text element first.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Assert the computed accessible name begins with the link's rendered visible text."
+          "runtime_check": "Compute the accessible name; assert it begins with the link's visible text."
         },
         {
           "rule": "For icon-only links, provide an accessible name using `aria-label` or `aria-labelledby`.",
@@ -2576,7 +2332,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Links with no text content carry a non-empty aria-label or resolving aria-labelledby.",
+          "static_hint": "A link whose only content is an icon carries aria-label or aria-labelledby.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2586,7 +2342,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon elements inside links carry aria-hidden=\"true\".",
+          "static_hint": "Icon elements inside a link carry aria-hidden=\"true\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2598,17 +2354,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus the link and press Enter; assert navigation fires. Press Space; assert no navigation (page scrolls instead, per native behavior)."
-        },
-        {
-          "rule": "Preferred: provide `href` (native focus + native behaviors).",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Interactive <a> elements have an href attribute.",
-          "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Focus the link and press Enter; assert it navigates. Press Space; assert it does not activate the link."
         },
         {
           "rule": "If using `role=\"link\"` on a non-`<a>` element, you must also provide keyboard support and focus management (e.g., `tabIndex=\"0\"` and Enter key activation).",
@@ -2617,95 +2363,41 @@
             "static",
             "runtime"
           ],
-          "static_hint": "role=\"link\" elements carry tabindex=\"0\" and an Enter key handler.",
+          "static_hint": "role=\"link\" elements carry tabindex=\"0\" and a keydown handler for Enter.",
           "llm_eval_question": null,
-          "runtime_check": "Tab to the role=\"link\" element; assert it is focusable, and pressing Enter performs the navigation."
+          "runtime_check": "Tab to the role=\"link\" element and press Enter; assert it receives focus and navigates."
         },
         {
-          "rule": "If a link opens a new tab/window, include programmatic context in the accessible name (e.g., \"opens in new tab\")",
+          "rule": "If a link opens a new tab/window, include programmatic context in the accessible name (e.g., \"opens in new tab\").",
           "source": "must_have",
           "techniques": [
             "static",
-            "llm-eval"
+            "runtime"
           ],
-          "static_hint": "Links with target=\"_blank\" include new-tab wording in their accessible name computation (visible, offscreen, or aria-label text).",
-          "llm_eval_question": "For each new-tab link, does the accessible name communicate that it opens in a new tab/window?",
-          "runtime_check": null
+          "static_hint": "Links with target=\"_blank\" carry aria-label, aria-describedby, or offscreen text conveying that a new tab opens.",
+          "llm_eval_question": null,
+          "runtime_check": "Compute the accessible name of each new-tab link; assert it conveys that the link opens a new tab or window."
         },
         {
           "rule": "If a link opens a new tab/window, include a visual affordance: append an external-link icon at the end of the visible label.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "runtime"
+            "static"
           ],
-          "static_hint": "target=\"_blank\" links render an external-link icon element after the label text.",
+          "static_hint": "Links with target=\"_blank\" render an external-link icon element after the label text.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the icon is rendered visible at the end of the link's visible label."
+          "runtime_check": null
         },
         {
           "rule": "Do not style a link to look like plain text when it appears inline within a paragraph; inline links must be visually obvious (e.g., underlined).",
           "source": "dont",
           "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Flag CSS removing text-decoration from inline links without another non-color differentiator.",
-          "llm_eval_question": null,
-          "runtime_check": "For links inside paragraph text, assert computed styles visibly distinguish them from surrounding text (e.g., underline present)."
-        },
-        {
-          "rule": "Do not rely on color alone to indicate a link.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Flag inline link styles whose only difference from body text is color.",
-          "llm_eval_question": null,
-          "runtime_check": "Compare the link's computed styles against surrounding text; assert at least one non-color cue (underline, weight, border) differs."
-        },
-        {
-          "rule": "Do not use `<a>` without `href` for interactive behavior; it loses native link semantics and behaviors.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag <a> elements with click handlers but no href.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not use `role=\"link\"` on non-link elements unless you cannot use a native `<a href>`. Native links provide browser behaviors ARIA cannot add automatically.",
-          "source": "dont",
-          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Flag role=\"link\" on non-<a> elements.",
-          "llm_eval_question": "Is there a genuine constraint preventing a native <a href> here?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not use `role=\"link\"` unless you also implement the missing link behaviors (focus, Enter activation, navigation, and expected link affordances).",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"link\" elements carry tabindex and key handlers.",
-          "llm_eval_question": null,
-          "runtime_check": "Tab to the role=\"link\" element, press Enter; assert focusability and navigation both work as a native link would."
-        },
-        {
-          "rule": "Do not permit Space to activate links.",
-          "source": "dont",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "Flag text-decoration:none on links rendered inside running text with no other non-color distinction authored.",
           "llm_eval_question": null,
-          "runtime_check": "Focus the link and press Space; assert no navigation occurs."
+          "runtime_check": "Compare an inline link's computed style with the surrounding text; assert a non-color difference such as an underline."
         }
       ]
     },
@@ -4899,7 +4591,7 @@
     },
     "select.native": {
       "pattern_id": "select.native",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.12.0",
       "rules": [
         {
           "rule": "Use a native `<select>` element with native `<option>` elements.",
@@ -4907,7 +4599,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Control is a native <select> containing native <option> children.",
+          "static_hint": "Control is a native <select> whose children are <option> (or <optgroup>) elements.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -4918,29 +4610,18 @@
             "static",
             "runtime"
           ],
-          "static_hint": "A <label for> matches the select's id.",
+          "static_hint": "A <label for> / htmlFor points at the select's id, or the select is wrapped in a <label>.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the label is rendered visible."
+          "runtime_check": "Assert the label renders visible and resolves into the select's computed accessible name."
         },
         {
-          "rule": "The `<select>` participates in the form via a `name` attribute",
+          "rule": "The `<select>` participates in the form via a `name` attribute, and uses native attributes (`required`, `disabled`) as needed.",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Select carries a non-empty name attribute.",
+          "static_hint": "The select carries a name attribute; required and disabled use the native attributes rather than aria-required or aria-disabled.",
           "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "The `<select>` uses native attributes (`required`, `disabled`) as needed.",
-          "source": "must_have",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "Required/disabled states use the native attributes, not aria substitutes.",
-          "llm_eval_question": "Given the field's contract, are the appropriate native attributes applied (and no ARIA re-implementations)?",
           "runtime_check": null
         },
         {
@@ -4949,7 +4630,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "No markup (images, spans with styling hooks, controls) inside <option> elements.",
+          "static_hint": "<option> elements contain text only — no elements, images, or markup.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -4959,42 +4640,9 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Styling is CSS on the native select; no JS re-implementation of open/close/selection behavior.",
+          "static_hint": "Styling is applied through CSS on the native select; no scripted re-implementation of the control's appearance or behavior.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Do not rebuild the select with `<div>` elements and scripting when a native `<select>` suffices.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "Flag div-based dropdown widgets replacing a native select.",
-          "llm_eval_question": "Does this use case genuinely require a custom widget (rich option content, etc.), or would the native select suffice?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not remove the native element in favor of a custom widget for styling reasons alone.",
-          "source": "dont",
-          "techniques": [
-            "llm-eval",
-            "static"
-          ],
-          "static_hint": "Detect replacement of the native select as the review trigger.",
-          "llm_eval_question": "Is the only motivation for the custom widget visual styling — something CSS on the native select could achieve?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not replace native behavior with scripting.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag JS handlers that preventDefault or re-implement the select's open/navigate/select behaviors.",
-          "llm_eval_question": null,
-          "runtime_check": "Operate the select with keyboard and pointer; assert native behaviors (open, arrow, type-ahead, select) work unmodified."
         },
         {
           "rule": "Do not use the `multiple` attribute (native multi-select tests very poorly).",
@@ -5005,17 +4653,6 @@
           "static_hint": "Flag the multiple attribute on the select.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Do not hide the label.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag sr-only/display:none/visibility:hidden styles on the select's label.",
-          "llm_eval_question": null,
-          "runtime_check": "Assert the label is rendered visible in the layout."
         }
       ]
     },
