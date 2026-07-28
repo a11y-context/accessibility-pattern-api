@@ -95,6 +95,16 @@ Each pattern's `latest_version` in `patterns.json` is bumped only when its **sem
 - **PATCH (Z+1)** — typo, wording fix, golden-pattern code clarification with no requirements change, single-pattern formatting fix
 - **No bump** — pure typography sweeps applied corpus-wide (e.g., a corpus-wide "Don't" → "Do not" normalization). These bump only `catalog_revision`.
 
+#### Beta patterns stay in `0.x`
+
+New patterns are authored `beta` at `0.1.0` (see the Status ladder above), so nearly every live pattern sits in `0.x`. A MAJOR-class change to a pattern that remains `beta` bumps **`0.(Y+1).0`**, not `1.0.0`: for example, a Must Have whose mechanism is reversed at `0.2.0` becomes `0.3.0`. This is ordinary `0.x` semver, where breaking changes are absorbed at the minor position.
+
+`1.0.0` is reserved for promotion to `stable`. Applying it to a beta pattern asserts a stability commitment the pattern has not earned, and contradicts its own `status`.
+
+#### Deprecated patterns end at `1.0.0`
+
+When a pattern is retired, usually because its ID was renamed, its final version is `1.0.0` regardless of its prior version. This is a terminal marker rather than a stability claim, and the pattern is excluded from the generated catalog either way. See `menu.account`, `dialog.modal`, and `dialog.nonmodal`.
+
 ### Every corpus PR includes
 
 1. Appropriate `latest_version` bumps in `patterns.json` for each touched pattern.
