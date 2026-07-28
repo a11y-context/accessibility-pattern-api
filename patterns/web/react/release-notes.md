@@ -8,6 +8,15 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.9.0 — 2026-07-27
+
+**QA catalog: `switch.basic` and `button.toggle` re-derived under the ordered-escalation model.** No pattern `.md` changed — this is a classification-only release. These two carried the corpus's highest llm-eval ratios and serve as the calibration pair for the remaining re-derives.
+
+- `switch.basic` → 15 rules (53% llm-eval, 1.80 techniques/rule) becomes 16 rules (25%, 1.25). Keyboard activation, the accessible-name prefix check, and the focus-state check drop their narrated `llm-eval` and `static` tags: pressing a key and comparing a computed accessible name are runtime assertions, and a `static` tag that cannot resolve what runtime left open is not a fallback. The `aria-describedby` bullet splits into placement on the switch (`static` + `runtime`, because static cannot prove the IDREF resolves) and the container prohibition (`static` alone).
+- `button.toggle` → 16 rules (44% llm-eval, 1.81) becomes 13 rules (23%, 1.38). Three Don'ts drop as duplicates of captured Must Haves: stale `aria-pressed` restates the toolbar rule's own reflect-state requirement, the icon-only Don't inverts the icon-only Must Have, and "state only in the icon" is the disjunction of two strategies already required. Native `disabled` collapses from three techniques to `static`.
+- Both patterns keep one rule that restates `global.focus-states`. These are flagged rather than dropped: the corpus-wide Foundations-duplication decision is still open, and settling it removes roughly 25 rules across the corpus in one sweep.
+- The checkbox family published in 0.8.0 (`checkbox.basic`, `checkbox.group`) has no `qa-catalog.json` block yet and is queued as the next derive batch.
+
 ## 0.8.0 — 2026-07-27
 
 **The checkbox family arrives: a single binary checkbox and a related-set group.**

@@ -3,7 +3,7 @@
   "_comment_order_overrides": "Patterns default to alphabetical filename order (which also drives the sidebar). Each [earlierId, laterId] pair pins earlierId to appear immediately before laterId. select.native (\"Select (Basic)\") must precede select.basic (\"Select (Custom Style)\"), the reverse of the alphabetical select.basic/select.native. Unlisted patterns keep their alphabetical slot.",
   "stack": "web/react",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.8.0",
+  "catalog_revision": "0.9.0",
   "cache_ttl_seconds": 3600,
   "order_overrides": [
     ["select.native", "select.basic"]
