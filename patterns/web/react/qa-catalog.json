@@ -1465,8 +1465,8 @@
       }
     ]
   },
-  "dialog.modal": {
-    "pattern_id": "dialog.modal",
+  "dialog.basic": {
+    "pattern_id": "dialog.basic",
     "catalog_revision": "0.5.2",
     "rules": [
       {
@@ -1770,8 +1770,8 @@
       }
     ]
   },
-  "dialog.nonmodal": {
-    "pattern_id": "dialog.nonmodal",
+  "popover.basic": {
+    "pattern_id": "popover.basic",
     "catalog_revision": "0.5.2",
     "rules": [
       {

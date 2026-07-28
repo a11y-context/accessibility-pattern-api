@@ -8,6 +8,19 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.6.0 — 2026-07-24
+
+**Overlay family split: the non-modal dialog becomes Popover, and the modal dialog becomes the family's default member.**
+
+Two renames. Both old IDs are retained as deprecated tombstones for backward compatibility and are excluded from the generated catalog, following the `menu.account` precedent.
+
+- `dialog.nonmodal` → **`popover.basic`** ("Popover"), new pattern at 0.1.0. An anchored, non-blocking overlay is what every widely used design system calls a popover; no major system ships a "non-modal dialog" as a named component, so the old name was a poor retrieval anchor for the thing it describes. The accessibility contract is unchanged (accessible name, focus in on open, focus restored on close, no focus trap, no `aria-modal`, no `inert`, Esc from anywhere, visible close control). Reframed around the anchored-overlay model, with positioning added to Customizable. The old terms stay in `aliases` so "non-modal dialog" and "modeless dialog" still retrieve this pattern. `dialog.nonmodal` → 1.0.0, deprecated.
+- `dialog.modal` → **`dialog.basic`** ("Dialog (Basic)"), new pattern at 0.1.0. With the non-modal overlay moved out, the `(Modal)` qualifier no longer distinguished anything: every remaining member of the `dialog.` family is modal, and what makes this one the default member is that it holds arbitrary content rather than a fixed message shape. Requirement text, Golden Pattern, and Acceptance Checks are unchanged from `dialog.modal` 0.3.1. "modal" is retained in `tags` and `aliases` for retrieval. `dialog.modal` → 1.0.0, deprecated.
+
+**Redirects reconciled.** `tooltip.basic` now points at `popover.basic`. `toast.basic` pointed at a bare `dialog`, which was never a valid ID, and now points at `dialog.basic`. `dialog.basic`'s own "content does not block the page" rejection previously carried no redirect and now points at `popover.basic`; its status-message rejection pointed at a bare `toast` and now points at `toast.basic`.
+
+Also updated: `qa-catalog.json` keys, the navbar search index, and the `grid.channel-guide` documentation note. iOS is unaffected by this release; the matching iOS rename travels with the open iOS pattern PR.
+
 ## 0.5.2 — 2026-07-10
 
 **Backfill of the eight-concern Must Haves subheaders to the pre-0.5.0 patterns. Structure-only; no requirement changes.**

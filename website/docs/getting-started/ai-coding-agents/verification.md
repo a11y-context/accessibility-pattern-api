@@ -30,7 +30,7 @@ If any are missing, the skill is installed but not being invoked — see [Troubl
 Build a modal dialog for editing a profile.
 ```
 
-Expect the agent to retrieve the **dialog.modal** pattern and produce:
+Expect the agent to retrieve the **dialog.basic** pattern and produce:
 
 - A native `<dialog>` opened with `.showModal()` (not a bare `<div>` overlay)
 - Focus moving into the dialog on open, trapped while open, restored to the trigger on close
@@ -50,7 +50,7 @@ confirms when a product is added to the cart.
 
 This is the one that demonstrates **selective retrieval** working. Expect the agent to:
 
-- Retrieve **collection-row**, **dialog.modal**, **button**, and **toast** — and *nothing else* (it should not pull the channel guide grid, the carousel, or unrelated patterns)
+- Retrieve **collection-row**, **dialog.basic**, **button**, and **toast** — and *nothing else* (it should not pull the channel guide grid, the carousel, or unrelated patterns)
 - Apply each pattern's Must Haves and avoid its Don'ts
 - Produce a page where: the card row is a single-focus-stop list with paging, activating a card opens a focus-trapped modal, closing the modal restores focus to the originating card, and the add-to-cart toast announces without stealing focus
 
