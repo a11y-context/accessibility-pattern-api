@@ -2,7 +2,7 @@
 id: checkbox.group
 title: Checkbox Group
 stack: web/react
-status: draft
+status: beta
 latest_version: 0.1.0
 tags: [checkbox, form, form-control, group, fieldset, multi-select]
 aliases: [checkbox group, checkbox list, multi-select checkboxes, fieldset checkboxes, options list, select multiple, preferences checkboxes]
@@ -33,13 +33,13 @@ Each option in the group is an individual checkbox that follows `checkbox.basic`
   - Preferred: a `<fieldset>` with a `<legend>`; the `<legend>` states the question the set answers and becomes the group's accessible name.
   - When `<legend>` cannot be laid out or styled as required, use a container with `role="group"` and `aria-labelledby` pointing at the visible group-label element.
 - The group label states the question or instruction for the whole set (e.g., "Which genres do you watch?"), not a generic heading.
-- If a group-level hint applies (e.g., "Select at least one"), associate it with the group via `aria-describedby`.
+- Reference any group-level hint (e.g., "Select at least one") from each checkbox's `aria-describedby`.
 - Each option is a native `<input type="checkbox">` (preferred) with a programmatically associated visible `<label>` and its own `checked` state; see `checkbox.basic` for the per-control contract. Any number of options may be checked.
 - Space toggles the focused option; Tab and Shift+Tab move between options, and each option is its own tab stop.
 - Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around each option.
 - If the group is required, validate at the group level, never per option:
   - Indicate the requirement in the group's accessible name (e.g., append "(required)" to the `<legend>` or `aria-labelledby` target), since a group has no native `required` attribute.
-  - Provide one inline error container after the group, present in the DOM at all times (empty until invalid), carrying `aria-live="polite"` and referenced by the group container's `aria-describedby` (valid on both `<fieldset>` and a `role="group"` element).
+  - Provide one inline error container, present in the DOM at all times (empty until invalid), carrying `aria-live="polite"` and referenced from each checkbox's `aria-describedby`.
   - Populate the error only when focus leaves the whole group with the requirement unmet, not as focus moves between options.
   - While invalid, give the group a visible non-color indication (e.g., a red outline plus error text beginning with "Error:").
   - Do not move focus when the error appears; submit-time focus handling is a form-level concern (see `form.error-summary`).
@@ -55,6 +55,7 @@ Each option in the group is an individual checkbox that follows `checkbox.basic`
 - Do not use `role="radiogroup"`, `role="radio"`, or arrow-key roving focus for checkboxes; checkboxes allow multiple selections, and each is a tab stop.
 - Do not put `required` on every checkbox to express "select at least one"; native `required` forces that specific box to be checked. Validate at the group level instead.
 - Do not attach a separate live-region error to each checkbox in a group; use one group-level error, announced once, so the user does not hear a string of errors while tabbing through the options.
+- Do not rely on `aria-describedby` on the `<fieldset>` or `role="group"` container to convey the hint or error. NVDA does not announce a group-level description when the first control in the group is a checkbox, and descriptions on the container are dropped in browse mode. Put the reference on each `<input>`.
 - Do not wrap a single, self-sufficient checkbox in a `<fieldset>` and `<legend>` (that belongs to `checkbox.basic`).
 - Do not combine unrelated questions in one group; one question per `<fieldset>` or `role="group"`.
 
@@ -106,18 +107,21 @@ export function CheckboxGroupDemo() {
   return (
     <form noValidate>
       {/* Grouped with fieldset + legend (preferred) */}
-      <fieldset
-        aria-describedby={genresError ? "genres-hint genres-error" : "genres-hint"}
-        onBlur={onGenresBlur}
-      >
+      <fieldset onBlur={onGenresBlur}>
         <legend>Which genres do you watch? (required)</legend>
         <p id="genres-hint">Select at least one.</p>
         {GENRES.map((g) => (
           <div key={g.value}>
+            {/* Hint and error are referenced from each input, not from the
+                fieldset: a description on the group container is not announced
+                reliably when the first control is a checkbox. */}
             <input
               type="checkbox"
               id={`genre-${g.value}`}
               checked={genres.includes(g.value)}
+              aria-describedby={
+                genresError ? "genres-hint genres-error" : "genres-hint"
+              }
               onChange={() => {
                 toggle(setGenres, g.value);
                 setGenresError("");
@@ -127,7 +131,7 @@ export function CheckboxGroupDemo() {
           </div>
         ))}
       </fieldset>
-      {/* One group-level error, placed AFTER the group; announced via aria-live. */}
+      {/* One group-level error; the live region announces it once on populate. */}
       <p id="genres-error" aria-live="polite">
         {genresError}
       </p>
@@ -154,20 +158,18 @@ export function CheckboxGroupDemo() {
 
 ## Acceptance Checks
 
-Keyboard
-- Tab moves focus to each option in turn; each checkbox is its own tab stop.
-- Space toggles the focused option, and multiple options can be checked at once.
-- Arrow keys do not move focus between options (this is not a radio group).
-- A visible focus indicator is present on the focused option.
-
-Screen Reader
-- Entering the group announces the group name (the `<legend>` or the `aria-labelledby` target).
-- Each option is announced with its own label, role ("checkbox"), and checked or unchecked state.
-- A group-level instruction associated via `aria-describedby` is announced with the group.
-- The `role="group"` set announces equivalently to the `<fieldset>` and `<legend>` set.
-
-Validation
-- Moving focus out of the group with no option selected populates one group-level error, announced once via `aria-live="polite"` (not once per option as focus passes through).
-- While invalid, the group shows a visible non-color indication, and returning to the group re-announces the error via `aria-describedby`.
-- Focus is not moved when the error appears.
-- Selecting an option clears the error.
+- Keyboard
+  - Tab moves focus to each option in turn; each checkbox is its own tab stop.
+  - Space toggles the focused option, and multiple options can be checked at once.
+  - Arrow keys do not move focus between options (this is not a radio group).
+  - A visible focus indicator is present on the focused option.
+- Screen Reader
+  - Entering the group announces the group name (the `<legend>` or the `aria-labelledby` target).
+  - Each option is announced with its own label, role ("checkbox"), and checked or unchecked state.
+  - The group-level hint is announced when a checkbox receives focus.
+  - The `role="group"` set announces equivalently to the `<fieldset>` and `<legend>` set.
+- Validation
+  - Moving focus out of the group with no option selected populates one group-level error, announced once via `aria-live="polite"` (not once per option as focus passes through).
+  - While invalid, the group shows a visible non-color indication, and returning focus to a checkbox re-announces the error via `aria-describedby`.
+  - Focus is not moved when the error appears.
+  - Selecting an option clears the error.
