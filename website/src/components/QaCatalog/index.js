@@ -2,12 +2,15 @@ import React, {useMemo, useState} from 'react';
 import catalog from '../../../../patterns/web/react/qa-catalog.json';
 import styles from './styles.module.css';
 
-// qa-catalog.json is an object keyed by pattern_id; each value is
-// { pattern_id, catalog_revision, rules: [...] }. See patterns/web/react/qa-catalog.json.
-const WRAPPERS = Object.values(catalog).sort((a, b) =>
-  a.pattern_id.localeCompare(b.pattern_id),
-);
-const CATALOG_REVISION = WRAPPERS[0]?.catalog_revision ?? '';
+// qa-catalog.json is { stack, catalog_revision, components, foundations }, where
+// components is keyed by pattern_id and each value is { pattern_id, catalog_revision,
+// rules: [...] }. Foundations are keyed by rule_id and are not rendered here yet.
+// The pre-0.11.0 shape was a bare map of pattern_id, still handled as a fallback.
+const COMPONENTS = catalog.components ?? catalog;
+const WRAPPERS = Object.values(COMPONENTS)
+  .filter((w) => w && Array.isArray(w.rules))
+  .sort((a, b) => a.pattern_id.localeCompare(b.pattern_id));
+const CATALOG_REVISION = catalog.catalog_revision ?? WRAPPERS[0]?.catalog_revision ?? '';
 
 const TECHNIQUES = [
   {key: 'static', label: 'Static', blurb: 'Checkable from source (lint / AST).'},
