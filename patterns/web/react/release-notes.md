@@ -8,6 +8,16 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.10.0 — 2026-07-27
+
+**QA catalog: the checkbox family gets its blocks; web/react QA coverage reaches 25 of 25.** No pattern `.md` changed — classification only. `checkbox.basic` and `checkbox.group` published in 0.8.0, before deriving QA alongside a new pattern was a convention, and were the only two published patterns without a catalog block.
+
+- `checkbox.basic` → 22 rules (static 14 / runtime 13 / llm-eval 3; 14% llm-eval, 1.36 techniques/rule). The native-input vs `role="checkbox"` choice is one branching rule rather than two competing ones, with the fallback's `tabindex`, `aria-checked`, and Space-handler obligations carried in its static hint. Space-toggles and Enter-does-not-toggle are runtime, not static: a key handler's presence does not prove what it does. The required-field error contract splits into four separable assertions — container always in the DOM, `aria-live="polite"`, referenced by the input's `aria-describedby`, and populated on blur — of which only the timing one is runtime-only.
+- `checkbox.group` → 19 rules (static 10 / runtime 10 / llm-eval 3; 16%, 1.21). The two valid group forms are one branching rule. Hint and error `aria-describedby` belong on **each `<input>`**, never on the `<fieldset>` or `role="group"` container, and the static hints flag container-level placement as a failure. No rule requires `aria-invalid` on the group: the attribute is deliberately absent from the pattern. The highest-value check in the pattern is runtime — the group error fires once when focus leaves the whole group, never as focus moves between options.
+- Both patterns keep one rule restating `global.focus-states`, flagged and not dropped, pending the corpus-wide Foundations-duplication decision.
+
+Per-block `catalog_revision` is provenance: it records the revision at which a block was last derived. The catalog now reads as its own backlog — 20 blocks at `0.5.2` still use the pre-escalation "tag all that apply" semantics and are queued for re-derive; `tabs.basic` (`0.7.0`), `switch.basic` and `button.toggle` (`0.9.0`), and the checkbox family (`0.10.0`) are current.
+
 ## 0.9.0 — 2026-07-27
 
 **QA catalog: `switch.basic` and `button.toggle` re-derived under the ordered-escalation model.** No pattern `.md` changed — this is a classification-only release. These two carried the corpus's highest llm-eval ratios and serve as the calibration pair for the remaining re-derives.
