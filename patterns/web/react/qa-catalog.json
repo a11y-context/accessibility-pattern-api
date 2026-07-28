@@ -925,6 +925,444 @@
       }
     ]
   },
+  "checkbox.basic": {
+    "pattern_id": "checkbox.basic",
+    "catalog_revision": "0.10.0",
+    "rules": [
+      {
+        "rule": "Use a native `<input type=\"checkbox\">` (preferred). Use a custom `role=\"checkbox\"` only when a native input cannot be used; it then needs `tabindex=\"0\"`, `aria-checked=\"true|false\"` reflecting state, and a key handler where Space toggles it and prevents page scrolling.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Control is an input[type=\"checkbox\"]; otherwise it is a role=\"checkbox\" element carrying tabindex=\"0\", aria-checked bound to state, and a keydown handler for Space that calls preventDefault. Flag a div/span with only a click handler.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Associate a visible `<label>` with the input (wrap the input, or point `for` / `htmlFor` at its `id`).",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Input is wrapped in a <label>, or a <label for> / htmlFor points at the input's id.",
+        "llm_eval_question": null,
+        "runtime_check": "Assert the label renders visible and its text resolves into the input's computed accessible name."
+      },
+      {
+        "rule": "Word the label so it reads true when checked (e.g., \"Remember me on this device\").",
+        "source": "must_have",
+        "techniques": [
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Does the label read as a true statement when the box is checked, rather than as an instruction or a question?",
+        "runtime_check": null
+      },
+      {
+        "rule": "The checkbox has an accessible name equivalent to its visible label.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Compute the checkbox's accessible name; assert it matches the visible label text."
+      },
+      {
+        "rule": "When additional context is needed, add it via `aria-label`, `aria-labelledby`, or offscreen text (`.sr-only`), with the visible text at the start of the accessible name.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Added context uses aria-label, aria-labelledby, or an .sr-only element — not title or display:none text.",
+        "llm_eval_question": null,
+        "runtime_check": "Compute the accessible name; assert it begins with the visible label text."
+      },
+      {
+        "rule": "Convey the checked state programmatically: on a native input use the `checked` property (never `aria-checked`); on `role=\"checkbox\"` use `aria-checked=\"true|false\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Exactly one state mechanism: native input uses checked and carries no aria-checked; role=\"checkbox\" carries aria-checked. Flag an element with both.",
+        "llm_eval_question": null,
+        "runtime_check": "Toggle the control; assert the checked property (native) or aria-checked (custom) tracks the rendered state after each toggle."
+      },
+      {
+        "rule": "The control is in the tab order.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Control is a native input, or a role=\"checkbox\" element with tabindex=\"0\"; no tabindex=\"-1\".",
+        "llm_eval_question": null,
+        "runtime_check": "Tab to the control; assert it receives focus (catches an inert or visually-hidden-with-display-none ancestor)."
+      },
+      {
+        "rule": "Space toggles the control.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Focus the checkbox and press Space; assert the state toggles and the page does not scroll."
+      },
+      {
+        "rule": "Enter does not toggle a checkbox (within a form, Enter submits).",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Focus the checkbox and press Enter; assert the checked state is unchanged."
+      },
+      {
+        "rule": "Mark it with the native `required` attribute and a visible non-color text indicator (e.g., \"(required)\").",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Required checkbox carries the native required attribute, and a text indicator such as \"(required)\" is rendered in or beside the label.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "`aria-hidden` the visible indicator when it would duplicate the native required announcement.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "The visible \"(required)\" indicator carries aria-hidden=\"true\" when the input already has the native required attribute.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Give it an inline error container that is always present in the DOM (empty until invalid).",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "The error container is rendered unconditionally with its text as the only conditional part. Flag a container behind a conditional render (e.g., {error && <p…>}).",
+        "llm_eval_question": null,
+        "runtime_check": "With the field valid, assert the error container is present in the DOM and empty."
+      },
+      {
+        "rule": "The inline error container carries `aria-live=\"polite\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "The error container element carries aria-live=\"polite\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The inline error container is referenced by the input's `aria-describedby`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "The input's aria-describedby includes the error container's id, and is present whether or not the field is currently invalid.",
+        "llm_eval_question": null,
+        "runtime_check": "Assert the aria-describedby IDREF resolves to the rendered error container."
+      },
+      {
+        "rule": "Populate the error on blur when left invalid, not on submit and not per keystroke.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Focus the required checkbox, leave it unchecked, and blur; assert the error populates. Assert it does not populate while the control still has focus, and does not wait for submit."
+      },
+      {
+        "rule": "The error text names the problem and is itself non-color (e.g., begins with \"Error:\").",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "llm-eval"
+        ],
+        "static_hint": "The error container renders text content when invalid, not only a color or border change.",
+        "llm_eval_question": "Does the error text state what is wrong and how to resolve it, rather than being generic (\"Invalid\")?",
+        "runtime_check": null
+      },
+      {
+        "rule": "Associate any supporting hint text with the input via `aria-describedby`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Hint text elements are referenced by the input's aria-describedby with a matching id.",
+        "llm_eval_question": null,
+        "runtime_check": "Assert each aria-describedby IDREF resolves to a rendered element."
+      },
+      {
+        "rule": "If the choice is unavailable, disable the input with the native `disabled` attribute.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Unavailable state uses the native disabled attribute, not aria-disabled with a click guard.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the control.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Keyboard-focus the checkbox; assert a visible focus indicator renders (computed outline/box-shadow differs from the unfocused state)."
+      },
+      {
+        "rule": "Do not hide the input with `display: none` or `visibility: hidden` when styling a custom box; that removes it from the tab order and disables keyboard operation.",
+        "source": "dont",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Flag display:none or visibility:hidden applied to the checkbox input; the .sr-only technique is the supported way to hide it visually.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Do not move focus to the checkbox when its inline error appears; populating the `aria-live` container is what announces it.",
+        "source": "dont",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Blur the invalid required checkbox to trigger the error; assert document.activeElement is unchanged by the error appearing."
+      },
+      {
+        "rule": "Do not use a single checkbox for a set of related options that answer one question (that is a grouped pattern).",
+        "source": "dont",
+        "techniques": [
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Do these checkboxes answer one shared question whose labels are not meaningful alone (checkbox.group), rather than each being an independent choice?",
+        "runtime_check": null,
+        "confidence": "advisory"
+      }
+    ]
+  },
+  "checkbox.group": {
+    "pattern_id": "checkbox.group",
+    "catalog_revision": "0.10.0",
+    "rules": [
+      {
+        "rule": "Wrap the related checkboxes in a single named group.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "The set is wrapped in a <fieldset> with a <legend> (preferred), or a container with role=\"group\" and aria-labelledby pointing at the visible group-label element.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The group label states the question or instruction for the whole set (e.g., \"Which genres do you watch?\"), not a generic heading.",
+        "source": "must_have",
+        "techniques": [
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Does the legend or group label state the question the set answers, rather than being a generic heading like \"Options\" or \"Preferences\"?",
+        "runtime_check": null,
+        "confidence": "advisory"
+      },
+      {
+        "rule": "Reference any group-level hint (e.g., \"Select at least one\") from each checkbox's `aria-describedby`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "The hint element's id appears in the aria-describedby of every checkbox in the group. Flag the hint referenced only from the fieldset or role=\"group\" container.",
+        "llm_eval_question": null,
+        "runtime_check": "Assert every option's aria-describedby resolves to the rendered hint element."
+      },
+      {
+        "rule": "Each option is a native `<input type=\"checkbox\">` (preferred) with a programmatically associated visible `<label>` and its own `checked` state.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Every option is an input[type=\"checkbox\"] with its own label association and independent checked binding — not a shared value.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Space toggles the focused option.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Focus an option and press Space; assert only that option's state toggles and the others are unchanged."
+      },
+      {
+        "rule": "Tab and Shift+Tab move between options, and each option is its own tab stop.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Tab through the group; assert focus stops on every option in turn, in both directions (no roving tabindex skipping options)."
+      },
+      {
+        "rule": "Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around each option.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Keyboard-focus each option; assert a visible focus indicator renders on each."
+      },
+      {
+        "rule": "Indicate the requirement in the group's accessible name (e.g., append \"(required)\" to the `<legend>` or `aria-labelledby` target), since a group has no native `required` attribute.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "The legend or aria-labelledby target text carries a required indicator; the group carries no native required attribute and no aria-invalid.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Provide one inline error container, present in the DOM at all times (empty until invalid).",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Exactly one error container serves the group, rendered unconditionally. Flag a per-option error container, and flag a container behind a conditional render.",
+        "llm_eval_question": null,
+        "runtime_check": "With the group valid, assert exactly one error container exists for the group and is empty."
+      },
+      {
+        "rule": "The group's inline error container carries `aria-live=\"polite\"`.",
+        "source": "must_have",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "The group error container carries aria-live=\"polite\".",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "The group's inline error container is referenced from each checkbox's `aria-describedby`.",
+        "source": "must_have",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "The error container id appears in every option's aria-describedby. Flag the reference placed on the <fieldset> or role=\"group\" container instead.",
+        "llm_eval_question": null,
+        "runtime_check": "Assert every option's aria-describedby resolves to the single group error container."
+      },
+      {
+        "rule": "Populate the error only when focus leaves the whole group with the requirement unmet, not as focus moves between options.",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Tab through every option leaving the requirement unmet; assert no error appears while focus stays inside the group, and exactly one error appears once focus leaves it."
+      },
+      {
+        "rule": "While invalid, give the group a visible non-color indication (e.g., a red outline plus error text beginning with \"Error:\").",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Drive the group invalid; assert a text indication is rendered, not only a color or border change."
+      },
+      {
+        "rule": "Do not move focus when the error appears; submit-time focus handling is a form-level concern (see `form.error-summary`).",
+        "source": "must_have",
+        "techniques": [
+          "runtime"
+        ],
+        "static_hint": null,
+        "llm_eval_question": null,
+        "runtime_check": "Move focus out of the invalid group; assert document.activeElement is wherever the user moved it, unchanged by the error appearing."
+      },
+      {
+        "rule": "Do not use `role=\"radiogroup\"`, `role=\"radio\"`, or arrow-key roving focus for checkboxes; checkboxes allow multiple selections, and each is a tab stop.",
+        "source": "dont",
+        "techniques": [
+          "static",
+          "runtime"
+        ],
+        "static_hint": "Flag role=\"radiogroup\" or role=\"radio\" on the group or its options, and flag a roving-tabindex implementation (options carrying tabindex=\"-1\").",
+        "llm_eval_question": null,
+        "runtime_check": "Focus an option and press Arrow keys; assert focus does not move between options."
+      },
+      {
+        "rule": "Do not put `required` on every checkbox to express \"select at least one\"; native `required` forces that specific box to be checked.",
+        "source": "dont",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Flag the native required attribute on individual options of a group whose requirement is group-level.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Do not rely on `aria-describedby` on the `<fieldset>` or `role=\"group\"` container to convey the hint or error.",
+        "source": "dont",
+        "techniques": [
+          "static"
+        ],
+        "static_hint": "Flag aria-describedby authored on the <fieldset> or role=\"group\" container; the reference belongs on each <input>.",
+        "llm_eval_question": null,
+        "runtime_check": null
+      },
+      {
+        "rule": "Do not wrap a single, self-sufficient checkbox in a `<fieldset>` and `<legend>` (that belongs to `checkbox.basic`).",
+        "source": "dont",
+        "techniques": [
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Does this group contain a set of options answering one shared question, rather than a single self-sufficient checkbox?",
+        "runtime_check": null,
+        "confidence": "advisory"
+      },
+      {
+        "rule": "Do not combine unrelated questions in one group; one question per `<fieldset>` or `role=\"group\"`.",
+        "source": "dont",
+        "techniques": [
+          "llm-eval"
+        ],
+        "static_hint": null,
+        "llm_eval_question": "Do all options in this group answer the same single question?",
+        "runtime_check": null,
+        "confidence": "advisory"
+      }
+    ]
+  },
   "collection-row.basic": {
     "pattern_id": "collection-row.basic",
     "catalog_revision": "0.5.2",
