@@ -2,8 +2,8 @@
 id: dialog.nonmodal
 title: "Dialog (Non-Modal)"
 stack: web/react
-status: beta
-latest_version: 0.1.0
+status: deprecated
+latest_version: 1.0.0
 tags: [dialog, non-modal, overlay, popover, focus-restoration, modeless]
 aliases: [non-modal dialog, modeless dialog, non-blocking dialog, popover dialog, editor popover, composer panel, floating panel]
 summary: A dialog that does not block the page; uses role="dialog" with an accessible name, moves focus in on open and restores it on close, but does not trap focus or inert the background.
@@ -15,7 +15,7 @@ Pattern ID: `dialog.nonmodal`
 
 A dialog that does not block the page; uses `role="dialog"` with an accessible name, moves focus in on open and restores it on close, but does not trap focus or `inert` the background.
 
-This is the counterpart to `dialog.modal`; the defining contrast is the absence of background isolation and focus trapping.
+Deprecated. This pattern was renamed to `popover.basic`. An anchored, non-blocking overlay is what every major design system calls a popover, and no widely used system ships a "non-modal dialog" as a named component, so the name was a poor retrieval anchor for the thing it describes. The accessibility contract is unchanged. Use `popover.basic`. This ID is retained for backward compatibility and is excluded from the generated catalog.
 
 ## Use When
 - Use when an overlay presents content or a task without blocking the page (e.g., a non-blocking editor popover, a composer, a rich panel with interactive controls).

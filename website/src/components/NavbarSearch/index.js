@@ -41,8 +41,7 @@ const PAGES = [
   {label: 'Carousel (Thumbnails) · React (Web)', to: '/web/react/components/carousel.thumbnails'},
   {label: 'Collection Row · React (Web)', to: '/web/react/components/collection-row.basic'},
   {label: 'Combobox (Autocomplete) · React (Web)', to: '/web/react/components/combobox.autocomplete'},
-  {label: 'Dialog (Modal) · React (Web)', to: '/web/react/components/dialog.modal'},
-  {label: 'Dialog (Non-Modal) · React (Web)', to: '/web/react/components/dialog.nonmodal'},
+  {label: 'Dialog (Basic) · React (Web)', to: '/web/react/components/dialog.basic'},
   {label: 'Disclosure · React (Web)', to: '/web/react/components/disclosure.basic'},
   {label: 'Grid (Channel Guide) · React (Web)', to: '/web/react/components/grid.channel-guide'},
   {label: 'Link · React (Web)', to: '/web/react/components/link.basic'},
@@ -51,6 +50,7 @@ const PAGES = [
   {label: 'Menubar · React (Web)', to: '/web/react/components/menu.menubar'},
   {label: 'Navigation (Flat List) · React (Web)', to: '/web/react/components/navigation-menu.basic'},
   {label: 'Navigation (Disclosure) · React (Web)', to: '/web/react/components/navigation-menu.dropdown'},
+  {label: 'Popover · React (Web)', to: '/web/react/components/popover.basic'},
   // Reordered so "Select (Basic)" (select.native) precedes "Select (Custom
   // Style)" (select.basic), matching the sidebar order. Slugs/URLs unchanged.
   {label: 'Select (Basic) · React (Web)', to: '/web/react/components/select.native'},
