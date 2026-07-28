@@ -8,6 +8,16 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.11.0 — 2026-07-27
+
+**QA catalog: web/react gains a `foundations` section, and the duplicated focus-state check is relocated into it.** No pattern `.md` changed — classification only.
+
+- **New `foundations` section**, derived from the 9 `global.*` rules in `global_rules.md` (`sr-only`, `page-title`, `landmarks`, `headings`, `text-contrast`, `non-text-contrast`, `use-of-color`, `focus-not-obscured`, `focus-states`) — 36 checks. `qa-catalog.json` moves from a bare map of pattern ids to `{ stack, catalog_revision, components, foundations }`, the shape iOS already uses. **Consumers reading the top level as a components map must now read `.components`.**
+- **23 per-pattern focus-state restatements removed.** Every pattern's Must Haves close with the same focus formula, which the catalog was turning into 23 copies of one assertion — 23 findings for a single defect. Focus visibility is now a single check in `global.focus-states`. Only exact restatements of the formula were dropped; component-specific focus requirements stay, including `tabs.basic`'s "The focus indicator on a focused tab is distinguishable from the selected-tab styling."
+- **The pattern docs keep their restatement.** The corpus and the catalog have different readers. A pattern doc is retrieved a chunk at a time by an AI agent and has to stand alone, since a consumer's RAG pipeline may never pull `global_rules.md` alongside it; a harness loads the whole catalog at once and needs the check exactly once. The same duplication is correct in one file and noise in the other.
+
+Components now carry 542 rules across 25 patterns; foundations 36 checks across 9 rules.
+
 ## 0.10.0 — 2026-07-27
 
 **QA catalog: the checkbox family gets its blocks; web/react QA coverage reaches 25 of 25.** No pattern `.md` changed — classification only. `checkbox.basic` and `checkbox.group` published in 0.8.0, before deriving QA alongside a new pattern was a convention, and were the only two published patterns without a catalog block.
