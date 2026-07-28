@@ -8,6 +8,27 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.13.0 — 2026-07-27
+
+**QA catalog: second re-derive batch — `accordion.basic`, `disclosure.basic`, `navigation-menu.dropdown`, `carousel.dots`, `carousel.thumbnails`, `menu.basic`.** No pattern `.md` changed — classification only. 127 rules become 87.
+
+| pattern | before | after |
+|---|---|---|
+| `accordion.basic` | 16 rules, 19% llm-eval, 1.50 avg | 11 rules, 0%, 1.27 |
+| `disclosure.basic` | 15 rules, 13%, 1.40 | 10 rules, 10%, 1.60 |
+| `navigation-menu.dropdown` | 25 rules, 16%, 1.32 | 18 rules, 11%, 1.28 |
+| `carousel.dots` | 18 rules, 11%, 1.50 | 10 rules, 0%, 1.40 |
+| `carousel.thumbnails` | 18 rules, 11%, 1.50 | 10 rules, 0%, 1.40 |
+| `menu.basic` | 35 rules, 14%, 1.37 | 28 rules, 7%, 1.25 |
+
+The dominant reduction is again Don'ts that invert a captured Must Have — the "do not leave it visible while `aria-expanded="false"`" pairing appears in four of these six patterns, and each was already asserted positively by that pattern's own state rule.
+
+`menu.basic` keeps 28 rules because its keyboard contract is genuinely eleven separate observable behaviors rather than padding: Arrow keys with wrap, Home/End, type-ahead, activation, Esc, Tab, and outside-click each fail independently. `disclosure.basic` is the one pattern whose average rose (1.40 → 1.60), because dropping five inverted Don'ts left a smaller set in which the legitimately paired `static` + `runtime` checks — attribute authored, reference resolves — are a larger share; its rule count fell by a third at the same time.
+
+Both carousels come out identical at 10 rules, which is correct: they differ only in whether the navigation controls are dots or thumbnails.
+
+Corpus totals: 469 component rules, 9% `llm-eval`. Nine blocks remain at `0.5.2`.
+
 ## 0.12.0 — 2026-07-27
 
 **QA catalog: first re-derive batch — `button.basic`, `link.basic`, `select.native`, `collection-row.basic`, `dialog.basic`.** No pattern `.md` changed — classification only. These five carried the heaviest pre-escalation classifications remaining; 91 rules become 58.
