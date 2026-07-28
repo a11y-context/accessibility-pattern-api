@@ -8,6 +8,17 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.8.0 — 2026-07-27
+
+**The checkbox family arrives: a single binary checkbox and a related-set group.**
+
+Two new patterns at 0.1.0, completing the binary-control trio alongside `switch.basic` and `button.toggle`. The selection boundary between them is now explicit in all three: a checkbox records a value read at submit, a switch changes a setting immediately, and a toggle button acts on the current context.
+
+- **`checkbox.basic`** ("Checkbox"), new pattern at 0.1.0. A single, self-sufficient binary choice submitted with a form (consent, "Remember me", marketing opt-in). Native `<input type="checkbox">` is the preferred implementation, with `role="checkbox"` documented as the fallback for when a native input cannot be used. Customizable carries the three-step styling ladder that keeps a real input under custom visuals: `accent-color`, then `appearance: none`, then the visually-hidden-input technique. Required checkboxes get a field-level inline error: a container present in the DOM at all times carrying `aria-live="polite"`, referenced by the input's `aria-describedby`, populated on blur, with focus never moved.
+- **`checkbox.group`** ("Checkbox Group"), new pattern at 0.1.0. A set of checkboxes that together answer one question, named with `<fieldset>` + `<legend>` (preferred) or `role="group"` + `aria-labelledby`. Validation is group-level, never per option, and the error fires once when focus leaves the whole group rather than repeating as the user tabs across options. Group-level hints and errors are referenced from **each `<input>`**, not from the group container: NVDA does not announce a container description when the first control in the group is a checkbox ([nvaccess/nvda#11617](https://github.com/nvaccess/nvda/issues/11617)), and container descriptions are dropped in browse mode. `aria-invalid` is omitted on the group, which has no valid host for it — the attribute is deprecated on the `group` role in ARIA 1.2.
+
+**Redirects now resolve.** The forward references already carried by `switch.basic` (to `checkbox.basic` and `checkbox.group`) and `button.toggle` (to `checkbox.basic`) point at published patterns for the first time. Both new patterns seed their own forward redirects to `checkbox.tristate`, `radio.group`, and `form.error-summary`, none of which exist yet.
+
 ## 0.7.0 — 2026-07-27
 
 **New pattern: Tabs.**
