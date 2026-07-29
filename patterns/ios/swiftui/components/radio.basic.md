@@ -62,8 +62,10 @@ struct RadioGroupDemo: View {
 
     var body: some View {
         // The container carries the group label so VoiceOver announces it
-        // when focus first enters the group.
+        // when focus first enters the group; it matches the visible heading.
         VStack(alignment: .leading, spacing: 8) {
+            Text("Choose color")
+
             ForEach(options, id: \.self) { option in
                 RadioButton(title: option, isSelected: selected == option) {
                     selected = option

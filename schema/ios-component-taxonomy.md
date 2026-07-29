@@ -51,6 +51,7 @@ Legend: ✅ authored · ☆ recommended first wave.
 | ID | SwiftUI | What it is |
 |---|---|---|
 | `text-field.basic` ✅ | `TextField` / `SecureField` | Single-line text entry |
+| `text-editor.basic` | `TextEditor` | Multi-line text entry |
 | `form.validation` | error identification + focus-to-error | Form error handling |
 | `combobox.autocomplete` | `.searchable` + suggestions | Search field with suggestions |
 
@@ -100,7 +101,7 @@ Later / niche: `drag-drop.basic`, `tip.basic` (TipKit).
 
 Referenced by components, not authored as component pages. Rules marked ✅ are authored in `global_rules.md` today.
 
-`touch-target-size` ✅ · `focus-visible` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` ✅ (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` ✅ (`@AccessibilityFocusState`) · `meaningful-names` (WCAG 2.5.3) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` ✅ · `reading-order` · `navigation-focus` ✅ (push/pop focus) · `text-contrast` + `non-text-contrast` · `dynamic-type` ✅ · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
+`touch-target-size` ✅ · `focus-visible` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` ✅ (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` ✅ (`@AccessibilityFocusState`) · `meaningful-names` (WCAG 2.5.3) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` ✅ · `reading-order` · `navigation-focus` ✅ (push/pop focus) · `text-contrast` + `non-text-contrast` · `semantic-color` ✅ · `dynamic-type` ✅ · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
 
 Skipped: A11yCheck / SwiftLint / XCTestAccessibility (tooling), `AccessibilityDetection` (anti-pattern-adjacent), `AccessibilityIdentifier` (test hooks).
 

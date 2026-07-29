@@ -75,8 +75,6 @@ struct SliderBasicDemo: View {
                 } maximumValueLabel: {
                     Text("100")
                 }
-                // Native Slider already announces a percentage for this range; add
-                // .accessibilityValue only when units differ (e.g., "72 degrees")
 
                 Button {
                     brightness = min(100, brightness + 10)

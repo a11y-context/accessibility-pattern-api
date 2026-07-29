@@ -6,14 +6,14 @@ status: beta
 latest_version: 0.1.0
 tags: [date-picker, time-picker, calendar, date-entry, form-control]
 aliases: [DatePicker, date picker, time picker, calendar picker, compact date picker, graphical date picker, wheel date picker, date and time picker]
-summary: A native SwiftUI DatePicker for choosing a date or time, whose accessible name is supplied per style — an accessibilityLabel for compact and default styles, but the visible DatePicker label text for graphical and wheel styles.
+summary: A native SwiftUI DatePicker for choosing a date or time, whose accessible name is supplied per style (an accessibilityLabel for compact and default styles, but the visible DatePicker label text for graphical and wheel styles).
 ---
 
 # Date Picker
 
 Pattern ID: `date-picker.basic`
 
-A native SwiftUI `DatePicker` for choosing a date or time, whose accessible name is supplied per style: an `.accessibilityLabel` for compact and default styles, but the visible `DatePicker` label text for `.graphical` and `.wheel` styles.
+A native SwiftUI `DatePicker` for choosing a date or time, whose accessible name is supplied per style (an `.accessibilityLabel` for compact and default styles, but the visible `DatePicker` label text for `.graphical` and `.wheel` styles).
 
 ## Use When
 - Use when the user selects a calendar date, a time, or a combined date and time from a native control (e.g., "Start date", "Scheduled time", "Reservation"). Uses a SwiftUI `DatePicker` with `displayedComponents` set to `.date`, `.hourAndMinute`, or both.
@@ -25,7 +25,7 @@ A native SwiftUI `DatePicker` for choosing a date or time, whose accessible name
 - Do not use when the choice is among a few visible options that fit inline (use `select.segmented`).
 
 ## Must Haves
-- Use the native `DatePicker` so it exposes the date or time value, the adjustable behavior, and the correct role to VoiceOver, Switch Control, and Full Keyboard Access (WCAG 4.1.2).
+- Use the native `DatePicker` so it exposes the date or time value, the correct role, and its style's interaction model to VoiceOver, Switch Control, and Full Keyboard Access (WCAG 4.1.2). The interaction model differs per style: `.wheel` is adjustable, the default and `.compact` styles are a collapsed control that opens a calendar or time popover, and `.graphical` is a navigable calendar grid.
 - Set `displayedComponents` to match what is being chosen: `.date` for a calendar date, `.hourAndMinute` for a time, or `[.date, .hourAndMinute]` for both.
 - Name the picker per style, because the visible `DatePicker` label text does not automatically become the accessible name (WCAG 1.3.1, 4.1.2):
   - For the default and `.compact` styles, add an `.accessibilityLabel` that matches the visible label text, so VoiceOver speaks the name when the picker is focused.
@@ -37,7 +37,7 @@ A native SwiftUI `DatePicker` for choosing a date or time, whose accessible name
 ## Customizable
 - The style may be default, `.compact`, `.graphical`, or `.wheel`; the naming approach above follows from the chosen style.
 - The value may be bounded with the `in:` parameter (an open or closed range), as long as the picker still exposes a valid, announced value.
-- On the `.wheel` and `.graphical` styles, the visible label may be hidden from layout with `.labelsHidden()` while the `DatePicker("Label")` string remains set, so the accessible name is preserved even when the label is not shown.
+- On the `.wheel` and `.graphical` styles, the layout label may be hidden with `.labelsHidden()` as long as another visible text (e.g., a preceding `Text`) still names the picker for sighted users and the `DatePicker("Label")` string remains set so the accessible name is preserved.
 
 ## Don'ts
 - Do not add an `.accessibilityLabel` to a `.graphical` or `.wheel` `DatePicker`; combined with the required visible `DatePicker("Label")` string, VoiceOver speaks both and the name is announced twice.
@@ -74,9 +74,11 @@ struct DatePickerBasicDemo: View {
             DatePicker("Check in", selection: $checkIn, displayedComponents: .date)
                 .datePickerStyle(.graphical)
 
+            Text("Check out")
             DatePicker("Check out", selection: $checkOut, displayedComponents: .hourAndMinute)
                 .datePickerStyle(.wheel)
-                .labelsHidden() // label hidden from layout; the "Check out" name is still spoken
+                .labelsHidden() // layout label hidden; the visible Text names it for sighted
+                                // users, and the "Check out" string is still spoken to VoiceOver
         }
     }
 }
@@ -87,12 +89,12 @@ struct DatePickerBasicDemo: View {
 Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
 
 **Traits & semantics**
-- The picker exposes its accessible name and its current date or time value, with the adjustable behavior of a native `DatePicker`.
+- The picker exposes its accessible name, its current date or time value, and the interaction model of its style (adjustable wheel, pop-up button, or calendar grid).
 - On default and `.compact` styles the name comes from an `.accessibilityLabel`; on `.graphical` and `.wheel` styles it comes from the `DatePicker("Label")` string, with no duplicate label.
 
 **VoiceOver**
 - Focusing the picker speaks its name and current value; on `.graphical` and `.wheel` styles the name is spoken once, not twice.
-- Adjusting the picker updates the announced date or time value.
+- Changing the value through the style's interaction (spinning the wheel, choosing from the popover, or tapping a grid date) updates the announced date or time value.
 - A `DatePicker("", ...)` with an empty label on a `.graphical` or `.wheel` style speaks no name (a failure the pattern prevents).
 
 **Switch Control & Full Keyboard Access**

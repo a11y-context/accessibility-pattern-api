@@ -10,7 +10,7 @@ Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisio
 
 ## 0.2.0 — 2026-07-19
 
-**Principal accessibility review of the component set; two patterns corrected. Seven new component patterns and two new Foundations rules added. This release also introduces this release-notes file and backfills the nine patterns added since 0.1.0.**
+**Principal accessibility review of the component set; two patterns corrected. Seven new component patterns and two new Foundations rules added. This release also introduces this release-notes file and backfills the nine patterns and four Foundations rules added since 0.1.0.**
 
 **New patterns (beta, all at 0.1.0):**
 - Dialog (Confirmation) (`dialog.confirmation`) — native `.confirmationDialog` action sheet with per-action focus return.
@@ -29,6 +29,7 @@ New patterns are AI-drafted and principal-reviewed against the reference pattern
 
 **Components:**
 - Text Field → 0.2.0 — validation errors are now appended to the field's accessibility label dynamically instead of being exposed through `.accessibilityValue`, which replaced the typed text so VoiceOver stopped speaking the field's actual value. New Don'ts bar error text in `.accessibilityValue` and hint-only exposure (users can turn hints off in VoiceOver settings and would never hear the error). Golden Pattern and Acceptance Checks updated to match.
+- Dialog (Alert) → 0.1.1 — Golden Pattern demo copy replaced with an original example scenario; no requirement changes.
 - Slider → 0.1.1 — Golden Pattern: removed the redundant `.accessibilityValue("N percent")` override on the 0–100 brightness example; the native `Slider` already announces a percentage for that range, and the override is reserved for values with meaningful units (e.g., "72 degrees"). No requirement changes.
 
 **Backfill (added 2026-07-11 as beta, all at 0.1.0, without a catalog bump at the time):**
@@ -41,6 +42,12 @@ New patterns are AI-drafted and principal-reviewed against the reference pattern
 - Slider (`slider.basic`)
 - Stepper (`stepper.basic`)
 - Text Field (`text-field.basic`)
+
+Foundations rules from the same window:
+- `global.custom-control-representation`
+- `global.semantic-color`
+- `global.dynamic-type`
+- `global.navigation-focus`
 
 The full component set was reviewed against the reference patterns and the CVS Health `ios-swiftui-accessibility-techniques` repo; the seven patterns not listed under Components above were verified accurate and are unchanged.
 

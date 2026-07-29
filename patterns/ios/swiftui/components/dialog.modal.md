@@ -45,6 +45,7 @@ A native SwiftUI `.sheet` or `.fullScreenCover` modal that takes VoiceOver focus
 - Do not present a `.fullScreenCover` without an explicit close control; with no swipe-to-dismiss gesture, VoiceOver and other users can be trapped with no way out.
 - Do not leave the sheet title as plain text with no heading trait; VoiceOver users lose the quick way to identify the modal.
 - Do not place long content outside a `ScrollView`; it truncates at large Dynamic Type sizes instead of scrolling.
+- Do not apply `.presentationBackgroundInteraction(.enabled)`; it makes the background reachable while the sheet is up, which breaks the modality this pattern asserts (VoiceOver focus is no longer kept within the modal).
 
 ## Golden Pattern
 

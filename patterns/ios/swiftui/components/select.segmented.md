@@ -13,7 +13,7 @@ summary: A SwiftUI Picker with the segmented style, showing two to five mutually
 
 Pattern ID: `select.segmented`
 
-A SwiftUI `Picker` with the segmented style: two to five mutually exclusive options shown inline at once, where selecting one takes effect immediately. Unlike the menu style, it requires an `.accessibilityLabel` matching its visible label plus `.accessibilityElement(children: .contain)` to be named to VoiceOver.
+A SwiftUI `Picker` with the segmented style, showing two to five mutually exclusive options inline where selecting one takes effect immediately, and which requires an `.accessibilityLabel` matching its visible label plus `.accessibilityElement(children: .contain)` to be named to VoiceOver.
 
 ## Use When
 - Use when the user picks one value from a small fixed set of two to five options that all stay visible at once (e.g., "Day / Week / Month", "Red / Green / Blue"). Uses a SwiftUI `Picker` with `.pickerStyle(.segmented)`.
@@ -24,7 +24,7 @@ A SwiftUI `Picker` with the segmented style: two to five mutually exclusive opti
 - Do not use when there are more than five options, or the labels are too long to fit inline, or a compact single-value display is wanted (use `select.menu`).
 - Do not use when the intent is to spin through values on a rotating wheel (use `select.wheel`).
 - Do not use when the control is a single on/off setting (use `switch.basic`, or `button.toggle` for an in-context toggle).
-- Do not use when the segments switch between top-level sections of the app; that is the job of a tab bar, not a selection control.
+- Do not use when the segments switch between top-level sections of the app; that is the job of a tab bar, not a selection control (use `tab-bar.basic`).
 
 ## Must Haves
 - Use a native `Picker` with `.pickerStyle(.segmented)` so the segments expose their selectable roles and current selection to VoiceOver and Switch Control.
@@ -98,3 +98,6 @@ Observable behaviors a tester verifies with iOS assistive technologies, grouped 
 
 **Dynamic Type**
 - The group label, the segment labels, and any accompanying value text scale with Dynamic Type and stay legible at accessibility text sizes.
+
+**Visual**
+- The selected segment is distinguishable from the others by the native segmented fill and shape, not by tint color alone.

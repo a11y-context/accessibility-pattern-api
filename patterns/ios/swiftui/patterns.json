@@ -125,7 +125,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "A native SwiftUI DatePicker for choosing a date or time, whose accessible name is supplied per style — an accessibilityLabel for compact and default styles, but the visible DatePicker label text for graphical and wheel styles.",
+      "summary": "A native SwiftUI DatePicker for choosing a date or time, whose accessible name is supplied per style (an accessibilityLabel for compact and default styles, but the visible DatePicker label text for graphical and wheel styles).",
       "aliases": [
         "DatePicker",
         "date picker",
@@ -167,7 +167,7 @@
       "title": "Dialog (Alert)",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "A native SwiftUI .alert modal that takes VoiceOver focus on presentation, with each action returning focus to the trigger because native alerts do not restore it automatically.",
       "aliases": [
         "alert",
@@ -220,7 +220,7 @@
       ],
       "tags": [
         "confirmation",
-        "action sheet",
+        "action-sheet",
         "dialog",
         "destructive",
         "actions"
@@ -568,7 +568,7 @@
           "Do not use when there are more than five options, or the labels are too long to fit inline, or a compact single-value display is wanted (use select.menu).",
           "Do not use when the intent is to spin through values on a rotating wheel (use select.wheel).",
           "Do not use when the control is a single on/off setting (use switch.basic, or button.toggle for an in-context toggle).",
-          "Do not use when the segments switch between top-level sections of the app; that is the job of a tab bar, not a selection control."
+          "Do not use when the segments switch between top-level sections of the app; that is the job of a tab bar, not a selection control (use tab-bar.basic)."
         ]
       },
       "variants": [],
