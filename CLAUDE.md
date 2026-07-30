@@ -174,6 +174,8 @@ CI (`.github/workflows/build.yml`) runs prebuild + build on every PR and verifie
 
 `.github/CODEOWNERS` auto-assigns `@jsweetdude` as reviewer on every PR.
 
+**No AI attribution in PRs or commits.** Do not add the "🤖 Generated with Claude Code" footer (or any Claude/AI attribution or Co-Authored-By line) to PR bodies or commit messages in this repo. This overrides the default Claude Code behavior of appending it.
+
 ## Cross-repo context
 
 - **Skills monorepo:** [`a11y-context/a11y-context-skills`](https://github.com/a11y-context/a11y-context-skills) — installable rule/skill artifacts. The Downloads page pulls from here at build time.
