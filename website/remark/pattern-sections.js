@@ -132,10 +132,28 @@ function normalizeGroupLabel(raw) {
   return s;
 }
 
-/** A flat <ul> (mdast list) wrapping the given listItem nodes. Tight, so each
- *  <li> renders as a leaf check and keeps the acceptance-check checkmark marker. */
+/** A flat <ul> (mdast list) wrapping the given listItem nodes. Tight (list AND items
+ *  spread:false), so each <li> renders as a leaf check with no <p> margins and keeps
+ *  the acceptance-check checkmark marker. */
 function flatList(items) {
-  return {type: 'list', ordered: false, spread: false, children: items};
+  const children = (items || []).map((it) => {
+    if (it && typeof it === 'object') it.spread = false;
+    return it;
+  });
+  return {type: 'list', ordered: false, spread: false, children};
+}
+
+/** Force an authored list to render tight in place: no <p> wrappers / extra margins
+ *  on the top-level items. Nested sub-lists (e.g. button.basic's "Disabled button:"
+ *  detail bullets) are left as authored. A single item with block content otherwise
+ *  makes CommonMark render the WHOLE list loose — this un-does that. */
+function makeTight(list) {
+  if (!list || list.type !== 'list') return list;
+  list.spread = false;
+  for (const item of list.children || []) {
+    if (item && typeof item === 'object') item.spread = false;
+  }
+  return list;
 }
 
 /** True when a list's first item contains a nested sub-list — the "grouped" shape.
@@ -189,35 +207,60 @@ function expandGroupedList(list) {
   return result;
 }
 
-/** True when a paragraph is *only* a bold run — the "**Group label**" shape some
- *  patterns (notably iOS/SwiftUI) use to head each check group instead of the
- *  nested-list shape. Whitespace-only text siblings are ignored. */
-function isBoldLabelPara(node) {
+/** True when a paragraph heads a check group — the shape used when patterns don't
+ *  use the nested-list form. Two accepted forms: a bold-only paragraph ("**Keyboard**",
+ *  iOS/SwiftUI) or a short plain-text label ("Keyboard", "Screen Reader" — a few words,
+ *  one line, no sentence-ending period). The brevity + no-period test keeps a real
+ *  intro sentence from being mistaken for a label. Only meaningful when the paragraph
+ *  is immediately followed by a list (checked at the call site). */
+function isGroupLabelPara(node) {
   if (!node || node.type !== 'paragraph' || !Array.isArray(node.children)) return false;
   const kids = node.children.filter(
     (c) => !(c.type === 'text' && /^\s*$/.test(c.value)),
   );
-  return kids.length === 1 && kids[0].type === 'strong';
+  if (kids.length === 1 && kids[0].type === 'strong') return true; // **Label**
+  const text = toText(node).trim();
+  if (!text || text.includes('\n')) return false;
+  return text.split(/\s+/).length <= 6 && !/[.]$/.test(text);
 }
 
-/** Flatten the Acceptance Checks body into h3 + flat-ul blocks. Handles two authored
- *  shapes: (1) a single nested list whose top-level items are group labels, and
- *  (2) a run of "**Group label**" paragraphs each followed by a flat checklist.
- *  Both normalize to <h3 class="ac-group-title"> + flat <ul>. Non-group nodes (an
- *  intro paragraph, an ungrouped checklist) keep their position unchanged. */
+/** The boilerplate intro iOS/SwiftUI patterns place under Acceptance Checks ("Observable
+ *  behaviors a tester verifies … XCUITest … not part of this pattern"). It duplicates the
+ *  injected section-sub and adds no per-pattern value, so it's dropped from the render. */
+function isIosBoilerplateIntro(node) {
+  return !!(
+    node &&
+    node.type === 'paragraph' &&
+    /^Observable behaviors a tester verifies with iOS assistive technologies/.test(
+      toText(node).trim(),
+    )
+  );
+}
+
+/** Flatten the Acceptance Checks body into h3 + flat-ul blocks. Handles three authored
+ *  shapes: (1) a single nested list whose top-level items are group labels; (2) a run of
+ *  "Group label" paragraphs (bold or short plain text) each followed by a flat checklist;
+ *  (3) a plain ungrouped checklist. Groups normalize to <h3 class="ac-group-title"> + flat
+ *  <ul>; ungrouped lists are forced tight so a trailing detail sub-list (button.basic's
+ *  "Disabled button:") doesn't make the whole list render loose. */
 function expandAcceptanceChecks(body) {
   const out = [];
   let done = false;
   for (let i = 0; i < body.length; i++) {
     const node = body[i];
     const next = body[i + 1];
+    if (isIosBoilerplateIntro(node)) {
+      continue;
+    }
     if (!done && node.type === 'list' && isGroupedList(node)) {
       out.push(...expandGroupedList(node));
       done = true;
-    } else if (isBoldLabelPara(node) && next && next.type === 'list') {
+    } else if (isGroupLabelPara(node) && next && next.type === 'list') {
       out.push(groupTitle(normalizeGroupLabel(toText(node))));
       out.push(flatList(next.children || []));
       i++; // consume the checklist paired with this label
+    } else if (node.type === 'list') {
+      out.push(makeTight(node));
     } else {
       out.push(node);
     }

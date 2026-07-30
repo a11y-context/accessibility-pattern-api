@@ -8,6 +8,84 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.12.0 — 2026-07-27
+
+**QA catalog: first re-derive batch — `button.basic`, `link.basic`, `select.native`, `collection-row.basic`, `dialog.basic`.** No pattern `.md` changed — classification only. These five carried the heaviest pre-escalation classifications remaining; 91 rules become 58.
+
+| pattern | before | after |
+|---|---|---|
+| `button.basic` | 16 rules, 38% llm-eval, 1.69 avg | 9 rules, 22%, 1.44 |
+| `link.basic` | 19 rules, 26%, 1.58 | 12 rules, 17%, 1.50 |
+| `select.native` | 11 rules, 27%, 1.55 | 6 rules, 0%, 1.17 |
+| `collection-row.basic` | 17 rules, 24%, 1.59 | 14 rules, 7%, 1.43 |
+| `dialog.basic` | 28 rules, 21%, 1.68 | 17 rules, 0%, 1.41 |
+
+Most of the reduction is Don'ts that invert a Must Have already captured, and `llm-eval` tags that restated a runtime assertion in prose. `select.native` and `dialog.basic` come out with no `llm-eval` at all, which is the honest answer for them: one is a native form control whose requirements are entirely structural, and the other is an element choice plus six observable behaviors. Nothing in either turns on judgment.
+
+Two rules flagged in 0.11.0 as possible Foundations restatements are resolved here and dropped: `dialog.basic`'s "Focus indicators … follow the Foundations focus rule" (a restatement by reference) and `button.basic`'s "Do not hide focus outlines without providing a strong custom focus style."
+
+Corpus totals: 509 component rules, 11% `llm-eval`. Fifteen blocks remain at `0.5.2` and are queued for the next batches.
+
+## 0.11.0 — 2026-07-27
+
+**QA catalog: web/react gains a `foundations` section, and the duplicated focus-state check is relocated into it.** No pattern `.md` changed — classification only.
+
+- **New `foundations` section**, derived from the 9 `global.*` rules in `global_rules.md` (`sr-only`, `page-title`, `landmarks`, `headings`, `text-contrast`, `non-text-contrast`, `use-of-color`, `focus-not-obscured`, `focus-states`) — 36 checks. `qa-catalog.json` moves from a bare map of pattern ids to `{ stack, catalog_revision, components, foundations }`, the shape iOS already uses. **Consumers reading the top level as a components map must now read `.components`.**
+- **23 per-pattern focus-state restatements removed.** Every pattern's Must Haves close with the same focus formula, which the catalog was turning into 23 copies of one assertion — 23 findings for a single defect. Focus visibility is now a single check in `global.focus-states`. Only exact restatements of the formula were dropped; component-specific focus requirements stay, including `tabs.basic`'s "The focus indicator on a focused tab is distinguishable from the selected-tab styling."
+- **The pattern docs keep their restatement.** The corpus and the catalog have different readers. A pattern doc is retrieved a chunk at a time by an AI agent and has to stand alone, since a consumer's RAG pipeline may never pull `global_rules.md` alongside it; a harness loads the whole catalog at once and needs the check exactly once. The same duplication is correct in one file and noise in the other.
+
+Components now carry 542 rules across 25 patterns; foundations 36 checks across 9 rules.
+
+## 0.10.0 — 2026-07-27
+
+**QA catalog: the checkbox family gets its blocks; web/react QA coverage reaches 25 of 25.** No pattern `.md` changed — classification only. `checkbox.basic` and `checkbox.group` published in 0.8.0, before deriving QA alongside a new pattern was a convention, and were the only two published patterns without a catalog block.
+
+- `checkbox.basic` → 22 rules (static 14 / runtime 13 / llm-eval 3; 14% llm-eval, 1.36 techniques/rule). The native-input vs `role="checkbox"` choice is one branching rule rather than two competing ones, with the fallback's `tabindex`, `aria-checked`, and Space-handler obligations carried in its static hint. Space-toggles and Enter-does-not-toggle are runtime, not static: a key handler's presence does not prove what it does. The required-field error contract splits into four separable assertions — container always in the DOM, `aria-live="polite"`, referenced by the input's `aria-describedby`, and populated on blur — of which only the timing one is runtime-only.
+- `checkbox.group` → 19 rules (static 10 / runtime 10 / llm-eval 3; 16%, 1.21). The two valid group forms are one branching rule. Hint and error `aria-describedby` belong on **each `<input>`**, never on the `<fieldset>` or `role="group"` container, and the static hints flag container-level placement as a failure. No rule requires `aria-invalid` on the group: the attribute is deliberately absent from the pattern. The highest-value check in the pattern is runtime — the group error fires once when focus leaves the whole group, never as focus moves between options.
+- Both patterns keep one rule restating `global.focus-states`, flagged and not dropped, pending the corpus-wide Foundations-duplication decision.
+
+Per-block `catalog_revision` is provenance: it records the revision at which a block was last derived. The catalog now reads as its own backlog — 20 blocks at `0.5.2` still use the pre-escalation "tag all that apply" semantics and are queued for re-derive; `tabs.basic` (`0.7.0`), `switch.basic` and `button.toggle` (`0.9.0`), and the checkbox family (`0.10.0`) are current.
+
+## 0.9.0 — 2026-07-27
+
+**QA catalog: `switch.basic` and `button.toggle` re-derived under the ordered-escalation model.** No pattern `.md` changed — this is a classification-only release. These two carried the corpus's highest llm-eval ratios and serve as the calibration pair for the remaining re-derives.
+
+- `switch.basic` → 15 rules (53% llm-eval, 1.80 techniques/rule) becomes 16 rules (25%, 1.25). Keyboard activation, the accessible-name prefix check, and the focus-state check drop their narrated `llm-eval` and `static` tags: pressing a key and comparing a computed accessible name are runtime assertions, and a `static` tag that cannot resolve what runtime left open is not a fallback. The `aria-describedby` bullet splits into placement on the switch (`static` + `runtime`, because static cannot prove the IDREF resolves) and the container prohibition (`static` alone).
+- `button.toggle` → 16 rules (44% llm-eval, 1.81) becomes 13 rules (23%, 1.38). Three Don'ts drop as duplicates of captured Must Haves: stale `aria-pressed` restates the toolbar rule's own reflect-state requirement, the icon-only Don't inverts the icon-only Must Have, and "state only in the icon" is the disjunction of two strategies already required. Native `disabled` collapses from three techniques to `static`.
+- Both patterns keep one rule that restates `global.focus-states`. These are flagged rather than dropped: the corpus-wide Foundations-duplication decision is still open, and settling it removes roughly 25 rules across the corpus in one sweep.
+- The checkbox family published in 0.8.0 (`checkbox.basic`, `checkbox.group`) has no `qa-catalog.json` block yet and is queued as the next derive batch.
+
+## 0.8.0 — 2026-07-27
+
+**The checkbox family arrives: a single binary checkbox and a related-set group.**
+
+Two new patterns at 0.1.0, completing the binary-control trio alongside `switch.basic` and `button.toggle`. The selection boundary between them is now explicit in all three: a checkbox records a value read at submit, a switch changes a setting immediately, and a toggle button acts on the current context.
+
+- **`checkbox.basic`** ("Checkbox"), new pattern at 0.1.0. A single, self-sufficient binary choice submitted with a form (consent, "Remember me", marketing opt-in). Native `<input type="checkbox">` is the preferred implementation, with `role="checkbox"` documented as the fallback for when a native input cannot be used. Customizable carries the three-step styling ladder that keeps a real input under custom visuals: `accent-color`, then `appearance: none`, then the visually-hidden-input technique. Required checkboxes get a field-level inline error: a container present in the DOM at all times carrying `aria-live="polite"`, referenced by the input's `aria-describedby`, populated on blur, with focus never moved.
+- **`checkbox.group`** ("Checkbox Group"), new pattern at 0.1.0. A set of checkboxes that together answer one question, named with `<fieldset>` + `<legend>` (preferred) or `role="group"` + `aria-labelledby`. Validation is group-level, never per option, and the error fires once when focus leaves the whole group rather than repeating as the user tabs across options. Group-level hints and errors are referenced from **each `<input>`**, not from the group container: NVDA does not announce a container description when the first control in the group is a checkbox ([nvaccess/nvda#11617](https://github.com/nvaccess/nvda/issues/11617)), and container descriptions are dropped in browse mode. `aria-invalid` is omitted on the group, which has no valid host for it — the attribute is deprecated on the `group` role in ARIA 1.2.
+
+**Redirects now resolve.** The forward references already carried by `switch.basic` (to `checkbox.basic` and `checkbox.group`) and `button.toggle` (to `checkbox.basic`) point at published patterns for the first time. Both new patterns seed their own forward redirects to `checkbox.tristate`, `radio.group`, and `form.error-summary`, none of which exist yet.
+
+## 0.7.0 — 2026-07-27
+
+**New pattern: Tabs.**
+
+- `tabs.basic` → 0.1.0 — initial pattern. Same-page view switching with `role="tablist"`, roving tabindex keyed to selection, and wrapping arrow-key traversal. The activation model is a Must Have rather than a preference: whichever model is used must be implemented consistently, with automatic activation appropriate only when panels display without noticeable latency. The explicit `aria-selected="false"` on a focused-but-unselected tab is required so user agents do not report the focused tab as selected. Horizontal tablists deliberately leave Up and Down Arrow alone so the page can still scroll, per APG.
+- `qa-catalog.json` → 31 classified rules for `tabs.basic` (static 17 / runtime 21 / llm-eval 4), the first pattern derived under the ordered-escalation technique model: `techniques` is cheapest-first, and later entries are fallbacks that run only when the primary is indeterminate. The remaining web and iOS patterns still use the previous "tag all that apply" semantics and are queued for re-derive.
+
+## 0.6.0 — 2026-07-24
+
+**Overlay family split: the non-modal dialog becomes Popover, and the modal dialog becomes the family's default member.**
+
+Two renames. Both old IDs are retained as deprecated tombstones for backward compatibility and are excluded from the generated catalog, following the `menu.account` precedent.
+
+- `dialog.nonmodal` → **`popover.basic`** ("Popover"), new pattern at 0.1.0. An anchored, non-blocking overlay is what every widely used design system calls a popover; no major system ships a "non-modal dialog" as a named component, so the old name was a poor retrieval anchor for the thing it describes. The accessibility contract is unchanged (accessible name, focus in on open, focus restored on close, no focus trap, no `aria-modal`, no `inert`, Esc from anywhere, visible close control). Reframed around the anchored-overlay model, with positioning added to Customizable. The old terms stay in `aliases` so "non-modal dialog" and "modeless dialog" still retrieve this pattern. `dialog.nonmodal` → 1.0.0, deprecated.
+- `dialog.modal` → **`dialog.basic`** ("Dialog (Basic)"), new pattern at 0.1.0. With the non-modal overlay moved out, the `(Modal)` qualifier no longer distinguished anything: every remaining member of the `dialog.` family is modal, and what makes this one the default member is that it holds arbitrary content rather than a fixed message shape. Requirement text, Golden Pattern, and Acceptance Checks are unchanged from `dialog.modal` 0.3.1. "modal" is retained in `tags` and `aliases` for retrieval. `dialog.modal` → 1.0.0, deprecated.
+
+**Redirects reconciled.** `tooltip.basic` now points at `popover.basic`. `toast.basic` pointed at a bare `dialog`, which was never a valid ID, and now points at `dialog.basic`. `dialog.basic`'s own "content does not block the page" rejection previously carried no redirect and now points at `popover.basic`; its status-message rejection pointed at a bare `toast` and now points at `toast.basic`.
+
+Also updated: `qa-catalog.json` keys, the navbar search index, and the `grid.channel-guide` documentation note. iOS is unaffected by this release; the matching iOS rename travels with the open iOS pattern PR.
+
 ## 0.5.2 — 2026-07-10
 
 **Backfill of the eight-concern Must Haves subheaders to the pre-0.5.0 patterns. Structure-only; no requirement changes.**

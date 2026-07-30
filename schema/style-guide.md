@@ -19,6 +19,7 @@ Every sentence in a pattern doc is one of four things:
 
 What a pattern doc is **not**:
 
+- **Not a test plan.** It states what to build, not how to confirm it was built. Verification checks are derived from these requirements into a separate catalog; a bullet phrased as "assert", "verify", or "check each" belongs there, not here. See `CONTRIBUTING.md` § What belongs in a pattern doc.
 - Not a WCAG explainer. No lectures on why accessibility matters.
 - Not a history of the ARIA spec. No "in the past, developers used to..."
 - Not motivational. No "accessibility is everyone's responsibility."
@@ -270,6 +271,7 @@ The rAF defers the focus call until React has flushed the state change and the t
 ## Prose and punctuation
 
 - **Concrete over abstract — the prime rule.** Every requirement names the element, attribute, value, or key. "Add `aria-expanded="true|false"` reflecting open/closed" — never "expose appropriate state semantics." If a bullet could appear in any component's doc unchanged, it is too abstract (the focus-state formula being the deliberate exception).
+- **State the requirement, not the reason.** Drop trailing "so that…", "because…", and "which means…" clauses. Keep the reason only when it changes what gets built (a named fallback, a browser behavior the agent must code around). Rationale is the single most common source of bloat in a pattern doc, and it costs the agent context it could spend on the rest of the pattern.
 - **No hedging, no filler.** Banned: "simply", "just", "easy", "obviously", "best practice" as decoration, "consider using" (either require it, permit it in Customizable, or omit it).
 - **Em dashes: effectively zero.** This genre does not use them. Use commas, parentheses, or restructure the bullet.
 - **Oxford comma**, always.

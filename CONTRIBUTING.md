@@ -30,6 +30,32 @@ The canonical format for every pattern file is `schema/pattern-template.md`. The
 
 ---
 
+## What belongs in a pattern doc, and what does not
+
+A pattern doc tells an AI coding agent **what to build**. It is not a test plan, and it is not documentation of how to check the result.
+
+Every Must Have should read as an instruction you could follow while writing the component. If a bullet reads as something you would do *afterward* — "assert that", "verify each", a rule about how to observe rather than what to produce — it belongs to the verification layer, not here.
+
+**State the requirement, not the reason.** Rationale is not a requirement. Omit the explanatory clause unless the reason changes what gets built.
+
+> Write this:
+> - The `"false"` value is set explicitly, including on a tab that holds focus without being selected.
+>
+> Not this:
+> - The `"false"` value is set explicitly, including on a tab that holds focus without being selected, because when `aria-selected` is absent, user agents report the focused tab as selected, which silently collapses manual activation into automatic activation for assistive technology.
+
+Same requirement. The first is an instruction; the second is a paragraph about the instruction, and it costs the agent context it could have spent on the rest of the pattern.
+
+The same rule governs scope. A pattern doc carries what an agent must do to build the component correctly. It does not carry:
+
+- **Verification steps.** The maintainer derives machine-readable checks from these requirements after merge, in a separate verification catalog. Requirements are written once, here; the checks that confirm them live elsewhere and are not the contributor's job.
+- **Usability advice that does not change the markup or behavior.** Guidance about ordering, counts, and label length belongs in `Customizable`, not `Must Haves`.
+- **Restatements of Foundations rules.** If `global_rules.md` already owns it, reference the rule ID rather than repeating it.
+
+The test to apply to any bullet you are about to add: *could an agent act on this while writing the component, without having rendered anything?* If not, it is probably a check, not a requirement.
+
+---
+
 ## Authoring a new pattern — high-level checklist
 
 Full checklist with rules in `schema/style-guide.md` § Definition of done.
@@ -94,6 +120,16 @@ Each pattern's `latest_version` in `patterns.json` is bumped only when its **sem
 - **MINOR (Y+1.0)** — a new Must Have is added, a Customizable item is added, an Acceptance Check is added, `selection_excerpt` aliases are expanded, an existing requirement is semantically clarified or reframed
 - **PATCH (Z+1)** — typo, wording fix, golden-pattern code clarification with no requirements change, single-pattern formatting fix
 - **No bump** — pure typography sweeps applied corpus-wide (e.g., a corpus-wide "Don't" → "Do not" normalization). These bump only `catalog_revision`.
+
+#### Beta patterns stay in `0.x`
+
+New patterns are authored `beta` at `0.1.0` (see the Status ladder above), so nearly every live pattern sits in `0.x`. A MAJOR-class change to a pattern that remains `beta` bumps **`0.(Y+1).0`**, not `1.0.0`: for example, a Must Have whose mechanism is reversed at `0.2.0` becomes `0.3.0`. This is ordinary `0.x` semver, where breaking changes are absorbed at the minor position.
+
+`1.0.0` is reserved for promotion to `stable`. Applying it to a beta pattern asserts a stability commitment the pattern has not earned, and contradicts its own `status`.
+
+#### Deprecated patterns end at `1.0.0`
+
+When a pattern is retired, usually because its ID was renamed, its final version is `1.0.0` regardless of its prior version. This is a terminal marker rather than a stability claim, and the pattern is excluded from the generated catalog either way. See `menu.account`, `dialog.modal`, and `dialog.nonmodal`.
 
 ### Every corpus PR includes
 

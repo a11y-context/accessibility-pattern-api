@@ -1,21 +1,19 @@
 ---
-id: dialog.modal
-title: "Dialog (Modal)"
+id: dialog.basic
+title: "Dialog (Basic)"
 stack: web/react
-status: deprecated
-latest_version: 1.0.0
+status: beta
+latest_version: 0.1.0
 tags: [dialog, modal, pop-up, overlay, focus-trap, blocking, native-dialog, show-modal]
-aliases: [dialog, modal, pop-up]
+aliases: [dialog, modal, modal dialog, pop-up, blocking overlay, show-modal]
 summary: User-initiated blocking dialog. Uses the native <dialog> element with .showModal() so the browser handles focus trap, background inertness, Escape dismissal, focus restoration, and top-layer rendering.
 ---
 
-# Dialog (Modal)
+# Dialog (Basic)
 
-Pattern ID: `dialog.modal`
+Pattern ID: `dialog.basic`
 
 User-initiated blocking dialog. Uses the native `<dialog>` element with `.showModal()` so the browser handles focus trap, background inertness, Escape dismissal, focus restoration, and top-layer rendering. When the native element cannot be used, a manual `<div role="dialog">` fallback is documented under Customizable with the full behavior contract that must be implemented by hand.
-
-Deprecated. This pattern was renamed to `dialog.basic`. The non-modal overlay moved to `popover.basic`, so the `(Modal)` qualifier no longer distinguishes this pattern from its siblings: every remaining member of the `dialog.` family is modal, and what makes this one the default member is that it holds arbitrary content rather than a fixed message shape. Use `dialog.basic`. This ID is retained for backward compatibility and is excluded from the generated catalog.
 
 ## Use When
 - Use when content appears in an overlay that blocks interaction with the underlying page.
@@ -23,8 +21,8 @@ Deprecated. This pattern was renamed to `dialog.basic`. The non-modal overlay mo
 - Use when the user must explicitly complete or dismiss the dialog before returning to the main interface.
 
 ## Do Not Use When
-- Do not use when the content is part of the normal page flow and does not block background interaction.
-- Do not use when presenting brief, non-blocking status messages that do not require focus movement (use `toast` or `snackbar`).
+- Do not use when the content is part of the normal page flow and does not block background interaction (use `popover.basic`).
+- Do not use when presenting brief, non-blocking status messages that do not require focus movement (use `toast.basic`).
 - Do not use when the message is urgent and requires immediate acknowledgment (use `dialog.alert`).
 - Do not use when the interaction involves complex, multi-step workflows spanning multiple screens.
 
