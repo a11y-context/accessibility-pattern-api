@@ -8,6 +8,26 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.16.0 — 2026-08-04
+
+**QA catalog: third re-derive batch — `combobox.autocomplete`, `grid.channel-guide`, `listbox.basic`, `menu.menubar`, `navigation-menu.basic`.** No pattern `.md` changed — classification only. These are the five largest blocks in the corpus; 146 rules become 109.
+
+| pattern | before | after |
+|---|---|---|
+| `combobox.autocomplete` | 28 rules, 0% llm-eval, 1.29 avg | 23 rules, 0%, 1.30 |
+| `grid.channel-guide` | 25 rules, 4%, 1.28 | 20 rules, 0%, 1.20 |
+| `listbox.basic` | 23 rules, 0%, 1.17 | 15 rules, 0%, 1.13 |
+| `menu.menubar` | 30 rules, 10%, 1.27 | 21 rules, 10%, 1.19 |
+| `navigation-menu.basic` | 40 rules, 12%, 1.40 | 30 rules, 3%, 1.27 |
+
+These five were already close to the reference on llm-eval, so the reduction here is almost entirely **structural noise rather than mis-tiering**: section-label bullets that carry no requirement ("Keyboard model:", "The grid must expose its dimensions:", "Tab boundary behavior:"), branch details that belong in a single rule's hint rather than as competing rules, and the recurring inverted Don'ts.
+
+`combobox.autocomplete` contains the corpus's clearest example of a **partial** Foundations restatement: "Ensure a visible focus state … around the input, **and a distinct visual highlight on the active option**." The focus-state half is dropped as a restatement of `global.focus-states`; the active-option highlight is a genuine combobox requirement and is kept as its own rule. That is the caveat the 0.11.0 decision called out, and this is the pattern where it applies.
+
+`navigation-menu.basic`'s three top-level item shapes (simple link / parent link + toggle / parent button) collapse from six competing rules into one branching rule, matching how the checkbox and dialog fallbacks are handled: competing rules would make every valid implementation fail two of them.
+
+Corpus totals: 432 component rules, 8% `llm-eval`. Four blocks remain at `0.5.2`.
+
 ## 0.15.0 — 2026-08-04
 
 **Foundations gains a tenth rule, `global.forced-colors`, and the three color rules that were silent about it now carry it.** No pattern `.md` changed.
