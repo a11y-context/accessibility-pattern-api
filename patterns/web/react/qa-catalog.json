@@ -1,10 +1,10 @@
 {
   "stack": "web/react",
-  "catalog_revision": "0.12.0",
+  "catalog_revision": "0.13.0",
   "components": {
     "accordion.basic": {
       "pattern_id": "accordion.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
           "rule": "Accordion is composed of a series of header + panel pairs.",
@@ -12,7 +12,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Markup shows repeated pairs: a heading-wrapped button followed by its associated panel element, one pair per section.",
+          "static_hint": "Each header control has exactly one corresponding panel element, and each panel exactly one header.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -20,76 +20,54 @@
           "rule": "Each accordion header control is a native `<button>` (or `role=\"button\"` only when a native button cannot be used).",
           "source": "must_have",
           "techniques": [
+            "static"
+          ],
+          "static_hint": "Each header control is a native <button>; role=\"button\" is the fallback path only.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "If role=\"button\" is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
+          "source": "must_have",
+          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Each header's interactive control is a <button>, or an element with role=\"button\".",
-          "llm_eval_question": "If role=\"button\" is used instead of a native <button>, is there a genuine constraint that prevented using the native element?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If role=\"button\" is used instead of a native `<button>`, add `tabindex=\"0\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every element with role=\"button\" also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" element has a keydown/keyup handler covering Enter and Space (not only onClick).",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" header, press Enter, then Space; assert each keypress toggles the panel."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, focus the role=\"button\" header and press Space; assert the control activates and window.scrollY does not change."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "Each header button is contained within a heading element (`<h2>`–`<h6>`) or an element with `role=\"heading\"` and the appropriate `aria-level`.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "llm-eval"
+            "static"
           ],
-          "static_hint": "Each header button's parent is <h2>–<h6>, or an element with role=\"heading\" plus a numeric aria-level.",
-          "llm_eval_question": "Is the heading level (h2–h6 or aria-level) appropriate for the accordion's position in the page's heading outline?",
+          "static_hint": "Each header button's parent is a heading element, or an element with role=\"heading\" carrying aria-level.",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
           "rule": "The header button uses `aria-expanded=\"true\"` when its panel is visible and `\"false\"` when hidden.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Header buttons carry an aria-expanded attribute bound to open state.",
+          "static_hint": "Each header button carries aria-expanded bound to its panel's visibility state.",
           "llm_eval_question": null,
-          "runtime_check": "Toggle each header; assert aria-expanded is \"true\" exactly when its panel is visible and \"false\" when it is hidden."
+          "runtime_check": "Expand and collapse each panel; assert aria-expanded matches the panel's rendered visibility every time."
         },
         {
-          "rule": "The panel is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that hidden content **cannot** be accessed by screen readers.",
+          "rule": "The panel is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that hidden content cannot be accessed by screen readers.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Collapse mechanism uses `hidden`, conditional rendering, or display:none — not opacity/height tricks that leave content in the accessibility tree.",
+          "static_hint": "Collapsed panels use the hidden attribute or are unmounted; flag CSS-only hiding such as height:0 or visibility that leaves content in the accessibility tree.",
           "llm_eval_question": null,
-          "runtime_check": "With a panel collapsed, assert its content is not visible, not focusable via Tab, and absent from the accessibility tree."
+          "runtime_check": "With a panel collapsed, assert its content is absent from the accessibility tree and cannot be reached by keyboard."
         },
         {
           "rule": "Users move focus between accordion headers using Tab / Shift+Tab.",
@@ -99,7 +77,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Tab and Shift+Tab through the accordion; assert each header button is reached in document order with no arrow-key-only traversal required."
+          "runtime_check": "Tab and Shift+Tab through the accordion; assert focus stops on each header control in both directions."
         },
         {
           "rule": "Since the header control is a button, it is activated with Enter or Space.",
@@ -109,39 +87,17 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus a header button and press Enter, then Space; assert each toggles the panel's expanded state."
+          "runtime_check": "Focus a header and press Enter, then Space; assert each toggles its panel."
         },
         {
           "rule": "If the accordion does not permit a panel to be collapsed while expanded, the expanded header button uses `aria-disabled=\"true\"` (rare case).",
           "source": "must_have",
           "techniques": [
-            "runtime",
             "static"
           ],
-          "static_hint": "If the implementation enforces always-one-open, code sets aria-disabled=\"true\" on the expanded header (not native disabled).",
+          "static_hint": "In an always-one-open accordion, the expanded header carries aria-disabled=\"true\" rather than the native disabled attribute.",
           "llm_eval_question": null,
-          "runtime_check": "Expand a panel and attempt to collapse it via its own header; if collapse is refused, assert that header carries aria-disabled=\"true\" and remains focusable."
-        },
-        {
-          "rule": "Do not use non-focusable headers (e.g., `<div>` without proper button semantics) as the interactive control.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Flag click handlers on header elements that are not <button> and lack role=\"button\"+tabindex.",
-          "llm_eval_question": null,
-          "runtime_check": "Tab through the accordion; assert every interactive header is reachable and toggles with the keyboard."
-        },
-        {
-          "rule": "Do not make the panel visible while leaving `aria-expanded=\"false\"` (and vice versa).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "After each toggle, assert panel visibility and the header's aria-expanded value never disagree."
+          "runtime_check": null
         },
         {
           "rule": "Do not remove panel content from the DOM in a way that breaks expected focus behavior (e.g., collapsing a panel while focus remains inside it without moving focus).",
@@ -151,27 +107,16 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus an element inside an open panel, collapse that panel programmatically or via its header; assert focus is not stranded on <body> (it lands on the header or another sensible element)."
-        },
-        {
-          "rule": "Do not use `role=\"heading\"` without an `aria-level`.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every element with role=\"heading\" also has a valid aria-level.",
-          "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Move focus inside an expanded panel and collapse it; assert focus moves to a sensible element (typically its header) rather than being lost to <body>."
         },
         {
           "rule": "Do not nest accordions within accordion panels.",
           "source": "dont",
           "techniques": [
-            "static",
-            "llm-eval"
+            "static"
           ],
-          "static_hint": "Flag heading+button[aria-expanded]+panel structures rendered inside another accordion's panel element.",
-          "llm_eval_question": "Does any panel's content constitute another accordion widget (a series of expandable header/panel pairs)?",
+          "static_hint": "Flag an accordion rendered inside another accordion's panel.",
+          "llm_eval_question": null,
           "runtime_check": null
         }
       ]
@@ -409,25 +354,15 @@
     },
     "carousel.dots": {
       "pattern_id": "carousel.dots",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
-          "rule": "Render a carousel container with `aria-roledescription=\"carousel\"`",
+          "rule": "Render a carousel container with `aria-roledescription=\"carousel\"` and an accessible name (`aria-label`).",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Carousel container element carries aria-roledescription=\"carousel\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "The carousel container has an accessible name (`aria-label`).",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Carousel container carries a non-empty aria-label.",
+          "static_hint": "The carousel container carries aria-roledescription=\"carousel\" and a non-empty aria-label.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -437,126 +372,83 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Container is a <section> (or comparable landmark-capable element) or carries role=\"region\".",
+          "static_hint": "The carousel container is a <section> or carries role=\"region\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "Each slide must have `role=\"group\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every slide element carries role=\"group\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "`aria-roledescription=\"slide\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every slide element carries aria-roledescription=\"slide\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Each slide has an `aria-label` like \"1 of N\" (N is total number of slides).",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Each slide's aria-label matches an \"X of Y\" pattern where Y equals the total slide count and X is the slide's 1-based index.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Slides that are not currently visible must not be rendered, or must be hidden in the DOM (e.g., via the `hidden` attribute), so their content cannot be reached by keyboard or screen readers.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Off-slide hiding uses `hidden`/conditional rendering/display:none, not transform/overflow-only positioning.",
-          "llm_eval_question": null,
-          "runtime_check": "With slide 1 active, assert links/controls in other slides are unreachable via Tab and absent from the accessibility tree."
-        },
-        {
-          "rule": "Provide Previous/Next buttons as real `<button>` elements",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Previous and Next controls are native <button> elements.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "with `aria-label` like \"Previous Slide\" and \"Next Slide\".",
-          "source": "must_have",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "Both buttons carry non-empty aria-labels.",
-          "llm_eval_question": "Do the labels clearly convey previous/next slide navigation (not just \"arrow\" or \"chevron\")?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Provide dot navigation as real `<button>` elements in normal tab order (no roving tabindex)",
+          "rule": "Each slide must have `role=\"group\"`, `aria-roledescription=\"slide\"` and an `aria-label` like \"1 of N\" (N is total number of slides).",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Dots are native <button> elements with no tabindex=\"-1\" roving scheme.",
+          "static_hint": "Each slide carries role=\"group\", aria-roledescription=\"slide\", and an aria-label following the documented form.",
           "llm_eval_question": null,
-          "runtime_check": "Tab through the carousel; assert every dot is reached as its own tab stop."
+          "runtime_check": "Assert each slide's aria-label numbers it correctly and that the total matches the real slide count."
         },
         {
-          "rule": "with `aria-label` like \"Go to slide 2\"",
+          "rule": "Slides that are not currently visible must not be rendered, or must be hidden in the DOM (e.g., via the `hidden` attribute), so their content cannot be reached by keyboard or screen readers.",
           "source": "must_have",
           "techniques": [
             "static",
-            "llm-eval"
+            "runtime"
           ],
-          "static_hint": "Each dot carries an aria-label identifying its target slide number.",
-          "llm_eval_question": "Does each dot's label convey the go-to-slide action and the correct slide number?",
+          "static_hint": "Off-screen slides are unmounted or carry the hidden attribute; flag CSS-only hiding such as opacity or transform.",
+          "llm_eval_question": null,
+          "runtime_check": "With a slide off-screen, assert its content cannot be reached by keyboard and is absent from the accessibility tree."
+        },
+        {
+          "rule": "Provide Previous/Next buttons as real `<button>` elements, with `aria-label` like \"Previous Slide\" and \"Next Slide\".",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Previous and Next controls are <button> elements carrying accessible names.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Provide dot navigation as real `<button>` elements in normal tab order (no roving tabindex), with `aria-label` like \"Go to slide 2\".",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Dot controls are <button> elements with accessible names and no tabindex=\"-1\" (they stay in normal tab order).",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
           "rule": "Set `aria-current=\"true\"` on the dot button corresponding to the active slide.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "aria-current is bound to active-slide state on the dot buttons.",
+          "static_hint": "aria-current is bound to the active-slide state on the dot controls.",
           "llm_eval_question": null,
-          "runtime_check": "Navigate between slides; assert exactly one dot has aria-current=\"true\" and it always matches the visible slide."
+          "runtime_check": "Move between slides; assert exactly one dot control carries aria-current=\"true\" and it always matches the visible slide."
         },
         {
           "rule": "Provide a Pause/Play button as the first focusable element inside the carousel container.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "A Pause/Play <button> exists and precedes other focusable elements in the container's DOM order.",
+          "static_hint": "A Pause/Play control is rendered as the first focusable element within the carousel container.",
           "llm_eval_question": null,
-          "runtime_check": "Tab into the carousel from just before it; assert the first focus stop inside the container is the Pause/Play button."
+          "runtime_check": "Tab into the carousel; assert the first control reached is the Pause/Play button."
         },
         {
           "rule": "Default to paused when `prefers-reduced-motion: reduce`.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Code consults prefers-reduced-motion (matchMedia or CSS) before starting autoplay.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Emulate prefers-reduced-motion: reduce, load the page; assert the carousel does not auto-advance and the control shows the paused state."
+          "runtime_check": "Emulate prefers-reduced-motion: reduce and load the carousel; assert autoplay does not start."
         },
         {
           "rule": "Pause when keyboard focus enters the carousel region.",
@@ -566,63 +458,21 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With autoplay running, Tab into the carousel; assert auto-advancing stops while focus is inside the region."
-        },
-        {
-          "rule": "Do not auto-advance the slides without a visible Pause/Play control.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "If autoplay logic exists, a Pause/Play button must exist in the markup.",
-          "llm_eval_question": null,
-          "runtime_check": "If slides auto-advance after load, assert a visible, operable Pause/Play control is rendered inside the carousel."
-        },
-        {
-          "rule": "Do not ignore `prefers-reduced-motion`.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Autoplay/animation code branches on prefers-reduced-motion.",
-          "llm_eval_question": null,
-          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert autoplay is off and slide transitions are reduced or instant."
-        },
-        {
-          "rule": "Do not keep moving while the user is interacting (focus inside carousel must pause autoplay).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Focus a control inside the carousel and wait past the autoplay interval; assert the active slide does not change while focus remains inside."
+          "runtime_check": "Tab into the carousel while it is autoplaying; assert advancing stops while focus remains inside."
         }
       ]
     },
     "carousel.thumbnails": {
       "pattern_id": "carousel.thumbnails",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
-          "rule": "Render a carousel container with `aria-roledescription=\"carousel\"`",
+          "rule": "Render a carousel container with `aria-roledescription=\"carousel\"` and an accessible name (`aria-label`).",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Carousel container element carries aria-roledescription=\"carousel\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "The carousel container has an accessible name (`aria-label`).",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Carousel container carries a non-empty aria-label.",
+          "static_hint": "The carousel container carries aria-roledescription=\"carousel\" and a non-empty aria-label.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -632,126 +482,83 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Container is a <section> or carries role=\"region\".",
+          "static_hint": "The carousel container is a <section> or carries role=\"region\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "Each slide must have `role=\"group\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every slide element carries role=\"group\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "`aria-roledescription=\"slide\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every slide element carries aria-roledescription=\"slide\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Each slide has an `aria-label` like \"1 of N\".",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Each slide's aria-label matches \"X of Y\" with Y equal to the total slide count and X the slide's 1-based index.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Slides that are not currently visible must not be rendered, or must be hidden in the DOM (e.g., via the `hidden` attribute), so their content cannot be reached by keyboard or screen readers.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Hiding uses `hidden`/conditional rendering/display:none, not overflow/transform positioning alone.",
-          "llm_eval_question": null,
-          "runtime_check": "With one slide active, assert content in other slides is unreachable via Tab and absent from the accessibility tree."
-        },
-        {
-          "rule": "Provide Previous/Next buttons as real `<button>` elements",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Previous and Next controls are native <button> elements.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "with `aria-label` like \"Previous Slide\" and \"Next Slide\".",
-          "source": "must_have",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "Both buttons carry non-empty aria-labels.",
-          "llm_eval_question": "Do the labels clearly convey previous/next slide navigation?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Provide thumbnail navigation as real `<button>` elements in normal tab order (no roving tabindex)",
+          "rule": "Each slide must have `role=\"group\"`, `aria-roledescription=\"slide\"` and an `aria-label` like \"1 of N\".",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Thumbnails are native <button> elements without a roving tabindex scheme.",
+          "static_hint": "Each slide carries role=\"group\", aria-roledescription=\"slide\", and an aria-label following the documented form.",
           "llm_eval_question": null,
-          "runtime_check": "Tab through the carousel; assert every thumbnail is reached as its own tab stop."
+          "runtime_check": "Assert each slide's aria-label numbers it correctly and that the total matches the real slide count."
         },
         {
-          "rule": "with `aria-label` like \"Go to slide 2: {title of slide 2}\"",
+          "rule": "Slides that are not currently visible must not be rendered, or must be hidden in the DOM (e.g., via the `hidden` attribute), so their content cannot be reached by keyboard or screen readers.",
           "source": "must_have",
           "techniques": [
             "static",
-            "llm-eval"
+            "runtime"
           ],
-          "static_hint": "Each thumbnail carries an aria-label with the go-to action, slide number, and a title string.",
-          "llm_eval_question": "Does each thumbnail's label include the actual title of the slide it targets (not a generic or mismatched title)?",
+          "static_hint": "Off-screen slides are unmounted or carry the hidden attribute; flag CSS-only hiding such as opacity or transform.",
+          "llm_eval_question": null,
+          "runtime_check": "With a slide off-screen, assert its content cannot be reached by keyboard and is absent from the accessibility tree."
+        },
+        {
+          "rule": "Provide Previous/Next buttons as real `<button>` elements, with `aria-label` like \"Previous Slide\" and \"Next Slide\".",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Previous and Next controls are <button> elements carrying accessible names.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Provide thumbnail navigation as real `<button>` elements in normal tab order (no roving tabindex), with `aria-label` like \"Go to slide 2: {title of slide 2}\".",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Thumbnail controls are <button> elements with accessible names and no tabindex=\"-1\" (they stay in normal tab order).",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
           "rule": "Set `aria-current=\"true\"` on the thumbnail button corresponding to the active slide.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "aria-current bound to active-slide state on thumbnails.",
+          "static_hint": "aria-current is bound to the active-slide state on the thumbnail controls.",
           "llm_eval_question": null,
-          "runtime_check": "Navigate between slides; assert exactly one thumbnail has aria-current=\"true\" and it matches the visible slide."
+          "runtime_check": "Move between slides; assert exactly one thumbnail control carries aria-current=\"true\" and it always matches the visible slide."
         },
         {
           "rule": "Provide a Pause/Play button as the first focusable element inside the carousel container.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Pause/Play <button> precedes other focusables in the container's DOM order.",
+          "static_hint": "A Pause/Play control is rendered as the first focusable element within the carousel container.",
           "llm_eval_question": null,
-          "runtime_check": "Tab into the carousel; assert the first focus stop inside is the Pause/Play button."
+          "runtime_check": "Tab into the carousel; assert the first control reached is the Pause/Play button."
         },
         {
           "rule": "Default to paused when prefers-reduced-motion: reduce.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Code consults prefers-reduced-motion before starting autoplay.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Emulate prefers-reduced-motion: reduce, load the page; assert no auto-advance and a paused control state."
+          "runtime_check": "Emulate prefers-reduced-motion: reduce and load the carousel; assert autoplay does not start."
         },
         {
           "rule": "Pause when keyboard focus enters the carousel region.",
@@ -761,39 +568,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With autoplay running, Tab into the carousel; assert auto-advancing stops while focus is inside."
-        },
-        {
-          "rule": "Do not auto-advance the slides without a visible Pause/Play control.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "If autoplay logic exists, a Pause/Play button exists in markup.",
-          "llm_eval_question": null,
-          "runtime_check": "If slides auto-advance, assert a visible operable Pause/Play control is present inside the carousel."
-        },
-        {
-          "rule": "Do not ignore `prefers-reduced-motion: reduce`.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Autoplay/animation code branches on prefers-reduced-motion.",
-          "llm_eval_question": null,
-          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert autoplay is off."
-        },
-        {
-          "rule": "Do not keep moving while the user is interacting (focus inside carousel must pause autoplay).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Focus inside the carousel, wait past the autoplay interval; assert the active slide does not change."
+          "runtime_check": "Tab into the carousel while it is autoplaying; assert advancing stops while focus remains inside."
         }
       ]
     },
@@ -1846,91 +1621,71 @@
     },
     "disclosure.basic": {
       "pattern_id": "disclosure.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
           "source": "must_have",
           "techniques": [
+            "static"
+          ],
+          "static_hint": "Trigger is a native <button>; role=\"button\" is the fallback path only.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
+          "source": "must_have",
+          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Trigger is a native <button>, or an element with role=\"button\".",
-          "llm_eval_question": "If role=\"button\" is used, is there a genuine constraint that prevented a native <button>?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every role=\"button\" trigger also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" trigger has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" trigger, press Enter, then Space; assert each toggles the region."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" trigger; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "The button reflects open state with `aria-expanded=\"true|false\"`.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger carries aria-expanded bound to the region's open state.",
+          "static_hint": "The trigger carries aria-expanded bound to the region's visibility; flag aria-expanded authored on the region instead of the trigger.",
           "llm_eval_question": null,
-          "runtime_check": "Toggle the disclosure; assert aria-expanded is \"true\" exactly when the region is visible and \"false\" when hidden."
+          "runtime_check": "Toggle the disclosure; assert aria-expanded on the trigger matches the region's rendered visibility."
         },
         {
           "rule": "The button references the region with `aria-controls=\"IDREF\"`.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger's aria-controls IDREF resolves to the region element's id.",
+          "static_hint": "The trigger carries aria-controls whose value matches the region element's id.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert the aria-controls IDREF resolves to the rendered region."
         },
         {
           "rule": "The region is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that when closed, its content cannot be reached by keyboard or screen readers.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Closed state uses `hidden`/conditional rendering/display:none, not visual-only hiding.",
+          "static_hint": "The closed region uses the hidden attribute or is unmounted; flag CSS-only hiding.",
           "llm_eval_question": null,
-          "runtime_check": "With the region closed, assert its content is unreachable via Tab and absent from the accessibility tree."
+          "runtime_check": "With the region closed, assert its content cannot be reached by keyboard and is absent from the accessibility tree."
         },
         {
           "rule": "The button has an accessible name that describes the content it controls.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
           "static_hint": "Trigger has a non-empty accessible name source.",
-          "llm_eval_question": "Does the trigger's name describe the disclosed content (e.g., \"Shipping details\") rather than being generic (\"More\", \"Expand\")?",
+          "llm_eval_question": "Does the trigger's name describe the content it reveals, rather than the action alone (\"Show\", \"More\")?",
           "runtime_check": null
         },
         {
@@ -1940,9 +1695,9 @@
             "static",
             "runtime"
           ],
-          "static_hint": "No aria-label/aria-labelledby overriding the visible text on text-bearing triggers.",
+          "static_hint": "No aria-label or aria-labelledby overrides the trigger's visible text.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the computed accessible name matches the trigger's rendered visible text."
+          "runtime_check": "Compute the accessible name; assert it equals the visible text content."
         },
         {
           "rule": "For an icon-only trigger, provide an accessible name using `aria-label` or `aria-labelledby`.",
@@ -1950,7 +1705,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon-only triggers carry a non-empty aria-label or resolving aria-labelledby.",
+          "static_hint": "A trigger whose only content is an icon carries aria-label or aria-labelledby.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1960,7 +1715,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "No aria-haspopup attribute on the disclosure trigger.",
+          "static_hint": "Flag aria-haspopup on the disclosure trigger — a revealed region is not a popup widget.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1973,36 +1728,6 @@
           "static_hint": "Flag role=\"menu\" on the disclosure region.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Do not add `aria-haspopup` to the button.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag any aria-haspopup value on the disclosure trigger.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not put the expanded state on the region instead of the trigger.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag aria-expanded on the region element; it belongs on the trigger button.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not leave the region visible while `aria-expanded=\"false\"` (and vice versa).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Across toggle cycles, assert region visibility and the trigger's aria-expanded value never disagree."
         }
       ]
     },
@@ -2643,49 +2368,28 @@
     },
     "menu.basic": {
       "pattern_id": "menu.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
           "source": "must_have",
           "techniques": [
+            "static"
+          ],
+          "static_hint": "Trigger is a native <button>; role=\"button\" is the fallback path only.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
+          "source": "must_have",
+          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Trigger is a native <button>, or an element with role=\"button\".",
-          "llm_eval_question": "If role=\"button\" is used, is there a genuine constraint that prevented a native <button>?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every role=\"button\" trigger also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" trigger has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" trigger, press Enter, then Space; assert each opens the menu."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" trigger; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "The menu container has `role=\"menu\"`.",
@@ -2693,7 +2397,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Popup container carries role=\"menu\".",
+          "static_hint": "The menu container carries role=\"menu\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2703,7 +2407,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Every command element inside the menu carries role=\"menuitem\".",
+          "static_hint": "Each command element carries role=\"menuitem\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2711,13 +2415,12 @@
           "rule": "A stateful item that toggles in place uses `role=\"menuitemcheckbox\"` or `role=\"menuitemradio\"` with `aria-checked=\"true|false\"`.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
             "static",
             "runtime"
           ],
-          "static_hint": "Toggling items carry menuitemcheckbox/menuitemradio plus aria-checked.",
-          "llm_eval_question": "Which items toggle state in place rather than executing a one-shot command, and do those use the checkbox/radio menuitem roles?",
-          "runtime_check": "Activate a stateful item; assert aria-checked flips and stays in sync with the item's actual state."
+          "static_hint": "Toggling items carry role=\"menuitemcheckbox\" or role=\"menuitemradio\" with aria-checked bound to state.",
+          "llm_eval_question": null,
+          "runtime_check": "Toggle a stateful item; assert aria-checked flips and the menu behaves per its documented stay-open or close contract."
         },
         {
           "rule": "Dividers between groups of items use `role=\"separator\"`.",
@@ -2725,7 +2428,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Divider elements inside the menu carry role=\"separator\".",
+          "static_hint": "Divider elements carry role=\"separator\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2735,7 +2438,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag <a>, headings, inputs, or non-menu-role content inside the role=\"menu\" container.",
+          "static_hint": "Flag <a>, heading elements, or form controls inside the role=\"menu\" container.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2743,11 +2446,11 @@
           "rule": "The trigger has an accessible name that describes its purpose or action.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
           "static_hint": "Trigger has a non-empty accessible name source.",
-          "llm_eval_question": "Does the trigger's name convey what the menu offers (e.g., \"More actions\") rather than being generic or icon-descriptive?",
+          "llm_eval_question": "Does the trigger's name describe what the menu does, rather than naming the icon?",
           "runtime_check": null
         },
         {
@@ -2756,7 +2459,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon-only triggers carry a non-empty aria-label or resolving aria-labelledby.",
+          "static_hint": "An icon-only trigger carries aria-label or aria-labelledby.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2776,7 +2479,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "role=\"menu\" element carries aria-labelledby resolving to the trigger's id, or a non-empty aria-label.",
+          "static_hint": "The menu container carries aria-labelledby pointing at the trigger, or a non-empty aria-label.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2786,7 +2489,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Trigger carries aria-haspopup with the exact value \"menu\".",
+          "static_hint": "The trigger carries aria-haspopup=\"menu\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -2794,33 +2497,34 @@
           "rule": "The trigger has `aria-expanded=\"true|false\"` reflecting the open or closed state of the menu.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger carries aria-expanded bound to menu open state.",
+          "static_hint": "The trigger carries aria-expanded bound to the menu's visibility.",
           "llm_eval_question": null,
-          "runtime_check": "Open and close the menu; assert aria-expanded always matches actual menu visibility."
+          "runtime_check": "Open and close the menu; assert aria-expanded matches the menu's rendered visibility every time."
         },
         {
           "rule": "The trigger has `aria-controls=\"IDREF\"` pointing to the menu container.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger's aria-controls IDREF resolves to the role=\"menu\" element.",
+          "static_hint": "The trigger carries aria-controls whose value matches the menu container's id.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert the aria-controls IDREF resolves to the rendered menu container."
         },
         {
           "rule": "The menu is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that when closed, its items cannot be reached by keyboard or screen readers.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Closed state uses `hidden`/conditional rendering/display:none.",
+          "static_hint": "The closed menu uses the hidden attribute or is unmounted; flag CSS-only hiding.",
           "llm_eval_question": null,
-          "runtime_check": "With the menu closed, assert its items are unreachable via Tab and absent from the accessibility tree."
+          "runtime_check": "With the menu closed, assert its items cannot be reached by keyboard and are absent from the accessibility tree."
         },
         {
           "rule": "On the trigger, Enter, Space, and Arrow Down open the menu and move focus to the first item.",
@@ -2830,7 +2534,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Enter, Space, and Arrow Down on the trigger (separately); assert each opens the menu with DOM focus on the first item."
+          "runtime_check": "Focus the trigger and press Enter, Space, and Arrow Down in turn; assert each opens the menu with focus on the first item."
         },
         {
           "rule": "On the trigger, Arrow Up opens the menu and moves focus to the last item.",
@@ -2840,7 +2544,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Arrow Up on the trigger; assert the menu opens with DOM focus on the last item."
+          "runtime_check": "Focus the trigger and press Arrow Up; assert the menu opens with focus on the last item."
         },
         {
           "rule": "Within the menu, Arrow Up and Arrow Down move focus between items and wrap at the ends.",
@@ -2850,7 +2554,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Arrow through all items; assert focus advances per press and wraps last→first (Down) and first→last (Up)."
+          "runtime_check": "Arrow through the open menu past both ends; assert focus moves item to item and wraps."
         },
         {
           "rule": "Within the menu, Home moves focus to the first item and End moves focus to the last item.",
@@ -2860,7 +2564,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Home and End inside the menu; assert focus lands on the first and last item respectively."
+          "runtime_check": "With the menu open, press Home and End; assert focus lands on the first and last items."
         },
         {
           "rule": "Within the menu, Enter or Space activates the focused item, then closes the menu and returns focus to the trigger.",
@@ -2870,7 +2574,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Enter (and separately Space) on a focused item; assert the command fires, the menu closes, and document.activeElement is the trigger."
+          "runtime_check": "Focus a menu item and press Enter, then repeat with Space; assert the item activates, the menu closes, and focus returns to the trigger."
         },
         {
           "rule": "Within the menu, a printable character moves focus to the next item whose label starts with that character (type-ahead).",
@@ -2880,40 +2584,28 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Type a character matching an item's first letter; assert focus jumps to the next item starting with it."
+          "runtime_check": "With the menu open, type a character matching a later item's first letter; assert focus moves to that item."
         },
         {
           "rule": "Focus is managed with roving tabindex: the active item has `tabindex=\"0\"` and all other items have `tabindex=\"-1\"`.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Menu items render tabindex bound to active state.",
+          "static_hint": "Menu items carry tabindex bound to the active index — one item at \"0\", the rest at \"-1\".",
           "llm_eval_question": null,
-          "runtime_check": "After each arrow press, assert exactly one item has tabindex=\"0\" and all others have tabindex=\"-1\"."
+          "runtime_check": "Arrow through the menu; assert exactly one item has tabindex=\"0\" at a time and it is the focused item."
         },
         {
           "rule": "The active item receives DOM focus via `element.focus()`.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Navigation code calls .focus() on the newly active item (not aria-activedescendant tracking).",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Arrow between items; assert document.activeElement is always the active menu item itself."
-        },
-        {
-          "rule": "Focus returns to the trigger when the menu closes via activation or Esc, deferred with `requestAnimationFrame` so the trigger is focusable when the call runs.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Close path restores trigger focus inside requestAnimationFrame.",
-          "llm_eval_question": null,
-          "runtime_check": "Close via item activation and via Esc; assert document.activeElement is the trigger afterward, with no frame where focus is stranded on <body>."
+          "runtime_check": "Arrow through the menu; assert document.activeElement is the active menu item, not the container."
         },
         {
           "rule": "Esc closes the menu and returns focus to the trigger.",
@@ -2923,7 +2615,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the menu open, press Esc; assert it closes and focus is on the trigger."
+          "runtime_check": "With the menu open, press Esc; assert it closes and document.activeElement is the trigger."
         },
         {
           "rule": "Tab moves focus out of the menu and closes it.",
@@ -2933,7 +2625,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the menu open, press Tab; assert focus moves to the next focusable element outside and the menu closes."
+          "runtime_check": "With the menu open, press Tab; assert the menu closes and focus moves to the next focusable element on the page."
         },
         {
           "rule": "An outside click or focus loss closes the menu.",
@@ -2943,69 +2635,27 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the menu open, click outside it (and separately move focus elsewhere programmatically); assert the menu closes in both cases."
+          "runtime_check": "With the menu open, click outside it and separately move focus away; assert it closes in both cases."
         },
         {
           "rule": "Do not use `role=\"menu\"` for navigation or for items that are links.",
           "source": "dont",
           "techniques": [
-            "static",
             "llm-eval"
           ],
-          "static_hint": "Flag <a href> elements inside role=\"menu\", or menu roles wrapping site navigation.",
-          "llm_eval_question": "Are the items commands (actions on the app) or destinations (navigation)? Destinations mean menu roles are the wrong model.",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not place links, headings, form inputs, or arbitrary content inside a `role=\"menu\"` container.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag non-menu-part content inside the role=\"menu\" container.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not declare `role=\"menu\"` without implementing the full keyboard contract (roving tabindex, Arrow keys, Home/End, type-ahead, Esc).",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "If role=\"menu\" is present, key handling code for arrows/Home/End/type-ahead/Esc must exist.",
-          "llm_eval_question": null,
-          "runtime_check": "Exercise the full keyboard contract on the open menu; any missing behavior (arrows, Home/End, type-ahead, Esc) fails the rule."
-        },
-        {
-          "rule": "Do not forget to return focus to the trigger when the menu closes via activation or Esc.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
           "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Close via activation and via Esc; assert document.activeElement is the trigger after each."
-        },
-        {
-          "rule": "Do not leave the menu visible while `aria-expanded=\"false\"` (and vice versa).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Across open/close cycles, assert menu visibility and the trigger's aria-expanded never disagree."
+          "llm_eval_question": "Do these items perform application commands, rather than navigating to destinations (which belongs in navigation-menu.dropdown)?",
+          "runtime_check": null,
+          "confidence": "advisory"
         },
         {
           "rule": "Do not reach for `aria-activedescendant` when roving tabindex is simpler for the case at hand.",
           "source": "dont",
           "techniques": [
-            "llm-eval",
             "static"
           ],
-          "static_hint": "Detect aria-activedescendant usage in the menu implementation as the review trigger.",
-          "llm_eval_question": "Does this menu have a genuine reason (e.g., composite focus constraints) to use aria-activedescendant instead of the simpler roving tabindex?",
+          "static_hint": "Flag aria-activedescendant on a menu that also manages a roving tabindex.",
+          "llm_eval_question": null,
           "runtime_check": null
         }
       ]
@@ -3748,60 +3398,39 @@
     },
     "navigation-menu.dropdown": {
       "pattern_id": "navigation-menu.dropdown",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.13.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
           "source": "must_have",
           "techniques": [
+            "static"
+          ],
+          "static_hint": "Trigger is a native <button>; role=\"button\" is the fallback path only.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
+          "source": "must_have",
+          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Trigger is a native <button>, or role=\"button\" as documented fallback.",
-          "llm_eval_question": "If role=\"button\" is used, is there a genuine constraint that prevented a native <button>?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Every role=\"button\" trigger also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" trigger has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" trigger, press Enter, then Space; assert each toggles the dropdown."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" trigger; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "The list is shown/hidden in the DOM (e.g., via the `hidden` attribute), so that when closed, its content cannot be reached by keyboard or screen readers.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Closed state uses `hidden`/conditional rendering/display:none.",
+          "static_hint": "The closed list uses the hidden attribute or is unmounted; flag CSS-only hiding.",
           "llm_eval_question": null,
-          "runtime_check": "With the dropdown closed, assert its links are unreachable via Tab and absent from the accessibility tree."
+          "runtime_check": "With the dropdown closed, assert its links cannot be reached by keyboard and are absent from the accessibility tree."
         },
         {
           "rule": "Items are contained in a list structure (`<ul><li>…</li></ul>`) holding links and an optional trailing action `<button>`.",
@@ -3809,31 +3438,19 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Dropdown content is <a> elements (plus at most a trailing <button>) inside <li> children of a <ul>.",
+          "static_hint": "Dropdown items are <li> children of a <ul>, containing links and at most one trailing <button>.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Any links and buttons comply with the rules for the `link.basic` and `button.basic` patterns.",
-          "source": "must_have",
-          "techniques": [
-            "llm-eval",
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Links have href; buttons are native; icon-only controls have accessible names; icons are aria-hidden.",
-          "llm_eval_question": "Do the dropdown's links and buttons individually satisfy the link.basic and button.basic Must Haves?",
-          "runtime_check": "Spot-check native behaviors: Enter activates links (Space does not); Enter/Space activate the trailing button."
         },
         {
           "rule": "The button has an accessible name that describes its purpose or action.",
           "source": "must_have",
           "techniques": [
-            "llm-eval",
-            "static"
+            "static",
+            "llm-eval"
           ],
           "static_hint": "Trigger has a non-empty accessible name source.",
-          "llm_eval_question": "Does the trigger's name convey what the dropdown contains (e.g., \"Account\"), rather than being generic?",
+          "llm_eval_question": "Does the trigger's name describe what the dropdown contains or does, rather than naming the avatar or icon?",
           "runtime_check": null
         },
         {
@@ -3842,7 +3459,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon/avatar-only triggers carry a non-empty aria-label or resolving aria-labelledby.",
+          "static_hint": "An avatar-only trigger carries aria-label or aria-labelledby.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3852,7 +3469,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Icon elements inside the trigger carry aria-hidden=\"true\".",
+          "static_hint": "Icon and avatar image elements inside the trigger carry aria-hidden=\"true\" or an empty alt.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3860,30 +3477,31 @@
           "rule": "The button reflects open state with `aria-expanded=\"true|false\"`.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger carries aria-expanded bound to dropdown state.",
+          "static_hint": "The trigger carries aria-expanded bound to the list's visibility.",
           "llm_eval_question": null,
-          "runtime_check": "Open and close the dropdown; assert aria-expanded always matches actual list visibility."
+          "runtime_check": "Open and close the dropdown; assert aria-expanded matches the list's rendered visibility every time."
         },
         {
           "rule": "The button is associated with the list container via `aria-controls=\"IDREF\"`.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger's aria-controls IDREF resolves to the list container's id.",
+          "static_hint": "The trigger carries aria-controls whose value matches the list container's id.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert the aria-controls IDREF resolves to the rendered list container."
         },
         {
-          "rule": "The button does not carry `aria-haspopup`. A list of links is not a menu, listbox, tree, grid, or dialog, so `aria-haspopup` announces a widget that is not present; `aria-expanded` alone is the correct signal.",
+          "rule": "The button does not carry `aria-haspopup`.",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "No aria-haspopup attribute on the trigger.",
+          "static_hint": "Flag aria-haspopup on the trigger — a list of links is not a menu, listbox, tree, grid, or dialog.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3898,16 +3516,6 @@
           "runtime_check": "Open the dropdown; assert document.activeElement is still the trigger."
         },
         {
-          "rule": "Keyboard users reach the first item with Tab.",
-          "source": "must_have",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Open the dropdown, press Tab; assert focus lands on the first item in the list."
-        },
-        {
           "rule": "The dropdown does not trap focus. Users can Tab through the items and continue to the rest of the page.",
           "source": "must_have",
           "techniques": [
@@ -3915,7 +3523,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Tab through all dropdown items; assert focus continues into subsequent page content without looping."
+          "runtime_check": "With the dropdown open, Tab past the last item; assert focus continues to the next focusable element on the page."
         },
         {
           "rule": "When focus moves outside the button and list (Tab away, click elsewhere), the dropdown closes.",
@@ -3925,18 +3533,17 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the dropdown open, Tab past its last item (and separately click elsewhere); assert the dropdown closes in both cases."
+          "runtime_check": "Open the dropdown, then move focus outside it by Tab and by an outside click; assert it closes in both cases."
         },
         {
           "rule": "Esc closes the dropdown and returns focus to the invoking button (use `requestAnimationFrame` for the focus restore).",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Esc handler restores trigger focus inside requestAnimationFrame.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With focus inside the open dropdown, press Esc; assert it closes and document.activeElement becomes the trigger."
+          "runtime_check": "With the dropdown open, press Esc; assert it closes and document.activeElement is the invoking button."
         },
         {
           "rule": "Do not use `role=\"menu\"` or `role=\"menuitem\"`; the items are links in a list, not menu commands.",
@@ -3944,27 +3551,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag menu/menuitem roles anywhere in the dropdown.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not add `aria-haspopup` to the button; it announces a menu that is not there.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag aria-haspopup on the trigger.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not render the button without `aria-expanded`; state alone is what conveys open or closed.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Trigger must carry aria-expanded; flag its absence.",
+          "static_hint": "Flag role=\"menu\" or role=\"menuitem\" on the dropdown container or its items.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3976,17 +3563,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus the trigger and press Enter, then Space; assert each opens the dropdown without any pointer input."
-        },
-        {
-          "rule": "Do not leave the list visible while `aria-expanded=\"false\"` (and vice versa).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Across open/close cycles, assert list visibility and the trigger's aria-expanded never disagree."
+          "runtime_check": "Focus the trigger and press Enter, then Space; assert each opens the dropdown without any pointer interaction."
         },
         {
           "rule": "Do not close the dropdown in a way that strands focus (e.g., removing the focused element without moving focus).",
@@ -3996,7 +3573,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Close the dropdown while focus is on one of its items; assert focus is not stranded on <body>."
+          "runtime_check": "Close the dropdown while focus is on one of its items; assert focus moves to the trigger rather than being lost to <body>."
         },
         {
           "rule": "Do not let a hidden dropdown be the only path to a destination; expose those links elsewhere on the site as well.",
@@ -4005,8 +3582,9 @@
             "llm-eval"
           ],
           "static_hint": null,
-          "llm_eval_question": "Are the dropdown's destinations reachable through at least one other discoverable route (footer, settings page, sitemap), or is this collapsed list the sole path?",
-          "runtime_check": null
+          "llm_eval_question": "Is every destination in this dropdown reachable somewhere else on the site, such as a footer or sitemap?",
+          "runtime_check": null,
+          "confidence": "advisory"
         }
       ]
     },
