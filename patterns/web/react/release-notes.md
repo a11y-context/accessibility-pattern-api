@@ -8,6 +8,32 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.17.0 — 2026-08-04
+
+**QA catalog: web/react is complete — every published pattern has a block, and every block uses the escalation model.** No pattern `.md` changed. This release re-derives the last four pre-escalation blocks and adds the two patterns that shipped in 0.14.0 without catalog entries.
+
+Re-derived (82 rules become 58):
+
+| pattern | before | after |
+|---|---|---|
+| `popover.basic` | 19 rules, 5% llm-eval, 1.53 avg | 12 rules, 8%, 1.42 |
+| `toast.basic` | 11 rules, 9%, 1.27 | 9 rules, 0%, 1.11 |
+| `tooltip.basic` | 17 rules, 6%, 1.29 | 13 rules, 0%, 1.23 |
+| `select.basic` | 35 rules, 9%, 1.49 | 24 rules, 0%, 1.42 |
+
+Newly derived, closing the coverage gap opened in 0.14.0:
+
+| pattern | rules |
+|---|---|
+| `progress-bar.basic` | 23 rules, 17% llm-eval, 1.35 avg |
+| `spinner.basic` | 21 rules, 29%, 1.24 |
+
+`spinner.basic` carries the corpus's highest llm-eval share, and that is the correct reading of the pattern rather than a classification problem. Its central requirement is that announcement text is **derived, not invented** — the status word, the borrowed host name, and the completed-form end message are all judgments about whether wording matches what the user can see. No static or runtime check can decide "does this text reuse the host's existing name?", so the alternative to an llm-eval tag is no check at all. `select.basic` sits at the other extreme and reaches 0%: it is a native form control mirrored by a custom UI, and every requirement is an attribute, a role, or an observable keyboard behavior.
+
+Every component block now carries a `catalog_revision` of `0.7.0` or later. No block remains at `0.5.2`, the stamp that marked the pre-escalation "tag all that apply" semantics. Corpus totals: **27 components, 452 rules, 9% `llm-eval`**.
+
+Still outstanding, and tracked for the next release: the `foundations` section predates 0.15.0, so it does not yet carry `global.forced-colors` or the forced-colors requirements added to `global.text-contrast`, `global.non-text-contrast`, and `global.use-of-color`.
+
 ## 0.16.0 — 2026-08-04
 
 **QA catalog: third re-derive batch — `combobox.autocomplete`, `grid.channel-guide`, `listbox.basic`, `menu.menubar`, `navigation-menu.basic`.** No pattern `.md` changed — classification only. These are the five largest blocks in the corpus; 146 rules become 109.
