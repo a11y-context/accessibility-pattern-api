@@ -8,6 +8,25 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.20.0 — 2026-08-04
+
+**QA catalog: the `foundations` section catches up completely — all 11 `global.*` rules now carry blocks, at their current text.** No pattern `.md` or Foundations `.md` changed — classification only.
+
+- **`global.forced-colors` gets its block** — 6 checks. The rule shipped in 0.15.0 with no catalog entry.
+- **The three color rules are re-derived** against their extended text: `global.text-contrast` 1 → 3 checks, `global.non-text-contrast` 2 → 3, `global.use-of-color` 2 → 3.
+- **`global.motion` gets its block** — 11 checks. The rule shipped in 0.19.0.
+- **`global.sr-only` is re-derived** 2 → 3 checks, picking up the stranded-focusable Don't added in 0.19.0.
+
+Foundations now carries **58 checks across all 11 `global.*` rules**, matching `global_rules.md` exactly, at 34% `llm-eval` and 1.36 techniques per check.
+
+**Forced colors is the case that most clearly justifies the catalog.** These failures are invisible to every other layer: the markup is correct, so a static ARIA check sees nothing wrong, and the contrast passes in the authored palette, so a normal runtime contrast check passes too. A boundary drawn only with `background-color` does not merely lose contrast under Windows High Contrast Mode — it is repainted with the system palette and disappears. Only a check that emulates forced colors catches it.
+
+That also makes these rules unusually **runtime-tractable** rather than judgment-bound, which is why the classification leans on it: Playwright emulates `forced-colors: active` directly, so "does this boundary survive?" is a real assertion rather than an opinion. `global.use-of-color`'s state rule gains a runtime check for the first time in this release — under forced colors, a state carried by a background tint disappears outright, which is decisive where a grayscale eyeball test was not.
+
+`global.motion` classifies the same way for the same reason. Reduced motion and forced colors are both emulable browser states, so "does this still animate?" and "did focus survive the removal?" are runtime assertions rather than opinions. Only two of its eleven checks lead with `llm-eval`: whether an automatic animation running past 5 seconds is genuinely essential, and whether a change signalled by movement is also available without perceiving that movement. Neither has a cheaper decider.
+
+Foundations sits at the corpus's highest `llm-eval` share and correctly so: "do these authored colors carry meaning the system palette would erase?" and "is this graphic meaningful or decorative?" have no cheaper decider, and dropping them would delete the check rather than relocate it.
+
 ## 0.19.0 — 2026-08-04
 
 **Foundations gains an eleventh rule, `global.motion`, `global.sr-only` closes a focus gap, and three broken redirects are corrected.**
