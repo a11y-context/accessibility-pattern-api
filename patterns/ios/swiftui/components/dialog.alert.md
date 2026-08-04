@@ -3,7 +3,7 @@ id: dialog.alert
 title: Dialog (Alert)
 stack: ios/swiftui
 status: beta
-latest_version: 0.1.0
+latest_version: 0.1.1
 tags: [alert, dialog, modal, confirmation, destructive]
 aliases: [alert, alert dialog, confirmation alert, popup alert, delete confirmation, .alert]
 summary: A native SwiftUI .alert modal that takes VoiceOver focus on presentation, with each action returning focus to the trigger because native alerts do not restore it automatically.
@@ -55,22 +55,22 @@ struct DialogAlertDemo: View {
     @AccessibilityFocusState private var triggerFocused: Bool
 
     var body: some View {
-        Button("Delete All Messages", role: .destructive) {
+        Button("Remove Download", role: .destructive) {
             showingAlert = true
         }
         .accessibilityFocused($triggerFocused)
-        .alert("Delete all messages?", isPresented: $showingAlert) {
+        .alert("Remove this download?", isPresented: $showingAlert) {
             // Each action returns VoiceOver focus to the trigger, since native
             // alerts do not restore it automatically.
             Button("Cancel", role: .cancel) {
                 triggerFocused = true
             }
-            Button("Delete", role: .destructive) {
-                // perform the deletion
+            Button("Remove", role: .destructive) {
+                // perform the removal
                 triggerFocused = true
             }
         } message: {
-            Text("You cannot undo deleting all messages.")
+            Text("This episode will no longer be available offline.")
         }
     }
 }
