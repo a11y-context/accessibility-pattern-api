@@ -1,6 +1,6 @@
 {
   "stack": "web/react",
-  "catalog_revision": "0.17.0",
+  "catalog_revision": "0.20.0",
   "components": {
     "accordion.basic": {
       "pattern_id": "accordion.basic",
@@ -38,7 +38,7 @@
           "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
-          "rule": "Each header button is contained within a heading element (`<h2>`–`<h6>`) or an element with `role=\"heading\"` and the appropriate `aria-level`.",
+          "rule": "Each header button is contained within a heading element (`<h2>`\u2013`<h6>`) or an element with `role=\"heading\"` and the appropriate `aria-level`.",
           "source": "must_have",
           "techniques": [
             "static"
@@ -175,7 +175,7 @@
             "static",
             "llm-eval"
           ],
-          "static_hint": "Added context uses aria-label, aria-labelledby, or offscreen text — not title, and not text removed from the accessibility tree.",
+          "static_hint": "Added context uses aria-label, aria-labelledby, or offscreen text \u2014 not title, and not text removed from the accessibility tree.",
           "llm_eval_question": "Is the visible text alone ambiguous among similar buttons on the screen, and if so, has distinguishing context been added?",
           "runtime_check": null
         },
@@ -247,7 +247,7 @@
           "runtime_check": null
         },
         {
-          "rule": "Default strategy: represent state by changing the accessible name to the next action (e.g., \"Mute\" ↔ \"Unmute\", \"Pin\" ↔ \"Remove pin\").",
+          "rule": "Default strategy: represent state by changing the accessible name to the next action (e.g., \"Mute\" \u2194 \"Unmute\", \"Pin\" \u2194 \"Remove pin\").",
           "source": "must_have",
           "techniques": [
             "runtime",
@@ -275,7 +275,7 @@
             "static",
             "llm-eval"
           ],
-          "static_hint": "Any added context uses aria-label, aria-labelledby, or offscreen text — not title or a visually hidden hack that removes it from the accessibility tree.",
+          "static_hint": "Any added context uses aria-label, aria-labelledby, or offscreen text \u2014 not title or a visually hidden hack that removes it from the accessibility tree.",
           "llm_eval_question": "Is the visible text alone ambiguous among similar toggles on the screen, and if so, has distinguishing context been added?",
           "runtime_check": null
         },
@@ -346,7 +346,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag a control that both binds aria-pressed to state and computes its name/label from that same state — the two state models conflict.",
+          "static_hint": "Flag a control that both binds aria-pressed to state and computes its name/label from that same state \u2014 the two state models conflict.",
           "llm_eval_question": null,
           "runtime_check": null
         }
@@ -624,7 +624,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Added context uses aria-label, aria-labelledby, or an .sr-only element — not title or display:none text.",
+          "static_hint": "Added context uses aria-label, aria-labelledby, or an .sr-only element \u2014 not title or display:none text.",
           "llm_eval_question": null,
           "runtime_check": "Compute the accessible name; assert it begins with the visible label text."
         },
@@ -697,7 +697,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "The error container is rendered unconditionally with its text as the only conditional part. Flag a container behind a conditional render (e.g., {error && <p…>}).",
+          "static_hint": "The error container is rendered unconditionally with its text as the only conditional part. Flag a container behind a conditional render (e.g., {error && <p\u2026>}).",
           "llm_eval_question": null,
           "runtime_check": "With the field valid, assert the error container is present in the DOM and empty."
         },
@@ -839,7 +839,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Every option is an input[type=\"checkbox\"] with its own label association and independent checked binding — not a shared value.",
+          "static_hint": "Every option is an input[type=\"checkbox\"] with its own label association and independent checked binding \u2014 not a shared value.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1476,7 +1476,7 @@
           "runtime_check": "With the dialog open, assert the close control is rendered visible and has a non-empty accessible name."
         },
         {
-          "rule": "The invoking control declares dialog-trigger semantics — apply `aria-haspopup=\"dialog\"` to the trigger element.",
+          "rule": "The invoking control declares dialog-trigger semantics \u2014 apply `aria-haspopup=\"dialog\"` to the trigger element.",
           "source": "must_have",
           "techniques": [
             "static"
@@ -1664,7 +1664,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag aria-haspopup on the disclosure trigger — a revealed region is not a popup widget.",
+          "static_hint": "Flag aria-haspopup on the disclosure trigger \u2014 a revealed region is not a popup widget.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -1794,7 +1794,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Cells carry tabIndex bound to the active-cell index — one at 0, the rest at -1.",
+          "static_hint": "Cells carry tabIndex bound to the active-cell index \u2014 one at 0, the rest at -1.",
           "llm_eval_question": null,
           "runtime_check": "Arrow around the grid; assert exactly one cell has tabIndex 0 at a time and it is the focused cell."
         },
@@ -2154,7 +2154,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Either the options carry a roving tabindex (active at \"0\", the rest \"-1\"), or the listbox carries tabindex=\"0\" plus aria-activedescendant — not a mix of both.",
+          "static_hint": "Either the options carry a roving tabindex (active at \"0\", the rest \"-1\"), or the listbox carries tabindex=\"0\" plus aria-activedescendant \u2014 not a mix of both.",
           "llm_eval_question": null,
           "runtime_check": "Move the active option; assert the chosen mechanism updates consistently and the other is never introduced."
         },
@@ -2407,7 +2407,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Menu items carry tabindex bound to the active index — one item at \"0\", the rest at \"-1\".",
+          "static_hint": "Menu items carry tabindex bound to the active index \u2014 one item at \"0\", the rest at \"-1\".",
           "llm_eval_question": null,
           "runtime_check": "Arrow through the menu; assert exactly one item has tabindex=\"0\" at a time and it is the focused item."
         },
@@ -2658,7 +2658,7 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Top-level items carry a roving tabindex — the first at \"0\" and the rest at \"-1\" on load.",
+          "static_hint": "Top-level items carry a roving tabindex \u2014 the first at \"0\" and the rest at \"-1\" on load.",
           "llm_eval_question": null,
           "runtime_check": "Move between top-level items; assert exactly one carries tabindex=\"0\" at a time and it is the focused item."
         },
@@ -2710,7 +2710,7 @@
           "runtime_check": null
         },
         {
-          "rule": "Top-level navigation items are presented in a list structure (e.g., `<ul><li>…</li></ul>`).",
+          "rule": "Top-level navigation items are presented in a list structure (e.g., `<ul><li>\u2026</li></ul>`).",
           "source": "must_have",
           "techniques": [
             "static"
@@ -2761,7 +2761,7 @@
           "runtime_check": null
         },
         {
-          "rule": "Sub-menu items are links and/or buttons contained in a list structure (`<ul><li>…</li></ul>`).",
+          "rule": "Sub-menu items are links and/or buttons contained in a list structure (`<ul><li>\u2026</li></ul>`).",
           "source": "must_have",
           "techniques": [
             "static"
@@ -3046,7 +3046,7 @@
           "runtime_check": "With the dropdown closed, assert its links cannot be reached by keyboard and are absent from the accessibility tree."
         },
         {
-          "rule": "Items are contained in a list structure (`<ul><li>…</li></ul>`) holding links and an optional trailing action `<button>`.",
+          "rule": "Items are contained in a list structure (`<ul><li>\u2026</li></ul>`) holding links and an optional trailing action `<button>`.",
           "source": "must_have",
           "techniques": [
             "static"
@@ -3114,7 +3114,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag aria-haspopup on the trigger — a list of links is not a menu, listbox, tree, grid, or dialog.",
+          "static_hint": "Flag aria-haspopup on the trigger \u2014 a list of links is not a menu, listbox, tree, grid, or dialog.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3363,7 +3363,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag any element content inside <progress> or the role=\"progressbar\" element — descendants of the role are presentational.",
+          "static_hint": "Flag any element content inside <progress> or the role=\"progressbar\" element \u2014 descendants of the role are presentational.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3437,7 +3437,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "aria-valuemin and aria-valuemax appear only on bars whose range is not 0–100.",
+          "static_hint": "aria-valuemin and aria-valuemax appear only on bars whose range is not 0\u2013100.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3873,7 +3873,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "<option> elements contain text only — no elements, images, or markup.",
+          "static_hint": "<option> elements contain text only \u2014 no elements, images, or markup.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3994,7 +3994,7 @@
             "llm-eval"
           ],
           "static_hint": null,
-          "llm_eval_question": "Does the announcement begin with a status word — \"Loading\" for a region, or the progressive form of the control's own label?",
+          "llm_eval_question": "Does the announcement begin with a status word \u2014 \"Loading\" for a region, or the progressive form of the control's own label?",
           "runtime_check": null
         },
         {
@@ -4216,7 +4216,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus the switch and press Enter; assert the state toggles. Exception: for a native input[type=\"checkbox\"] implementation, Enter is not expected to toggle — assert Space alone does."
+          "runtime_check": "Focus the switch and press Enter; assert the state toggles. Exception: for a native input[type=\"checkbox\"] implementation, Enter is not expected to toggle \u2014 assert Space alone does."
         },
         {
           "rule": "If multiple switches are presented as a labeled set, group them with `fieldset` + `legend` or `role=\"group\"` + `aria-labelledby`.",
@@ -4911,7 +4911,7 @@
           "runtime_check": null
         },
         {
-          "rule": "Do not ship focus styles without a `forced-colors` override — Windows High Contrast Mode users will lose the custom colors and be left with browser defaults that may not match the design's contrast intent.",
+          "rule": "Do not ship focus styles without a `forced-colors` override \u2014 Windows High Contrast Mode users will lose the custom colors and be left with browser defaults that may not match the design's contrast intent.",
           "source": "dont",
           "techniques": [
             "static"
@@ -4922,6 +4922,78 @@
         }
       ],
       "catalog_revision": "0.11.0"
+    },
+    "global.forced-colors": {
+      "rule_id": "global.forced-colors",
+      "stack": "web/react",
+      "catalog_revision": "0.18.0",
+      "rules": [
+        {
+          "rule": "An element distinguished from its surroundings only by `background-color` also carries a real `border`, so its boundary survives when backgrounds are flattened.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Elements whose only separation from their surroundings is a background-color also declare a border; flag a painted state layer, fill, badge, chip, or pill with no border.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate forced-colors: active; assert each such element's boundary is still perceivable rather than merging into the flattened background."
+        },
+        {
+          "rule": "Where the authored colors carry meaning the system palette would erase, pair the styling with a `@media (forced-colors: active)` block that restates the distinction using CSS system color keywords.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "A @media (forced-colors: active) block exists and restates the distinction using system color keywords (Canvas, CanvasText, Highlight, ButtonBorder, and the rest).",
+          "llm_eval_question": "Do this element's authored colors carry meaning the user needs, such that the system palette replacing them would lose information?",
+          "runtime_check": null
+        },
+        {
+          "rule": "`box-shadow` is not the only carrier of a boundary, a state, or an elevation cue that the user needs.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a meaningful boundary, ring, or elevation cue expressed only through box-shadow with no border or outline alongside it.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate forced-colors: active, where shadows are removed; assert the boundary or state cue is still perceivable."
+        },
+        {
+          "rule": "Icons drawn as a CSS `background-image` are paired with a forced-colors fallback, such as an inline SVG or a text alternative.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Meaningful icons rendered via CSS background-image have a declared forced-colors fallback; inline SVG using currentColor needs none.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate forced-colors: active; assert every meaningful icon is still rendered rather than dropped with the background image."
+        },
+        {
+          "rule": "`forced-color-adjust: none` is applied only to elements whose authored colors are themselves the information, such as a color-picker swatch, a chart series key, or a brand preview.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "Locate every forced-color-adjust: none declaration and its target element.",
+          "llm_eval_question": "Are this element's authored colors themselves the information the user needs (a swatch, a chart key, a brand preview), rather than ordinary styling being preserved?",
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not hard-code a color value inside a `@media (forced-colors: active)` block. The system keywords follow the user's chosen theme; a literal does not.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag hex, rgb, hsl, or named color literals inside a @media (forced-colors: active) block; only CSS system color keywords belong there.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        }
+      ]
     },
     "global.headings": {
       "rule_id": "global.headings",
@@ -5110,9 +5182,130 @@
       ],
       "catalog_revision": "0.11.0"
     },
+    "global.motion": {
+      "rule_id": "global.motion",
+      "stack": "web/react",
+      "catalog_revision": "0.20.0",
+      "rules": [
+        {
+          "rule": "Under `prefers-reduced-motion: reduce`, no animation repeats, travels an element across the screen, or scales it.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "A @media (prefers-reduced-motion: reduce) block or a matchMedia guard disables looping, translating, and scaling animations; flag an animation or transition with no reduced-motion path.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert no element is running a repeating, translating, or scaling animation."
+        },
+        {
+          "rule": "Movement driven by a value the user is waiting on, such as a progress fill advancing, is not decorative motion and continues.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Emulate prefers-reduced-motion: reduce; advance a value-driven indicator and assert its fill still moves with the value."
+        },
+        {
+          "rule": "Animation that starts automatically, lasts more than 5 seconds, and runs alongside other content provides a mechanism to pause, stop, or hide it, unless the movement is essential to an activity in progress.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval",
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does any animation start automatically, run longer than 5 seconds alongside other content, and lack a pause, stop, or hide control, without being essential to an activity the user is waiting on?",
+          "runtime_check": "Load the view and wait 5 seconds; assert any still-animating region exposes a pause, stop, or hide control."
+        },
+        {
+          "rule": "Motion is not the only means of conveying that something changed. A change communicated by movement is also communicated by text, by a change in the accessibility tree, or by a live region.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is every change that is signalled by movement also available as text, an accessibility-tree change, or a live-region announcement?",
+          "runtime_check": null
+        },
+        {
+          "rule": "Before an element holding keyboard focus is removed from the DOM or made unfocusable, focus is moved to a stable element that remains present, such as the control that opened it or the container that replaces it.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Focus a control inside a dismissible region, dismiss it, and assert document.activeElement is a stable visible element rather than document.body."
+        },
+        {
+          "rule": "`aria-hidden=\"true\"` is not applied to a focusable element, nor to any ancestor of one.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag aria-hidden=\"true\" on an element that is focusable or that contains a focusable descendant.",
+          "llm_eval_question": null,
+          "runtime_check": "Assert no element matching [aria-hidden=\"true\"] contains or is a focusable element."
+        },
+        {
+          "rule": "An element being animated out leaves the accessibility tree when it stops being available to the user, not when its exit animation finishes.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Dismiss an animated region; assert it is absent from the accessibility tree immediately rather than after the exit animation completes."
+        },
+        {
+          "rule": "Do not remove or disable an element that holds focus without first moving focus somewhere stable.",
+          "source": "dont",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Activate a control that disables or removes itself; assert focus does not land on document.body."
+        },
+        {
+          "rule": "Do not rely on an exit animation to communicate that something was removed.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the removal of this content conveyed only by its exit animation, with no text, live-region, or accessibility-tree signal?",
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not treat `prefers-reduced-motion: reduce` as a request to remove the element. It asks for less movement, not less information.",
+          "source": "dont",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert every element that would otherwise animate is still rendered and readable."
+        },
+        {
+          "rule": "Do not hold content out of the accessibility tree for the duration of an entrance animation.",
+          "source": "dont",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Trigger an entrance animation; assert the content is present in the accessibility tree from the moment it is rendered, not only after the animation ends."
+        }
+      ]
+    },
     "global.non-text-contrast": {
       "rule_id": "global.non-text-contrast",
       "stack": "web/react",
+      "catalog_revision": "0.18.0",
       "rules": [
         {
           "rule": "Visual information needed to identify a user interface component - such as control boundaries - must have a contrast ratio of at least 3:1 against adjacent colors.",
@@ -5132,12 +5325,22 @@
             "runtime"
           ],
           "static_hint": null,
-          "llm_eval_question": "Is this graphic meaningful — needed to understand the content or identify a state — rather than decorative?",
+          "llm_eval_question": "Is this graphic meaningful \u2014 needed to understand the content or identify a state \u2014 rather than decorative?",
           "runtime_check": "For each graphic judged meaningful, compute its contrast against adjacent colors; assert at least 3:1.",
           "confidence": "advisory"
+        },
+        {
+          "rule": "A boundary carried by `background-color` alone is restated under `@media (forced-colors: active)`, since Windows High Contrast Mode replaces author backgrounds and the boundary disappears rather than merely losing contrast.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Boundaries expressed only through background-color have a @media (forced-colors: active) block restating them with a border or system color.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate forced-colors: active; assert the boundary is still present rather than gone \u2014 a stronger check than contrast, which only measures a boundary that still exists."
         }
-      ],
-      "catalog_revision": "0.11.0"
+      ]
     },
     "global.page-title": {
       "rule_id": "global.page-title",
@@ -5202,6 +5405,7 @@
     "global.sr-only": {
       "rule_id": "global.sr-only",
       "stack": "web/react",
+      "catalog_revision": "0.20.0",
       "rules": [
         {
           "rule": "Where a component's rules dictate the use of \"offscreen text\", then the snippet below must be included as a CSS class: `.sr-only`.",
@@ -5223,13 +5427,24 @@
           "static_hint": "Flag display:none or visibility:hidden on any element referenced by aria-labelledby/aria-describedby or serving as offscreen label text.",
           "llm_eval_question": null,
           "runtime_check": "Compute the accessible name of controls named by offscreen text; assert the text contributes rather than resolving to empty."
+        },
+        {
+          "rule": "Do not leave focusable content inside a visually hidden container that stays hidden while focused.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a focusable element inside a .sr-only container where no :focus or :focus-within rule restores it to the visible layout.",
+          "llm_eval_question": null,
+          "runtime_check": "Tab through the page; assert no element holding focus has a zero-size or clipped rendered box."
         }
-      ],
-      "catalog_revision": "0.11.0"
+      ]
     },
     "global.text-contrast": {
       "rule_id": "global.text-contrast",
       "stack": "web/react",
+      "catalog_revision": "0.18.0",
       "rules": [
         {
           "rule": "Text and images of text must have sufficient contrast against their background.",
@@ -5240,13 +5455,34 @@
           "static_hint": null,
           "llm_eval_question": null,
           "runtime_check": "Compute the contrast ratio of every text node against its effective background; assert at least 4.5:1 for normal text and 3:1 for large-scale text (18pt regular or 14pt bold)."
+        },
+        {
+          "rule": "Text placed over a background image also has a `background-color` behind it, so it stays legible when Windows High Contrast Mode drops the image.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Elements carrying both text and a background-image also declare a background-color.",
+          "llm_eval_question": null,
+          "runtime_check": "Emulate forced-colors: active, where background images are dropped; assert the text remains legible against the flattened background."
+        },
+        {
+          "rule": "`forced-color-adjust: none` is not applied to text or its container, which would pin the authored text colors and prevent the user's palette from applying.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag forced-color-adjust: none on a text element or any ancestor that contains text.",
+          "llm_eval_question": null,
+          "runtime_check": null
         }
-      ],
-      "catalog_revision": "0.11.0"
+      ]
     },
     "global.use-of-color": {
       "rule_id": "global.use-of-color",
       "stack": "web/react",
+      "catalog_revision": "0.18.0",
       "rules": [
         {
           "rule": "Do not use color as the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element (WCAG 1.4.1).",
@@ -5262,14 +5498,25 @@
           "rule": "When a component renders a meaningful state visually (e.g., selected, active, current, invalid, pressed), that state is distinguishable by something in addition to color, such as an icon, checkmark, shape, underline, or text.",
           "source": "must_have",
           "techniques": [
+            "runtime",
             "llm-eval"
           ],
           "static_hint": null,
           "llm_eval_question": "For each visually rendered state, is there a non-color cue (icon, shape, underline, text) in addition to the color change?",
-          "runtime_check": null
+          "runtime_check": "Emulate forced-colors: active, which repaints author colors with the system palette; assert each meaningful state is still distinguishable."
+        },
+        {
+          "rule": "The additional cue is an icon, a shape, a border, or text rather than a second color treatment, so that it survives Windows High Contrast Mode.",
+          "source": "must_have",
+          "techniques": [
+            "runtime",
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is the additional cue a shape, icon, border, or text, rather than another color treatment such as a darker tint or a background swap?",
+          "runtime_check": "Emulate forced-colors: active; assert the additional cue survives, which a second color treatment does not."
         }
-      ],
-      "catalog_revision": "0.11.0"
+      ]
     }
   }
 }
