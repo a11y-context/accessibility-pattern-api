@@ -32,6 +32,8 @@ scope: [utility, component, style]
 
 ### Don'ts
 - Do not hide offscreen text using `display: none` or `visibility: hidden` when it is needed for an accessible name.
+- Do not leave focusable content inside a visually hidden container that stays hidden while focused. A keyboard user reaches it with nothing visible on screen, and the focus indicator appears to vanish.
+  - A visually hidden control that returns to the visible layout on focus is the acceptable case, such as a skip link. Pair `.sr-only` with the `:focus` restoration below.
 
 ### Snippets
 ```css
@@ -49,8 +51,24 @@ scope: [utility, component, style]
 }
 ```
 
+For a visually hidden element that must become visible when it receives focus, such as a skip link. `:focus-within` covers the case where the focusable element is a descendant of the hidden container:
+
+```css
+.sr-only-focusable:focus,
+.sr-only-focusable:focus-within {
+  clip: auto;
+  height: auto;
+  overflow: visible;
+  position: static;
+  white-space: normal;
+  width: auto;
+}
+```
+
 ### Acceptance Checks
 - Where offscreen text is implemented, it is not overridden by `aria-labelledby` or `aria-label`.
+- Tabbing through the page never lands on a control that is invisible at the moment it holds focus.
+- Any visually hidden control intended to be reachable, such as a skip link, becomes visible when it receives keyboard focus.
 
 ---
 
@@ -374,3 +392,69 @@ Required forced-colors override — pair with either primary style above. `Highl
 - If a custom focus style is used, it is clearly visible and does not make focus harder to perceive than the default browser or platform behavior.
 - Hover alone is not the only visible cue for the currently focused element.
 - With Windows High Contrast Mode active (or emulated via a browser dev-tool forced-colors setting), the focus indicator remains clearly visible using the system `Highlight` color.
+
+---
+
+## Rule: Motion and Unmounting
+
+```yaml
+id: global.motion
+scope: [component, style]
+```
+
+Animation and content removal belong to one rule because they fail together. An element animating out is still in the DOM while it is visually gone, and that window is where keyboard focus is lost and the accessibility tree stops matching the screen.
+
+### Must Haves
+- Under `prefers-reduced-motion: reduce`, no animation repeats, travels an element across the screen, or scales it.
+  - Changes to color, opacity, or blur that do not alter an element's perceived size, shape, or position are not motion animation and may continue.
+  - Movement driven by a value the user is waiting on, such as a progress fill advancing, is not decorative motion and continues.
+- Animation that starts automatically, lasts more than 5 seconds, and runs alongside other content provides a mechanism to pause, stop, or hide it, unless the movement is essential to an activity in progress (WCAG 2.2.2).
+- Motion is not the only means of conveying that something changed. A change communicated by movement is also communicated by text, by a change in the accessibility tree, or by a live region.
+- Before an element holding keyboard focus is removed from the DOM or made unfocusable, focus is moved to a stable element that remains present, such as the control that opened it or the container that replaces it.
+- `aria-hidden="true"` is not applied to a focusable element, nor to any ancestor of one.
+- An element being animated out leaves the accessibility tree when it stops being available to the user, not when its exit animation finishes.
+
+### Don'ts
+- Do not remove or disable an element that holds focus without first moving focus somewhere stable. Focus falls to the document body and the user loses their place in the page.
+- Do not apply `aria-hidden="true"` to a container that holds a focusable control. A keyboard user reaches a control that assistive technology cannot report.
+- Do not rely on an exit animation to communicate that something was removed.
+- Do not treat `prefers-reduced-motion: reduce` as a request to remove the element. It asks for less movement, not less information.
+- Do not hold content out of the accessibility tree for the duration of an entrance animation. It is available to a screen reader as soon as it is available at all.
+
+### Snippets
+
+Disable decorative motion under the reduced-motion preference. Scope it to the elements that animate decoratively rather than applying it to everything, so movement the user is waiting on still runs:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .spinner,
+  .slide-in {
+    animation: none;
+    transition: none;
+  }
+}
+```
+
+Reading the preference in script, for components that need to render differently rather than merely stop animating:
+
+```js
+const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+const apply = () => setReduceMotion(query.matches);
+apply();
+query.addEventListener("change", apply);
+```
+
+Moving focus before removal, deferred so the replacement is focusable by the time the call lands:
+
+```js
+requestAnimationFrame(() => returnTarget.current?.focus());
+```
+
+### Acceptance Checks
+- With `prefers-reduced-motion: reduce` set, no element repeats an animation, travels across the screen, or scales.
+- With that preference set, all content that would have animated in is present and readable, and nothing has been removed.
+- Dismissing or collapsing a component that holds focus leaves focus on a stable, visible element, never on the document body.
+- No focusable control has `aria-hidden="true"` on itself or on any ancestor.
+- Content that has been dismissed is absent from the accessibility tree as soon as it is unavailable, not after its exit animation completes.
+- Every change communicated by movement is also available without perceiving that movement.

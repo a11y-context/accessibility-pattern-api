@@ -8,6 +8,16 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.19.0 — 2026-08-04
+
+**Foundations gains an eleventh rule, `global.motion`, `global.sr-only` closes a focus gap, and three broken redirects are corrected.**
+
+- **New rule `global.motion` ("Motion and Unmounting")**, scope component and style. 6 Must Haves, 5 Don'ts, 3 snippets, 6 Acceptance Checks. Animation and content removal are one rule because they fail together: an element animating out is still in the DOM while it is visually gone, and that window is where keyboard focus is lost and the accessibility tree stops matching the screen. Four patterns already restated `prefers-reduced-motion` independently (`carousel.dots`, `carousel.thumbnails`, `progress-bar.basic`, `spinner.basic`) with nothing owning it. The rule draws the line WCAG 2.3.3 draws: changes to color, opacity, or blur that do not alter perceived size, shape, or position are not motion animation, and neither is movement driven by a value the user is waiting on. It also carries the removal half — focus is moved off an element before that element is removed or disabled, and `aria-hidden="true"` never lands on a focusable element or its ancestor.
+- **`global.sr-only`** gains a Don't, a snippet, and two Acceptance Checks for stranded focusable content. A control inside a visually hidden container that stays hidden while focused is reachable by keyboard with nothing on screen, and the focus indicator appears to vanish. The rescue is the skip-link case, so the rule now ships the `:focus` and `:focus-within` restoration alongside the base `.sr-only` class.
+- **Three broken redirects corrected.** `button.basic` and `button.toggle` pointed at `` `link` ``, and `link.basic` pointed at `` `button` `` in two bullets. The real IDs are `link.basic` and `button.basic`. A redirect to a nonexistent ID silently defeats the mechanism that keeps an agent from blending sibling patterns, and unlike the corpus's deliberate forward references, these targets already existed. `button.basic` → 0.2.2, `button.toggle` → 0.2.2, `link.basic` → 0.2.1, all PATCH.
+
+Foundations now carries 11 rules. The `foundations` section of `qa-catalog.json` does not yet cover `global.motion` or the amended `global.sr-only`; both are queued for the next derive batch.
+
 ## 0.17.0 — 2026-08-04
 
 **QA catalog: web/react is complete — every published pattern has a block, and every block uses the escalation model.** No pattern `.md` changed. This release re-derives the last four pre-escalation blocks and adds the two patterns that shipped in 0.14.0 without catalog entries.
