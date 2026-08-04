@@ -1,6 +1,6 @@
 {
   "stack": "web/react",
-  "catalog_revision": "0.16.0",
+  "catalog_revision": "0.17.0",
   "components": {
     "accordion.basic": {
       "pattern_id": "accordion.basic",
@@ -3203,50 +3203,48 @@
     },
     "popover.basic": {
       "pattern_id": "popover.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.17.0",
       "rules": [
         {
-          "rule": "The dialog surface uses `role=\"dialog\"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).",
+          "rule": "The popover surface uses `role=\"dialog\"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The surface carries role=\"dialog\", or is a native <dialog> opened with .show(); flag any .showModal() call on it.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "The popover has an accessible name via `aria-labelledby` (preferred), referencing a visible title element (e.g., `<h2 id=\"...\">`), or `aria-label`.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Surface is role=\"dialog\" or a native <dialog> whose open path uses `.show()`/the `open` attribute; flag any `.showModal()` call.",
+          "static_hint": "The popover carries aria-labelledby or a non-empty aria-label.",
           "llm_eval_question": null,
-          "runtime_check": "Open the dialog; assert it does NOT match the `:modal` pseudo-class and the page behind remains interactive."
+          "runtime_check": "With the popover open, assert its computed accessible name is non-empty and any aria-labelledby IDREF resolves to a visible element."
         },
         {
-          "rule": "The dialog has an accessible name via `aria-labelledby` (preferred), referencing a visible title element (e.g., `<h2 id=\"...\">`), or `aria-label`.",
-          "source": "must_have",
-          "techniques": [
-            "static",
-            "runtime"
-          ],
-          "static_hint": "Dialog surface carries a non-empty aria-label, or aria-labelledby whose IDREF resolves to a title element inside the dialog.",
-          "llm_eval_question": null,
-          "runtime_check": "If aria-labelledby is used, assert the referenced title element is rendered visible while the dialog is open."
-        },
-        {
-          "rule": "Focus moves into the dialog on open, landing on the dialog container or its first interactive control.",
+          "rule": "Focus moves into the popover on open, landing on the popover container or its first interactive control.",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Activate the trigger; assert document.activeElement is the dialog container or its first interactive control."
+          "runtime_check": "Open the popover; assert document.activeElement is the popover container or a descendant."
         },
         {
-          "rule": "Esc closes the dialog, regardless of where focus currently sits, since focus is not trapped and may have moved into the page.",
+          "rule": "Esc closes the popover, regardless of where focus currently sits, since focus is not trapped and may have moved into the page.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Esc handler is bound at the document level, not only on the dialog surface.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Open the dialog, Tab focus out into the page, press Esc; assert the dialog closes even though focus was outside it."
+          "runtime_check": "Open the popover, Tab focus out into the page, then press Esc; assert the popover closes."
         },
         {
           "rule": "Focus is restored to the invoking element on close.",
@@ -3256,49 +3254,38 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Open from the trigger, close the dialog; assert document.activeElement is the original invoking element."
+          "runtime_check": "Open and close the popover; assert document.activeElement is the invoking element."
         },
         {
-          "rule": "Capture the invoking element at open time, and restore focus with `requestAnimationFrame` after the dialog is unmounted.",
+          "rule": "Capture the invoking element at open time, and restore focus with `requestAnimationFrame` after the popover is unmounted.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "runtime"
+            "static"
           ],
-          "static_hint": "Open handler stores document.activeElement (or the trigger ref); close path calls focus() on it inside requestAnimationFrame.",
+          "static_hint": "The open path stores a reference to the invoker, and the close path restores focus inside a requestAnimationFrame callback.",
           "llm_eval_question": null,
-          "runtime_check": "Close the dialog; assert focus lands on the invoker on the frame after unmount (not stranded on <body> due to restoring before removal)."
+          "runtime_check": null
         },
         {
-          "rule": "The dialog does not trap focus. Tab and Shift+Tab move out of the dialog into the rest of the page, which stays interactive.",
+          "rule": "The popover does not trap focus. Tab and Shift+Tab move out of the popover into the rest of the page, which stays interactive.",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus moves into the page and page controls remain clickable/focusable."
+          "runtime_check": "With the popover open, Tab past its last focusable element; assert focus continues into the page and background controls remain operable."
         },
         {
-          "rule": "The dialog does not set `aria-modal=\"true\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "No aria-modal=\"true\" on the dialog surface.",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "The dialog does not apply `inert` to the background.",
+          "rule": "The popover does not set `aria-modal=\"true\"` and does not apply `inert` to the background.",
           "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "No code sets `inert` on the app root, body, or background containers when this dialog opens.",
+          "static_hint": "Flag aria-modal on the popover, and flag inert applied to the app root or body when it opens.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, assert background elements are focusable and have no inert ancestor."
+          "runtime_check": "With the popover open, assert background elements are focusable and have no inert ancestor."
         },
         {
           "rule": "Provide a visible close control. Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
@@ -3307,40 +3294,20 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Dialog contains a close control that is a native <button>, or role=\"button\" as documented fallback.",
+          "static_hint": "The popover contains a close control that is a native <button>, or role=\"button\" on the fallback path.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, assert the close control is rendered visible."
+          "runtime_check": "With the popover open, assert the close control renders visible."
         },
         {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"`",
+          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating the control.",
           "source": "must_have",
           "techniques": [
-            "static"
-          ],
-          "static_hint": "Every role=\"button\" close control also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If `role=\"button\"` is used instead of a native `<button>`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" element has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" close control, press Enter, then Space; assert each closes the dialog."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating the control",
-          "source": "must_have",
-          "techniques": [
+            "static",
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" control; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
           "rule": "The close control has an accessible name that describes its purpose or action (e.g., `aria-label=\"Close\"`).",
@@ -3349,67 +3316,269 @@
             "static",
             "llm-eval"
           ],
-          "static_hint": "Close control has a non-empty accessible name source.",
-          "llm_eval_question": "Does the close control's name convey the close action rather than being generic or icon-descriptive?",
+          "static_hint": "The close control has a non-empty accessible name source.",
+          "llm_eval_question": "Does the close control's name describe the action it performs, rather than being an icon name or empty?",
           "runtime_check": null
         },
         {
-          "rule": "Do not set `aria-modal=\"true\"` on a non-modal dialog; it falsely tells assistive technology the background is inert.",
+          "rule": "Do not bind Esc only to a container-level handler on the popover surface; once focus leaves the untrapped popover, that handler stops firing and Esc no longer closes.",
           "source": "dont",
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag aria-modal=\"true\" on the non-modal dialog surface.",
+          "static_hint": "The Esc handler is registered at the document level, not only as a React onKeyDown on the popover surface.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        }
+      ]
+    },
+    "progress-bar.basic": {
+      "pattern_id": "progress-bar.basic",
+      "catalog_revision": "0.17.0",
+      "rules": [
+        {
+          "rule": "Use the native `<progress>` element (preferred), or `role=\"progressbar\"` on a non-native element only when the native element cannot be used.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The indicator is a native <progress>, or a non-native element carrying role=\"progressbar\" on the fallback path.",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "Do not trap focus within the dialog.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "With the dialog open, Tab past its last focusable element; assert focus exits into the page instead of cycling back inside."
-        },
-        {
-          "rule": "Do not apply `inert` to, or otherwise block, the background content.",
-          "source": "dont",
+          "rule": "The progress bar is not focusable and is not in the page tab sequence.",
+          "source": "must_have",
           "techniques": [
             "static",
             "runtime"
           ],
-          "static_hint": "Flag inert application, full-screen blocking overlays, or pointer-events:none on background containers tied to this dialog's open state.",
+          "static_hint": "The progress bar carries no tabindex and is not a natively focusable element.",
           "llm_eval_question": null,
-          "runtime_check": "With the dialog open, click and focus background controls; assert they respond normally."
+          "runtime_check": "Tab through the page; assert focus never lands on the progress bar."
         },
         {
-          "rule": "Do not omit focus restoration; closing the dialog must return focus to the element that invoked it.",
-          "source": "dont",
+          "rule": "The `<progress>` element, or the element carrying `role=\"progressbar\"`, contains no text, headings, images, or interactive content.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag any element content inside <progress> or the role=\"progressbar\" element — descendants of the role are presentational.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Render the label, the numeric value, and any status message as siblings of the progress bar.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Label, value, and status elements are siblings of the progress bar, not descendants.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "When the progress bar reports loading of a specific region of the page, that region has `aria-busy=\"true\"` until loading completes, and the attribute is removed or set to `\"false\"` afterward.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The loading region carries aria-busy bound to the in-flight state.",
+          "llm_eval_question": null,
+          "runtime_check": "Start and finish a load; assert aria-busy is \"true\" during and absent or \"false\" after."
+        },
+        {
+          "rule": "The progress bar has an accessible name that describes what is progressing, via `<label>` or `aria-labelledby` referencing visible text when it exists, otherwise via `aria-label`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "The progress bar has a name source: an associated <label>, aria-labelledby, or aria-label.",
+          "llm_eval_question": "Does the name say what is progressing, rather than being generic (\"Progress\", \"Loading\")?",
+          "runtime_check": null
+        },
+        {
+          "rule": "When a visible label exists, the visible text is contained in the accessible name and appears at the start of it.",
+          "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Close the dialog by each supported path; assert document.activeElement is the invoking element after each."
+          "runtime_check": "Compute the accessible name; assert it begins with the visible label text."
         },
         {
-          "rule": "Do not bind Esc only to a container-level handler on the dialog surface; once focus leaves the untrapped dialog, that handler stops firing and Esc no longer closes.",
-          "source": "dont",
+          "rule": "When context beyond the name is needed, add it via `aria-describedby` referencing the visible text that carries it.",
+          "source": "must_have",
           "techniques": [
-            "runtime",
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Supplementary text is referenced by aria-describedby rather than folded into the name.",
+          "llm_eval_question": null,
+          "runtime_check": "Assert the aria-describedby IDREF resolves to the rendered text element."
+        },
+        {
+          "rule": "A determinate progress bar sets `aria-valuenow` to the current value, updated as the process advances.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "A determinate bar carries aria-valuenow bound to state; on <progress> the value attribute carries this and aria-valuenow is not added.",
+          "llm_eval_question": null,
+          "runtime_check": "Advance the process; assert the reported value tracks it at each step."
+        },
+        {
+          "rule": "`aria-valuemin` and `aria-valuemax` are set when the range is not 0 to 100, and omitted otherwise, since `aria-valuemin` defaults to `0` and `aria-valuemax` defaults to `100`.",
+          "source": "must_have",
+          "techniques": [
             "static"
           ],
-          "static_hint": "Flag an Esc keydown handler attached only to the dialog element with no document-level listener.",
+          "static_hint": "aria-valuemin and aria-valuemax appear only on bars whose range is not 0–100.",
           "llm_eval_question": null,
-          "runtime_check": "Open the dialog, move focus into the page outside it, press Esc; assert the dialog still closes."
+          "runtime_check": null
+        },
+        {
+          "rule": "An indeterminate progress bar omits `aria-valuenow` entirely.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "An indeterminate bar carries no aria-valuenow, not even \"0\"; on <progress> the value attribute is omitted.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "When a percentage does not describe the value accurately, set `aria-valuetext` to the unit the user cares about (e.g., \"3 of 8 files\", \"About 2 minutes remaining\").",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "aria-valuetext is present where the raw percentage is not the meaningful unit.",
+          "llm_eval_question": "Is a bare percentage a poor description of this value, and if so does aria-valuetext give the unit the user cares about?",
+          "runtime_check": null
+        },
+        {
+          "rule": "The filled portion of the bar and the unfilled track differ from each other by a contrast ratio of at least 3:1, per `global.non-text-contrast`.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Compute the contrast between the fill and the track colors; assert at least 3:1."
+        },
+        {
+          "rule": "Under Windows High Contrast Mode, author background colors are overridden, so pair the styling with a `@media (forced-colors: active)` override that gives the track a `1px` border in `CanvasText` and the fill a background in `Highlight`.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "A @media (forced-colors: active) block gives the track a border in CanvasText and the fill a background in Highlight.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Status messages tied to the progress bar (e.g., \"Uploading\", \"Almost done\", \"Complete\") are rendered into a live region that is present in the DOM before the first message appears. Use `role=\"status\"`, or an equivalent such as `aria-live=\"polite\"` and `aria-atomic=\"true\"`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The live region is rendered unconditionally and carries role=\"status\", or aria-live=\"polite\" with aria-atomic=\"true\".",
+          "llm_eval_question": null,
+          "runtime_check": "Before any status message appears, assert the live region already exists in the DOM."
+        },
+        {
+          "rule": "When those messages are visible on screen, the visible container is the live region, and no second copy is added.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Where visible status text exists, that element is the live region; flag a second visually hidden region carrying the same text.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "When the design has no visible status messages, a determinate progress bar announces its completion once through a visually hidden live region (e.g., \"Upload complete\"), per `global.sr-only`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Where no visible status text exists, a visually hidden live region carries the completion message.",
+          "llm_eval_question": null,
+          "runtime_check": "Run the process to completion; assert the completion message is announced exactly once."
+        },
+        {
+          "rule": "Announcement text takes its words from the progress bar's accessible name rather than newly authored wording, so the announcement matches the visible label (e.g., a bar named \"Uploading episode files\" gives \"Upload complete\").",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the announcement borrow its words from the progress bar's accessible name, rather than introducing new wording the user never sees?",
+          "runtime_check": null
+        },
+        {
+          "rule": "Text in a visually hidden live region is cleared once it no longer describes the current state, so a stale message is not discoverable later by a user browsing the page.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "After completion, assert the hidden live region is empty rather than retaining the last message."
+        },
+        {
+          "rule": "Announcements are limited to the status messages the design defines and to completion. Intermediate value changes are not announced.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Advance the value through many steps; assert the live region updates only at the defined points, not on every tick."
+        },
+        {
+          "rule": "Under `prefers-reduced-motion: reduce`, the progress bar runs no looping animation, such as a barber-pole stripe or a fill that sweeps back and forth, and stays on screen as a static indicator of ongoing work.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert no looping animation runs and the bar remains rendered."
+        },
+        {
+          "rule": "Do not give the progress bar element `aria-live`, and do not nest it inside a live region. Every value change is then announced, interrupting the user's reading and navigation.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag aria-live on the progress bar, and flag a progress bar rendered inside a live-region ancestor.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not use `role=\"progressbar\"` for a value the user can change.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the user only observe this value, rather than adjusting it (which would be a slider or spinbutton)?",
+          "runtime_check": null
         }
       ]
     },
     "select.basic": {
       "pattern_id": "select.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.17.0",
       "rules": [
         {
           "rule": "Provide a visible label for the field. Prefer a native `<label>` and ensure the custom UI is programmatically associated with the label (see `aria-labelledby` below).",
@@ -3418,9 +3587,9 @@
             "static",
             "runtime"
           ],
-          "static_hint": "A <label> element exists and its id is referenced by the button's aria-labelledby.",
+          "static_hint": "A visible label element exists and is referenced by the custom control's aria-labelledby.",
           "llm_eval_question": null,
-          "runtime_check": "Assert the label is rendered visible (not hidden or offscreen)."
+          "runtime_check": "Assert the label renders visible and contributes to the button's computed accessible name."
         },
         {
           "rule": "Include a visually hidden native `<select>` (required).",
@@ -3428,7 +3597,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Markup contains a native <select> styled visually hidden alongside the custom UI.",
+          "static_hint": "A native <select> is rendered and visually hidden with the .sr-only technique rather than display:none.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3436,22 +3605,20 @@
           "rule": "The hidden `<select>` includes the same options and current value as the custom UI.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "runtime"
           ],
-          "static_hint": "Both controls render from the same options data source.",
+          "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Compare the hidden select's <option> list and value against the custom UI's options and displayed value; change the selection and assert they stay equal."
+          "runtime_check": "Change the selection in the custom UI; assert the hidden select's value and option set match."
         },
         {
           "rule": "The hidden `<select>` includes form attributes as needed (e.g., `name`, `required`, `disabled`).",
           "source": "must_have",
           "techniques": [
-            "static",
-            "llm-eval"
+            "static"
           ],
-          "static_hint": "Hidden select carries name (and required/disabled when the field's contract calls for them).",
-          "llm_eval_question": "Given the field's form behavior, are the appropriate form attributes present on the hidden select?",
+          "static_hint": "The hidden select carries name, and required/disabled where the field needs them.",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
@@ -3461,82 +3628,62 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Hidden select carries tabindex=\"-1\" (or an equivalent focus exclusion).",
+          "static_hint": "The hidden select carries tabindex=\"-1\" or aria-hidden=\"true\".",
           "llm_eval_question": null,
-          "runtime_check": "Tab through the field; assert only the custom button receives focus, never the hidden select."
+          "runtime_check": "Tab through the field; assert focus stops once, on the visible button, never on the hidden select."
         },
         {
           "rule": "The visible interactive control is a native `<button>` (preferred) or `role=\"button\"` only when a native button cannot be used.",
           "source": "must_have",
           "techniques": [
+            "static"
+          ],
+          "static_hint": "The trigger is a native <button>; role=\"button\" is the fallback path only.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "If using `role=\"button\"`, add `tabindex=\"0\"` and keyboard support for Enter and Space, ensuring Space prevents page scrolling while activating.",
+          "source": "must_have",
+          "techniques": [
             "static",
-            "llm-eval"
-          ],
-          "static_hint": "Visible trigger is a native <button>, or role=\"button\" as documented fallback.",
-          "llm_eval_question": "If role=\"button\" is used, is there a genuine constraint that prevented a native <button>?",
-          "runtime_check": null
-        },
-        {
-          "rule": "If using `role=\"button\"`, add `tabindex=\"0\"`",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "role=\"button\" trigger also carries tabindex=\"0\".",
-          "llm_eval_question": null,
-          "runtime_check": null
-        },
-        {
-          "rule": "If using `role=\"button\"`, add keyboard support for Enter and Space.",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "role=\"button\" trigger has key handlers covering Enter and Space.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the role=\"button\" trigger, press Enter, then Space; assert each opens the listbox."
-        },
-        {
-          "rule": "ensuring Space prevents page scrolling while activating.",
-          "source": "must_have",
-          "techniques": [
             "runtime"
           ],
-          "static_hint": null,
+          "static_hint": "role=\"button\" elements carry tabindex=\"0\" and a keydown handler covering Enter and Space that calls preventDefault for Space.",
           "llm_eval_question": null,
-          "runtime_check": "On a scrollable page, press Space on the focused role=\"button\" trigger; assert activation occurs and the page does not scroll."
+          "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
-          "rule": "The button must expose \"opens a listbox\" semantics and state: `aria-haspopup=\"listbox\"`",
+          "rule": "The button carries `aria-haspopup=\"listbox\"`.",
           "source": "must_have",
           "techniques": [
             "static"
           ],
-          "static_hint": "Button carries aria-haspopup with the exact value \"listbox\".",
+          "static_hint": "The trigger carries aria-haspopup=\"listbox\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
         {
-          "rule": "`aria-expanded=\"true|false\"` reflecting open/closed",
+          "rule": "The button carries `aria-expanded=\"true|false\"` reflecting open/closed.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Button carries aria-expanded bound to popup state.",
+          "static_hint": "The trigger carries aria-expanded bound to the listbox's visibility.",
           "llm_eval_question": null,
-          "runtime_check": "Open and close the listbox; assert aria-expanded always matches actual visibility."
+          "runtime_check": "Open and close the listbox; assert aria-expanded matches its rendered visibility every time."
         },
         {
-          "rule": "`aria-controls=\"IDREF\"` pointing to the listbox element",
+          "rule": "The button carries `aria-controls=\"IDREF\"` pointing to the listbox element.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Button's aria-controls IDREF resolves to the role=\"listbox\" element.",
+          "static_hint": "The trigger carries aria-controls whose value matches the listbox id.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert the aria-controls IDREF resolves to the rendered listbox."
         },
         {
           "rule": "The button must have an accessible name that includes the field label and current value.",
@@ -3545,19 +3692,9 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Button's name computation draws on both the label element and a current-value element.",
+          "static_hint": "The trigger carries aria-labelledby referencing both the label element and the element holding the current value.",
           "llm_eval_question": null,
-          "runtime_check": "Compute the button's accessible name; assert it contains the field label followed by the currently selected value, and updates when the value changes."
-        },
-        {
-          "rule": "Recommended: `aria-labelledby=\"{labelId} {valueId}\"` where `labelId` references the label element and `valueId` references an element containing the currently selected value text",
-          "source": "must_have",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Button's aria-labelledby lists the label element's id first, then the value element's id, both resolving.",
-          "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Compute the trigger's accessible name; assert it contains both the field label text and the currently selected value."
         },
         {
           "rule": "The popup contains one element with `role=\"listbox\"` and a stable ID (the same one referenced by `aria-controls`).",
@@ -3565,7 +3702,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Exactly one role=\"listbox\" element with an id matching the button's aria-controls.",
+          "static_hint": "Exactly one element in the popup carries role=\"listbox\", with an id that does not change across renders.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3575,7 +3712,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Every option carries role=\"option\" and a deterministic id usable by aria-activedescendant.",
+          "static_hint": "Each option carries role=\"option\" and a deterministic id.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3586,31 +3723,31 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Every option carries aria-selected bound to selection state.",
+          "static_hint": "Each option carries aria-selected bound to selection state.",
           "llm_eval_question": null,
-          "runtime_check": "Change the selection; assert aria-selected=\"true\" moves to the newly selected option only."
+          "runtime_check": "Select an option; assert aria-selected is true on it and false on the others."
         },
         {
-          "rule": "When the listbox is open, the \"currently active\" option is programmatically indicated (recommended). Preferred approach: keep focus on the button and set `aria-activedescendant=\"{optionId}\"` on the button to point to the active option.",
+          "rule": "When the listbox is open, the \"currently active\" option is programmatically indicated (recommended).",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Button carries aria-activedescendant bound to the active option's id while open.",
+          "static_hint": "Focus stays on the button and aria-activedescendant points at the active option, or an equivalent documented mechanism is used consistently.",
           "llm_eval_question": null,
-          "runtime_check": "Open the listbox and arrow through options; assert DOM focus stays on the button and aria-activedescendant always resolves to the highlighted option."
+          "runtime_check": "Arrow through the open listbox; assert the active option is programmatically identified and tracks the highlight."
         },
         {
           "rule": "The listbox must be shown/hidden in the DOM so that when closed it cannot be reached by keyboard or screen readers (e.g., via `hidden`).",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Closed state uses `hidden`/conditional rendering/display:none.",
+          "static_hint": "The closed listbox uses the hidden attribute or is unmounted; flag CSS-only hiding.",
           "llm_eval_question": null,
-          "runtime_check": "With the listbox closed, assert its options are unreachable and absent from the accessibility tree."
+          "runtime_check": "With the listbox closed, assert its options are absent from the accessibility tree."
         },
         {
           "rule": "Tab / Shift+Tab moves focus to/from the button like a normal form field (no focus trap).",
@@ -3620,7 +3757,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Tab into and out of the field in both directions; assert focus moves like a native form field with no trapping."
+          "runtime_check": "Tab into and out of the field; assert focus enters and leaves the button without being trapped."
         },
         {
           "rule": "Enter or Space on the button opens the listbox.",
@@ -3630,37 +3767,37 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Enter (and separately Space) on the focused button; assert the listbox opens."
+          "runtime_check": "Focus the button and press Enter, then Space; assert each opens the listbox."
         },
         {
-          "rule": "When open: Arrow Up/Down moves the active option.",
+          "rule": "Arrow Up/Down moves the active option.",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the listbox open, press Arrow Down/Up; assert the active option advances/retreats one option per press."
+          "runtime_check": "With the listbox open, press Arrow Up and Arrow Down; assert the active option moves."
         },
         {
-          "rule": "When open: Enter or Space selects the active option and closes the listbox.",
+          "rule": "Enter or Space selects the active option and closes the listbox.",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Press Enter (and separately Space) on an active option; assert it becomes selected, the listbox closes, and the button's value text updates."
+          "runtime_check": "With an option active, press Enter, then repeat with Space; assert each selects it and closes the listbox."
         },
         {
-          "rule": "When open: Esc closes the listbox and returns the user to the button state.",
+          "rule": "Esc closes the listbox and returns the user to the button state.",
           "source": "must_have",
           "techniques": [
             "runtime"
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the listbox open, press Esc; assert it closes without changing the selection and focus remains on the button."
+          "runtime_check": "With the listbox open, press Esc; assert it closes and focus is on the button."
         },
         {
           "rule": "Clicking/tapping outside closes the listbox.",
@@ -3670,72 +3807,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "With the listbox open, click outside the component; assert the listbox closes."
-        },
-        {
-          "rule": "The label and current value are announced together (via `aria-labelledby`).",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "aria-labelledby composes label + value elements.",
-          "llm_eval_question": null,
-          "runtime_check": "Compute the button's accessible name; assert it contains both the label and the current value."
-        },
-        {
-          "rule": "Expanded/collapsed state is announced (via `aria-expanded`).",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "aria-expanded present on the button.",
-          "llm_eval_question": null,
-          "runtime_check": "Assert the button's expanded state in the accessibility tree tracks the popup's open/closed state."
-        },
-        {
-          "rule": "The user can perceive which option is selected (`aria-selected`).",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "aria-selected present on options.",
-          "llm_eval_question": null,
-          "runtime_check": "Assert the selected option's aria-selected=\"true\" matches the visible selection."
-        },
-        {
-          "rule": "The user can perceive which option is currently active when navigating (`aria-activedescendant` recommended).",
-          "source": "must_have",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "aria-activedescendant (or equivalent focus indication) present while navigating.",
-          "llm_eval_question": null,
-          "runtime_check": "Arrow through options; assert the active option is programmatically exposed at each step."
-        },
-        {
-          "rule": "Do not omit the visually hidden native `<select>` when this control participates in form submission or should support autofill.",
-          "source": "dont",
-          "techniques": [
-            "static",
-            "llm-eval"
-          ],
-          "static_hint": "If the component sits in a <form> or has a name-able value, a hidden native <select> must be present.",
-          "llm_eval_question": "Does this select participate in form submission or autofill, and if so, is the hidden native select present?",
-          "runtime_check": null
-        },
-        {
-          "rule": "Do not implement the trigger as a non-interactive element (e.g., `<div>`) without button semantics.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag click handlers on trigger elements lacking <button> or role=\"button\"+tabindex.",
-          "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "With the listbox open, click outside the control; assert it closes."
         },
         {
           "rule": "Do not use `role=\"menu\"` / `role=\"menuitem\"` for select options.",
@@ -3743,7 +3815,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag menu/menuitem roles in the popup; require listbox/option.",
+          "static_hint": "Flag role=\"menu\" or role=\"menuitem\" on the popup or its options.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -3756,27 +3828,7 @@
           ],
           "static_hint": "Flag tabindex=\"0\" on option elements.",
           "llm_eval_question": null,
-          "runtime_check": "With the listbox open, press Tab; assert focus leaves the component rather than stepping through options."
-        },
-        {
-          "rule": "Do not leave the listbox visible while `aria-expanded=\"false\"` (and vice versa).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Across open/close cycles, assert listbox visibility and the button's aria-expanded never disagree."
-        },
-        {
-          "rule": "Do not allow the custom UI and hidden `<select>` to get out of sync (options/value must match).",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "After every selection change (keyboard and pointer), assert the hidden select's value and options equal the custom UI's."
+          "runtime_check": "With the listbox open, press Tab; assert focus does not step through the options."
         }
       ]
     },
@@ -3844,6 +3896,229 @@
           "static_hint": "Flag the multiple attribute on the select.",
           "llm_eval_question": null,
           "runtime_check": null
+        }
+      ]
+    },
+    "spinner.basic": {
+      "pattern_id": "spinner.basic",
+      "catalog_revision": "0.17.0",
+      "rules": [
+        {
+          "rule": "The graphic that draws the spinner has `aria-hidden=\"true\"`, no `role`, no `aria-label`, and no text content.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The spinner graphic carries aria-hidden=\"true\" and no role, aria-label, or text content.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "The loading state is carried by the host, meaning the control or region the spinner sits inside, together with a live region holding the text that describes the wait.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The busy state is expressed on the host element plus a live region; the graphic itself carries no state.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "When a region is fetching or replacing its content, that region has `aria-busy=\"true\"` for the duration, and the attribute is removed or set to `\"false\"` once the content arrives.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The fetching region carries aria-busy bound to the in-flight state.",
+          "llm_eval_question": null,
+          "runtime_check": "Start and finish a fetch; assert aria-busy is \"true\" during and absent or \"false\" after."
+        },
+        {
+          "rule": "The spinner is not focusable and is not in the page tab sequence.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The spinner carries no tabindex and is not a natively focusable element.",
+          "llm_eval_question": null,
+          "runtime_check": "Tab through the page while the spinner shows; assert focus never lands on it."
+        },
+        {
+          "rule": "The spinner contributes nothing to the accessible name of its host. Adding the graphic does not change what the host control or region is called.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Compute the host's accessible name with and without the spinner rendered; assert it is identical."
+        },
+        {
+          "rule": "The host names what is loading: a control through its own label, and a region through its heading referenced by `aria-labelledby`, or through `aria-label`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "The host has a name source: its own label, aria-labelledby pointing at a heading, or aria-label.",
+          "llm_eval_question": "Does the host's name identify what is loading, rather than leaving the wait unattributed?",
+          "runtime_check": null
+        },
+        {
+          "rule": "When the host's visible label changes while busy (e.g., \"Save\" becomes \"Saving\"), the changed text is the host's accessible name.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Put the control in its busy state; assert its computed accessible name is the changed visible text."
+        },
+        {
+          "rule": "A live region is present in the DOM before the spinner appears, and receives text describing the wait. Use `role=\"status\"`, or an equivalent such as `aria-live=\"polite\"` and `aria-atomic=\"true\"`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The live region is rendered unconditionally and carries role=\"status\", or aria-live=\"polite\" with aria-atomic=\"true\".",
+          "llm_eval_question": null,
+          "runtime_check": "Before the spinner appears, assert the live region already exists in the DOM."
+        },
+        {
+          "rule": "The text begins with a status word: \"Loading\" for a region fetching content, or the progressive form of a control's own label for a control (\"Save\" becomes \"Saving\").",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the announcement begin with a status word — \"Loading\" for a region, or the progressive form of the control's own label?",
+          "runtime_check": null
+        },
+        {
+          "rule": "When the button or region has a short accessible name, append it, taking the words from that existing name rather than authoring new ones (e.g., a panel named \"Recommendations\" gives \"Loading recommendations\"). \"Loading\" on its own is correct when there is no short name to borrow.",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the announcement borrow the host's existing name rather than introducing new wording, and fall back to \"Loading\" alone when there is no short name?",
+          "runtime_check": null
+        },
+        {
+          "rule": "The live region receives a message when the wait ends, on success and on failure alike.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Complete a wait and separately fail one; assert the live region receives an end message in both cases."
+        },
+        {
+          "rule": "The end message reuses the words of the start message in completed form (e.g., \"Loading recommendations\" becomes \"Recommendations loaded\").",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the end message reuse the start message's words in completed form, rather than introducing different wording?",
+          "runtime_check": null
+        },
+        {
+          "rule": "The live region text is removed once it is no longer current, so a stale message is not discoverable later by a user browsing the page.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "After the wait ends and the message has been announced, assert the live region is cleared."
+        },
+        {
+          "rule": "A control that becomes busy after activation uses `aria-disabled=\"true\"` rather than the native `disabled` attribute, so the control keeps keyboard focus for the duration of the wait.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Busy controls carry aria-disabled; flag the native disabled attribute applied on activation.",
+          "llm_eval_question": null,
+          "runtime_check": "Activate the control by keyboard; assert it retains focus for the duration of the wait."
+        },
+        {
+          "rule": "The activation handler returns early while the control is busy, since `aria-disabled` does not block activation on its own.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The activation handler guards on the busy state and returns before performing its action.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Under `prefers-reduced-motion: reduce`, the animated graphic is not shown, and visible text stating what is happening is rendered in its place.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Emulate prefers-reduced-motion: reduce; assert no animated graphic renders and visible status text appears instead."
+        },
+        {
+          "rule": "The spinner is removed when the wait ends, and a failed wait is replaced by an error message rather than a graphic that spins indefinitely.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Fail a request; assert the spinner is removed and an error message is rendered."
+        },
+        {
+          "rule": "Do not put `role=\"progressbar\"` on a spinner that has no value, which reports a range widget with nothing to report.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag role=\"progressbar\" on a spinner carrying no aria-valuenow.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not put `aria-live` on the spinner graphic or on the element that mounts and unmounts with it, since a live region that is not in the DOM before the change does not announce reliably.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag aria-live on the spinner graphic or on any element rendered conditionally alongside it.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not place several spinners in one view for content arriving in pieces.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Would a single busy indicator for the view serve better than one spinner per arriving piece?",
+          "runtime_check": null,
+          "confidence": "advisory"
+        },
+        {
+          "rule": "Do not attach a spinner to every asynchronous call. Add one when the wait is long enough for the user to notice it, or when the design asks for a busy state on a specific control.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is this wait long enough for the user to perceive, or does the design call for a busy state here?",
+          "runtime_check": null,
+          "confidence": "advisory"
         }
       ]
     },
@@ -4327,18 +4602,18 @@
     },
     "toast.basic": {
       "pattern_id": "toast.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.17.0",
       "rules": [
         {
           "rule": "The live region container must be present in the DOM when the page/view loads.",
           "source": "must_have",
           "techniques": [
-            "runtime",
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Live region element is rendered unconditionally at mount, not created when a toast fires.",
+          "static_hint": "The live region container is rendered unconditionally; flag a container behind a conditional render tied to toast visibility.",
           "llm_eval_question": null,
-          "runtime_check": "Load the page with no toast triggered; assert the live region container already exists (empty) in the DOM."
+          "runtime_check": "With no toast showing, assert the live region container exists in the DOM and is empty."
         },
         {
           "rule": "The toast message must be announced via `role=\"status\"`, or an equivalent such as `aria-live=\"polite\"` and `aria-atomic=\"true\"`.",
@@ -4346,7 +4621,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Live region carries role=\"status\", or aria-live=\"polite\" plus aria-atomic=\"true\".",
+          "static_hint": "The live region carries role=\"status\", or aria-live=\"polite\" together with aria-atomic=\"true\".",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -4358,7 +4633,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Trigger a toast; assert the message text appears inside the pre-existing live region element (same node, not a new container)."
+          "runtime_check": "Trigger a toast; assert the message text appears inside the pre-existing live region element rather than a newly mounted one."
         },
         {
           "rule": "The toast must not move focus automatically when it appears.",
@@ -4368,7 +4643,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus an element, trigger a toast; assert document.activeElement is unchanged."
+          "runtime_check": "Trigger a toast from a control; assert document.activeElement is unchanged."
         },
         {
           "rule": "The toast must disappear automatically (recommended ~5 seconds).",
@@ -4378,7 +4653,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Trigger a toast and wait past the timeout; assert the toast is no longer visible without user action."
+          "runtime_check": "Trigger a toast and wait; assert it is removed without user interaction."
         },
         {
           "rule": "The live region text must be cleared when the toast dismisses to avoid stale messages being discovered later.",
@@ -4388,7 +4663,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "After the toast dismisses, assert the live region container's text content is empty."
+          "runtime_check": "Let a toast auto-dismiss; assert the live region is empty afterward."
         },
         {
           "rule": "If a dismiss button is present, it must not steal focus when the toast appears.",
@@ -4398,28 +4673,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus an element, trigger a toast with a dismiss button; assert focus does not move to the dismiss button."
-        },
-        {
-          "rule": "Do not mount/unmount the live region container based on toast visibility.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Flag conditional rendering of the live region element tied to toast state.",
-          "llm_eval_question": null,
-          "runtime_check": "Trigger and dismiss toasts; assert the live region element is the same persistent DOM node throughout."
-        },
-        {
-          "rule": "Do not move focus into the toast when it appears.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Trigger a toast; assert document.activeElement never becomes the toast or a descendant of it."
+          "runtime_check": "Trigger a toast that renders a dismiss button; assert focus stays on the triggering control."
         },
         {
           "rule": "Do not use `role=\"alertdialog\"`.",
@@ -4435,18 +4689,17 @@
           "rule": "The toast must not contain buttons or elements that require user action (use `snackbar` or `dialog` instead).",
           "source": "dont",
           "techniques": [
-            "static",
-            "llm-eval"
+            "static"
           ],
-          "static_hint": "Flag interactive elements inside the toast (an optional dismiss button per the Must Haves is the only tolerated control).",
-          "llm_eval_question": "Does the toast's content demand a user decision or action (confirm, undo, input), meaning it should be a snackbar or dialog instead?",
+          "static_hint": "Flag interactive controls inside the toast other than a single dismiss button.",
+          "llm_eval_question": null,
           "runtime_check": null
         }
       ]
     },
     "tooltip.basic": {
       "pattern_id": "tooltip.basic",
-      "catalog_revision": "0.5.2",
+      "catalog_revision": "0.17.0",
       "rules": [
         {
           "rule": "The tooltip bubble is an element with `role=\"tooltip\"` and a stable `id`.",
@@ -4454,7 +4707,7 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Tooltip element carries role=\"tooltip\" and a deterministic id.",
+          "static_hint": "The tooltip element carries role=\"tooltip\" and an id that does not change across renders.",
           "llm_eval_question": null,
           "runtime_check": null
         },
@@ -4462,22 +4715,23 @@
           "rule": "The trigger references the tooltip with `aria-describedby` pointing to the tooltip's `id`.",
           "source": "must_have",
           "techniques": [
-            "static"
+            "static",
+            "runtime"
           ],
-          "static_hint": "Trigger's aria-describedby IDREF equals the tooltip's id.",
+          "static_hint": "The trigger carries aria-describedby whose value matches the tooltip's id.",
           "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Assert the aria-describedby IDREF resolves to the rendered tooltip."
         },
         {
           "rule": "The tooltip supplements the accessible name, it does not replace it. The trigger has its own accessible name (e.g., visible text or `aria-label`).",
           "source": "must_have",
           "techniques": [
             "static",
-            "llm-eval"
+            "runtime"
           ],
-          "static_hint": "Trigger has a non-empty accessible name independent of the tooltip; tooltip is referenced by aria-describedby, not aria-labelledby.",
-          "llm_eval_question": "Is the tooltip content supplemental description rather than serving as the trigger's only name?",
-          "runtime_check": null
+          "static_hint": "The trigger has its own name source; flag aria-labelledby pointing at the tooltip.",
+          "llm_eval_question": null,
+          "runtime_check": "Compute the trigger's accessible name; assert it is non-empty and does not come from the tooltip text."
         },
         {
           "rule": "The tooltip appears on both pointer hover and keyboard focus of the trigger.",
@@ -4487,7 +4741,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Hover the trigger; assert the tooltip shows. Separately, keyboard-focus the trigger; assert the tooltip shows."
+          "runtime_check": "Hover the trigger and assert the tooltip appears; separately focus it by keyboard and assert it appears."
         },
         {
           "rule": "Esc dismisses the tooltip whether it was opened by pointer hover or by keyboard focus, and does not move pointer hover or keyboard focus (dismissible).",
@@ -4497,18 +4751,17 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Show the tooltip via hover, press Esc; assert it hides. Repeat via focus; assert it hides and document.activeElement is unchanged."
+          "runtime_check": "Open the tooltip by hover and press Esc; repeat by keyboard focus. Assert it hides both times and focus is unchanged."
         },
         {
           "rule": "Bind the Esc handler at the document level, not only on the trigger, so it works when the tooltip is shown by hover and the trigger does not hold focus.",
           "source": "must_have",
           "techniques": [
-            "static",
-            "runtime"
+            "static"
           ],
-          "static_hint": "Esc keydown listener is attached to document while the tooltip is visible, not solely to the trigger element.",
+          "static_hint": "The Esc handler is registered on document, not only as an onKeyDown on the trigger.",
           "llm_eval_question": null,
-          "runtime_check": "With focus elsewhere on the page, hover the trigger and press Esc; assert the tooltip dismisses."
+          "runtime_check": null
         },
         {
           "rule": "When the trigger has keyboard focus, the trigger keeps focus after dismissal.",
@@ -4518,7 +4771,7 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Focus the trigger, press Esc to dismiss; assert document.activeElement is still the trigger."
+          "runtime_check": "Focus the trigger, press Esc; assert document.activeElement is still the trigger."
         },
         {
           "rule": "The tooltip remains visible while the pointer is over the trigger or over the tooltip, and while the trigger has focus (hoverable and persistent).",
@@ -4528,18 +4781,17 @@
           ],
           "static_hint": null,
           "llm_eval_question": null,
-          "runtime_check": "Move the pointer from the trigger onto the tooltip bubble; assert it stays visible. Hold keyboard focus on the trigger; assert it stays visible."
+          "runtime_check": "Move the pointer from the trigger onto the tooltip; assert it stays visible. Assert it also stays while the trigger holds keyboard focus."
         },
         {
           "rule": "Track hover and focus as independent conditions and keep the tooltip open while either is active, so a stray pointer movement does not hide it while the trigger still has keyboard focus.",
           "source": "must_have",
           "techniques": [
-            "runtime",
             "static"
           ],
-          "static_hint": "Visibility state derives from hover OR focus flags, not a single shared boolean.",
+          "static_hint": "Hover and focus are two separate state values combined with a logical OR; flag a single boolean shared by both.",
           "llm_eval_question": null,
-          "runtime_check": "Focus the trigger, then move the pointer across and off the trigger; assert the tooltip remains visible while focus is held."
+          "runtime_check": null
         },
         {
           "rule": "The tooltip is not focusable and contains plain text only, with no interactive content.",
@@ -4548,19 +4800,9 @@
             "static",
             "runtime"
           ],
-          "static_hint": "Tooltip has no tabindex and no interactive descendants; content is text-only.",
+          "static_hint": "Flag interactive elements or a tabindex inside the tooltip.",
           "llm_eval_question": null,
-          "runtime_check": "Tab through the page with the tooltip visible; assert the tooltip never receives focus."
-        },
-        {
-          "rule": "Do not place interactive content (links, buttons, form controls) in a tooltip.",
-          "source": "dont",
-          "techniques": [
-            "static"
-          ],
-          "static_hint": "Flag any interactive element inside the role=\"tooltip\" element.",
-          "llm_eval_question": null,
-          "runtime_check": null
+          "runtime_check": "Tab through the page with the tooltip shown; assert focus never lands inside it."
         },
         {
           "rule": "Do not rely on the native `title` attribute as the tooltip; it is not keyboard-accessible and is announced inconsistently.",
@@ -4568,40 +4810,9 @@
           "techniques": [
             "static"
           ],
-          "static_hint": "Flag title attributes used as the tooltip mechanism on the trigger.",
+          "static_hint": "Flag a title attribute used as the tooltip mechanism on the trigger.",
           "llm_eval_question": null,
           "runtime_check": null
-        },
-        {
-          "rule": "Do not make the tooltip vanish when the pointer moves from the trigger toward the tooltip; it must be hoverable.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Traverse the pointer from trigger to tooltip across the gap; assert the tooltip does not hide during the traversal or while hovered."
-        },
-        {
-          "rule": "Do not show the tooltip on hover only; it must also appear on keyboard focus.",
-          "source": "dont",
-          "techniques": [
-            "runtime"
-          ],
-          "static_hint": null,
-          "llm_eval_question": null,
-          "runtime_check": "Without any pointer input, keyboard-focus the trigger; assert the tooltip appears."
-        },
-        {
-          "rule": "Do not hide the tooltip on `onMouseLeave` while the trigger still has keyboard focus; hover and focus must be tracked independently.",
-          "source": "dont",
-          "techniques": [
-            "runtime",
-            "static"
-          ],
-          "static_hint": "Flag mouseleave handlers that hide unconditionally without checking the focus flag.",
-          "llm_eval_question": null,
-          "runtime_check": "Focus the trigger, hover it, then move the pointer away; assert the tooltip stays visible while focus remains."
         },
         {
           "rule": "Do not use `role=\"menu\"` on the tooltip.",
