@@ -1,7 +1,7 @@
 {
   "stack": "web/react",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.13.0",
+  "catalog_revision": "0.14.0",
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
@@ -827,6 +827,54 @@
       }
     },
     {
+      "id": "progress-bar.basic",
+      "title": "Progress Bar",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Non-interactive indicator of a process advancing toward completion, using the native <progress> element or role=\"progressbar\" with aria-valuenow, and announcing completion through a separate live region rather than on every value change.",
+      "aliases": [
+        "progress bar",
+        "progress indicator",
+        "loading bar",
+        "loading indicator",
+        "upload progress",
+        "download progress",
+        "percent complete",
+        "indeterminate progress"
+      ],
+      "tags": [
+        "progress",
+        "progressbar",
+        "loading",
+        "status",
+        "live-region",
+        "reduced-motion"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a process the user started reports how far it has advanced toward a known end point (e.g., \"Uploading 3 of 8 files\", a download at 47%).",
+          "Use when a process the user started is running with no knowable end point, and a bar communicates that work is still underway (e.g., a form submitting, a report generating).",
+          "Use when the value advances on its own and the user cannot set, drag, or type it."
+        ],
+        "do_not_use_when": [
+          "Do not use when the user sets or changes the value by dragging or with arrow keys (use slider.basic).",
+          "Do not use when the value is a static measurement within a known range rather than progress toward completion, such as disk usage, storage quota, or battery level (use meter.basic).",
+          "Do not use when the indicator is a small glyph inside a button or panel that already carries its own label, added only to show that button or panel is working, such as a spinner inside a Save button while it submits (use spinner.basic).",
+          "Do not use when grey shapes stand in for the layout of the content itself, such as bars where lines of text will appear and a block where an image will load (use skeleton.basic).",
+          "Do not use when the bar shows position within playing media and the user can seek to a point in it (use slider.seek).",
+          "Do not use when the display shows which step of a multi-step sequence the user has reached (use stepper.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/progress-bar.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "select.native",
       "title": "Native Select",
       "pattern_type": "component",
@@ -909,6 +957,53 @@
       "default_variant": null,
       "source": {
         "path": "components/select.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "spinner.basic",
+      "title": "Spinner",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Indeterminate loading glyph that carries no semantics of its own, where the graphic is decorative and the control or region hosting it reports the wait through aria-busy and a separate live region.",
+      "aliases": [
+        "spinner",
+        "loading spinner",
+        "loading indicator",
+        "busy indicator",
+        "activity indicator",
+        "throbber",
+        "loader",
+        "button loading state"
+      ],
+      "tags": [
+        "spinner",
+        "loading",
+        "busy",
+        "status",
+        "live-region",
+        "reduced-motion"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a control the user activated stays busy long enough that the user would otherwise wonder whether it worked, and the wait has no knowable end point (e.g., a Save button submitting, a Sign in button authenticating).",
+          "Use when a region is fetching or replacing its content with no knowable end point, and the region keeps its place in the layout (e.g., a results panel reloading after a filter change).",
+          "Use when the button or region the indicator sits in already names what is loading, so the indicator itself needs no label."
+        ],
+        "do_not_use_when": [
+          "Do not use when the process reports how far it has advanced toward a known end point (use progress-bar.basic).",
+          "Do not use when the indicator has its own label naming the work and its own place in the layout, whether or not it reports a value, such as a labeled bar beneath \"Uploading episode files\" or a labeled ring for a sync that is running (use progress-bar.basic).",
+          "Do not use when grey shapes stand in for the layout of the content itself, such as bars where lines of text will appear and a block where an image will load (use skeleton.basic).",
+          "Do not use when several regions of one view would each show their own spinner at the same time (use skeleton.basic).",
+          "Do not use when the message reports the outcome of finished work rather than work still in progress (use toast.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/spinner.basic.md",
         "format": "markdown",
         "frontmatter": true
       }

@@ -8,6 +8,23 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.14.0 — 2026-07-30
+
+**Progress indicators arrive as a pair, split on composition rather than shape.**
+
+Two new patterns at 0.1.0. The boundary between them is the interesting part, and it is deliberately not the obvious one: shape does not decide which pattern applies. A progress bar is the labeled indicator for a piece of work; a spinner decorates something that is already labeled and has no label of its own. A determinate ring is therefore a progress bar, and a bar-shaped indeterminate loader inside a panel is still a progress bar, while a glyph inside a Save button is a spinner regardless of how it is drawn.
+
+- **`progress-bar.basic`** ("Progress Bar"), new pattern at 0.1.0. Covers both determinate and indeterminate bars. The native `<progress>` element is preferred, with `<div role="progressbar">` documented as the fallback for visual treatments the native element cannot express, since it is styled through three vendor-specific pseudo-element systems and offers no control over its indeterminate animation. Indeterminate means `aria-valuenow` is omitted entirely rather than set to `0`, which would report stalled progress instead of unknown progress. Announcements are the load-bearing requirement: the progress bar never carries `aria-live` itself, because a live region on the element announces every value change and interrupts the user's reading. A separate live region receives only the status messages the design defines plus completion.
+- **`spinner.basic`** ("Spinner"), new pattern at 0.1.0. The graphic is decorative — `aria-hidden="true"`, no role, no label, no text — and the loading state is carried by the control or region it sits in, plus a separate live region. This follows the more cautious of the two models in production: Primer documents that its spinner "isn't exposed to screen readers, and has no built-in announcement," so relying on the graphic to announce anything is treated as the failure mode rather than the norm. A control that becomes busy after activation uses `aria-disabled="true"` and never the native `disabled` attribute, which destroys focus and returns the user to the start of the document.
+
+**Announcement text is derived, not invented.** Both patterns require the announcement to borrow its words from the indicator's existing accessible name rather than authoring new prose, so what is announced matches what is on screen. A panel named "Recommendations" yields "Loading recommendations"; "Loading" alone is correct when there is no short name to borrow.
+
+**Reduced motion diverges between the two, deliberately.** A spinner replaces its animated graphic with visible text. A progress bar stops any looping animation, such as a barber-pole stripe or a sweeping fill, but keeps advancing its fill as the value changes, since value-driven movement is not the motion the preference is about. Neither indicator disappears, because a vanished indicator reads as a frozen process.
+
+**Six forward redirects seeded**, none of which resolve yet: `skeleton.basic`, `meter.basic`, `slider.basic`, `slider.seek`, `stepper.basic`, and the mutual pair between the two new patterns, which does resolve. `meter.basic` matters most — disk usage, storage quota, and battery level are `role="meter"`, not `progressbar`, and the APG carries a Meter pattern while documenting no progressbar or loading pattern at all.
+
+Neither pattern has a `qa-catalog.json` block yet; both are queued as the next derive batch.
+
 ## 0.13.0 — 2026-07-27
 
 **QA catalog: second re-derive batch — `accordion.basic`, `disclosure.basic`, `navigation-menu.dropdown`, `carousel.dots`, `carousel.thumbnails`, `menu.basic`.** No pattern `.md` changed — classification only. 127 rules become 87.
