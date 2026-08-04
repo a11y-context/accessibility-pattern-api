@@ -8,6 +8,20 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.15.0 — 2026-08-04
+
+**Foundations gains a tenth rule, `global.forced-colors`, and the three color rules that were silent about it now carry it.** No pattern `.md` changed.
+
+Windows High Contrast Mode was covered in exactly one place, `global.focus-states`, which requires a `forced-colors` override for focus indicators. Nothing owned the general case, and the other color rules said nothing at all. Forced colors is not a dark theme: the browser re-maps `background-color`, `border-color`, and `color` to a user-chosen system palette, removes `box-shadow`, and can drop background images. Anything whose meaning rested on those properties alone disappears, and the failure is invisible to every other check in the corpus, since the markup is correct and the contrast passes in the authored palette.
+
+- **New rule `global.forced-colors`** (scope: component, style), 7 Must Haves, 5 Don'ts, 5 Acceptance Checks. The load-bearing requirement is that an element distinguished from its surroundings only by `background-color` also carries a real `border` — that one covers progress fills against their tracks, selected rows, badges, chips, and custom form-control indicators in a single assertion. Where authored colors carry meaning the system palette erases, a `@media (forced-colors: active)` block restates the distinction using the CSS system color keywords, which the rule enumerates so authors do not have to look them up. `forced-color-adjust: none` is permitted only where the authored color is itself the information (a color-picker swatch, a chart series key, a brand preview); using it to preserve an ordinary palette overrides the colors the user chose and defeats the mode.
+- **`global.non-text-contrast`** gains a Must Have, a Don't, a snippet, and an Acceptance Check. This rule needed it most: a boundary carried by `background-color` alone does not merely lose contrast under forced colors, it disappears, and the old rule could be fully satisfied by a design that vanishes.
+- **`global.use-of-color`** gains a Must Have, a Don't, and an Acceptance Check, requiring the additional cue to be an icon, shape, border, or text rather than a second color treatment. A darker tint satisfies a grayscale check and still fails forced colors, which is the gap this closes.
+- **`global.text-contrast`** gains two Must Haves, a Don't, and an Acceptance Check covering the two ways text fails there: contrast established by a background image that gets dropped, and `forced-color-adjust: none` pinning authored text colors so the user's palette cannot apply. It gets no snippet, because the fix is a `background-color` fallback rather than a `forced-colors` block.
+- **`global.focus-states` is unchanged.** It already carried a Must Have, a Don't, the required `Highlight` override snippet, and an Acceptance Check. The new rule cross-references it rather than absorbing it; splitting a well-formed published rule to centralize one clause would have cost more than the duplication saves.
+
+Foundations now carries 10 rules. The `foundations` section of `qa-catalog.json` is not re-derived in this release; the new rule and the three amended ones are queued for the next derive batch.
+
 ## 0.14.0 — 2026-07-30
 
 **Progress indicators arrive as a pair, split on composition rather than shape.**

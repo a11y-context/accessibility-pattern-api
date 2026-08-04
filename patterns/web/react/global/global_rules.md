@@ -154,13 +154,17 @@ scope: [page, layout, component, style]
 - Text and images of text must have sufficient contrast against their background.
   - Normal-size text must meet a contrast ratio of at least 4.5:1.
   - Large-scale text (18pt regular, or 14pt bold) must meet a contrast ratio of at least 3:1.
+- Text placed over a background image also has a `background-color` behind it, so it stays legible when Windows High Contrast Mode drops the image. See `global.forced-colors`.
+- `forced-color-adjust: none` is not applied to text or its container, which would pin the authored text colors and prevent the user's palette from applying.
 
 ### Don'ts
 - Do not use color combinations for text that fall below 4.5:1 for normal text or 3:1 for large text.
+- Do not rely on a background image alone to establish the contrast behind text.
 
 ### Acceptance Checks
 - Normal text meets at least 4.5:1 contrast against its background.
 - Large-scale text meets at least 3:1 contrast against its background.
+- With forced colors active, all text remains legible, including text that sits over a background image.
 
 ---
 
@@ -176,13 +180,28 @@ scope: [page, component, style]
   - In other words, a component's border or background color must contrast at least 3:1 against the page's background color.
 - Meaningful graphical objects must have a contrast ratio of at least 3:1 against adjacent colors when their appearance is needed to understand the content.
   - This includes meaningful icons, simple charts, data marks, indicators, and other non-decorative graphics.
+- A boundary carried by `background-color` alone is restated under `@media (forced-colors: active)`, since Windows High Contrast Mode replaces author backgrounds and the boundary disappears rather than merely losing contrast. See `global.forced-colors`.
 
 ### Don'ts
 - Do not use very low-contrast borders, outlines, or icons when they are necessary to identify a control or its current state.
+- Do not verify contrast only in the authored palette. A boundary that passes 3:1 can still vanish entirely under forced colors.
+
+### Snippets
+
+A boundary painted as a background fill needs a real border under forced colors, since the fill and its surroundings collapse to the same system color:
+
+```css
+@media (forced-colors: active) {
+  .control-boundary {
+    border: 1px solid CanvasText;
+  }
+}
+```
 
 ### Acceptance Checks
 - Visible UI controls and authored state indicators needed for perception meet at least 3:1 contrast against adjacent colors.
 - Meaningful icons and other non-text graphics needed for understanding meet at least 3:1 contrast against adjacent colors.
+- With forced colors active, every boundary and indicator that was carried by a background fill is still perceivable.
 
 ---
 
@@ -197,12 +216,76 @@ scope: [component, style]
 - Do not use color as the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element (WCAG 1.4.1).
 - When a component renders a meaningful state visually (e.g., selected, active, current, invalid, pressed), that state is distinguishable by something in addition to color, such as an icon, checkmark, shape, underline, or text.
   - This is the visual counterpart to exposing the state programmatically. A component may satisfy `aria-selected` yet still fail 1.4.1 if selection is shown by a background tint alone.
+- The additional cue is an icon, a shape, a border, or text rather than a second color treatment, so that it survives Windows High Contrast Mode. See `global.forced-colors`.
+  - Forced colors is the reason this rule has teeth beyond grayscale: a state shown by a background tint does not merely lose contrast there, it is repainted with the system color and disappears.
 
 ### Don'ts
 - Do not signal selection, validity, current-ness, or availability by color alone.
+- Do not satisfy this rule with a second color treatment, such as a darker tint or a colored background swap, which fails under forced colors exactly as the first one does.
 
 ### Acceptance Checks
 - Every meaningful state the component renders is perceivable without relying on color (verify in grayscale).
+- With forced colors active, every meaningful state is still distinguishable, and the cue carrying it is not a background tint.
+
+---
+
+## Rule: Forced Colors (Windows High Contrast Mode)
+
+```yaml
+id: global.forced-colors
+scope: [component, style]
+```
+
+Windows High Contrast Mode replaces the author's palette with a small set of user-chosen system colors. It is not a dark theme: `background-color`, `border-color`, and `color` are re-mapped, `box-shadow` is removed, and some background images are dropped. Anything whose meaning rested on those properties alone disappears.
+
+### Must Haves
+- An element distinguished from its surroundings only by `background-color` also carries a real `border`, so its boundary survives when backgrounds are flattened.
+  - This covers progress fills against their tracks, selected rows, badges, chips, pills, custom form-control indicators, and any painted state layer.
+- Where the authored colors carry meaning the system palette would erase, pair the styling with a `@media (forced-colors: active)` block that restates the distinction using CSS system color keywords.
+  - The keywords are `Canvas`, `CanvasText`, `LinkText`, `VisitedText`, `ActiveText`, `ButtonFace`, `ButtonText`, `ButtonBorder`, `Field`, `FieldText`, `Highlight`, `HighlightText`, `SelectedItem`, `SelectedItemText`, `Mark`, `MarkText`, `GrayText`, `AccentColor`, and `AccentColorText`.
+- `box-shadow` is not the only carrier of a boundary, a state, or an elevation cue that the user needs, since shadows are removed under forced colors.
+- Icons drawn as a CSS `background-image` are paired with a forced-colors fallback, such as an inline SVG or a text alternative.
+  - Inline SVG painted with `fill: currentColor` or `stroke: currentColor` inherits the system text color and needs no override.
+- `forced-color-adjust: none` is applied only to elements whose authored colors are themselves the information, such as a color-picker swatch, a chart series key, or a brand preview.
+- Focus indicators follow `global.focus-states`, which carries its own required `forced-colors` override.
+
+### Don'ts
+- Do not convey state, selection, or a boundary with `background-color` alone.
+- Do not rely on `box-shadow` for a border, a ring, or any cue that carries meaning.
+- Do not apply `forced-color-adjust: none` broadly to preserve a design's ordinary palette. It overrides the colors the user chose and defeats the mode.
+- Do not hard-code a color value inside a `@media (forced-colors: active)` block. The system keywords follow the user's chosen theme; a literal does not.
+- Do not treat a component as verified because it reads correctly in a dark theme. Forced colors replaces the palette outright and removes shadows.
+
+### Snippets
+
+An element distinguished only by `background-color` vanishes when the palette is replaced. Restate the distinction with system colors, and give the container a border so its bounds survive:
+
+```css
+@media (forced-colors: active) {
+  .indicator-track {
+    border: 1px solid CanvasText;
+  }
+
+  .indicator-fill {
+    background: Highlight;
+  }
+}
+```
+
+Opting out, for the narrow case where the authored color is the content itself:
+
+```css
+.swatch {
+  forced-color-adjust: none;
+}
+```
+
+### Acceptance Checks
+- With Windows High Contrast Mode active, or emulated via a browser dev-tool forced-colors setting, every meaningful boundary, state, and indicator remains visible.
+- Elements that were distinguished by background color alone remain distinguishable from their surroundings.
+- No meaningful element becomes invisible once shadows are removed.
+- Colors inside `forced-colors` blocks come from the system keyword palette rather than being hard-coded.
+- `forced-color-adjust: none` appears only where the authored color is itself the information.
 
 ---
 
