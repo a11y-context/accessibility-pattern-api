@@ -13,6 +13,8 @@ Browse all accessibility patterns available for Web / React.
 | Component | Summary |
 |-----------|---------|
 | [Accordion](./components/accordion.basic.md) | A set of show/hide sections with heading-wrapped buttons controlling associated panels via aria-expanded (and optionally aria-controls / region). |
+| [Avatar](./components/avatar.basic.md) | Image, initials, or glyph standing for a person or entity, where the accessible name identifies who is represented and stays the same whichever branch of the fallback chain renders. |
+| [Badge](./components/badge.basic.md) | Small non-interactive indicator annotating a host element with a count or a status, where the meaning is folded into an accessible name and read on arrival rather than announced on change. |
 | [Button (Basic)](./components/button.basic.md) | Native button that triggers an action. Supports text-only, icon+text, and icon-only labeling patterns. |
 | [Button (Toggle)](./components/button.toggle.md) | Two- or three-state button that toggles between pressed and not pressed using aria-pressed. |
 | [Carousel (Dots)](./components/carousel.dots.md) | Horizontally-advancing carousel (aka hero or marquee carousel) with 'dot' navigation, prev/next buttons, and pause behavior. |
