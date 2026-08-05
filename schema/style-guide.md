@@ -82,6 +82,20 @@ Sections appear in this exact order with these exact H2 names:
 
 The Pattern ID line and Summary paragraph satisfy the RAG chunking requirement (canonical ID + summary in the first lines of every page).
 
+### Use When and Do Not Use When — the selection pair
+
+These two sections exist for one job: helping a retrieving agent **pick this pattern, or leave for a better one**. They are routing, not description. How the component behaves, what it must contain, and what it must never do belong to Must Haves, Don'ts, and Customizable — never here.
+
+Both sections are extracted into `patterns.json` as `selection_excerpt`, and in retrieval they are frequently *all* a model sees of the pattern. Every bullet spent describing behavior is a bullet not spent helping the model choose.
+
+The test for any bullet in either section: *could an agent decide, from this sentence alone, whether to keep reading this pattern or go elsewhere?* If the sentence only makes sense once the pattern has already been chosen, it is a requirement wearing a selection bullet's clothes. Move it.
+
+Three failures, all observed in review:
+
+- **A requirement stated as a selection criterion.** "Use when the indicator is read where it sits, and the user does not need to be told before arriving there." That is the no-live-region requirement. It selects nothing.
+- **A Must Have stated as a selection criterion.** "Use when the artwork falls back from a photograph to initials or a generic glyph." That is the name-stability requirement, and an agent cannot use it to choose.
+- **A negative capability instead of a redirect.** "Use when the representation does not activate anything on its own." An agent cannot select on an absence. The matching `Do Not Use When` redirect already draws that line, and draws it usefully by naming where to go instead.
+
 ### Use When
 
 - 1–4 bullets. Every bullet starts with "Use when".
@@ -93,7 +107,8 @@ The Pattern ID line and Summary paragraph satisfy the RAG chunking requirement (
 
 - Every bullet starts with "Do not use when".
 - Each bullet carries a redirect to the alternative in a trailing parenthetical with a backticked pattern ID: `(use \`button.toggle\`)`. This redirect mechanism prevents AI agents from blending sibling patterns.
-- Redirects may point to patterns that do not exist yet (`combobox`, `dialog.alert`, `menu.menubar`). Encouraged — it seeds the boundary map and doubles as an authoring backlog.
+- **One boundary per bullet, carrying every applicable redirect.** When several situations are the same distinction wearing different clothes, collapse them: `(use \`button.basic\` or \`link.basic\`)` in one bullet, not three bullets for three flavors of "this one is interactive". Selection budget is small; spend it on distinct boundaries.
+- Redirects may point to patterns that do not exist yet (`combobox`, `dialog.alert`, `menu.menubar`). Encouraged — it seeds the boundary map and doubles as an authoring backlog. A forward reference is a commitment, so name it to John when it is introduced and add it to the improvement-notes D5 backlog in the same turn; an undeclared one is an invented pattern nobody agreed to write.
 
 ### Must Haves
 
@@ -168,25 +183,89 @@ Every Golden Pattern section opens with the same single-sentence framing line, o
 
 This line makes the contract explicit for human readers landing on a pattern page (hiring panel reviewers, contributors, anyone clicking through from the rendered docs site): the snippet demonstrates the behavior contract, not a production-realistic template. It lives outside the code fence so it does not consume retrieval tokens inside the snippet itself.
 
-Rules:
+#### The shape
 
-- **Ideal HTML / semantic structure.** Use the standard element or canonical ARIA composition. No bespoke wrappers.
-- **Minimal JSX functionality — just enough to convey the UX and any dynamic behavior.** A state hook to show toggle behavior, an `onClick` with `alert()` to show the trigger fires, a conditional render to show what changes at runtime. The agent should be able to see what changes when the user interacts.
-- **No styling except what is required for understanding the behavior.** Strip Tailwind, CSS modules, design-system classes, and color values. Keep only structural styling that carries behavioral meaning (`aria-hidden` on icon spans, `sr-only` for visually-hidden text). The Golden Pattern showcases semantic and behavioral correctness, not visual design.
-- **Use placeholders for things that would be real in production.** `[icon]` text or a `<span aria-hidden="true">` instead of importing an icon library; `alert()` or `console.log()` instead of real handlers; `// fetch data here` instead of a real fetch call.
-- **Multiple short variants in one snippet are encouraged** when they belong to the same pattern — text-only, icon+text, and icon-only buttons in one Golden Pattern is better than three pattern files. Each variant should be minimal.
+Three slots, in this order. Nothing else appears in the fence.
 
-Code conventions:
+```jsx
+"use client";                    // only when state, refs, effects, or handlers are used
 
-- Open with `"use client";` when the component has state, refs, effects, or event handlers; omit for stateless demos. The directive is a structural signal for Next.js App Router consumers (where Server Components are the default and using hooks without `"use client"` is a build error). Vite, Remix, CRA, and other consumers strip it.
-- **No React import statement.** Omit `import * as React from "react"` and `import { createPortal } from "react-dom"`. Hook and API names appear in the body using named-import style (`useState`, `useRef`, `useEffect`, `useCallback`, `useLayoutEffect`, `useId`, `useMemo`, `useContext`, `createContext`, `createPortal`) — never with the `React.` namespace prefix. The LLM consumer and any modern React engineer know the imports; the boilerplate adds noise without information.
-- One exported named function component. Name it `XDemo` for showcase-style demos (`SwitchDemo`, `ButtonBasicDemo`) or a reusable component name when the pattern IS a reusable component (`ModalDialog`, `CollectionRow`, `AccountMenu`).
-- Demo data as `const` arrays at the bottom of the block (`DEFAULT_ITEMS`, `ITEMS`) with realistic streaming/ecommerce-flavored content (show titles, products, channels). Realistic data teaches the AI what slots the pattern fills.
-- Layout-dependent patterns may use inline `style` objects for positioning and visible boundaries only — no design-system styling.
+const srOnly = { ... }           // slot 2 — constants and helpers, minimal
+export function Pattern(props)   // slot 1 — the export, named for the pattern
+function helper()                // slot 2
+function PatternExamples()       // slot 3 — optional; see the gate below
+```
+
+**Slot 1 is mandatory and singular.** Exactly one export, named for the pattern: `badge.basic` exports `Badge`, `avatar.basic` exports `Avatar`. That export is what an agent lifts into a codebase, and its name is how the agent knows it found the right thing. Use the standard element or canonical ARIA composition inside it; no bespoke wrappers.
+
+#### Does the pattern need Examples at all?
+
+Ask: **does any Must Have mention something the component does not contain?**
+
+- `badge.basic` — "its text joins the *control's* accessible name." Yes, so Examples.
+- `avatar.basic` — "when a visible name sits *beside* the avatar." Yes, so Examples.
+- `switch.basic`, `button.basic`, `combobox.autocomplete`, `dialog.basic` — every requirement is internal. No, so the export stands alone.
+
+Most patterns are export-only. Reach for slot 3 only when a requirement points outward.
+
+#### Examples are illustrative, not exhaustive
+
+Include one example per **distinct requirement**, not per situation the component appears in. `badge.basic` carries three because there are three different answers to "where does the accessible name live," not because badges appear in three places. They appear in dozens.
+
+The test: **remove an example. Does a requirement stop being shown? If not, it was decoration.**
+
+Two or three cases is typical; more than four usually means the pattern is too broad or the examples restate each other. Err toward fewer. An exhaustive-looking list reads to an agent as a *closed* set of permitted compositions, which does more damage than showing less.
+
+**A Customizable option earns an example when implementing it wrong would break a requirement.** Shape, size, placement, and colour never need one — an agent cannot get those wrong in a way that matters. A naming composition or a fallback mechanism often does, because there is a correct way to build it and a plausible way to miss: the visually-hidden alternative to `role="img"` fails outright if the hidden text is nested inside the `aria-hidden` subtree, and nothing on the page says so.
+
+**Mark such an example as an alternative, not an addition.** Open its comment with "Alternative:" or "Equivalent alternative:" and say what it replaces. Without that, an agent reading two compositions of the same thing may build both, and a pattern that names itself twice is worse than one that names itself the second-best way.
+
+#### Props versus Examples
+
+| the variation changes | where it goes | example |
+|---|---|---|
+| what the component renders | a prop on the export | `decorative` on `Avatar` flips `alt=""` and `alt={name}` |
+| how or where it attaches | a case in Examples | a badge inside a button, versus over an avatar |
+
+A prop that cannot change output is documentation wearing an API's clothes. `<Badge attachment="inside-control" />` does nothing, and it teaches an agent that setting a prop discharges an obligation that actually lives in the markup tree.
+
+**Props on the export; literals in Examples.** Example markup takes no invented prop shapes, because the literal duplication is often the teaching: seeing "Jane Okonkwo" in both the avatar and the adjacent text shows the redundancy that makes it decorative, which `{author.name}` twice conceals. Keep a prop in an example only where it drives a branch the pattern requires, such as the count deciding whether a badge renders at all.
+
+#### Invent no other component names
+
+Two names per fence, maximum: the export, and `<Pattern>Examples`. Every additional name is a retrieval hazard, because the corpus is chunked and an agent can receive a chunk holding only that function with nothing marking it as illustration. `ChannelRow` collides with the real `collection-row.basic`; `NotificationsButton` sits beside `button.basic`. Prefix the container (`BadgeExamples`, not `Examples`) so an excerpted chunk still identifies itself. Naming a host after the pattern is worse still: a `CountBadge` that renders a whole `<button>` is a lie in the name.
+
+`XDemo` naming survives in 17 older patterns (`SwitchDemo`, `ButtonBasicDemo`, `SaveButtonDemo`). It is legacy, not a model to copy. `progress-bar.basic` shows the older multi-variant habit at its best (`UploadProgress` and `ReportProgress` both keep the noun); `spinner.basic` shows it at its worst (`SaveButton`, `PanelLoading` keep nothing).
+
+#### Comments and state both have to earn their place
+
+**A comment is justified only when it states something the code cannot show** — browser behavior, a spec constraint, or why a removable-looking thing is load-bearing. A comment that narrates the code is bloat.
+
+> Earns it: `// role="img" makes descendants presentational: the initials are never announced.`
+>
+> Does not: `// One name prop threaded through every branch, so the fallbacks cannot drift.`
+
+**State, refs, and effects earn their place the same way.** Include them where they demonstrate *required* behavior — focus restoration, `aria-expanded` sync, an image `onError` fallback. State that exists only to make something interactive for a viewer is harness, and harness belongs in the lab.
+
+#### Forbidden
+
+No `Demo` suffix. No anti-pattern or deliberately-wrong variants. No harness readouts or toggles. No invented component names. No React import statements. No test IDs. No CSS frameworks, styled-components, or external dependencies including icon libraries. **No porting from the lab in either direction.**
+
+The lab is a separate artifact with a separate job: it needs toggles, deliberate failures, and readouts because it must be *testable*, and it should deliberately not share component names with the Golden Pattern so a chunk from either is unambiguous. Traffic is one-directional and only at authoring time — write the Golden Pattern, then build the lab from it. A wrong Golden Pattern is fixed by hand, never by copy-paste back.
+
+#### Size
+
+Soft ceiling around 120 lines; the corpus median is 97. Running long usually means the pattern is doing two jobs and wants splitting.
+
+#### Code conventions
+
+- Open with `"use client";` when the component has state, refs, effects, or event handlers; omit it otherwise. The directive is a structural signal for Next.js App Router consumers, where Server Components are the default and using hooks without it is a build error. Vite, Remix, and CRA strip it.
+- **No React import statement.** Omit `import * as React from "react"` and `import { createPortal } from "react-dom"`. Hook and API names appear in named-import style (`useState`, `useRef`, `useEffect`, `useCallback`, `useLayoutEffect`, `useId`, `useMemo`, `useContext`, `createContext`, `createPortal`), never with the `React.` prefix.
+- **No styling except what carries behavioral meaning.** Strip Tailwind, CSS modules, design-system classes, and color values. Keep `aria-hidden` on icon spans and `sr-only` for visually-hidden text. Inline `style` objects are permitted for positioning and visible boundaries only, such as an overlay anchor or a border that must survive forced colors.
+- **Placeholders for anything that would be real in production.** `[icon]` text or `<span aria-hidden="true">` instead of an icon library; `alert()` or `console.log()` instead of real handlers; `// fetch data here` instead of a real fetch.
 - Visually-hidden helpers are inlined as `srOnly` style objects with a comment tying them to the global utility: `// Visually-hidden styles matching the global sr-only utility (global.sr-only).`
-- No CSS frameworks, no styled-components, no external dependencies — including icon libraries.
-- Stable prefixed kebab-case IDs (`acc-btn-overview`, `color-select-listbox`) in single-instance demos; `useId()` when the component is written as reusable.
-- Comments only where they teach an accessibility decision: `{/* Live region is always mounted */}`, `// Capture the opener at the moment we open (so focus can be restored on close).`. No TODOs, no commented-out code, no framework tips unrelated to accessibility.
+- Where a `const` array of demo data is still warranted, give it realistic streaming or ecommerce content (show titles, products, channels) so the data teaches what slots the pattern fills.
+- Stable prefixed kebab-case IDs (`acc-btn-overview`, `color-select-listbox`) for single instances; `useId()` when the component is written as reusable.
 - Fence language: ```jsx.
 
 ### Acceptance Checks
