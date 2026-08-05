@@ -8,6 +8,18 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.23.0 — 2026-08-05
+
+**A segmented code field, where every requirement follows from one decision: the boxes are paint, not structure.**
+
+- **New pattern `pin-input.basic` ("PIN Input")**, beta at 0.1.0. The fixed-length numeric code entered across segmented boxes, covering parental controls, profile locks, purchase confirmation, and out-of-band verification codes. The requirement implementations miss is that the expected length has to reach assistive technology as text: a sighted user counts four boxes and knows what is being asked, and nobody else gets that from the rendering, so the count lives in a description rather than in the box count. Everything else follows from building the field as one `<input>` holding the whole code, with the boxes and any group separator as `aria-hidden` presentation. Typing advancing, Backspace retreating, arrow keys moving between boxes, and paste filling the whole field stop being re-implemented key handling and become native caret behavior. One `<input>` per box is the anti-pattern the pattern exists to prevent: each box announces as an unlabeled text field, and the control consumes one tab stop per digit.
+- **Masking is real, not painted, and assistive-technology testing is what caught it.** The draft masked the value by rendering bullet glyphs into the presentational boxes while the input stayed `type="text"`. VoiceOver read the actual digits aloud while the screen showed dots, which inverts who the masking protects: the viewer keeps shoulder-surfing protection while the listener has their PIN spoken through the speakers. The field now carries `type="password"` while masked and `type="text"` when revealed, and a Don't names the painted-glyph version specifically.
+- **1.3.5 Identify Input Purpose does not bind here; 3.3.8 does.** Identify Input Purpose is scoped to inputs collecting information about the user, and its normative token list carries no PIN, passcode, or one-time code. `one-time-code` is a valid HTML autofill token and is absent from WCAG's 53. What does bind is Accessible Authentication (Minimum): remembering a PIN is a cognitive function test, and the Understanding document is explicit that blocking copy and paste, or blocking password managers from filling the field, fails the criterion unless an alternative is provided. Paste working across the whole field is therefore a conformance requirement rather than a convenience, and `autocomplete` is omitted on a stored PIN rather than set to `"off"`, which would suppress the autofill the criterion depends on.
+- **The group separator is decorative, and now says so against a sibling.** With `separator.basic` shipped in 0.21.0, a dash between digit groups has a plausible-looking wrong answer. It is presentation inside a single field, so it never takes `role="separator"` or `<hr>`, never enters the value, and never appears in the caret path.
+- **Forward reference seeded:** `form.error-summary`, for form-level error collection and submit-time focus handling. Already referenced in production by `checkbox.basic` and `checkbox.group` without ever being logged, so the backlog entry covers all three.
+
+`qa-catalog.json` is unchanged: the new pattern is queued for a derive batch.
+
 ## 0.22.0 — 2026-08-05
 
 **Two small display components that carry status, split on the mechanism rather than the host. The style guide gains a full Golden Pattern strategy and a rule about what the selection sections are for.**
