@@ -102,6 +102,8 @@ The heart of the document. Non-negotiables for WCAG 2.2 AA conformance.
 - **All Must Haves are required.** Do not use "(required)" inline labels — they implicitly deprioritize the rest.
 - **Phrase as imperatives or declaratives.** "Use", "Ensure", "Provide", "Render", or flat statements of fact ("The switch has `role='switch'`."). Do **not** use "may", "should", or "recommended when" in Must Haves — those phrasings belong in Customizable.
 - **Brief conditionality is fine.** "When X, do Y" or "If X (rare case), do Y" are acceptable when the requirement remains firm under the condition.
+- **State the right answer, not the wrong ones.** A Must Have says what the implementation does. A requirement phrased as a prohibition ("The separator is not focusable", "`<hr>` is not used inside `<ul>`") is a Don't wearing a Must Have's clothes, and it belongs in Don'ts. The test: if the bullet reads naturally with "Do not" in front of it, move it.
+- **One right answer per branch.** Where several implementations would conform, the Must Have names the one an agent should reach for by default, and the alternatives go to Customizable. A Must Have offering four equivalent routes gives a generating agent nothing to choose between, which is the failure mode this section exists to prevent.
 - **One requirement per bullet.** Conditionals and elaborations go in nested sub-bullets, not run-on sentences. Maximum nesting depth: 2. Sub-bullets are used for exactly two purposes: **elaboration** of the parent bullet or **carve-out exception** to the parent. Parallel items at the same logical level are flat siblings.
 - **Every element, attribute, and value in backticks**, spelled exactly as in spec: `aria-expanded="true"`, `<button>`, `tabindex="0"`.
 - **Quote exact attribute–value pairs** when the value matters: `aria-haspopup="listbox"`, not "an appropriate haspopup value".
@@ -152,6 +154,7 @@ Failure modes — the anti-pattern catalog. Target the mistakes AI agents and de
 
 - Section heading remains `## Don'ts` (the canonical noun-plural).
 - Bullets use "Do not" — not "Don't".
+- **A Don't earns its place by adding something the Must Haves do not already say.** The negation of a Must Have is not a Don't; it is the same rule twice, and it inflates the section until the real failure modes are buried. A bullet qualifies when it names a mistake the requirements do not obviously rule out (a wrong attribute that looks right, a technique that behaves differently from the one it resembles), when it carries diagnostic detail that identifies the symptom ("announced as 'Delete Delete button'"), or when it corrects a plausible misreading. If removing a Don't would lose no information, remove it.
 - Where a Don't has a conditional rescue, nest it as a sub-bullet explaining the acceptable case.
 - For any pattern that toggles visibility, always include the state/visibility desync don't (see Boilerplate Formulas below).
 

@@ -458,3 +458,73 @@ requestAnimationFrame(() => returnTarget.current?.focus());
 - No focusable control has `aria-hidden="true"` on itself or on any ancestor.
 - Content that has been dismissed is absent from the accessibility tree as soon as it is unavailable, not after its exit animation completes.
 - Every change communicated by movement is also available without perceiving that movement.
+
+---
+
+## Rule: Icons
+
+```yaml
+id: global.icon
+scope: [component, style]
+```
+
+An icon is meaningful when the user needs it to understand or operate the interface and no text beside it carries the same meaning. Everything else is decorative, which is most icons. The two are marked up in opposite ways, so answer this first.
+
+### Must Haves
+- Hide a decorative icon from assistive technology. Inline `<svg>` and icon-font elements take `aria-hidden="true"`; an `<img>` takes an empty `alt=""`.
+- Expose a meaningful icon one of two ways: name the graphic, or supply its meaning as text.
+  - To name it, give the graphic `role="img"` and `aria-label` or `aria-labelledby`. ARIA requires a label on `role="img"`.
+  - To supply text, place the equivalent text beside the icon, visually hidden when it should not be seen (see `global.sr-only`), and hide the icon.
+- For an icon-only control, put the accessible name on the `<button>` or `<a>` and leave the graphic decorative.
+- Name what the control does or what the icon means, not what it depicts (e.g., "Add to my list", not "Plus sign").
+- A meaningful icon carries the non-text contrast requirement in `global.non-text-contrast`. A decorative one does not.
+
+### Don'ts
+- Do not name both a control and the icon inside it. The control is announced with its name repeated (e.g., "Delete Delete button").
+- Do not hide an inline `<svg>` with `role="presentation"` or `role="none"`. Unlike `aria-hidden="true"`, they drop the element's own role but leave its `<title>` and text descendants in the accessibility tree.
+- Do not give a decorative graphic a `<title>` child, which names it.
+- Do not use an emoji or an icon-font glyph as a meaningful icon without a text alternative. Emoji are announced by their Unicode name (a flame reads as "fire" where "trending" was meant), and icon-font glyphs read as private use area characters or as nothing.
+
+### Snippets
+
+Decorative, because the adjacent text already carries the meaning:
+
+```jsx
+<button type="button">
+  <span aria-hidden="true">[download-icon]</span>
+  Download
+</button>
+```
+
+Icon-only control. The name lives on the control, and the graphic stays decorative:
+
+```jsx
+<button type="button" aria-label="Add to my list">
+  <span aria-hidden="true">[plus-icon]</span>
+</button>
+```
+
+Meaningful standalone icon, where no text nearby carries the status. Either route is correct, and the second one hides the graphic because the text has taken over the meaning:
+
+```jsx
+{/* Name the graphic. */}
+<svg role="img" aria-label="Downloaded" width="16" height="16" viewBox="0 0 16 16">
+  <path d="M2 8l4 4 8-8" fill="none" stroke="currentColor" strokeWidth="2" />
+</svg>
+
+{/* Or supply the meaning as text, which makes the graphic decorative. */}
+<span>
+  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+    <path d="M2 8l4 4 8-8" fill="none" stroke="currentColor" strokeWidth="2" />
+  </svg>
+  <span className="sr-only">Downloaded</span>
+</span>
+```
+
+### Acceptance Checks
+- Icons the user does not need, and icons whose meaning is already in adjacent text, are absent from the screen reader's output.
+- Every icon the user does need is announced with its meaning.
+- No control is announced with its name repeated.
+- Icon-only controls are announced with a name describing the action, not the shape of the glyph.
+- Controls that differ only by their icon are announced with different names.
+- No announcement contains an icon font glyph, a private use area character, or an emoji name standing in for a meaning.
