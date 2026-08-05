@@ -1,7 +1,7 @@
 {
   "stack": "web/react",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.20.0",
+  "catalog_revision": "0.21.0",
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
@@ -962,6 +962,50 @@
       }
     },
     {
+      "id": "separator.basic",
+      "title": "Separator",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Static line separating sections of content, rendered as an hr and hidden from assistive technology unless the line itself is the only thing marking the boundary.",
+      "aliases": [
+        "divider",
+        "horizontal rule",
+        "hr",
+        "rule",
+        "hairline",
+        "section break",
+        "thematic break",
+        "vertical divider",
+        "list divider",
+        "menu divider"
+      ],
+      "tags": [
+        "separator",
+        "divider",
+        "thematic-break",
+        "structure",
+        "semantics"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a visible line marks a break between sections of content (e.g., between entries in a feed, or between groups of settings on a preferences screen).",
+          "Use when a line separates groups of items or controls inside a container (e.g., separating destructive actions from the rest of a menu)."
+        ],
+        "do_not_use_when": [
+          "Do not use when the divider can be moved by the user to resize the regions on either side of it, which is a focusable widget with a value and a keyboard model rather than a static line (use splitter.basic).",
+          "Do not use when the line is a border belonging to a single element, such as a card edge, an input underline, or a rule between table cells. That is styling on that element rather than a break between two things, and it needs no separator semantics."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/separator.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "spinner.basic",
       "title": "Spinner",
       "pattern_type": "component",
@@ -1004,6 +1048,53 @@
       "default_variant": null,
       "source": {
         "path": "components/spinner.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "splitter.basic",
+      "title": "Splitter",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Moveable divider between two panes that changes their relative size, using a focusable role=\"separator\" with aria-valuenow, aria-controls, and arrow-key movement.",
+      "aliases": [
+        "split panel",
+        "split pane",
+        "split view",
+        "window splitter",
+        "splitter bar",
+        "resizable panes",
+        "pane divider",
+        "resize handle",
+        "drag handle",
+        "gutter",
+        "sash"
+      ],
+      "tags": [
+        "splitter",
+        "resizable-panes",
+        "window-splitter",
+        "drag-alternative",
+        "keyboard"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a moveable divider lets the user change the relative size of two adjacent panes (e.g., an episode list beside an episode detail view, or a player beside a live chat panel).",
+          "Use when a divider moves between a small set of layout positions rather than any value in a range (e.g., a three-stop divider for left pane only, both panes, and right pane only)."
+        ],
+        "do_not_use_when": [
+          "Do not use when the divider is a static line the user cannot move, which is the common case for anything a design system calls a separator or divider (use separator.basic).",
+          "Do not use when the divider has only two positions, expanded and collapsed, which is a show/hide control rather than a position with a value (use disclosure.basic for the toggle, and separator.basic for the line beside it).",
+          "Do not use when the control sets a value in the content rather than a layout size, such as a volume level, a playback position, or a price filter (use slider.basic).",
+          "Do not use when the two regions are resized by a control that is not positioned between them, such as a button in a toolbar that expands a panel (use disclosure.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/splitter.basic.md",
         "format": "markdown",
         "frontmatter": true
       }
