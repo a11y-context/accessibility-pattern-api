@@ -1,10 +1,28 @@
-# accessibility-pattern-api
+# A11y Context
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-A structured corpus of production-ready accessibility patterns for modern UI frameworks. Each pattern provides prescriptive guidance, a golden implementation, and acceptance checks — ready for AI context injection, design system documentation, or direct developer reference.
+A structured corpus of production-ready accessibility patterns, written to be retrieved by AI coding agents at the moment they generate code. Every pattern carries prescriptive Must Haves, a golden implementation, and acceptance checks, so an agent can apply it without the developer knowing the underlying rules.
 
-The live site: [a11y-context-project.vercel.app](https://a11y-context-project.vercel.app)
+Microsoft found that AI-generated UI passes accessibility checks roughly 12% of the time. This corpus exists to change that upstream, at authoring time, rather than catching it in an audit months later.
+
+**Live site: [a11y-context-project.vercel.app](https://a11y-context-project.vercel.app)**
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/pattern-page-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/pattern-page-light.png">
+  <img alt="The Accordion pattern page, showing the agent selection criteria followed by the Must Haves: native button semantics, heading-wrapped controls, aria-expanded state, and keyboard behavior." src="docs/pattern-page-light.png">
+</picture>
+
+## What's in it
+
+| Stack | Status | Count |
+|---|---|---|
+| Web / React | Published | 23 patterns + Foundations |
+| iOS / SwiftUI | Published | 13 patterns + Foundations |
+| Android / Compose | Taxonomy only | — |
+
+Patterns are consumed three ways: bundled with the [skill](https://github.com/a11y-context/a11y-context-skills), fetched over HTTP from the live site, or retrieved through the [MCP server](https://github.com/a11y-context/accessibility-pattern-mcp). The selection logic lives in the skill; only the retrieval step changes.
 
 ---
 
@@ -12,14 +30,14 @@ The live site: [a11y-context-project.vercel.app](https://a11y-context-project.ve
 
 ```
 /patterns                    ← source of truth for all content
-  /web/react                 ← Web / React corpus
+  /web/react                 ← Web / React corpus (published)
     catalog-meta.json        ← hand-edited top-level catalog metadata
     patterns.json            ← generated catalog (see "patterns.json is generated" below)
     component-gallery.md     ← generated table of patterns
     /components              ← one .md file per component pattern
     /global                  ← cross-cutting rules (Foundations)
-  /android                   ← Android Compose (stub)
-  /ios                       ← iOS SwiftUI (stub)
+  /ios/swiftui               ← iOS / SwiftUI corpus (published, same layout)
+  /android                   ← Android Compose (taxonomy only, no patterns yet)
 
 /schema
   pattern-template.md        ← canonical pattern format
