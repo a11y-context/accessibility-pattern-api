@@ -82,23 +82,3 @@ struct ButtonBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each button exposes the button trait (VoiceOver reads the name, then "Button").
-- Icon-only and icon+text buttons expose a single button element; the icon is not surfaced as its own labeled element.
-
-**VoiceOver**
-- Each button speaks a name that matches its purpose; an icon-only button speaks its `.accessibilityLabel` (e.g., "Open settings"), never silence or "button" alone.
-- No button's spoken name contains the word "Button".
-- Buttons that share visible text (a repeated "Edit") each speak a distinct name.
-- Double-tapping a button performs its action; a disabled button is announced as dimmed and does not activate.
-
-**Switch Control & Full Keyboard Access**
-- Every enabled button is reachable and activatable via Switch Control and a hardware keyboard; a disabled button is skipped by focus.
-
-**Dynamic Type**
-- Button text scales with Dynamic Type and stays fully visible (no clipping or truncation) at accessibility text sizes.

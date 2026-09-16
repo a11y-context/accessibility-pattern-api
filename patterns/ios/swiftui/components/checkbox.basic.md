@@ -98,25 +98,3 @@ struct CheckboxToggleStyle: ToggleStyle {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each checkbox is a single accessible element built on a `Toggle`. VoiceOver announces the switch trait (SwiftUI has no native checkbox trait) together with a Checked or Unchecked value.
-- A checkbox group is a container that announces its group label when focus first enters it.
-
-**VoiceOver**
-- Each checkbox speaks its label and its current value as "Checked" or "Unchecked", not "On" or "Off".
-- Double-tapping a checkbox flips it and the announced value updates.
-- Moving focus into a group speaks the group label before the first checkbox.
-
-**Switch Control & Full Keyboard Access**
-- Each checkbox is reachable and togglable via Switch Control and a hardware keyboard, with the value change announced.
-
-**Dynamic Type**
-- Checkbox labels scale with Dynamic Type and stay fully visible; the box glyph scales alongside the label rather than clipping.
-
-**Visual**
-- Checked and unchecked states differ by the box glyph (empty square versus checkmark), not by color alone.

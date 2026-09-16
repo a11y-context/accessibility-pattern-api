@@ -87,21 +87,3 @@ struct SliderBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The slider is announced as adjustable, and no manual `.adjustable` trait is present (SwiftUI has none). A custom slider exposes adjustability through `accessibilityAdjustableAction`.
-
-**VoiceOver**
-- The slider speaks its specific name (e.g., "Brightness") and its current value; swiping up or down changes the value and the new value is announced.
-- Where the value carries units, VoiceOver speaks them (e.g., "50 percent", "$50"), not a bare number that would be ambiguous.
-- The increment and decrement buttons each speak a distinct name.
-
-**Switch Control & Full Keyboard Access**
-- The slider is adjustable via Switch Control and a hardware keyboard, and the single-tap increment and decrement controls are reachable and activatable by both.
-
-**Dynamic Type**
-- The slider's label and value text scale with Dynamic Type and stay fully visible at accessibility text sizes.

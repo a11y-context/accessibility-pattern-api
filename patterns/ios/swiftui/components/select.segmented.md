@@ -80,24 +80,3 @@ struct SelectSegmentedDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The picker is a container of selectable segments; each segment exposes its own label and the group carries the accessible name from the `.accessibilityLabel`.
-
-**VoiceOver**
-- On first moving focus to a segment, VoiceOver speaks the group label (from the `.accessibilityLabel`) together with the segment, which happens only when `.accessibilityElement(children: .contain)` is also present.
-- Removing either `.accessibilityElement(children: .contain)` or the `.accessibilityLabel` drops the group label, and VoiceOver announces only the segment text.
-- Selecting a segment updates the current selection, and the change takes effect immediately.
-
-**Switch Control & Full Keyboard Access**
-- Every segment is reachable and selectable via Switch Control and a hardware keyboard, and the selection updates immediately.
-
-**Dynamic Type**
-- The group label, the segment labels, and any accompanying value text scale with Dynamic Type and stay legible at accessibility text sizes.
-
-**Visual**
-- The selected segment is distinguishable from the others by the native segmented fill and shape, not by tint color alone.

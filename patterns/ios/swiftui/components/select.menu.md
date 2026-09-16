@@ -76,21 +76,3 @@ struct SelectMenuDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The picker is a pop-up button exposing its accessible name (from the `Picker` label text) and its current value; no `.accessibilityLabel` overrides it.
-
-**VoiceOver**
-- When closed, VoiceOver speaks the picker name and the selected value (e.g., "Fruit, Apple, Pop Up Button").
-- Opening the picker lists the options, and selecting one updates the announced value.
-- After a selection, VoiceOver focus returns to the picker rather than jumping elsewhere.
-
-**Switch Control & Full Keyboard Access**
-- The picker is reachable and operable via Switch Control and a hardware keyboard: it opens, an option can be chosen, and it closes.
-
-**Dynamic Type**
-- The picker's label, on-button value, and option list scale with Dynamic Type and stay fully visible at accessibility text sizes.

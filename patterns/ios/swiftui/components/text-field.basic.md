@@ -119,27 +119,3 @@ struct TextFieldDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each field is a single accessible element exposing the text-field trait, its accessible name, and its current value; a `SecureField` masks its value and surfaces separately as a secure text field.
-- The accessible name does not repeat the control type (no "text field" in the name).
-
-**VoiceOver**
-- VoiceOver speaks each field's name from its title, `.accessibilityLabel`, or `LabeledContent` wrapper; the titleless ZIP field speaks "ZIP code", never silence or a blank name.
-- Double-tapping a field begins editing, including the `LabeledContent`-named field; this is the exact activation a vertical `LabeledContentStyle` breaks.
-- On submitting an invalid email, VoiceOver announces the error text as part of the field's label, the typed text is still spoken as the field's value, and focus moves to the errored field.
-- The secure field does not speak its typed characters.
-
-**Switch Control & Full Keyboard Access**
-- Each field is reachable and focusable via Switch Control and a hardware keyboard, and editing can begin from either.
-
-**Dynamic Type**
-- Field labels and entered text scale with Dynamic Type and stay fully visible (no clipping or truncation) at accessibility text sizes.
-
-**Visual**
-- Each field has a visible boundary meeting 3:1 non-text contrast against the background, including the borderless default case.
-- The validation error is conveyed by more than color (error text plus color, not color alone).

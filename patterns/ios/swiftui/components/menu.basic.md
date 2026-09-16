@@ -77,26 +77,3 @@ struct MenuBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The trigger exposes the pop-up button role together with its accessible name (the label text, or the `.accessibilityLabel` on an icon-only trigger).
-- Section headers, when used, are not exposed with the heading trait (an Apple gap); do not depend on a heading trait to convey menu structure.
-
-**VoiceOver**
-- The trigger speaks its name and pop-up button role (e.g., "Actions, Button, Pop Up Button").
-- Opening the menu moves VoiceOver focus into the menu, and each command is announced.
-- Each command speaks its specific label; a destructive command is presented as destructive.
-- When the menu closes, VoiceOver focus does not return to the trigger (an Apple platform defect); this is a known limitation of `Menu`, not a per-app bug.
-
-**Switch Control & Full Keyboard Access**
-- The trigger is reachable and operable via Switch Control and a hardware keyboard: the menu opens, a command can be activated, and the menu closes.
-
-**Dynamic Type**
-- The trigger label and command labels scale with Dynamic Type and stay fully visible at accessibility text sizes. A trailing checkmark `Image` used to mark a checked command disappears at the largest sizes (an Apple platform defect); prefer a `Picker` inside the menu.
-
-**Visual**
-- Destructive command text and any `Section` header text can fall short on contrast (an Apple platform defect); verify against your target appearances, and do not rely on those defaults alone to convey meaning.

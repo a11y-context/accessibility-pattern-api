@@ -75,25 +75,3 @@ struct DialogAlertDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The alert is a modal presented over the screen; while it is open, only its content and actions are reachable.
-- The native alert title is not exposed with the heading trait (an Apple gap); do not depend on a heading trait to convey the title.
-
-**VoiceOver**
-- When the alert opens, VoiceOver focus moves into it and the title and message are announced.
-- Each action button speaks its specific label (e.g., "Cancel", "Delete").
-- When any action dismisses the alert, VoiceOver focus returns to the trigger button.
-
-**Switch Control & Full Keyboard Access**
-- The alert's actions are reachable and activatable via Switch Control and a hardware keyboard, and dismissing returns focus to the trigger.
-
-**Dynamic Type**
-- The alert's title, message, and action labels scale with Dynamic Type and stay fully visible.
-
-**Visual**
-- Action labels are specific and do not depend on color alone. Native alert button text contrast can fall short (an Apple platform defect); verify against your target appearances.

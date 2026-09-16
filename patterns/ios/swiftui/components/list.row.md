@@ -89,22 +89,3 @@ struct SettingDetail: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each row is a single accessible element carrying the button trait; the disclosure chevron is not surfaced as its own element.
-- A row with a title plus secondary text reads as one element whose name includes both, not as fragmented siblings.
-
-**VoiceOver**
-- Each row speaks its destination name followed by "Button", never "Link".
-- Double-tapping a row pushes its destination, and the pushed screen's title is announced (per `global.navigation-focus`).
-- On returning to the list, focus is restored to the row that triggered the navigation.
-
-**Switch Control & Full Keyboard Access**
-- Every row is reachable and activatable via Switch Control and a hardware keyboard.
-
-**Dynamic Type**
-- Row labels scale with Dynamic Type and stay fully visible; rows grow in height rather than truncating at accessibility text sizes.

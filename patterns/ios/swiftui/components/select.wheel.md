@@ -74,25 +74,3 @@ struct SelectWheelDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The wheel exposes an accessible name equal to its visible label, sourced from the `.accessibilityLabel` combined with `.accessibilityElement(children: .contain)`; it is not left unnamed.
-
-**VoiceOver**
-- Focusing the wheel speaks the picker name and the current value; without the `.accessibilityLabel` plus `.contain` the name is silent, which is the failure this pattern prevents.
-- Scrolling the wheel updates the announced value to the option that lands in the selection position.
-
-**Switch Control & Full Keyboard Access**
-- The wheel is reachable and operable via Switch Control and a hardware keyboard: it takes focus and its value can be changed.
-- Voice Control users cannot say "Tap <option name>" to select a wheel option directly; this is an Apple platform defect (Feedback FB16125076).
-
-**Dynamic Type**
-- The wheel's label and option text scale with Dynamic Type and stay legible at accessibility text sizes.
-- Wheel-style pickers do not support the Large Content Viewer, an Apple platform defect, so the enlarged overlay is unavailable when inspecting a wheel option.
-
-**Visual**
-- Non-selected wheel options render with insufficient text contrast; this is an Apple platform defect (Feedback FB15338784) that a correct implementation cannot fully remedy.

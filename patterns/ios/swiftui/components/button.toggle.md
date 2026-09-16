@@ -96,23 +96,3 @@ struct ToggleButtonDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each toggle button exposes the button trait. In the toolbar trait strategy, the active state also exposes the selected trait and the inactive state exposes no selected trait.
-- A toggle never uses both state models at once: a name-change button never also carries the selected trait, and a trait-strategy button's name never changes when toggled.
-- The icon inside a toggle is not surfaced as its own labeled element.
-
-**VoiceOver**
-- Name-change strategy: activating the button changes the spoken name to the next action (e.g., "Mute" becomes "Unmute").
-- Trait strategy: the spoken name stays stable (e.g., "Bold") and VoiceOver appends "Selected" only while the control is active.
-- Double-tapping performs the toggle and the announced state updates.
-
-**Switch Control & Full Keyboard Access**
-- The toggle is reachable and activatable via Switch Control and a hardware keyboard, with the state change conveyed the same way as under VoiceOver.
-
-**Dynamic Type**
-- Any visible toggle text scales with Dynamic Type and stays fully visible at accessibility text sizes.

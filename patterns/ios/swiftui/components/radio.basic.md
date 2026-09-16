@@ -101,25 +101,3 @@ struct RadioButton: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each option is a single accessible element with the button trait removed; the selected option carries the selected trait and the others do not.
-- The radio group is a container that announces its group label when focus first enters it.
-
-**VoiceOver**
-- Each option speaks its label together with the value "Radio button, checked" or "Radio button, unchecked", not "Button".
-- The selected option is announced as selected; choosing a different option moves the selected state and the announced values update so only one option reads as checked.
-- Moving focus into the group speaks the group label before the first option.
-
-**Switch Control & Full Keyboard Access**
-- Each option is reachable and activatable via Switch Control and a hardware keyboard, and activating one updates the selection.
-
-**Dynamic Type**
-- Option labels scale with Dynamic Type and stay fully visible; the radio glyph scales alongside the label rather than clipping.
-
-**Visual**
-- Selected and unselected options differ by the radio glyph (empty circle versus filled circle), not by color alone.

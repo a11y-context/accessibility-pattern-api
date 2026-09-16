@@ -85,22 +85,3 @@ struct DialogModalDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- While the sheet is open it is modal: only its content and controls are reachable, and the underlying screen is not.
-- The sheet's title carries the heading trait, so VoiceOver can navigate to it by heading.
-
-**VoiceOver**
-- When the sheet opens, VoiceOver focus moves into it (onto or near the title heading).
-- The two-finger scrub (escape) gesture dismisses the sheet.
-- When the sheet closes by any means (the close control, the swipe gesture, or the escape gesture), VoiceOver focus returns to the trigger button rather than the top of the underlying screen.
-
-**Switch Control & Full Keyboard Access**
-- The sheet's controls, including the close or "Done" control, are reachable and operable via Switch Control and a hardware keyboard, and dismissing returns focus to the trigger.
-
-**Dynamic Type**
-- The sheet's title, body content, and controls scale with Dynamic Type; content inside the `ScrollView` scrolls and stays fully visible rather than truncating at accessibility text sizes.

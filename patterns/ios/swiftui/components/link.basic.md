@@ -80,25 +80,3 @@ struct LinkBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each link exposes the link trait and not the button trait; it is announced as a link, never "Button, Link" or "Button" alone.
-- The accessible name is the specific visible link text and does not contain the word "Link".
-
-**VoiceOver**
-- Each link speaks a name that identifies its destination (e.g., "View Weekly Ad"), never generic text like "Click here".
-- Double-tapping a link opens its URL.
-
-**Switch Control & Full Keyboard Access**
-- Every link is reachable and activatable via Switch Control and a hardware keyboard.
-
-**Dynamic Type**
-- Link text scales with Dynamic Type and stays fully visible (no clipping or truncation) at accessibility text sizes.
-
-**Visual**
-- Link text meets 4.5:1 contrast against its background in light and dark appearances.
-- A link placed inline with or adjacent to static text is distinguishable by more than color (e.g., underline).
