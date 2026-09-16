@@ -82,24 +82,3 @@ struct DialogConfirmationDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The confirmation dialog is an overlay presented over the screen; while it is open, only its content and actions are reachable.
-
-**VoiceOver**
-- When the dialog opens, VoiceOver focus moves into it and the title and message are announced.
-- Each action button speaks its specific label (e.g., "Discard Draft", "Keep Editing").
-- When any action dismisses the dialog, VoiceOver focus returns to the trigger button.
-
-**Switch Control & Full Keyboard Access**
-- The dialog's actions are reachable and activatable via Switch Control and a hardware keyboard, and dismissing returns focus to the trigger.
-
-**Dynamic Type**
-- The dialog's title, message, and action labels scale with Dynamic Type and stay fully visible.
-
-**Visual**
-- Action labels are specific and do not depend on color alone. Native confirmation dialog button text contrast can fall short (an Apple platform defect); verify against your target appearances.

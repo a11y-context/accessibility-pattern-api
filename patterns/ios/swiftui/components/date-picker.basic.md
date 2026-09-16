@@ -83,25 +83,3 @@ struct DatePickerBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The picker exposes its accessible name, its current date or time value, and the interaction model of its style (adjustable wheel, pop-up button, or calendar grid).
-- On default and `.compact` styles the name comes from an `.accessibilityLabel`; on `.graphical` and `.wheel` styles it comes from the `DatePicker("Label")` string, with no duplicate label.
-
-**VoiceOver**
-- Focusing the picker speaks its name and current value; on `.graphical` and `.wheel` styles the name is spoken once, not twice.
-- Changing the value through the style's interaction (spinning the wheel, choosing from the popover, or tapping a grid date) updates the announced date or time value.
-- A `DatePicker("", ...)` with an empty label on a `.graphical` or `.wheel` style speaks no name (a failure the pattern prevents).
-
-**Switch Control & Full Keyboard Access**
-- The picker is reachable and its value is adjustable via Switch Control and a hardware keyboard.
-
-**Dynamic Type**
-- The picker's visible label scales with Dynamic Type. Date, time, and wheel picker controls do not support Dynamic Type text resize or the Large Content Viewer (an Apple platform defect); verify legibility at large text sizes on device.
-
-**Visual**
-- Wheel-style non-selected options and the day-of-week column headers (S, M, T, W, T, F, S) can fall below the text-contrast minimum (Apple platform defects); verify contrast against your target appearances.

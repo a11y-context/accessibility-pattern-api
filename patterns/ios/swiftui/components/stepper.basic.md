@@ -76,21 +76,3 @@ struct StepperBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The stepper is announced with increment and decrement actions, and no manual `.adjustable` trait is present (SwiftUI has none).
-
-**VoiceOver**
-- The stepper speaks its name from the visible label (or from `.accessibilityLabel` when the label is empty) and its current value from the label text or `.accessibilityValue`.
-- Incrementing or decrementing changes the value and the new value is announced.
-- Repeated steppers each speak a distinct name.
-
-**Switch Control & Full Keyboard Access**
-- The stepper's increment and decrement are reachable and operable via Switch Control and a hardware keyboard, and the paired `TextField` accepts direct entry from both.
-
-**Dynamic Type**
-- The stepper's label and value text scale with Dynamic Type and stay fully visible. `Stepper` does not support the Large Content Viewer, so verify legibility through Dynamic Type rather than that magnifier.

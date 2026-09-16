@@ -8,6 +8,15 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.3.0 — 2026-09-16
+
+**Acceptance Checks leave the SwiftUI patterns, bringing this stack in line with web/react and with the shared pattern format.**
+
+- **Acceptance Checks removed from all 19 SwiftUI patterns.** The web/react stack shed the section in its own 0.25.0 release, which also removed it from `schema/style-guide.md` and `schema/pattern-template.md`. Those two files are stack-agnostic, so from that point the SwiftUI patterns were the only ones in the corpus still carrying a section the format no longer defines. The section restated in observation form what the Must Haves and Don'ts already state as requirements, and a pattern doc's job is to say what to build rather than how to confirm it was built. **No per-pattern version bumps:** no requirement changed in any of the 19, which puts this in the same class as a corpus-wide typography sweep.
+- **The SwiftUI Foundations rules are unaffected**, because `global/global_rules.md` on this stack never carried Acceptance Checks. Its web counterpart still does, and is now the only place in the corpus the section survives.
+
+`qa-catalog.json` is unchanged and never referenced the section.
+
 ## 0.2.0 — 2026-07-19
 
 **Principal accessibility review of the component set; two patterns corrected. Seven new component patterns and two new Foundations rules added. This release also introduces this release-notes file and backfills the nine patterns and four Foundations rules added since 0.1.0.**

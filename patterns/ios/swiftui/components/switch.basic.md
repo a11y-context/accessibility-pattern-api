@@ -66,25 +66,3 @@ struct SwitchBasicDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- The switch is a single accessible element carrying the switch trait, its name, and its on/off value; no separate static-text element duplicates the label.
-
-**VoiceOver**
-- VoiceOver speaks the setting name, the switch role, and the current state.
-- When custom value wording is used, VoiceOver announces that wording (e.g., "Dark"/"Light"), not generic On/Off.
-- Double-tapping flips the switch and the announced state updates.
-- Repeated switches each speak a distinct name.
-
-**Switch Control & Full Keyboard Access**
-- The switch is reachable and togglable via Switch Control and a hardware keyboard, with the state change announced.
-
-**Dynamic Type**
-- The switch's label scales with Dynamic Type and stays fully visible at accessibility text sizes.
-
-**Visual**
-- The off state is distinguishable from on by more than color, with the off-state fill meeting 3:1 contrast against its background.

@@ -73,25 +73,3 @@ struct InlineLinkDemo: View {
     }
 }
 ```
-
-## Acceptance Checks
-
-Observable behaviors a tester verifies with iOS assistive technologies, grouped by AT method. The runtime-testable subset is the spec for the iOS test harness (XCUITest); it is not part of this pattern.
-
-**Traits & semantics**
-- Each inline link is exposed as a link within the text, named by its specific run text.
-
-**VoiceOver**
-- Inline links are reachable through the VoiceOver Links rotor, each listed by its specific text, and activating one opens the URL.
-- Inline links do not appear as standalone elements in the normal swipe order the way a `link.basic` control does; the rotor is the reliable path to them.
-
-**Switch Control & Full Keyboard Access**
-- Inline `AttributedString` and Markdown links are not focusable or operable via Full Keyboard Access, and are not targetable by Voice Control Show Names or Show Numbers (Apple platform defect).
-- The standalone `link.basic` alternative to the same destination is reachable and activatable via Switch Control, Full Keyboard Access, and Voice Control.
-
-**Dynamic Type**
-- The paragraph text and its inline links scale with Dynamic Type and stay fully visible at accessibility text sizes.
-
-**Visual**
-- Each inline link is distinguishable from the surrounding text by more than color, with an underline present via `AttributedString`.
-- Inline link text meets 4.5:1 contrast against its background in light and dark appearances.
