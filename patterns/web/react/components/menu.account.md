@@ -166,21 +166,3 @@ export function AccountMenu() {
   );
 }
 ```
-
-## Acceptance Checks
-
-Keyboard
-- Tab lands on the invoking button.
-- Enter or Space activates the button to open and close the menu.
-- When opened, focus remains on the invoking button.
-- Tab moves from the button into the first menu item, then through each item, then out to the next focusable element on the page.
-- Shift+Tab moves backward from the first menu item to the invoking button.
-- Esc closes the menu and returns focus to the invoking button.
-- If focus moves outside the button + menu (Tab away or click elsewhere), the menu closes.
-
-Screen Reader
-- The invoking button announces expanded/collapsed state via `aria-expanded`; the attribute is present and flips between `"true"` and `"false"` on every open and close.
-- When closed, menu items are not reachable.
-- When open, the list and its items are reachable in reading and focus order.
-- Links announce as links and navigate correctly.
-- Buttons announce as buttons and activate correctly.

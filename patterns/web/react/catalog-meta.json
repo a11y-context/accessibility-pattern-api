@@ -1,11 +1,18 @@
 {
   "_comment": "Hand-edited top-level metadata for patterns.json. Bumped per the Versioning protocol when a release ships. The patterns.json output file is regenerated from this + the .md files in components/ by website/scripts/generate-patterns-json.js (runs in prebuild).",
-  "_comment_order_overrides": "Patterns default to alphabetical filename order (which also drives the sidebar). Each [earlierId, laterId] pair pins earlierId to appear immediately before laterId. select.native (\"Select (Basic)\") must precede select.basic (\"Select (Custom Style)\"), the reverse of the alphabetical select.basic/select.native. Unlisted patterns keep their alphabetical slot.",
+  "_comment_order_overrides": "Patterns default to alphabetical filename order (which also drives the sidebar). Each [earlierId, laterId] pair pins earlierId to appear immediately before laterId. select.native (\"Select (Basic)\") must precede select.basic (\"Select (Custom Style)\"), the reverse of the alphabetical select.basic/select.native. Unlisted patterns keep their alphabetical slot. toast.basic (\"Toast\") must precede toast.action (\"Toast with Action\"), the reverse of the alphabetical toast.action/toast.basic.",
   "stack": "web/react",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.24.0",
+  "catalog_revision": "0.25.0",
   "cache_ttl_seconds": 3600,
   "order_overrides": [
-    ["select.native", "select.basic"]
+    [
+      "select.native",
+      "select.basic"
+    ],
+    [
+      "toast.basic",
+      "toast.action"
+    ]
   ]
 }

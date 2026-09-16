@@ -71,10 +71,6 @@ Acceptable variations the pattern allows. Include this section **only** when the
 
 The section earns its place when the difference between "Must Have" and "personal preference" would otherwise be unclear to an implementer. If you find yourself writing "could also do X" in a Must Haves bullet, that's a Customizable item.
 
-### `## Acceptance Checks`
-
-Observable pass/fail behaviors. These double as a test specification for QA. Each bullet should be something a tester can verify with a keyboard + screen reader, with a clear pass criterion. Bullet form: "*Action* → *expected observable result*."
-
 ---
 
 ## Template (copy this into a new pattern file)
@@ -118,9 +114,6 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ​```
 
 ## Customizable
-- 
-
-## Acceptance Checks
 - 
 ```
 
