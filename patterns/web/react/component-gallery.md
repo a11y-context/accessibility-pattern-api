@@ -42,7 +42,8 @@ Browse all accessibility patterns available for Web / React.
 | [Splitter](./components/splitter.basic.md) | Moveable divider between two panes that changes their relative size, using a focusable role="separator" with aria-valuenow, aria-controls, and arrow-key movement. |
 | [Switch](./components/switch.basic.md) | Two-state on/off control representing a persistent setting. Uses role="switch" with aria-checked, or native checkbox semantics when applicable. |
 | [Tabs](./components/tabs.basic.md) | Same-page sections where one panel is visible at a time, using role="tablist", role="tab", and role="tabpanel" with aria-selected, a roving tabindex, and arrow-key traversal. |
-| [Toast](./components/toast.basic.md) | Temporary, non-blocking status message announced via live region. May include optional dismiss control. Disappears automatically. |
+| [Toast with Action](./components/toast.action.md) | Transient status message carrying exactly one action, announced through a text-only live region while the visible message and its controls sit in a separately mounted landmark region, and dismissing itself only when that action is also reachable elsewhere in the interface. |
+| [Toast](./components/toast.basic.md) | Temporary, non-blocking status message carrying no action beyond an optional dismiss control, announced through a text-only live region and disappearing on its own. |
 | [Tooltip](./components/tooltip.basic.md) | A brief supplementary text label shown on hover and focus of its trigger; uses role="tooltip" referenced by aria-describedby, and is hoverable, dismissible, and persistent. |
 
 <!-- gallery:end -->
