@@ -78,7 +78,6 @@ Brief checklist; full conventions in `schema/style-guide.md`.
 3. Must Haves must be behavioral and testable. All Must Haves are required; do not phrase them with "may", "should", or "recommended" — those phrasings belong in Customizable.
 4. No opinionated styling requirements in the Golden Pattern.
 5. Do not invent ARIA beyond canonical pattern guidance.
-6. Every pattern must include Acceptance Checks.
 
 ## `patterns.json` is generated — do not hand-edit it
 
@@ -117,7 +116,7 @@ The corpus uses semver (`MAJOR.MINOR.PATCH`) for both the catalog as a whole and
 Each pattern's `latest_version` in `patterns.json` is bumped only when its **semantic content** changes:
 
 - **MAJOR (X+1.0.0)** — a Must Have is removed or fundamentally changed, the scope of `Use When` narrows, the pattern ID is renamed, or any breaking change for consumers
-- **MINOR (Y+1.0)** — a new Must Have is added, a Customizable item is added, an Acceptance Check is added, `selection_excerpt` aliases are expanded, an existing requirement is semantically clarified or reframed
+- **MINOR (Y+1.0)** — a new Must Have is added, a Customizable item is added, `selection_excerpt` aliases are expanded, an existing requirement is semantically clarified or reframed
 - **PATCH (Z+1)** — typo, wording fix, golden-pattern code clarification with no requirements change, single-pattern formatting fix
 - **No bump** — pure typography sweeps applied corpus-wide (e.g., a corpus-wide "Don't" → "Do not" normalization). These bump only `catalog_revision`.
 

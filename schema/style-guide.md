@@ -78,7 +78,6 @@ Sections appear in this exact order with these exact H2 names:
 8. `## Customizable`
 9. `## Don'ts`
 10. `## Golden Pattern`
-11. `## Acceptance Checks`
 
 The Pattern ID line and Summary paragraph satisfy the RAG chunking requirement (canonical ID + summary in the first lines of every page).
 
@@ -267,18 +266,6 @@ Soft ceiling around 120 lines; the corpus median is 97. Running long usually mea
 - Where a `const` array of demo data is still warranted, give it realistic streaming or ecommerce content (show titles, products, channels) so the data teaches what slots the pattern fills.
 - Stable prefixed kebab-case IDs (`acc-btn-overview`, `color-select-listbox`) for single instances; `useId()` when the component is written as reusable.
 - Fence language: ```jsx.
-
-### Acceptance Checks
-
-Observable behaviors a human tester can verify with a keyboard and a screen reader. Binary pass/fail. Present-tense assertions: "Tab moves focus to each switch." "The expanded/collapsed state is announced via `aria-expanded`."
-
-Grouping rules:
-
-- **Default**: `Keyboard` and `Screen Reader` (plain text or bold group labels with nested bullets).
-- **Lifecycle phases** when the pattern has distinct phases: `On open`, `While open`, `On close` (canonical example: `dialog.modal`).
-- **Structural categories** when the pattern's correctness is verified across orthogonal dimensions: `Structure`, `Accessible naming`, `Visual focus`, `Keyboard` (canonical example: `collection-row.basic`).
-
-Every Must Have should be coverable by at least one acceptance check. If a Must Have has no observable check, either the Must Have is too abstract or a check is missing.
 
 ---
 
