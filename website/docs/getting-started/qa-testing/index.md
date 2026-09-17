@@ -4,7 +4,7 @@ title: QA & Accessibility Testing
 
 # QA & Accessibility Testing
 
-**The corpus doubles as a machine-readable test specification.** Every pattern's Must Haves, Don'ts, Golden Pattern, and Acceptance Checks define what "correct" looks like for that component — not just "no WCAG violations in the DOM" (what generic tools like axe-core check) but "the component's behavior contract holds" (what generic tools can't check).
+**The corpus doubles as a machine-readable test specification.** Every pattern's Must Haves, Don'ts, and Golden Pattern define what "correct" looks like for that component — not just "no WCAG violations in the DOM" (what generic tools like axe-core check) but "the component's behavior contract holds" (what generic tools can't check).
 
 Different rules need different verification techniques. A well-designed harness routes each rule to the cheapest layer that can actually verify it.
 
@@ -20,7 +20,7 @@ Same corpus, three verification cost tiers, each rule routed to the cheapest lay
 
 ## Available today
 
-**Manual testing.** Every pattern's Acceptance Checks are a ready-made keyboard + screen-reader verification protocol. A tester runs each pattern's checks top to bottom against the rendered component. Zero tooling required, works today.
+**Manual testing.** Every pattern's Must Haves and Don'ts are a ready-made keyboard + screen-reader verification protocol. A tester works through them against the rendered component. Zero tooling required, works today.
 
 **Generic axe-core.** Standard `axe.run(page)` catches the ~40% of accessibility failures that are structural (missing labels, invalid ARIA, contrast). This is the layer generic tooling already covers well; the corpus complements it, doesn't replace it.
 

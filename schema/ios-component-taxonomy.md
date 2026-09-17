@@ -113,7 +113,7 @@ Skipped: A11yCheck / SwiftLint / XCTestAccessibility (tooling), `AccessibilityDe
 
 Each new iOS pattern is authored on its own PR branch. New patterns are `status: beta` from the start (the unmerged branch isolates the work in progress; see `CONTRIBUTING.md` § Status ladder):
 
-1. **AI drafts** the pattern from CVS + Apple docs: Use When / Do Not Use When, Must Haves, Customizable, Don'ts, a minimal SwiftUI Golden Pattern, and Acceptance Checks as prose grouped by iOS AT method (Traits & semantics / VoiceOver / Switch Control & Full Keyboard Access / Dynamic Type). Annotates provenance and lists what a human must verify on device.
+1. **AI drafts** the pattern from CVS + Apple docs: Use When / Do Not Use When, Must Haves, Customizable, Don'ts, and a minimal SwiftUI Golden Pattern. Annotates provenance and lists what a human must verify on device. Patterns carry no Acceptance Checks section; verification belongs to the QA layer, and executable assertions belong to the harness.
 2. **Maintainer enriches** on the branch: WCAG success-criterion citations, Apple-doc links, trait-precision review, schema calls.
 3. **On-device AT pass** (VoiceOver + Switch Control) is the mandatory gate before merge. Only after it: bump `catalog_revision`, add release notes, merge.
 

@@ -136,7 +136,7 @@ attribute #8A4600 · number/const #0A3069 · comment #59636E · text/punct #1F23
 ```
 
 **Component (pattern) page** — section order: **Selection** → **Must Haves** → **Donts** →
-**Customizable** → **Golden Pattern** → **Acceptance Checks**. Breadcrumb is `Components /
+**Customizable** → **Golden Pattern**. Breadcrumb is `Components /
 {Name}` (no platform segment). Eyebrow bold sans. Each H2 carries a **website-only** muted
 intro line (below) — these are presentational for human readers and are NOT part of the
 pattern's Markdown source.
@@ -147,7 +147,6 @@ pattern's Markdown source.
 - Donts (no apostrophe): flat text. Intro: "Avoid these accessibility and UX barriers."
 - Customizable: flat text. Intro: "Alternatives and options that give the AI agent some room to move."
 - Golden Pattern: the code block. Intro: "The tested reference implementation. Agents start from this shape and adapt to the developer's codebase and context."
-- Acceptance Checks: flat text with checkmark markers. Intro: "The component's test spec — an optional body of checks for verification."
 
 Only **Selection** uses cards; the other sections are flat text on the page background.
 
