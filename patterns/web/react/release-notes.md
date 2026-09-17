@@ -8,6 +8,20 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.27.0 — 2026-09-17
+
+**One scope vocabulary across every stack: `screen`, `layout`, `component`. Three buckets replace five, and the two that were doing no work are gone.**
+
+- **`scope` is now a single structural-scale axis.** `screen` is the document or route as a whole, `layout` is the structural frame inside it, `component` is an individual element and its own presentation. The same three words are used by every stack, so a rule's scope means the same thing wherever it is read.
+- **`style` removed.** It sat on a different axis from the others: `screen`, `layout`, and `component` answer "how big is the thing being changed", while `style` answered "is this a visual concern". Because the two axes cross, every visual rule carried both tags, and `style` and `component` ended up selecting an identical set of nine rules. Two names for one bucket. Visual rules now carry the scale they bind at, and "visual" is simply what the rule is about.
+- **`utility` removed.** It tagged exactly one rule, `global.sr-only`, which binds when writing a component and is now scoped `[component]`.
+- **`page` renamed to `screen`**, so the word works unchanged on native platforms rather than forcing each stack to invent its own top-level term.
+- **All 12 rules rescoped**, narrowest scale first: `global.page-title` `[screen]`; `global.landmarks` and `global.headings` `[screen, layout]`; `global.focus-not-obscured` `[layout, component]`, since the obscuring is done by layout chrome and the obscured thing is a component; the remaining eight `[component]`.
+- **Every bucket now excludes something.** Distribution is screen 3/12, layout 3/12, component 9/12. Under the previous vocabulary `style` and `component` were interchangeable and neither narrowed anything.
+- **`schema/style-guide.md` gains a `scope` subsection** stating the vocabulary, what the field is actually for (bounding unrequested repairs, not deciding what an agent reads), the instruction to tag the narrowest scale that genuinely binds, and the test a new bucket must pass: name the rules it selects that no other word already selects, or it is decoration.
+
+No requirement text changed in any rule, and no component pattern was touched.
+
 ## 0.26.0 — 2026-09-16
 
 **Acceptance Checks leave the Foundations rules, finishing the sweep 0.25.0 began. Of the 43 check bullets across the 12 rules, three stated a requirement that no Must Have or Don't carried, and those three are promoted rather than deleted.**
