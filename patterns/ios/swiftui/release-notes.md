@@ -8,6 +8,16 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.1 — 2026-09-17
+
+**WCAG hyperlinks removed from the Foundations rules.**
+
+- Six Must Haves carried a markdown link to the WCAG Understanding page for the criterion they implement. **The success criterion number and name are kept as plain text**; only the URLs are gone. The reference still identifies the criterion precisely for a human reviewer, at roughly a quarter of the characters.
+- This file was the only place in the corpus doing it: the web Foundations carry zero such links, and so do all 52 component patterns across both stacks. Removing them makes iOS consistent with everything else rather than introducing a new divergence.
+- The corpus is retrieved by coding agents, which do not follow links, and `global_rules.md` is fetched on every UI task, so the URLs were spending retrieval budget on every lookup to deliver something no consumer uses.
+
+No requirement changed.
+
 ## 0.4.0 — 2026-09-17
 
 **Adopts the shared scope vocabulary: `screen`, `layout`, `component`. `control` is gone.**
