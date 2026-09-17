@@ -1,3 +1,4 @@
-# Default reviewer for all changes in this repository.
+# Default reviewers for all changes in this repository.
+# An approving review from ANY listed owner satisfies the code-owner requirement.
 # See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-security/customizing-your-repository/about-code-owners
-*       @jsweetdude
+*       @jsweetdude @jsweetpluto
