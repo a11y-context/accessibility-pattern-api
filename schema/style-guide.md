@@ -75,9 +75,11 @@ Sections appear in this exact order with these exact H2 names:
 5. `## Use When`
 6. `## Do Not Use When`
 7. `## Must Haves`
-8. `## Customizable`
-9. `## Don'ts`
+8. `## Don'ts`
+9. `## Customizable`
 10. `## Golden Pattern`
+
+**The order is the one the source file uses, and the website renders it as authored.** Requirements come before permitted variation: an agent reads what it must do, then what it must not, then where it has room, then the reference implementation. `npm run check:section-order` fails the build on any pattern that deviates.
 
 The Pattern ID line and Summary paragraph satisfy the RAG chunking requirement (canonical ID + summary in the first lines of every page).
 

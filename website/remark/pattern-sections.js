@@ -51,13 +51,22 @@ const INTROS = {
     'The tested reference implementation. Agents start from this shape and adapt to the developer’s codebase and context.',
 };
 
-// Order + display title of the flat (non-Selection) sections, by normalized key.
-const FLAT_SECTIONS = [
-  {norm: 'must haves', key: 'must-haves', title: 'Must Haves'},
-  {norm: 'donts', key: 'donts', title: 'Donts'},
-  {norm: 'customizable', key: 'customizable', title: 'Customizable'},
-  {norm: 'golden pattern', key: 'golden-pattern', title: 'Golden Pattern'},
-];
+// Display title + CSS key for the flat (non-Selection) sections, by normalized
+// heading. This is a LOOKUP, not an order: the page renders sections in the
+// order the source file authored them.
+//
+// It used to be an order, and the plugin iterated it instead of the document.
+// That silently corrected any file whose sections were out of order, so the
+// published page always looked right while the source drifted unchecked — and
+// it did, on all 55 patterns. The skills repo and the MCP package both ship the
+// raw .md, so those consumers saw the drift while the website hid it. Rendering
+// in source order makes a misordered file visibly misordered.
+const FLAT_SECTIONS = {
+  'must haves': {key: 'must-haves', title: 'Must Haves'},
+  donts: {key: 'donts', title: 'Donts'},
+  customizable: {key: 'customizable', title: 'Customizable'},
+  'golden pattern': {key: 'golden-pattern', title: 'Golden Pattern'},
+};
 
 /** Recursively extract the plain text of an mdast node. */
 function toText(node) {
@@ -127,15 +136,23 @@ module.exports = function remarkPatternSections() {
     const firstH2 = nodes.findIndex((n) => n.type === 'heading' && n.depth === 2);
     /** @type {Record<string, {title: string, body: any[]}>} */
     const byNorm = {};
+    /** Normalized headings in the order the source file authored them. */
+    const authoredOrder = [];
     let current = null;
     for (const node of nodes.slice(firstH2)) {
       if (node.type === 'heading' && node.depth === 2) {
+        const norm = normTitle(toText(node));
         current = {title: toText(node), body: []};
-        byNorm[normTitle(node && toText(node))] = current;
+        byNorm[norm] = current;
+        authoredOrder.push(norm);
       } else if (current) {
         current.body.push(node);
       }
     }
+
+    // The flat sections, in authored order. "Use When" and "Do Not Use When"
+    // are excluded because they are merged into the Selection card above.
+    const flatOrder = authoredOrder.filter((n) => n in FLAT_SECTIONS);
 
     const sections = [];
 
@@ -160,10 +177,14 @@ module.exports = function remarkPatternSections() {
       );
     }
 
-    // 2. Flat sections, in Version E order.
-    for (const {norm, key, title} of FLAT_SECTIONS) {
+    // 2. Flat sections, in the order the SOURCE FILE authored them. Canonical
+    // order is Must Haves → Don'ts → Customizable → Golden Pattern, enforced on
+    // the .md by scripts/check-section-order.mjs rather than papered over here.
+    for (const norm of flatOrder) {
+      const meta = FLAT_SECTIONS[norm];
       const group = byNorm[norm];
-      if (!group) continue;
+      if (!meta || !group) continue;
+      const {key, title} = meta;
       let body = group.body;
       // C1: drop the authored framing line above the Golden Pattern code block
       // ("Structural reference for AI coding assistants — …"). Version E shows

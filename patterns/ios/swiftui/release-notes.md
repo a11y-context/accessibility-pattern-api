@@ -8,6 +8,15 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.2 — 2026-09-17
+
+**Section order corrected in the source files.**
+
+- **`Don'ts` now precedes `Customizable`** in all 19 SwiftUI patterns, matching the canonical order shared with web: Use When, Do Not Use When, Must Haves, Don'ts, Customizable, Golden Pattern.
+- The website previously re-sorted sections at render time regardless of source order, which hid the drift on every page while the skills repo and the npm package shipped the raw file. Rendering now follows the source, and `npm run check:section-order` fails the build on any deviation.
+
+No requirement text changed.
+
 ## 0.4.1 — 2026-09-17
 
 **WCAG hyperlinks removed from the Foundations rules.**

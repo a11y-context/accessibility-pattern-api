@@ -8,6 +8,17 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.27.1 — 2026-09-17
+
+**Section order corrected in the source files, and the website stops silently correcting it.**
+
+- **`Don'ts` now precedes `Customizable`** in all 33 published web patterns. Canonical order is Use When, Do Not Use When, Must Haves, Don'ts, Customizable, Golden Pattern. Requirements come before permitted variation.
+- **The website renders sections in the order the source authored them.** The remark transform previously iterated a fixed array rather than the document, so every page was re-sorted into the right order no matter what the file said. The published site therefore looked correct while all 55 patterns across both stacks drifted underneath it, and the skills repo and the npm package, which both ship the raw `.md`, served the drifted order to agents. A misordered file is now visibly misordered.
+- **`npm run check:section-order` added and wired into `prebuild`.** It fails the build on any pattern whose sections are out of canonical order or that carries an unexpected H2.
+- `schema/style-guide.md` and `schema/pattern-template.md` both stated the order incorrectly, and differently from each other. Both corrected. The RAG chunking guidance on the custom-install page listed the old order too.
+
+No requirement text changed.
+
 ## 0.27.0 — 2026-09-17
 
 **One scope vocabulary across every stack: `screen`, `layout`, `component`. Three buckets replace five, and the two that were doing no work are gone.**

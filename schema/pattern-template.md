@@ -105,6 +105,9 @@ Pattern ID: `<id>`
 ## Don'ts
 - 
 
+## Customizable
+- 
+
 ## Golden Pattern
 
 Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
@@ -112,9 +115,6 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ​```<language>
 // canonical implementation
 ​```
-
-## Customizable
-- 
 ```
 
 (Delete the `Customizable` section if the pattern has no meaningful variations.)

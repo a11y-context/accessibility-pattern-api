@@ -74,7 +74,7 @@ The skill reads the config at retrieval time to know where to send its queries. 
 
 The pattern pages are written to survive chunking:
 
-- **Preserve major-heading boundaries.** `## Must Haves`, `## Customizable`, `## Don'ts`, `## Golden Pattern` are the safe chunk boundaries — do not split within these sections.
+- **Preserve major-heading boundaries.** `## Must Haves`, `## Don'ts`, `## Customizable`, `## Golden Pattern` are the safe chunk boundaries — do not split within these sections.
 - **Prefer one major heading per chunk.** Avoid giant chunks that merge major sections.
 - **Retain the pattern ID and summary at the top of every chunk.** Every page opens with `Pattern ID: <id>` and a one-sentence summary — keep these in the chunk so retrieval results are self-identifying.
 - **Filter by `stack` metadata.** Frontmatter carries `stack: web/react` (or `ios/swiftui`, etc.); use it to restrict retrievals to the platform your consumers work in.

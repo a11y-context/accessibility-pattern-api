@@ -43,6 +43,13 @@ Deprecated. This pattern was renamed to `popover.basic`. An anchored, non-blocki
 - The close control has an accessible name that describes its purpose or action (e.g., `aria-label="Close"`).
 - Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the trigger, the close control, and any focusable content within the dialog.
 
+## Don'ts
+- Do not set `aria-modal="true"` on a non-modal dialog; it falsely tells assistive technology the background is inert.
+- Do not trap focus within the dialog.
+- Do not apply `inert` to, or otherwise block, the background content.
+- Do not omit focus restoration; closing the dialog must return focus to the element that invoked it.
+- Do not bind Esc only to a container-level handler on the dialog surface; once focus leaves the untrapped dialog, that handler stops firing and Esc no longer closes.
+
 ## Customizable
 - Delivery is at the engineer's discretion as long as the non-modal contract above holds. Acceptable options:
   - A native `<dialog>` element shown non-modally.
@@ -50,13 +57,6 @@ Deprecated. This pattern was renamed to `popover.basic`. An anchored, non-blocki
   - A `<div role="dialog">` with explicit positioning.
 - Whether an outside click also dismisses the dialog is optional. The `popover` attribute provides it automatically; a `role="dialog"` div may add it via an outside-pointer handler, or omit it.
 - Initial focus may land on the dialog container (`tabindex="-1"`) so the accessible name is announced before the user Tabs to the first control, or on the first interactive control when the user's next action is to type or select. Either is acceptable.
-
-## Don'ts
-- Do not set `aria-modal="true"` on a non-modal dialog; it falsely tells assistive technology the background is inert.
-- Do not trap focus within the dialog.
-- Do not apply `inert` to, or otherwise block, the background content.
-- Do not omit focus restoration; closing the dialog must return focus to the element that invoked it.
-- Do not bind Esc only to a container-level handler on the dialog surface; once focus leaves the untrapped dialog, that handler stops firing and Esc no longer closes.
 
 ## Golden Pattern
 
