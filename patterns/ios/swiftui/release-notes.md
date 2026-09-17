@@ -8,6 +8,17 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.4.0 — 2026-09-17
+
+**Adopts the shared scope vocabulary: `screen`, `layout`, `component`. `control` is gone.**
+
+- **`control` removed.** It never appeared without `component`, so it was a strict subset that could not narrow anything a reader did not already have, and `component` sat on all 8 rules, so that one could not narrow anything either. Between them the two buckets made 8 of 8 rules match whatever was asked for.
+- **Now the same three words as web/react**, so a rule's scope reads identically across stacks rather than each platform inventing its own set.
+- **All 8 rules rescoped:** `global.navigation-focus` `[screen]`, since focus landing on a pushed screen is a screen-level concern; `global.dynamic-type` and `global.focus-management` `[layout, component]`; the remaining five `[component]`.
+- Distribution is screen 1/8, layout 2/8, component 7/8. Every bucket excludes something.
+
+No requirement text changed in any rule, and no component pattern was touched.
+
 ## 0.3.0 — 2026-09-16
 
 **Acceptance Checks leave the SwiftUI patterns, bringing this stack in line with web/react and with the shared pattern format.**

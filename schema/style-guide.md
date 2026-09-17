@@ -372,7 +372,7 @@ Global rules live in `global/global_rules.md` as `## Rule:` sections within a si
 
 ```yaml
 id: global.kebab-name
-scope: [utility | page | layout | component | style]
+scope: [screen | layout | component]
 ```
 
 ### Must Haves
@@ -382,7 +382,21 @@ scope: [utility | page | layout | component | style]
 
 A Foundations rule states requirements and prohibitions only. It carries no Acceptance Checks section, for the same reason component patterns no longer do: `scripts/sync-skills-repo.sh` ships `global_rules.md` whole to the skills repo, so check-voice prose reaches the generating agent alongside the requirements it is supposed to apply. Verification belongs to the QA layer. If a check states something no Must Have or Don't requires, the requirement is missing and belongs in one of those sections.
 
-`scope` drives the apply policy (`apply_policy.scopes_in_order` in the page frontmatter: utility, page, layout, component, style). Pick the scopes where the rule could bind during a code change. Same prose rules as components. Same boilerplate formulas where applicable.
+### `scope`
+
+`scope` is a **structural scale**, and the vocabulary is the same on every stack:
+
+- **`screen`** — the document, route, or screen as a whole. Its title, its language, where focus lands when the user arrives.
+- **`layout`** — the structural frame inside a screen. Landmarks, heading hierarchy, regions, and the chrome that can overlap what sits inside it.
+- **`component`** — an individual element and its own presentation. Its semantics, states, focus indicator, contrast, motion, and icons.
+
+**What `scope` is for.** Every Foundations rule is retrieved on every UI task; `scope` does not decide what an agent reads. It decides **what an agent may not go and repair in code it was not asked to change.** An agent adding a button to an existing screen applies the `component` rules to the button it writes, and leaves a missing landmark or a broken heading order alone — reporting them rather than fixing them. That boundary is the whole job.
+
+**Tag a rule with the narrowest scale where it genuinely binds**, and add a second only when it truly binds there too (`global.focus-not-obscured` is `[layout, component]` because the obscuring is done by layout chrome and the obscured thing is a component). Over-tagging is how the previous vocabulary decayed: at its worst, `style` and `component` selected an identical set of nine rules, and `component` was on every iOS rule, so neither excluded anything.
+
+**Do not add a bucket without testing it.** The test is: which rules does this word select that no other word already selects? If the answer is none, it is decoration. `utility` tagged exactly one rule; `style` duplicated `component`; `control` was a strict subset of `component` that never appeared alone. All three are gone.
+
+`scope` drives the apply policy (`apply_policy.scopes_in_order` in the page frontmatter). Same prose rules as components. Same boilerplate formulas where applicable.
 
 ---
 
