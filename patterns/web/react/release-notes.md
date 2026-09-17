@@ -8,6 +8,17 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.26.0 — 2026-09-16
+
+**Acceptance Checks leave the Foundations rules, finishing the sweep 0.25.0 began. Of the 43 check bullets across the 12 rules, three stated a requirement that no Must Have or Don't carried, and those three are promoted rather than deleted.**
+
+- **Acceptance Checks removed from all 12 Foundations rules**, and from the Foundations anatomy in `schema/style-guide.md`. The reasoning is the one that removed the section from the component patterns in 0.25.0, and it applies here identically: `scripts/sync-skills-repo.sh` ships `global_rules.md` whole to the skills repo, so check-voice prose reached the generating agent alongside the requirements it was supposed to apply. 0.25.0 left the Foundations rules alone pending review, and this is that review. The anatomy now states the rule and the diagnostic behind it, which is that a check asserting something no Must Have or Don't requires means the requirement is missing.
+- **`global.sr-only` gains a Don't.** Offscreen text carrying an element's accessible name is defeated by `aria-label` or `aria-labelledby` on the same element, because both override the element's text content. This was stated only as a check, so the rule prohibited nothing and an agent generating code had no requirement to apply.
+- **`global.headings` gains a Don't.** No empty heading elements. Previously check-only.
+- **`global.icon` gains a Must Have.** Controls that differ only by their icon have different accessible names. Previously check-only, and the failure it prevents is common: several icon-only controls in one toolbar sharing a generic name.
+- **`global.focus-states` clarifies an existing Must Have.** The visible indicator is required when the element receives keyboard focus and for as long as it retains focus. The duration was carried by a check and is now part of the requirement. No new requirement, so this is a clarification rather than an addition.
+- **No per-pattern version bumps.** `global_rules.md` carries ruleset frontmatter with no version field, and no component `.md` was touched.
+
 ## 0.25.0 — 2026-09-16
 
 **Acceptance Checks leave the web/react corpus, and `toast.action` is rebuilt around a narrower claim: the message is itself the landmark, and the pattern is only valid when its action can also be performed somewhere else.**

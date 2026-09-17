@@ -378,8 +378,9 @@ scope: [utility | page | layout | component | style]
 ### Must Haves
 ### Don'ts
 ### Snippets        ← optional; CSS/code the rule mandates
-### Acceptance Checks
 ````
+
+A Foundations rule states requirements and prohibitions only. It carries no Acceptance Checks section, for the same reason component patterns no longer do: `scripts/sync-skills-repo.sh` ships `global_rules.md` whole to the skills repo, so check-voice prose reaches the generating agent alongside the requirements it is supposed to apply. Verification belongs to the QA layer. If a check states something no Must Have or Don't requires, the requirement is missing and belongs in one of those sections.
 
 `scope` drives the apply policy (`apply_policy.scopes_in_order` in the page frontmatter: utility, page, layout, component, style). Pick the scopes where the rule could bind during a code change. Same prose rules as components. Same boilerplate formulas where applicable.
 
