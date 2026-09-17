@@ -44,14 +44,6 @@ Deprecated. This pattern was renamed to `navigation-menu.dropdown`. An account m
   - Any buttons and links comply with the rules for the button/link patterns.
 - Ensure a visible focus state (e.g., a 2px solid outline offset by 1-2px) around the button that opens the menu, as well as the links and buttons inside.
 
-## Customizable
-- Whether the menu closes when a menu item is activated (often yes).
-- Whether the menu includes non-interactive text (for example signed-in email) or separators.
-- Menu positioning (left/right alignment, above/below) as long as it does not break reading and focus order.
-- Accessible labeling strategy:
-  - Trigger button label (for example "Account" or "Open account menu").
-  - Optional label for the list (for example `aria-label="Account"` on the list, or wrap with a labeled container).
-
 ## Don'ts
 - Do not render the invoking button without `aria-expanded`; `aria-haspopup` alone does not convey open/closed state.
 - Do not make hover or pointer click the only way to open the menu; opening must also work with keyboard Enter and Space (native button activation).
@@ -59,6 +51,14 @@ Deprecated. This pattern was renamed to `navigation-menu.dropdown`. An account m
 - Do not position the menu in the DOM far away from the trigger in a way that breaks focus order or causes screen readers to encounter the menu in an unexpected location.
 - Do not leave the menu visible or accessible to screen readers while `aria-expanded="false"` (and vice versa).
 - Do not close the menu in a way that strands focus (for example removing the focused element without moving focus).
+
+## Customizable
+- Whether the menu closes when a menu item is activated (often yes).
+- Whether the menu includes non-interactive text (for example signed-in email) or separators.
+- Menu positioning (left/right alignment, above/below) as long as it does not break reading and focus order.
+- Accessible labeling strategy:
+  - Trigger button label (for example "Account" or "Open account menu").
+  - Optional label for the list (for example `aria-label="Account"` on the list, or wrap with a labeled container).
 
 ## Golden Pattern
 
