@@ -35,7 +35,7 @@ rules, plus a golden implementation and a checklist of acceptance criteria.
 1. **Select a component** from the sidebar.
 2. Read the **Must Haves** section. These are non-negotiable for WCAG 2.2 AA conformance.
 3. Apply the **Golden Pattern** code as your starting implementation.
-4. Run through the **Acceptance Checks** as part of your pull request review.
+4. Check the implementation against the **Must Haves** and **Don'ts** as part of your pull request review.
 
 > All patterns target WCAG 2.2 Level AA and Apple's accessibility guidance for iOS (Human Interface Guidelines, SwiftUI Accessibility).
 

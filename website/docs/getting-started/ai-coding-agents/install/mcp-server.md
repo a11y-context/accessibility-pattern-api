@@ -18,7 +18,7 @@ MCP is a **retrieval mechanism**, not a replacement for the skill. Two pieces wo
 The server exposes three tools:
 
 - **`list_patterns`** — the catalog (`id`, `title`, `summary`, `latest_version`, `tags`, `aliases`) for selection.
-- **`get_pattern(id)`** — the full spec (Must Haves, Don'ts, Golden Pattern, Acceptance Checks).
+- **`get_pattern(id)`** — the full spec (Must Haves, Don'ts, Customizable, Golden Pattern).
 - **`get_foundations()`** — the cross-cutting Foundations ruleset.
 
 Retrieval is deterministic — the skill selects by ID from a small structured catalog, not by embedding similarity. No drift, no embedding cost.

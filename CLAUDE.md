@@ -87,7 +87,7 @@ Both run automatically on Vercel build. Run manually with `npm run gen:gallery` 
 
 The site's look is a **standalone design system** — `website/DESIGN-SYSTEM.md` is the source of record — applied via CSS tokens (`custom.css`), swizzled Docusaurus components (`src/theme/`), and two **build-time remark transforms**. The key thing to understand before touching a pattern or the site:
 
-- **`website/remark/pattern-sections.js`** restructures each component pattern's raw Markdown into the on-page layout at build time: merges `Use When` / `Do Not Use When` into "Selection" cards, injects website-only intro lines, reorders/renames sections, drops the H1 + "Pattern ID" line, restructures Acceptance Checks into `h3` + lists. **Authors write the plain 7-H2 pattern Markdown per `schema/pattern-template.md`; the site injects the presentation.** Never hand-author the on-page structure into the `.md`, and note the `.md` still carries the raw H1 / Pattern ID line (dropped only in the render).
+- **`website/remark/pattern-sections.js`** restructures each component pattern's raw Markdown into the on-page layout at build time: merges `Use When` / `Do Not Use When` into "Selection" cards, injects website-only intro lines, reorders/renames sections, drops the H1 + "Pattern ID" line. **Authors write the plain 6-H2 pattern Markdown per `schema/pattern-template.md`; the site injects the presentation.** Never hand-author the on-page structure into the `.md`, and note the `.md` still carries the raw H1 / Pattern ID line (dropped only in the render).
 - **`website/remark/foundation-rules.js`** transforms Foundations pages (hides each rule's `id`, renders `scope` as pills, "Don'ts" → "Donts").
 - The swizzled `src/theme/DocItem/Content/index.js` renders the page-head (eyebrow / breadcrumb / H1 / summary) from front matter.
 
@@ -135,7 +135,7 @@ The full convention (semver rules, what counts as MAJOR/MINOR/PATCH, what doesn'
 Before suggesting `git add`, `git commit`, or `git push`, surface a versioning decision for each touched pattern file. For each touched file, propose:
 
 1. **What changed** — one-line summary
-2. **Recommended `latest_version` change** — **X.Y.Z because <reason>** using the semver rules in CONTRIBUTING § Versioning (MAJOR: removed/breaking; MINOR: added Must Have / Customizable / Acceptance Check / aliases / semantic clarification; PATCH: typo/wording/clarification with no requirements change; no-bump: pure corpus-wide typography sweep)
+2. **Recommended `latest_version` change** — **X.Y.Z because <reason>** using the semver rules in CONTRIBUTING § Versioning (MAJOR: removed/breaking; MINOR: added Must Have / Customizable / aliases / semantic clarification; PATCH: typo/wording/clarification with no requirements change; no-bump: pure corpus-wide typography sweep)
 3. **Recommended `catalog_revision` bump** — always for any commit that touches the corpus
 4. **Release notes entry** — one line per changed pattern, ready to paste into `release-notes.md` under the new catalog version heading
 

@@ -24,15 +24,9 @@
  *      rendered as two stacked cards ("Use when" / "Try a different component
  *      when").
  *   3. Renames "Don'ts" → "Donts" (Version E drops the apostrophe).
- *   4. Reorders to Selection → Must Haves → Donts → Customizable → Golden Pattern
- *      → Acceptance Checks, wraps each in <section class="pattern-section …">, and
- *      injects a muted intro line under each H2.
- *   5. Flattens the Acceptance Checks section: patterns author it as a NESTED list
- *      (top-level group labels like "Keyboard" / "Screen Reader", each holding a
- *      sub-list of checks). Each group becomes an <h3> — with the label normalized
- *      so "Keyboard Activation" / "Controls (keyboard)" → "Keyboard" and screen-
- *      reader variants → "Screen Reader" — followed by a FLAT <ul> of that group's
- *      checks. No nested lists remain. Flat/ungrouped checklists pass through.
+ *   4. Reorders to Selection → Must Haves → Donts → Customizable → Golden Pattern,
+ *      wraps each in <section class="pattern-section …">, and injects a muted intro
+ *      line under each H2.
  *
  * IMPORTANT — the per-section intro lines below are WEBSITE-ONLY presentational
  * annotations for human readers. They are the exact copy from DESIGN-SYSTEM.md §6
@@ -55,8 +49,6 @@ const INTROS = {
     'Alternatives and options that give the AI agent some room to move.',
   'golden-pattern':
     'The tested reference implementation. Agents start from this shape and adapt to the developer’s codebase and context.',
-  'acceptance-checks':
-    'The component’s test spec — an optional body of checks for verification.',
 };
 
 // Order + display title of the flat (non-Selection) sections, by normalized key.
@@ -65,7 +57,6 @@ const FLAT_SECTIONS = [
   {norm: 'donts', key: 'donts', title: 'Donts'},
   {norm: 'customizable', key: 'customizable', title: 'Customizable'},
   {norm: 'golden pattern', key: 'golden-pattern', title: 'Golden Pattern'},
-  {norm: 'acceptance checks', key: 'acceptance-checks', title: 'Acceptance Checks'},
 ];
 
 /** Recursively extract the plain text of an mdast node. */
@@ -106,166 +97,6 @@ function introNode(key) {
 /** A fresh H2 heading node with plain-text content (Docusaurus assigns the slug). */
 function h2(text) {
   return {type: 'heading', depth: 2, children: [{type: 'text', value: text}]};
-}
-
-// ── Acceptance Checks flattening ────────────────────────────────────────────
-// Patterns author "Acceptance Checks" as a nested list: top-level items are group
-// labels ("Keyboard", "Screen Reader", "Controls (keyboard):"…) each holding a
-// sub-list of checks. We flatten each group to an <h3> + a flat <ul> of its checks.
-
-/**
- * Normalize an acceptance-check group label so it reads the same across patterns:
- * keyboard variants ("Keyboard Activation", "Keyboard navigation", "Controls
- * (keyboard)"…) collapse to "Keyboard"; screen-reader variants to "Screen Reader".
- * Any other label (e.g. "Semantics", "Autoplay") is kept, minus a trailing colon.
- * The word-boundary match keeps distinct labels like "Pointer + keyboard
- * continuity" intact — only labels that *start* with "keyboard" collapse.
- */
-function normalizeGroupLabel(raw) {
-  const s = String(raw)
-    .replace(/[:\s]+$/, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-  const low = s.toLowerCase();
-  if (/^keyboard\b/.test(low) || low === 'controls (keyboard)') return 'Keyboard';
-  if (/^screen[\s-]?reader\b/.test(low)) return 'Screen Reader';
-  return s;
-}
-
-/** A flat <ul> (mdast list) wrapping the given listItem nodes. Tight (list AND items
- *  spread:false), so each <li> renders as a leaf check with no <p> margins and keeps
- *  the acceptance-check checkmark marker. */
-function flatList(items) {
-  const children = (items || []).map((it) => {
-    if (it && typeof it === 'object') it.spread = false;
-    return it;
-  });
-  return {type: 'list', ordered: false, spread: false, children};
-}
-
-/** Force an authored list to render tight in place: no <p> wrappers / extra margins
- *  on the top-level items. Nested sub-lists (e.g. button.basic's "Disabled button:"
- *  detail bullets) are left as authored. A single item with block content otherwise
- *  makes CommonMark render the WHOLE list loose — this un-does that. */
-function makeTight(list) {
-  if (!list || list.type !== 'list') return list;
-  list.spread = false;
-  for (const item of list.children || []) {
-    if (item && typeof item === 'object') item.spread = false;
-  }
-  return list;
-}
-
-/** True when a list's first item contains a nested sub-list — the "grouped" shape.
- *  Gating on the first item leaves flat checklists (and lists whose only nesting is
- *  an incidental sub-detail, e.g. button.basic's "Disabled button:") untouched. */
-function isGroupedList(list) {
-  const first = Array.isArray(list.children) ? list.children[0] : null;
-  return !!(
-    first &&
-    Array.isArray(first.children) &&
-    first.children.some((c) => c.type === 'list')
-  );
-}
-
-/** A non-heading <h3> group title (rendered via data.hName like selectionCard's
- *  title, so it does NOT get a slug or a right-hand TOC entry). */
-function groupTitle(label) {
-  return container('h3', ['ac-group-title'], [{type: 'text', value: label}]);
-}
-
-/** Expand one grouped acceptance-checks list into a run of <h3> + flat-<ul> blocks.
- *  Bare top-level checks (no nested list) are buffered into their own heading-less
- *  <ul>, preserving authored order. */
-function expandGroupedList(list) {
-  const result = [];
-  let loose = [];
-  const flushLoose = () => {
-    if (loose.length) {
-      result.push(flatList(loose));
-      loose = [];
-    }
-  };
-  for (const item of list.children || []) {
-    const kids = Array.isArray(item.children) ? item.children : [];
-    const subList = kids.find((c) => c.type === 'list');
-    if (subList) {
-      flushLoose();
-      const label = normalizeGroupLabel(
-        kids
-          .filter((c) => c.type !== 'list')
-          .map(toText)
-          .join(' '),
-      );
-      result.push(groupTitle(label));
-      result.push(flatList(subList.children || []));
-    } else {
-      loose.push(item);
-    }
-  }
-  flushLoose();
-  return result;
-}
-
-/** True when a paragraph heads a check group — the shape used when patterns don't
- *  use the nested-list form. Two accepted forms: a bold-only paragraph ("**Keyboard**",
- *  iOS/SwiftUI) or a short plain-text label ("Keyboard", "Screen Reader" — a few words,
- *  one line, no sentence-ending period). The brevity + no-period test keeps a real
- *  intro sentence from being mistaken for a label. Only meaningful when the paragraph
- *  is immediately followed by a list (checked at the call site). */
-function isGroupLabelPara(node) {
-  if (!node || node.type !== 'paragraph' || !Array.isArray(node.children)) return false;
-  const kids = node.children.filter(
-    (c) => !(c.type === 'text' && /^\s*$/.test(c.value)),
-  );
-  if (kids.length === 1 && kids[0].type === 'strong') return true; // **Label**
-  const text = toText(node).trim();
-  if (!text || text.includes('\n')) return false;
-  return text.split(/\s+/).length <= 6 && !/[.]$/.test(text);
-}
-
-/** The boilerplate intro iOS/SwiftUI patterns place under Acceptance Checks ("Observable
- *  behaviors a tester verifies … XCUITest … not part of this pattern"). It duplicates the
- *  injected section-sub and adds no per-pattern value, so it's dropped from the render. */
-function isIosBoilerplateIntro(node) {
-  return !!(
-    node &&
-    node.type === 'paragraph' &&
-    /^Observable behaviors a tester verifies with iOS assistive technologies/.test(
-      toText(node).trim(),
-    )
-  );
-}
-
-/** Flatten the Acceptance Checks body into h3 + flat-ul blocks. Handles three authored
- *  shapes: (1) a single nested list whose top-level items are group labels; (2) a run of
- *  "Group label" paragraphs (bold or short plain text) each followed by a flat checklist;
- *  (3) a plain ungrouped checklist. Groups normalize to <h3 class="ac-group-title"> + flat
- *  <ul>; ungrouped lists are forced tight so a trailing detail sub-list (button.basic's
- *  "Disabled button:") doesn't make the whole list render loose. */
-function expandAcceptanceChecks(body) {
-  const out = [];
-  let done = false;
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i];
-    const next = body[i + 1];
-    if (isIosBoilerplateIntro(node)) {
-      continue;
-    }
-    if (!done && node.type === 'list' && isGroupedList(node)) {
-      out.push(...expandGroupedList(node));
-      done = true;
-    } else if (isGroupLabelPara(node) && next && next.type === 'list') {
-      out.push(groupTitle(normalizeGroupLabel(toText(node))));
-      out.push(flatList(next.children || []));
-      i++; // consume the checklist paired with this label
-    } else if (node.type === 'list') {
-      out.push(makeTight(node));
-    } else {
-      out.push(node);
-    }
-  }
-  return out;
 }
 
 /** One Selection card: an <div class="sel-card …"> with a non-heading title + body. */
@@ -349,11 +180,6 @@ module.exports = function remarkPatternSections() {
                 .startsWith('Structural reference for AI coding assistants')
             ),
         );
-      }
-      // Flatten the authored "Keyboard / Screen Reader" group list into <h3> +
-      // flat <ul> blocks (see expandAcceptanceChecks). Ungrouped bodies pass through.
-      if (key === 'acceptance-checks') {
-        body = expandAcceptanceChecks(body);
       }
       sections.push(
         container(
