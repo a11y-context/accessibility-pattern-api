@@ -3,5 +3,56 @@
   "schema_version": "1.0.0",
   "catalog_revision": "0.1.0",
   "cache_ttl_seconds": 3600,
-  "patterns": []
+  "patterns": [
+    {
+      "id": "button.basic",
+      "title": "Button",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Material 3 control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which differ in where the accessible name comes from and where the control sits in reading order.",
+      "aliases": [
+        "btn",
+        "primary button",
+        "icon button",
+        "call to action",
+        "cta",
+        "IconButton",
+        "floating action button",
+        "fab",
+        "ExtendedFloatingActionButton",
+        "assist chip",
+        "suggestion chip",
+        "text button"
+      ],
+      "tags": [
+        "button",
+        "control",
+        "action",
+        "icon-button",
+        "fab",
+        "chip"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user triggers an immediate action and stays on the current screen (e.g., \"Save\", \"Add to Watchlist\", \"Play\").",
+          "Use when the action is presented as a floating action button, an icon-only control, or an assist or suggestion chip. All four carry Role.Button and no state of their own."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control represents an on or off state that persists after the tap (use button.toggle).",
+          "Do not use when the control carries a selected state, such as a filter or a removable token (use chip.filter or chip.input).",
+          "Do not use when the control opens a list of commands (use menu.basic).",
+          "Do not use when the control opens a URL or leaves the app (use link.standalone).",
+          "Do not use when the control is a row in a list that navigates elsewhere (use list-item.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/button.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    }
+  ]
 }
