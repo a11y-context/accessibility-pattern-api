@@ -8,6 +8,16 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.0 — 2026-09-18
+
+**WCAG citations removed, the focus rule renamed to match the rest of the corpus, and a native-first rule added.**
+
+- **23 WCAG criterion citations removed** from Must Haves and Don'ts across 11 SwiftUI patterns and `global_rules.md`, for the same reason as the web 0.28.0 release: the style guide says state the requirement, not the reason, and a criterion identifier never changes what gets built. `release-notes.md` keeps its own references.
+- **`global.focus-visible` is now `global.focus-states`**, matching web. It was the only Foundations ID that differed across stacks, and 32 references across 20 files moved with it. The rule heading becomes "Focus States". The surrounding prose in each pattern is unchanged; only the ID moved.
+- **New rule `global.native-first`**, scope control and component. It states the contract an interactive control owes assistive technology, its role, its value or state, and its actions, and names SwiftUI's own controls as the reference implementation that already satisfies it. Mostly a consolidation: `global.semantic-color` already said to use native control styles, `global.custom-control-representation` already covered the from-primitives case, and the focus rule already noted that native styles preserve the indicator. Stating it once lets component patterns reference it rather than restate it.
+
+The rename and the citation removal change no requirement. The new rule adds one. No per-pattern version bumps.
+
 ## 0.4.2 — 2026-09-17
 
 **Section order corrected in the source files.**

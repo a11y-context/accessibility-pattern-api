@@ -8,6 +8,16 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.28.0 — 2026-09-18
+
+**WCAG criterion citations leave the retrieved content.**
+
+- **34 parenthetical criterion references removed** from Must Haves, Don'ts, and three Golden Pattern code comments, across 8 web patterns and `global_rules.md`. The style guide already says to state the requirement and not the reason, and a criterion identifier is a reason that never changes what gets built. It cost retrieval budget on every lookup to deliver something no agent reads.
+- **Provenance and history keep theirs.** `intro.md` still says patterns target WCAG 2.2 AA, because that is scope framing for a human arriving at the section. `release-notes.md` keeps the reasoning in its entries, including the 1.3.5 against 3.3.8 analysis, because a decision record is poorer without it. `qa-catalog.json` keeps its citations, because testers use them.
+- Patterns touched: `badge.basic`, `dialog.basic`, `dialog.modal`, `splitter.basic`, `switch.basic`, `tabs.basic`, `tooltip.basic`, plus `global_rules.md`.
+
+No requirement text changed, so no per-pattern version bumps. `patterns.json` is unaffected: every citation sat in the build layer, and none in Use When or Do Not Use When.
+
 ## 0.27.1 — 2026-09-17
 
 **Section order corrected in the source files, and the website stops silently correcting it.**
