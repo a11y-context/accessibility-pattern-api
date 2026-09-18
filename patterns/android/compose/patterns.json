@@ -6,7 +6,7 @@
   "patterns": [
     {
       "id": "bottom-sheet.modal",
-      "title": "Modal Bottom Sheet",
+      "title": "Bottom Sheet",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
@@ -29,12 +29,12 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when content appears over the current screen, blocks interaction with it, and the user must act on it or dismiss it before continuing (e.g., a share sheet, a filter panel, a detail view raised from a list).",
-          "Use when the content is short enough to sit at the bottom of the screen and belongs to the screen behind it rather than replacing it."
+          "Use when the user needs a set of actions, a list, or a short form that belongs to the current screen and should not replace it (e.g., a share sheet, a filter panel, a sort menu).",
+          "Use when the user will work through several controls before dismissing, and the content blocks interaction with the screen behind it while they do."
         ],
         "do_not_use_when": [
           "Do not use when the background must stay reachable while the sheet is open (use bottom-sheet.standard).",
-          "Do not use when the content is a short message with up to two actions and no other controls (use dialog.alert).",
+          "Do not use when the content is a message the user acknowledges or answers with one of two choices, and nothing else. A sheet holds a set of things; a dialog interrupts with one (use dialog.alert).",
           "Do not use when the content is a list of commands acting on one trigger (use menu.basic).",
           "Do not use when the message reports an outcome and needs no response (use snackbar.basic)."
         ]
@@ -103,7 +103,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Independent yes or no choice submitted with a form. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.",
+      "summary": "Yes or no choice submitted with a form, independent of any other checkbox beside it. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.",
       "aliases": [
         "check box",
         "tick box",
@@ -123,9 +123,10 @@
       "selection_excerpt": {
         "use_when": [
           "Use when a single control records an independent yes or no choice submitted with a form rather than taking effect immediately (e.g., \"I agree to the Terms of Service\", \"Remember me on this device\").",
-          "Use when the control's label is self-sufficient, including when several such independent checkboxes appear in the same form."
+          "Use when several checkboxes appear together and any number of them may be checked at once, each label standing on its own (e.g., a list of notification types)."
         ],
         "do_not_use_when": [
+          "Do not use when the options are mutually exclusive and exactly one must be chosen (use radio.basic).",
           "Do not use when toggling the control takes effect immediately as a persistent setting (use switch.basic).",
           "Do not use when the control turns a feature or formatting state on and off in the current context rather than recording a value to submit (use button.toggle).",
           "Do not use when a third mixed or partially checked state is required, such as a parent reflecting a mix of checked children (use checkbox.tristate).",

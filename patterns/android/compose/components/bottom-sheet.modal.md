@@ -1,6 +1,6 @@
 ---
 id: bottom-sheet.modal
-title: Modal Bottom Sheet
+title: Bottom Sheet
 stack: android/compose
 status: beta
 latest_version: 0.1.0
@@ -9,7 +9,7 @@ aliases: [modal bottom sheet, ModalBottomSheet, bottom drawer, action sheet, she
 summary: Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.
 ---
 
-# Modal Bottom Sheet
+# Bottom Sheet
 
 Pattern ID: `bottom-sheet.modal`
 
@@ -18,12 +18,12 @@ Overlay that rises from the bottom edge and blocks the content behind it. Materi
 `ModalBottomSheet` already supplies most of the dismissal contract: scrim tap, back press, and a drag handle carrying named expand, collapse, and dismiss actions. Every one of them is conditional on a parameter the caller sets, so the requirements below are about keeping them rather than building them.
 
 ## Use When
-- Use when content appears over the current screen, blocks interaction with it, and the user must act on it or dismiss it before continuing (e.g., a share sheet, a filter panel, a detail view raised from a list).
-- Use when the content is short enough to sit at the bottom of the screen and belongs to the screen behind it rather than replacing it.
+- Use when the user needs a set of actions, a list, or a short form that belongs to the current screen and should not replace it (e.g., a share sheet, a filter panel, a sort menu).
+- Use when the user will work through several controls before dismissing, and the content blocks interaction with the screen behind it while they do.
 
 ## Do Not Use When
 - Do not use when the background must stay reachable while the sheet is open (use `bottom-sheet.standard`).
-- Do not use when the content is a short message with up to two actions and no other controls (use `dialog.alert`).
+- Do not use when the content is a message the user acknowledges or answers with one of two choices, and nothing else. A sheet holds a set of things; a dialog interrupts with one (use `dialog.alert`).
 - Do not use when the content is a list of commands acting on one trigger (use `menu.basic`).
 - Do not use when the message reports an outcome and needs no response (use `snackbar.basic`).
 

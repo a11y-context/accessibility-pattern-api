@@ -6,20 +6,21 @@ status: beta
 latest_version: 0.1.0
 tags: [checkbox, control, form-control, selection, toggleable]
 aliases: [check box, tick box, form checkbox, agree checkbox, opt-in, Checkbox, toggleable]
-summary: Independent yes or no choice submitted with a form. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.
+summary: Yes or no choice submitted with a form, independent of any other checkbox beside it. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.
 ---
 
 # Checkbox
 
 Pattern ID: `checkbox.basic`
 
-Independent yes or no choice submitted with a form. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.
+Yes or no choice submitted with a form, independent of any other checkbox beside it. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.
 
 ## Use When
 - Use when a single control records an independent yes or no choice submitted with a form rather than taking effect immediately (e.g., "I agree to the Terms of Service", "Remember me on this device").
-- Use when the control's label is self-sufficient, including when several such independent checkboxes appear in the same form.
+- Use when several checkboxes appear together and any number of them may be checked at once, each label standing on its own (e.g., a list of notification types).
 
 ## Do Not Use When
+- Do not use when the options are mutually exclusive and exactly one must be chosen (use `radio.basic`).
 - Do not use when toggling the control takes effect immediately as a persistent setting (use `switch.basic`).
 - Do not use when the control turns a feature or formatting state on and off in the current context rather than recording a value to submit (use `button.toggle`).
 - Do not use when a third mixed or partially checked state is required, such as a parent reflecting a mix of checked children (use `checkbox.tristate`).

@@ -17,5 +17,7 @@
     "link.basic": "Link (Standalone)",
     "link.inline": "Link (Inline)"
   },
-  "android/compose": {}
+  "android/compose": {
+    "bottom-sheet.modal": "Bottom Sheet (Modal)"
+  }
 }
