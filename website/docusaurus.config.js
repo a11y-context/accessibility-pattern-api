@@ -198,6 +198,11 @@ const config = {
             position: 'left',
           },
           {
+            label: 'Compose (Android)',
+            to: '/android',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/a11y-context/accessibility-pattern-api',
             position: 'right',
             className: 'header-github-link',

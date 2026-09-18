@@ -273,6 +273,8 @@ Soft ceiling around 120 lines; the corpus median is 97. Running long usually mea
 
 ## Boilerplate formulas
 
+Each stack keeps its own set, because a formula names platform mechanisms. The set immediately below is `web/react`; the `android/compose` set follows it. When a stack has no formula for a situation, write the sentence and add it here rather than paraphrasing per pattern.
+
 These recurring sentences appear nearly verbatim across the corpus. **Reuse them word-for-word** — consistency across patterns is a feature, it teaches retrieval systems and AI agents a stable vocabulary. Do not paraphrase creatively.
 
 ### Native button formula
@@ -336,6 +338,79 @@ requestAnimationFrame(() => trigger.focus());
 ```
 
 The rAF defers the focus call until React has flushed the state change and the trigger is back in a focusable state. Used in `collection-row.basic` (paging focus moves), `menu.account` (Esc restoration), and similar patterns.
+
+---
+
+### Android / Compose formulas
+
+Provisional. These were derived from the Foundations rules and the wave-1 component set before any Android pattern was authored, which inverts how the web set was built. Confirm or trim them after the first three patterns ship, then treat the set as closed and reuse verbatim.
+
+#### Native control formula
+
+> Use the Material `[Composable]` rather than assembling the control from primitives, so its role, state, and interaction semantics come from the component (`global.native-first`).
+
+#### Accessible name formulas
+
+> The [control] has an accessible name that describes its purpose or action.
+
+> When the [control] has visible text, that text serves as the accessible name and no `contentDescription` is set on it.
+
+> When more context is needed than the visible text carries, set `contentDescription` on the control, opening with the visible text.
+
+> An icon-only control takes its name from `contentDescription` on the control, and the `Icon` inside it carries `contentDescription = null`.
+
+#### Touch target formula (every pattern, near end of Must Haves)
+
+> Meets the touch target baseline in `global_rules.md` (`global.touch-target-size`).
+
+#### Focus state formula (every pattern, near end of Must Haves)
+
+> Meets the focus states baseline in `global_rules.md` (`global.focus-states`).
+
+#### Hoisted state formula
+
+For any selection control whose state is lifted to a wrapping row, which is Material's own documented arrangement:
+
+> When state is lifted to the wrapping row, the row carries `Modifier.toggleable(value = , onValueChange = , role = Role.[X])` and the control's own callback is `null`. The row then owns the role, the click target, and the touch target minimum.
+
+#### Merged row formula
+
+For any pattern whose unit is a row or surface containing several elements:
+
+> The [row] is a single accessibility node. A secondary action inside it is exposed as a `CustomAccessibilityAction` rather than as a nested interactive child (`global.merge-semantics`).
+
+#### State description formula
+
+> When the visible state wording differs from the default announcement, set `stateDescription` to match the visible wording.
+
+#### Disabled control formula
+
+> If the action is unavailable, pass `enabled = false` rather than removing the handler, so the control stays in the accessibility tree and reports that it is disabled.
+
+#### Overlay dismissal formula
+
+For any overlay the user can close:
+
+> The overlay closes on back press and on a tap outside it. Escape from a hardware keyboard is handled explicitly, because Compose does not supply it.
+
+#### Live region formula
+
+For any pattern that reports a change the user did not navigate to:
+
+> Mark the changed element with `Modifier.semantics { liveRegion = LiveRegionMode.Polite }` so the change is announced without moving the user's place (`global.announcements`).
+
+#### Collection position formula
+
+For any pattern built on a lazy layout where position in the set is meaningful:
+
+> Set `collectionInfo` on the container and `collectionItemInfo` on each item. Lazy layouts announce that the user is in a list without reporting position or total count.
+
+#### Nested interactive don't
+
+For any pattern whose unit is a row or surface that is itself clickable, always include this in Don'ts:
+
+> Do not nest an interactive child inside the [row]. A child that merges is not absorbed by a parent that merges, so the result is two competing targets rather than one.
+
 
 ---
 

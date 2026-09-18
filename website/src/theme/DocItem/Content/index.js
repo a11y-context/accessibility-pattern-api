@@ -37,6 +37,7 @@ const STACK_LABELS = {
 const GALLERY_HREF = {
   'web/react': '/web/react/component-gallery',
   'ios/swiftui': '/ios/swiftui/component-gallery',
+  'android/compose': '/android/compose/component-gallery',
 };
 
 /**
