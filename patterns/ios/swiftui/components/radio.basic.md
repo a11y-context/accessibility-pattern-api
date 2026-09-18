@@ -30,7 +30,7 @@ A mutually exclusive choice group built from custom `Button` elements, since Swi
 - Remove the button trait from each option with `.accessibilityRemoveTraits(.isButton)`, since SwiftUI exposes no native radio trait and "Button" would misdescribe the control.
 - Add the selected trait to the chosen option and remove it from the others (`.accessibilityAddTraits(.isSelected)` / `.accessibilityRemoveTraits(.isSelected)`), so VoiceOver announces which option is selected.
 - Override the announced value on every option with `.accessibilityValue`, "Radio button, checked" for the selected option and "Radio button, unchecked" for the rest, so VoiceOver conveys the radio role and the option's state that no native trait supplies.
-- Label the group container: apply `.accessibilityElement(children: .contain)` and an `.accessibilityLabel` matching the visible group heading, so VoiceOver announces the group name when focus first enters it (WCAG 1.3.1).
+- Label the group container: apply `.accessibilityElement(children: .contain)` and an `.accessibilityLabel` matching the visible group heading, so VoiceOver announces the group name when focus first enters it.
 - Each option has an accessible name matching its visible label text.
 - The selected state is distinguishable by more than color: the radio glyph itself changes (an empty circle versus a filled or ringed circle), not only a color fill (per `global.semantic-color`).
 - Let the radio glyph scale with the label under Dynamic Type; size it with the surrounding font rather than a fixed point frame that would clip at large sizes (per `global.dynamic-type`).

@@ -29,7 +29,7 @@ A native SwiftUI `.confirmationDialog` action sheet that takes VoiceOver focus o
 - Use the native `.confirmationDialog(_:isPresented:titleVisibility:actions:message:)` modifier so the action sheet is a real overlay that takes VoiceOver focus on presentation and blocks interaction with the rest of the screen until it is dismissed.
 - Provide the primary question or statement as the dialog title, and put any supporting detail in the `message:` closure.
 - Set `titleVisibility: .visible` so the title is shown and spoken, unless the triggering context already makes the choice clear (see Customizable).
-- Return VoiceOver focus to the trigger on dismissal: bind the trigger with `@AccessibilityFocusState` and set it true inside every action's closure, because native confirmation dialogs do not restore focus automatically, which is an Apple platform defect (WCAG 2.4.3). See `global.focus-management`.
+- Return VoiceOver focus to the trigger on dismissal: bind the trigger with `@AccessibilityFocusState` and set it true inside every action's closure, because native confirmation dialogs do not restore focus automatically, which is an Apple platform defect. See `global.focus-management`.
 - Give each action a specific label and the correct role: `.cancel` for the dismissive action and `.destructive` for a destructive one, so VoiceOver and the system present them correctly.
 - Keep the action set short and the labels self-explanatory out of context (e.g., "Discard Draft", "Keep Editing"), not "OK"/"Yes"/"No" where the outcome is ambiguous.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
