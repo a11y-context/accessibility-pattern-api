@@ -1,0 +1,112 @@
+---
+id: list-item.basic
+title: List Item
+stack: android/compose
+status: beta
+latest_version: 0.1.0
+tags: [list item, row, list, collection, navigation]
+aliases: [list row, ListItem, table row, cell, settings row, channel row, list tile, collection-row item]
+summary: A row in a vertical list. The row is one accessibility node rather than the several elements it looks like, so a second control inside it becomes a custom action rather than a nested target.
+---
+
+# List Item
+
+Pattern ID: `list-item.basic`
+
+A row in a vertical list. The row is one accessibility node rather than the several elements it looks like, so a second control inside it becomes a custom action rather than a nested target.
+
+A row carrying a title, a subtitle, an image, and a trailing control looks like four or five things and should read as one. Getting that wrong is the most common accessibility failure in a Compose list, and it is invisible to a scanner: every element has a name, contrast passes, and the tree is well formed.
+
+## Use When
+- Use when a row in a vertical list presents one item and, on tap, acts on that item or opens it (e.g., an episode in a season list, a channel in a guide, a row in a settings screen).
+- Use when the row carries several pieces of content, such as a thumbnail with a title and supporting text, that describe one thing.
+
+## Do Not Use When
+- Do not use when the tile sits in a horizontally scrolling row of content (use `content-shelf.basic`).
+- Do not use when the control performs an in-place action and is not a row in a list (use `button.basic`).
+- Do not use when the row is a selectable option in a mutually exclusive set (use `radio.basic`).
+- Do not use when the row carries a setting that toggles in place (use `switch.basic`).
+
+## Must Haves
+- Use the Material `ListItem` composable for the row's structure, so its slots carry the content in a known order and its merge behavior is the documented one (`global.native-first`).
+- Make the whole row the target when tapping it acts on the item, by putting `Modifier.clickable` on the `ListItem` rather than on the text inside it.
+- The row is a single accessibility node. Its headline, overline, and supporting text merge into one name, read in traversal order, so order the slots so that name reads as a sentence (`global.merge-semantics`).
+- Expose a secondary control inside the row as a `CustomAccessibilityAction` on the row rather than as a nested interactive child. TalkBack surfaces custom actions through its actions menu, which keeps the row a single stop.
+- Set `onClickLabel` on the row when "Double tap to activate" would not say what happens (e.g., `onClickLabel = "open episode"`).
+- Give a leading thumbnail `contentDescription = null` when the row's text already names the item. The artwork repeats the title, and naming it makes the row announce the title twice (`global.icon`).
+- Declare `collectionItemInfo` on each row and `collectionInfo` on the list when position in the set is meaningful. A `LazyColumn` announces that the user is in a list and reports neither position nor total (`global.collection-semantics`).
+- Give a progress bar or similar indicator inside the row a `stateDescription` on the row, or fold its value into the row's name. An indicator inside a merged node contributes nothing on its own (`global.state-description`).
+- Size the row to at least 48dp (`global.touch-target-size`).
+- Meets the focus states baseline in `global_rules.md` (`global.focus-states`).
+
+## Don'ts
+- Do not nest an interactive child inside a clickable row. A child that merges is not absorbed by a parent that merges, so a favorite button inside a clickable row becomes a second competing target rather than part of the row, and the user meets two stops where the layout shows one.
+- Do not make the title clickable instead of the row. The tap target shrinks to the text, and the rest of the row, including the artwork the user is aiming at, does nothing.
+- Do not give every element in the row its own `contentDescription`. They all reach the merged name and the row announces a run-on string.
+- Do not leave a decorative thumbnail unnamed by omitting `contentDescription` entirely. An unset description is not the same as `null`, and the image reports no name rather than leaving the tree.
+- Do not rely on `LazyColumn` to supply position. It says the user is in a list and stops there.
+
+## Customizable
+- The row may use `ListItem`'s slots or a hand-built `Row`, as long as the result is one node with a coherent name and a 48dp target. `ListItem` is preferred because its slot order is the order the name reads in.
+- A row may carry one secondary action as a custom action, or several. Where there are more than about three, a row that opens a detail surface is usually easier to operate than a row with a long actions menu.
+- A trailing chevron, a trailing value, or neither. A chevron is decorative and takes `contentDescription = null`.
+
+## Golden Pattern
+
+Structural reference for AI coding assistants — semantics, focus, and keyboard behavior. Styling, copy, and demo data are illustrative.
+
+```kotlin
+@Composable
+fun ListItemExamples() {
+    val episodes = listOf(
+        "The Silencer" to "41m, Sep 26 2012",
+        "The Pact" to "43m, Oct 3 2012"
+    )
+
+    LazyColumn(
+        modifier = Modifier.semantics {
+            collectionInfo = CollectionInfo(rowCount = episodes.size, columnCount = 1)
+        }
+    ) {
+        itemsIndexed(episodes, key = { _, item -> item.first }) { index, (title, meta) ->
+            var saved by remember { mutableStateOf(false) }
+
+            ListItem(
+                headlineContent = { Text(title) },
+                supportingContent = { Text(meta) },
+                // The artwork repeats the title, so naming it makes the row say
+                // the title twice.
+                leadingContent = {
+                    Image(
+                        painter = painterResource(R.drawable.episode_still),
+                        contentDescription = null
+                    )
+                },
+                // No nested IconButton here. A second clickable inside a clickable
+                // row is not absorbed by the merge, and becomes a rival target.
+                trailingContent = {
+                    Icon(
+                        imageVector = if (saved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier
+                    .clickable(onClickLabel = "open episode") { /* open */ }
+                    .heightIn(min = 48.dp)
+                    .semantics {
+                        collectionItemInfo = CollectionItemInfo(
+                            rowIndex = index, rowSpan = 1, columnIndex = 0, columnSpan = 1
+                        )
+                        // The bookmark control reaches the user here, through the
+                        // actions menu, instead of as a second stop in the list.
+                        customActions = listOf(
+                            CustomAccessibilityAction(
+                                label = if (saved) "Remove from saved" else "Save episode"
+                            ) { saved = !saved; true }
+                        )
+                    }
+            )
+        }
+    }
+}
+```

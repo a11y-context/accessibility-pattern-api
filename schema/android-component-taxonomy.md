@@ -411,13 +411,11 @@ The Material 3 column links to the component's own spec page, which is the faste
 
 ## Open questions
 
-One call that is John's, not mine. Everything else previously listed here has been decided and folded into the tables above.
-
-**1. Do chips occupy `tag.basic`?** `tag.basic` is a live forward reference from `badge.basic` on web, reserved for an indicator the user can select or dismiss. Every Material chip is exactly that. Either Android's `chip.*` family is the Android expression of `tag.*` and the web reference should be reconciled, or the two coexist for one concept. Cross-stack, so deliberately not settled here.
+Nothing open. Everything previously listed here has been decided and folded into the tables above.
 
 ### Decided and folded in
 
-Recorded so nobody reopens them. `content-shelf.basic` is the name, with `collection-row`, `shelf`, `rail`, `content row`, and `carousel row` as aliases: no design system surveyed names this component, Android's nearest terms are mechanisms rather than components, and `content-shelf` stays legible beside `list-item.basic` where `collection-row` would not. `global.use-of-color` stays its own rule rather than folding into `semantic-color`. Icon button, floating action button, and the assist and suggestion chips fold into `button.basic`. Secure text field folds into `text-field.basic`. `progress-indicator` splits on determinacy into two patterns. Navigation rail is deferred to wave 3 rather than cut, since the corpus serves any Android app and not only the two that prompted it. `fab.menu` is deferred, not cut, for the same reason.
+Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are the Android expression of the concept web reserved `tag.basic` for, under a different platform name: native Android says chip (Material, Acorn), web says tag (Ant, Chakra, Polaris, Carbon, USWDS, GOV.UK, Base Web). Each stack takes its own platform's word and the two cross-alias, so `tag` finds the Android chips and `chip` finds the web pattern whenever someone writes it. Low stakes: `tag.basic` is an unwritten forward reference nobody has committed to. `content-shelf.basic` is the name, with `collection-row`, `shelf`, `rail`, `content row`, and `carousel row` as aliases: no design system surveyed names this component, Android's nearest terms are mechanisms rather than components, and `content-shelf` stays legible beside `list-item.basic` where `collection-row` would not. `global.use-of-color` stays its own rule rather than folding into `semantic-color`. Icon button, floating action button, and the assist and suggestion chips fold into `button.basic`. Secure text field folds into `text-field.basic`. `progress-indicator` splits on determinacy into two patterns. Navigation rail is deferred to wave 3 rather than cut, since the corpus serves any Android app and not only the two that prompted it. `fab.menu` is deferred, not cut, for the same reason.
 
 ## Unverified claims
 
