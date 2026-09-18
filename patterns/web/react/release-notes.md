@@ -8,6 +8,15 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.28.1 — 2026-09-18
+
+**The no-external-references rule is written down.**
+
+- **`schema/style-guide.md` now states it**, under Prose and punctuation: no hyperlinks and no WCAG criterion identifiers in pattern text, with `intro.md`, `release-notes.md`, and `qa-catalog.json` named as the files that are not pattern text and keep theirs.
+- Both halves were already enforced and neither was recorded. Hyperlinks were stripped in iOS 0.4.1 and criterion identifiers in 0.28.0, on reasoning that lived only in the pull requests. A convention with nothing stating it is one contributor away from returning, which is the same gap the em-dash rule has.
+
+Documentation only. No pattern content changed, and `patterns.json` is unaffected.
+
 ## 0.28.0 — 2026-09-18
 
 **WCAG criterion citations leave the retrieved content.**
