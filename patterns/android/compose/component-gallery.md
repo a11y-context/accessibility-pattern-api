@@ -12,6 +12,6 @@ Every published Android / Compose pattern, with the situation it selects for. Th
 
 | Component | Summary |
 |-----------|---------|
-| [Button](./components/button.basic.md) | Material 3 control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which differ in where the accessible name comes from and where the control sits in reading order. |
+| [Button](./components/button.basic.md) | Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from. |
 
 <!-- gallery:end -->

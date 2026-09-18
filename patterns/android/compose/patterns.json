@@ -10,7 +10,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Material 3 control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which differ in where the accessible name comes from and where the control sits in reading order.",
+      "summary": "Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.",
       "aliases": [
         "btn",
         "primary button",

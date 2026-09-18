@@ -6,14 +6,14 @@ status: beta
 latest_version: 0.1.0
 tags: [button, control, action, icon-button, fab, chip]
 aliases: [btn, primary button, icon button, call to action, cta, IconButton, floating action button, fab, ExtendedFloatingActionButton, assist chip, suggestion chip, text button]
-summary: Material 3 control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which differ in where the accessible name comes from and where the control sits in reading order.
+summary: Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.
 ---
 
 # Button
 
 Pattern ID: `button.basic`
 
-Material 3 control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which differ in where the accessible name comes from and where the control sits in reading order.
+Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.
 
 ## Use When
 - Use when the user triggers an immediate action and stays on the current screen (e.g., "Save", "Add to Watchlist", "Play").

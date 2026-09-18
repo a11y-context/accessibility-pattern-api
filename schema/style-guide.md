@@ -199,6 +199,8 @@ function PatternExamples()       // slot 3 — optional; see the gate below
 
 **Slot 1 is mandatory and singular.** Exactly one export, named for the pattern: `badge.basic` exports `Badge`, `avatar.basic` exports `Avatar`. That export is what an agent lifts into a codebase, and its name is how the agent knows it found the right thing. Use the standard element or canonical ARIA composition inside it; no bespoke wrappers.
 
+**On `android/compose`, slot 1 is conditional.** A pattern whose unit is a composable you write once and reuse, such as a list row that carries its own semantics, exports it as normal. A pattern whose unit is a call site does not: on Android you do not write a Button, you call `androidx.compose.material3.Button`, and what an agent lifts is a correctly configured call rather than a component definition. Those patterns carry only `<Pattern>Examples`, and the export slot stays empty. The test is whether the pattern teaches a component or the way to invoke one. This does not apply to `web/react`, where the DOM ships no component and the export is always the thing being taught.
+
 #### Does the pattern need Examples at all?
 
 Ask: **does any Must Have mention something the component does not contain?**
