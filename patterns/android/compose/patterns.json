@@ -5,6 +5,49 @@
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
+      "id": "bottom-sheet.modal",
+      "title": "Modal Bottom Sheet",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.",
+      "aliases": [
+        "modal bottom sheet",
+        "ModalBottomSheet",
+        "bottom drawer",
+        "action sheet",
+        "sheet",
+        "slide-up panel",
+        "tray"
+      ],
+      "tags": [
+        "bottom sheet",
+        "modal",
+        "overlay",
+        "dialog",
+        "sheet"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when content appears over the current screen, blocks interaction with it, and the user must act on it or dismiss it before continuing (e.g., a share sheet, a filter panel, a detail view raised from a list).",
+          "Use when the content is short enough to sit at the bottom of the screen and belongs to the screen behind it rather than replacing it."
+        ],
+        "do_not_use_when": [
+          "Do not use when the background must stay reachable while the sheet is open (use bottom-sheet.standard).",
+          "Do not use when the content is a short message with up to two actions and no other controls (use dialog.alert).",
+          "Do not use when the content is a list of commands acting on one trigger (use menu.basic).",
+          "Do not use when the message reports an outcome and needs no response (use snackbar.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/bottom-sheet.modal.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "button.basic",
       "title": "Button",
       "pattern_type": "component",
@@ -50,6 +93,49 @@
       "default_variant": null,
       "source": {
         "path": "components/button.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "checkbox.basic",
+      "title": "Checkbox",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Independent yes or no choice submitted with a form. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.",
+      "aliases": [
+        "check box",
+        "tick box",
+        "form checkbox",
+        "agree checkbox",
+        "opt-in",
+        "Checkbox",
+        "toggleable"
+      ],
+      "tags": [
+        "checkbox",
+        "control",
+        "form-control",
+        "selection",
+        "toggleable"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a single control records an independent yes or no choice submitted with a form rather than taking effect immediately (e.g., \"I agree to the Terms of Service\", \"Remember me on this device\").",
+          "Use when the control's label is self-sufficient, including when several such independent checkboxes appear in the same form."
+        ],
+        "do_not_use_when": [
+          "Do not use when toggling the control takes effect immediately as a persistent setting (use switch.basic).",
+          "Do not use when the control turns a feature or formatting state on and off in the current context rather than recording a value to submit (use button.toggle).",
+          "Do not use when a third mixed or partially checked state is required, such as a parent reflecting a mix of checked children (use checkbox.tristate).",
+          "Do not use when several checkboxes answer one shared question and their labels are not meaningful without it. Group them and name the group, per global.collection-semantics."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/checkbox.basic.md",
         "format": "markdown",
         "frontmatter": true
       }
