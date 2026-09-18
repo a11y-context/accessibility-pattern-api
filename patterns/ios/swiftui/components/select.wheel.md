@@ -32,7 +32,7 @@ A SwiftUI `Picker` with the wheel style: an always-visible spinning drum of valu
 - Provide a visible label for the wheel so sighted users know what is being chosen, and keep the `.accessibilityLabel` matching it.
 - Each option has clear, distinct text so the values are distinguishable as they scroll under VoiceOver.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not omit `.accessibilityElement(children: .contain)` on a wheel-style `Picker`; without it the accessibility label is not spoken and the wheel is announced with no name.

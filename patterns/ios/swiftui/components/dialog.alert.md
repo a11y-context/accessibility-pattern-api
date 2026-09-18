@@ -31,7 +31,7 @@ A native SwiftUI `.alert` modal that takes VoiceOver focus on presentation, with
 - Give each action a specific label and the correct role: `.cancel` for the dismissive action and `.destructive` for a destructive one, so VoiceOver and the system present them correctly.
 - Keep the action set short and the labels self-explanatory out of context (e.g., "Delete", "Cancel"), not "OK"/"Yes"/"No" where the outcome is ambiguous.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not build a custom view as a faux alert (a conditional `VStack` overlay); it does not receive VoiceOver focus on display, does not block the background, and does not restore focus on close. Use the native `.alert()`, or `dialog.modal` for a richer custom modal.

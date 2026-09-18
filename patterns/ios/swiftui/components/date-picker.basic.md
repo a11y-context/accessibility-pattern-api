@@ -32,7 +32,7 @@ A native SwiftUI `DatePicker` for choosing a date or time, whose accessible name
   - For the `.graphical` and `.wheel` styles, supply a non-empty `DatePicker("Label")` string, which is spoken to VoiceOver as the accessible name; do not also add an `.accessibilityLabel`, or both the visible label and the accessibility label are spoken.
 - Give every picker a clear, specific name that identifies which date or time it sets when several appear together (e.g., "Start date", "End date"), so they are distinguishable.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not add an `.accessibilityLabel` to a `.graphical` or `.wheel` `DatePicker`; combined with the required visible `DatePicker("Label")` string, VoiceOver speaks both and the name is announced twice.

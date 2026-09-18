@@ -32,7 +32,7 @@ A checkbox built from a SwiftUI `Toggle` with a custom square toggle style, usin
 - The checked and unchecked states are distinguishable by more than color: the box glyph itself changes (empty square versus checkmark), not only a color fill (per `global.semantic-color`).
 - Let the box glyph scale with the label under Dynamic Type; size it with the surrounding font (e.g., `.imageScale`) rather than a fixed point frame that would clip at large sizes.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not build a checkbox from a `Button` that swaps a checkmark image; VoiceOver then announces "Button" with no Checked or Unchecked value, and the state is invisible to screen reader users.

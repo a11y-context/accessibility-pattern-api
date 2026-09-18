@@ -32,7 +32,7 @@ A SwiftUI `Picker` with the segmented style, showing two to five mutually exclus
 - Provide a visible label for the group (the `Picker` label text or a preceding `Text`) so a sighted user knows what the segments choose, and match the `.accessibilityLabel` to it.
 - Each segment has clear, distinct text so the options are distinguishable and each `.tag` matches the selection type.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not rely on the `Picker` label text alone to name a segmented picker; without `.accessibilityElement(children: .contain)`, the `.accessibilityLabel` is not spoken and VoiceOver users hear only the segment text, never the group label.

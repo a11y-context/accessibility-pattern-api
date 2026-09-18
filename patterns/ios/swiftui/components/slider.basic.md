@@ -31,7 +31,7 @@ A native SwiftUI `Slider` that VoiceOver adjusts by swiping up or down, paired w
   - Icon-only increment and decrement buttons each need an `.accessibilityLabel` (e.g., "Decrease brightness", "Increase brightness").
 - Give repeated sliders on one screen unique accessible names.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not add a `.adjustable` trait; SwiftUI has no such trait (it exists only in UIKit). For a custom slider, confer adjustability with `.accessibilityAdjustableAction`, not a trait.

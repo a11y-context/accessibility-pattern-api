@@ -21,6 +21,23 @@ The cross-cutting accessibility rules that apply across most SwiftUI work, indep
 
 Verification (audits, contrast measurement, on-device and human/LLM review) is a QA concern and lives in the QA layer, not here.
 
+## Rule: Native First
+
+```yaml
+id: global.native-first
+scope: [control, component]
+```
+
+### Must Haves
+- An interactive control exposes three things to assistive technology: its role, its current value or state, and its actions. Reach for the control that already does all three rather than assembling one that does none.
+- SwiftUI's own control is the reference implementation of that contract. `Button`, `Toggle`, `Slider`, `Stepper`, `Picker`, `TextField`, and `DatePicker` carry their traits, values, and actions without being told. A view that wraps one of them satisfies the contract too.
+- A control assembled from `Text`, `Image`, `Shape`, and `.onTapGesture` satisfies none of it, and has to declare all three by hand. When that is the only option, follow `global.custom-control-representation`.
+- When a component's own pattern states a fallback and its conditions, follow that pattern rather than this rule. The conditions under which the native control cannot be used differ by component.
+
+### Don'ts
+- Do not treat a visual match as a semantic match. An `HStack` of a checkmark `Image` and a `Text` renders like a checkbox and exposes none of a checkbox's trait or state.
+- Do not replace a native control to gain a visual treatment a style modifier could have given it. A custom `ToggleStyle` keeps the underlying `Toggle`; a hand-drawn switch does not.
+
 ## Rule: Touch Target Size
 
 ```yaml
@@ -37,10 +54,10 @@ scope: [component]
 ### Don'ts
 - Do not rely on the visible glyph size alone to satisfy the minimum; extend the frame, not the icon.
 
-## Rule: System Focus Indicator
+## Rule: Focus States
 
 ```yaml
-id: global.focus-visible
+id: global.focus-states
 scope: [component]
 ```
 

@@ -139,7 +139,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "device-human",
@@ -313,7 +313,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "device-human",
@@ -514,7 +514,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -663,7 +663,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -800,7 +800,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1070,7 +1070,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1230,7 +1230,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1378,7 +1378,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1537,7 +1537,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1687,7 +1687,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "device-human",
@@ -1849,7 +1849,7 @@
           "device_human_check": null
         },
         {
-          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).",
+          "rule": "Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).",
           "source": "must_have",
           "techniques": [
             "static",
@@ -2174,8 +2174,8 @@
         }
       ]
     },
-    "global.focus-visible": {
-      "rule_id": "global.focus-visible",
+    "global.focus-states": {
+      "rule_id": "global.focus-states",
       "stack": "ios/swiftui",
       "rules": [
         {

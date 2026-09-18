@@ -35,7 +35,7 @@ A mutually exclusive choice group built from custom `Button` elements, since Swi
 - The selected state is distinguishable by more than color: the radio glyph itself changes (an empty circle versus a filled or ringed circle), not only a color fill (per `global.semantic-color`).
 - Let the radio glyph scale with the label under Dynamic Type; size it with the surrounding font rather than a fixed point frame that would clip at large sizes (per `global.dynamic-type`).
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not leave the options as plain `Button` elements with no trait or value changes; VoiceOver then announces each as a generic button with no indication that they form a single-select group or which one is selected.

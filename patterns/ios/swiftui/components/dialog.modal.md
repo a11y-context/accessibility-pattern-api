@@ -32,7 +32,7 @@ A native SwiftUI `.sheet` or `.fullScreenCover` modal that takes VoiceOver focus
 - Return VoiceOver focus to the trigger on dismissal: bind the trigger with `@AccessibilityFocusState` and set it in the `onDismiss:` closure, because sheets and full-screen covers do not restore focus to the trigger automatically (an Apple platform defect). See `global.focus-management`. Unlike `select.menu`, the `.sheet` `onDismiss:` callback fires on any dismissal, so `@AccessibilityFocusState` reliably restores focus here.
 - Place the sheet's content inside a `ScrollView` so text and controls stay reachable and do not truncate at large Dynamic Type sizes (`global.dynamic-type`).
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not build a custom conditional `VStack` or overlay as a faux sheet; it does not receive VoiceOver focus on display, does not keep focus within the modal, does not restore focus on close, and lacks the built-in escape action. Use `.sheet` or `.fullScreenCover`.

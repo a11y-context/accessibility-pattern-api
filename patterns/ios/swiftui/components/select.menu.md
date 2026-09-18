@@ -33,7 +33,7 @@ A SwiftUI `Picker` with the menu style: a pop-up button that shows the current v
 - After the value changes, return VoiceOver focus to the picker with `@AccessibilityFocusState` and `.accessibilityFocused`, because `Picker` has no dismissal callback to restore focus.
 - Provide a visible indication of what is being chosen when the on-button value alone does not convey it; the `Picker` label text can serve this, or a separate `Text` can precede the picker.
 - Meets the touch target size baseline in `global_rules.md` (`global.touch-target-size`).
-- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-visible`).
+- Meets the system focus indicator baseline in `global_rules.md` (`global.focus-states`).
 
 ## Don'ts
 - Do not add `.accessibilityLabel` to a menu-style or default-style `Picker`; it stops VoiceOver from announcing the selected value when closed. Name it through the `Picker` label text instead.
