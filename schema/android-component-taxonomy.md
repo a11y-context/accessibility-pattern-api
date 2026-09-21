@@ -151,7 +151,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 
 | ID | Compose | What it is | Status |
 |---|---|---|---|
-| `text-field.basic` | `TextField`, `OutlinedTextField`, `SecureTextField` | Single-line text entry: label association, keyboard type, IME action, `error()` state, autofill `contentType`, and the obscured-value branch with its show-and-hide toggle | **W1** |
+| `text-field.basic` | `TextField`, `OutlinedTextField`, `SecureTextField` | Single-line text entry: label association, keyboard type, IME action, `error()` state, autofill `contentType`, and the obscured-value branch with its show-and-hide toggle | **W1** (written) |
 | `search-bar.basic` | `SearchBar`, `DockedSearchBar` | Search entry with an expanding results surface | **blocked**: the stable `SearchBar(state, inputField)` overload and every `Expanded*SearchBar` composable ship only in 1.5.0-alpha, not the 1.4.0 baseline. The remaining stable overloads are deprecated. Unblocks when 1.5.0 stabilizes |
 | `select.basic` | `ExposedDropdownMenuBox` with a read-only `TextField` | Choose one value from a list | W2 |
 | `form.validation` | `error()` semantics plus focus handling on submit | Form-level error handling | deferred to W2; redirects to `text-field.basic`, which is W1 |
@@ -201,7 +201,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | ID | Compose | What it is | Status |
 |---|---|---|---|
 | `image.basic` | `Image`, `Icon` | Decorative, informative, and functional roles as variants | **W1** |
-| `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Covers the strip and its tiles; there is no separate tile pattern, and "tile" is vocabulary rather than an ID. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row`, `tile` | **W1** |
+| `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Covers the strip and its tiles; there is no separate tile pattern, and "tile" is vocabulary rather than an ID. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row`, `tile` | **W1** (written) |
 | `card.basic` | `Card`, `ElevatedCard`, `OutlinedCard`, each with a clickable overload | Grouped surface, static or interactive. The clickable overload adds `Role.Button`; both branches are their own requirement | W2 |
 | `badge.basic` | `Badge`, `BadgedBox` | Non-interactive indicator whose value folds into the host's name. **Unverified** whether a documented API suppresses standalone announcement | W2 |
 | `divider.basic` | `HorizontalDivider`, `VerticalDivider` | Presentational separation | W3 |
@@ -439,6 +439,8 @@ Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are th
 ## Unverified claims
 
 Each of these must be confirmed before it reaches a Must Have.
+
+- Whether a caller's `error(...)` set through `Modifier.semantics` on a Material `TextField` overrides the component's internal `defaultErrorSemantics`, which applies `error()` with a generic default string on the inner `BasicTextField` when `isError` is true. The default merge policy keeps the ancestor's value, which would make the caller's message win, but the two sit on different nodes and only a device check settles it. `text-field.basic` is written on the assumption that it does; if it does not, the message has to move into the label instead.
 
 - Whether `DismissibleNavigationDrawer` and `PermanentNavigationDrawer` differ in exposed semantics beyond togglability.
 - Whether `ExposedDropdownMenuBox` applies combobox semantics automatically or requires the caller to add them.
