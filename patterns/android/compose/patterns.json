@@ -6,7 +6,7 @@
   "patterns": [
     {
       "id": "bottom-sheet.modal",
-      "title": "Bottom Sheet",
+      "title": "Bottom Sheet (Modal)",
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",

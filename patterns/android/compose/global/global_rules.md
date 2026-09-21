@@ -241,7 +241,7 @@ scope: [component]
 ```
 
 ### Must Haves
-- Give the container itself an accessible name with `Modifier.semantics { contentDescription = "..." }` when its heading is not adjacent to it in traversal order, so the user knows which collection they entered.
+- Name the collection. A visible heading above a list does not become the list's name; nothing on Android associates the two. Set `Modifier.semantics { contentDescription = "..." }` on the container so a user who arrives by any route other than swiping past the heading still knows what they entered.
 - Declare `collectionInfo` on the container and `collectionItemInfo` on each child when position within the set is meaningful. A `LazyColumn` or `LazyRow` announces that the user is in a list, and nothing else: not the collection's name, not item position, not total count.
 - Give a non-uniform collection, such as a grid whose cells span variable widths, explicit row and column indices, since nothing derives them.
 - Use stable `key` values on lazy items so the accessibility tree does not reshuffle when the list updates.

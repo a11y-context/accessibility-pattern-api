@@ -35,6 +35,7 @@ A row carrying a title, a subtitle, an image, and a trailing control looks like 
 - Set `onClickLabel` on the row when "Double tap to activate" would not say what happens (e.g., `onClickLabel = "open episode"`).
 - Give a leading thumbnail `contentDescription = null` when the row's text already names the item. The artwork repeats the title, and naming it makes the row announce the title twice (`global.icon`).
 - Declare `collectionItemInfo` on each row and `collectionInfo` on the list when position in the set is meaningful. A `LazyColumn` announces that the user is in a list and reports neither position nor total (`global.collection-semantics`).
+- Name the list itself on its container, not only its visible heading. A heading above a `LazyColumn` is read on the way past and is not attached to the list, so a user who enters the rows any other way hears only "in list" (`global.collection-semantics`).
 - Give a progress bar or similar indicator inside the row a `stateDescription` on the row, or fold its value into the row's name. An indicator inside a merged node contributes nothing on its own (`global.state-description`).
 - Size the row to at least 48dp (`global.touch-target-size`).
 - Meets the focus states baseline in `global_rules.md` (`global.focus-states`).

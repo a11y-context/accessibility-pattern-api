@@ -1,6 +1,6 @@
 ---
 id: bottom-sheet.modal
-title: Bottom Sheet
+title: Bottom Sheet (Modal)
 stack: android/compose
 status: beta
 latest_version: 0.1.0
@@ -9,7 +9,7 @@ aliases: [modal bottom sheet, ModalBottomSheet, bottom drawer, action sheet, she
 summary: Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.
 ---
 
-# Bottom Sheet
+# Bottom Sheet (Modal)
 
 Pattern ID: `bottom-sheet.modal`
 

@@ -201,7 +201,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | ID | Compose | What it is | Status |
 |---|---|---|---|
 | `image.basic` | `Image`, `Icon` | Decorative, informative, and functional roles as variants | **W1** |
-| `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row` | **W1** |
+| `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Covers the strip and its tiles; there is no separate tile pattern, and "tile" is vocabulary rather than an ID. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row`, `tile` | **W1** |
 | `card.basic` | `Card`, `ElevatedCard`, `OutlinedCard`, each with a clickable overload | Grouped surface, static or interactive. The clickable overload adds `Role.Button`; both branches are their own requirement | W2 |
 | `badge.basic` | `Badge`, `BadgedBox` | Non-interactive indicator whose value folds into the host's name. **Unverified** whether a documented API suppresses standalone announcement | W2 |
 | `divider.basic` | `HorizontalDivider`, `VerticalDivider` | Presentational separation | W3 |
@@ -408,6 +408,25 @@ The Material 3 column links to the component's own spec page, which is the faste
 | `card.basic` | [Card](https://m3.material.io/components/cards) | not found | not found | Bpk Card | Card, Tile | 15 | Dominant |
 | `switch.basic` | [Switch](https://m3.material.io/components/switch) | ToggleSwitch | Switch | Bpk Switch | Switch, Toggle | 14 | Material's name, and it matches the existing family |
 | `content-shelf.basic` | no name ([LazyRow](https://developer.android.com/reference/kotlin/androidx/compose/foundation/lazy/package-summary) is the mechanism) | not found | not found | not found | no name | 0 | **No system names this.** Nearest platform term is `androidx.leanback.widget.ListRow`, which is TV-only and superseded. Named for legibility against `list-item.basic`. Open question below |
+
+## Cross-stack note: the shelf name
+
+`content-shelf.basic` is the Android name, decided 2026-09-18 and extended to iOS on 2026-09-21.
+Web keeps its shipped `collection-row.basic`; `collection-row` is the lead alias on the other two,
+so the web name still retrieves them.
+
+The reason to drop "row" on both native stacks is that the word is taken there and means the wrong
+axis. On Android `Row` is the layout composable and `CollectionItemInfo` uses `rowIndex`/`rowCount`
+for the vertical axis, so "collection row" reads as one horizontal line of a grid. On iOS `List` is
+a literal SwiftUI component, vertical only, and its children are rows -- the iOS corpus already ships
+`list.row` for the vertical item -- while a shelf is never a `List`, it is
+`ScrollView(.horizontal) { LazyHStack }`. "Shelf" is also Apple's own vocabulary (tvOS top shelf,
+the TV app's shelves), so it is not a foreign import.
+
+This departs from the iOS convention of deriving the family from the cross-stack semantic, which
+would have produced `list.shelf`. That was rejected because it puts a container and an item in one
+family at different grains, and because the `list.*` family on iOS names the SwiftUI component a
+shelf is not.
 
 ## Open questions
 
