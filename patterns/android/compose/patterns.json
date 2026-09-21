@@ -142,6 +142,58 @@
       }
     },
     {
+      "id": "content-shelf.basic",
+      "title": "Content Shelf",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Horizontally scrolling strip of tiles under a heading. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.",
+      "aliases": [
+        "collection row",
+        "collection-row",
+        "content row",
+        "content rail",
+        "rail",
+        "strip",
+        "shelf",
+        "tile row",
+        "poster row",
+        "card row",
+        "media row",
+        "LazyRow",
+        "carousel row"
+      ],
+      "tags": [
+        "content-shelf",
+        "shelf",
+        "rail",
+        "horizontal-list",
+        "carousel",
+        "collection",
+        "browse"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when several related items sit in a horizontally scrolling strip under a shared heading (e.g., \"Continue Watching\", \"Action Movies\", \"Recently Played\").",
+          "Use when more than one item is visible at a time and the rest are reached by scrolling sideways.",
+          "Use when each item is a compact tile carrying artwork and, usually, a short title."
+        ],
+        "do_not_use_when": [
+          "Do not use when the rows run down the screen rather than across it (use list-item.basic).",
+          "Do not use when one item fills the strip at a time and the others are reached by paging (use carousel.basic).",
+          "Do not use when items wrap across several rows and columns (use grid.basic).",
+          "Do not use when the strip is a set of filters or categories the user selects among rather than content they open (use chip.filter)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/content-shelf.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "list-item.basic",
       "title": "List Item",
       "pattern_type": "component",
@@ -266,6 +318,55 @@
       "default_variant": null,
       "source": {
         "path": "components/switch.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "text-field.basic",
+      "title": "Text Field",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Single-line text entry built from the Material text field, whose label slot supplies the accessible name. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.",
+      "aliases": [
+        "textfield",
+        "text input",
+        "input field",
+        "edit text",
+        "EditText",
+        "TextField",
+        "OutlinedTextField",
+        "BasicTextField",
+        "password field",
+        "search field",
+        "secure field"
+      ],
+      "tags": [
+        "text-field",
+        "form",
+        "input",
+        "autofill",
+        "error",
+        "keyboard"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user types a single line of free text, such as a name, an email address, or a search term.",
+          "Use when the value maps to a system autofill category, so the keyboard can offer to fill it (e.g., a password, a one-time code, a postal code).",
+          "Use when the input has a natural software keyboard tied to its type, such as an email address or a phone number."
+        ],
+        "do_not_use_when": [
+          "Do not use when the user types more than one line, such as a message body or a review. The same component takes singleLine = false, and the multi-line case has its own labeling and scrolling requirements.",
+          "Do not use when the value comes from a fixed set rather than being typed (use select.basic).",
+          "Do not use when the value is a date or a time chosen from a picker (use date-picker.basic).",
+          "Do not use when the field is one cell of a segmented code entry (use pin-input.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/text-field.basic.md",
         "format": "markdown",
         "frontmatter": true
       }
