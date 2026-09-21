@@ -32,6 +32,7 @@ Persistent on or off setting that takes effect immediately. The control and its 
 - The row is a single accessibility node, and the label text inside it becomes the accessible name (`global.merge-semantics`).
 - Word the label so it reads true when the switch is on (e.g., "Enable notifications"), because TalkBack announces the name followed by the state.
 - Let the component report on and off. Set `stateDescription` only when the visible wording differs from the default, such as a switch showing "Allowed" and "Blocked" (`global.state-description`).
+- Put supporting text inside the toggleable row so it joins the merged name, or, when it is long enough that merging would bury the label, leave it in the row visually and set `contentDescription` on the row to the label alone. Compose has no `supportingText` slot on `Switch` and no equivalent of `aria-describedby`, so the text either merges or is lost.
 - When several switches share generic visible text, such as a repeated row label inside a list of accounts, give each row a `contentDescription` naming which setting it controls.
 - If the setting is unavailable, pass `enabled = false` to both the row's `toggleable` and the `Switch`, rather than removing the handler, so the control stays in the accessibility tree and reports that it is disabled.
 - Meets the focus states baseline in `global_rules.md` (`global.focus-states`).
