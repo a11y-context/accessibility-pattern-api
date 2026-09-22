@@ -29,7 +29,7 @@ const CANON = [
   "Golden Pattern",
 ];
 
-const STACKS = ["web/react", "ios/swiftui"];
+const STACKS = ["web/react", "ios/swiftui", "android/compose"];
 
 /** Straighten curly apostrophes so "Don’ts" and "Don'ts" compare equal. */
 const norm = (s) => s.replace(/’/g, "'").trim();

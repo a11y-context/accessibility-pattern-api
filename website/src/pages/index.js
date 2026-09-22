@@ -185,14 +185,22 @@ function Frameworks() {
             <p className={styles.fwStatus}>Available</p>
             <span className={styles.fwLink}>Browse patterns →</span>
           </Link>
-          <div className={clsx(styles.fwCard, styles.fwBeta)}>
+          <Link
+            className={clsx(styles.fwCard, styles.fwBeta)}
+            to="/ios/swiftui/component-gallery"
+          >
             <h3>SwiftUI (iOS)</h3>
             <p className={styles.fwStatus}>Beta</p>
-          </div>
-          <div className={clsx(styles.fwCard, styles.fwSoon)}>
+            <span className={styles.fwLink}>Browse patterns →</span>
+          </Link>
+          <Link
+            className={clsx(styles.fwCard, styles.fwBeta)}
+            to="/android/compose/component-gallery"
+          >
             <h3>Compose (Android)</h3>
-            <p className={styles.fwStatus}>Coming soon</p>
-          </div>
+            <p className={styles.fwStatus}>Beta</p>
+            <span className={styles.fwLink}>Browse patterns →</span>
+          </Link>
           <div className={clsx(styles.fwCard, styles.fwSoon)}>
             <h3>UIKit (iOS)</h3>
             <p className={styles.fwStatus}>Coming soon</p>

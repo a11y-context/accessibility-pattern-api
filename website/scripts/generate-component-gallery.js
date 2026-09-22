@@ -23,6 +23,7 @@ const displayNames = require('../patternDisplayNames.json');
 const PLATFORMS = [
   { stack: 'web/react', dir: '../../patterns/web/react' },
   { stack: 'ios/swiftui', dir: '../../patterns/ios/swiftui' },
+  { stack: 'android/compose', dir: '../../patterns/android/compose' },
 ];
 
 const START =

@@ -16,5 +16,8 @@
     "button.toggle": "Button (Toggle)",
     "link.basic": "Link (Standalone)",
     "link.inline": "Link (Inline)"
+  },
+  "android/compose": {
+    "bottom-sheet.modal": "Bottom Sheet (Modal)"
   }
 }

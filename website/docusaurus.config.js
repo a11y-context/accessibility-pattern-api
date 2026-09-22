@@ -127,7 +127,10 @@ const config = {
         path: '../patterns/android',
         routeBasePath: 'android',
         sidebarPath: './sidebars-android.js',
-        breadcrumbs: true,
+        exclude: ['**/patterns.json'],
+        // Version E renders its own "Components / {Name}" breadcrumb in the swizzled
+        // DocItem/Content, so the stock trail is disabled (matches web-react and ios).
+        breadcrumbs: false,
         // Future-proof: when Android/Compose patterns land they get the same Version E
         // restructure + foundation transform. Both self-gate, so they're inert on the
         // current coming-soon content.
@@ -195,6 +198,11 @@ const config = {
           {
             label: 'SwiftUI (iOS)',
             to: '/ios',
+            position: 'left',
+          },
+          {
+            label: 'Compose (Android)',
+            to: '/android',
             position: 'left',
           },
           {

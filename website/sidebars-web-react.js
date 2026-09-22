@@ -112,7 +112,8 @@ const sidebars = {
     // Styled via .a11y-sidebar-platform in src/css/custom.css.
     {
       type: 'html',
-      value: 'React (Web)',
+      value:
+        `React (Web)<span class="a11y-sidebar-version">v${patternsJson.catalog_revision}</span>`,
       className: 'a11y-sidebar-platform',
       defaultStyle: true,
     },

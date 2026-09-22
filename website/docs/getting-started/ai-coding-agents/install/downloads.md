@@ -95,7 +95,7 @@ The skill plus an `a11y-context.config.json` scaffold. Fill in your vector-DB en
 
 ## Android / Compose
 
-*Coming soon.*
+*Beta — the catalog is published and browsable; packaged skill downloads are coming.*
 
 ## Other consumption paths
 

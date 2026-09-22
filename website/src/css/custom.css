@@ -335,21 +335,6 @@ html[data-theme='dark'] {
   color: var(--a11y-ink);
 }
 
-/* "v0.5" pill — rendered immediately right of the wordmark. */
-.navbar__version-chip {
-  flex-shrink: 0;
-  margin-left: 0;
-  margin-right: 18px; /* pill → primary links (E navbar gap) */
-  font-family: var(--a11y-font-body);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--a11y-muted);
-  border: 1px solid var(--a11y-border);
-  border-radius: var(--a11y-radius-pill);
-  padding: 2px 9px;
-  white-space: nowrap;
-}
 
 /* Primary links: humanist body face, muted until hover/active (E: 14px/500,
    8px 12px hit area, 4px between adjacent links). */
@@ -430,13 +415,39 @@ html[data-theme='dark'] {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--a11y-muted);
+  color: var(--a11y-link);
   /* L: align the label's top edge with the content breadcrumb. The doc content
      container has 40px top padding (§K); the sidebar menu contributes ~8px top
      padding, so a 32px top pad here lands the label at ~40px — level with the
      breadcrumb. (Was 0.25rem/4px, which sat ~28px too high.) */
   padding: 32px 0.75rem 0.5rem;
   margin: 0 0 0.25rem;
+}
+
+/* Stack-aware catalog version, rendered inside the platform label by the
+   sidebar modules (sidebars-<stack>.js) from that stack's catalog_revision.
+   Each stack versions independently, so there is no site-wide number to show
+   here — the badge names the revision a retrieval client would pin to. */
+.menu .a11y-sidebar-platform .a11y-sidebar-version {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 1px 7px;
+  background: var(--a11y-accent-soft);
+  color: var(--a11y-link);
+  border: 1px solid var(--a11y-accent);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  vertical-align: middle;
+  /* Optical lift: the pill reads as sitting low against the uppercase,
+     letter-spaced label. Extra bottom margin grows the inline-block's
+     margin box downward, so middle alignment raises the border box 2px. */
+  margin-bottom: 2px;
+  /* Measured: link-on-accent-soft is 7.16:1 in light and 7.39:1 in dark, and
+     the accent border reads at 6.72:1 against the sidebar canvas -- the tint
+     alone is nearly invisible on #f5f6f8, so the border carries the shape. */
 }
 
 /* Sidebar nav inset — 32px of left padding on the menu so its links (and the
