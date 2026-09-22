@@ -27,7 +27,7 @@ Control that triggers an immediate action. Covers text, icon-only, floating, and
 - Do not use when the control is a row in a list that navigates elsewhere (use `list-item.basic`).
 
 ## Must Haves
-- Use the Material `Button`, `IconButton`, `FloatingActionButton`, `AssistChip`, or `SuggestionChip` composable, so its role, click semantics, and focus behavior come from the component (`global.native-first`).
+- The control reports `Role.Button` and a click action. Material's `Button`, `IconButton`, `FloatingActionButton`, `AssistChip`, and `SuggestionChip` are the reference implementations across the presentations this pattern covers; anything else has to set both itself (`global.native-first`).
 - The button has an accessible name that describes its purpose or action.
 - When the button has visible text, that text serves as the accessible name and no `contentDescription` is set on it.
 - An icon-only control takes its name from `contentDescription` on the control, and the `Icon` inside it carries `contentDescription = null`.

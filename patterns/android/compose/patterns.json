@@ -10,7 +10,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.",
+      "summary": "Overlay that rises from the bottom edge and blocks the content behind it. Most of the dismissal contract arrives with the component rather than the caller, and every part of it disappears under some configuration the caller controls.",
       "aliases": [
         "modal bottom sheet",
         "ModalBottomSheet",
@@ -147,7 +147,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Horizontally scrolling strip of tiles under a heading. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.",
+      "summary": "Horizontally scrolling strip of tiles under a heading that says what the tiles have in common. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.",
       "aliases": [
         "collection row",
         "collection-row",
@@ -174,7 +174,7 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when several related items sit in a horizontally scrolling strip under a shared heading (e.g., \"Continue Watching\", \"Action Movies\", \"Recently Played\").",
+          "Use when several related items sit in a horizontally scrolling strip under a shared heading (e.g., \"Customers also bought\", \"Continue watching\", \"Recently played\").",
           "Use when more than one item is visible at a time and the rest are reached by scrolling sideways.",
           "Use when each item is a compact tile carrying artwork and, usually, a short title."
         ],
@@ -219,7 +219,7 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when a row in a vertical list presents one item and, on tap, acts on that item or opens it (e.g., an episode in a season list, a channel in a guide, a row in a settings screen).",
+          "Use when a row in a vertical list presents one item and, on tap, acts on that item or opens it (e.g., a message in an inbox, an order in a purchase history, a row in a settings screen).",
           "Use when the row carries several pieces of content, such as a thumbnail with a title and supporting text, that describe one thing."
         ],
         "do_not_use_when": [
@@ -262,7 +262,7 @@
       ],
       "selection_excerpt": {
         "use_when": [
-          "Use when exactly one option must be chosen from a small set that stays fully visible as a list of rows (e.g., \"Choose a quality\", \"Choose a plan\").",
+          "Use when exactly one option must be chosen from a small set that stays fully visible as a list of rows (e.g., \"Shipping speed\", \"Choose a plan\").",
           "Use when the always-visible list is preferred over a control that collapses the choices behind a pop-up."
         ],
         "do_not_use_when": [
@@ -328,7 +328,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Single-line text entry built from the Material text field, whose label slot supplies the accessible name. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.",
+      "summary": "Single-line text entry whose accessible name has to come from the field's own label slot rather than a Text beside it. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.",
       "aliases": [
         "textfield",
         "text input",

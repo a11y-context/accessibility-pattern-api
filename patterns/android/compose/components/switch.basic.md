@@ -26,7 +26,7 @@ Persistent on or off setting that takes effect immediately. The control and its 
 - Do not use when exactly one option must be chosen from a set (use `radio.basic`).
 
 ## Must Haves
-- Use the Material `Switch` composable, so its role, checked state, and click semantics come from the component (`global.native-first`).
+- The control reports `Role.Switch`, its checked state, and a click action. Material's `Switch` is the reference implementation of that contract; anything else has to set all three itself (`global.native-first`).
 - Put the control and its label in a row that carries `Modifier.toggleable(value = checked, onValueChange = onCheckedChange, role = Role.Switch)`, and set the `Switch`'s own `onCheckedChange = null`. The whole row then toggles, which is a larger target than the track and what TalkBack reads as one control.
 - Size that row to at least 48dp. `Switch` applies the minimum only while it owns its callback, so hoisting state to the row moves the obligation to the row (`global.touch-target-size`).
 - The row is a single accessibility node, and the label text inside it becomes the accessible name (`global.merge-semantics`).

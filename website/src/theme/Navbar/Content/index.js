@@ -2,7 +2,8 @@
  * Swizzled from @docusaurus/theme-classic Navbar/Content (v3.7.0).
  *
  * Changes vs. stock (to match the Version E navbar — see DESIGN-SYSTEM.md §6):
- *   1. A "v0.5" version pill is rendered immediately right of the brand wordmark.
+ *   1. (Removed) A hardcoded "v0.5" pill used to sit right of the wordmark. The
+ *      catalog version is per stack, so it now renders in each stack sidebar.
  *   2. The right cluster order is search → GitHub icon → dark-mode toggle
  *      (stock renders items → toggle → search). Search is our own accessible
  *      combobox (src/components/NavbarSearch), not an Algolia/search plugin.
@@ -67,7 +68,6 @@ export default function NavbarContent() {
         <>
           {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
           <NavbarLogo />
-          <span className="navbar__version-chip">v0.5</span>
           <NavbarItems items={leftItems} />
         </>
       }

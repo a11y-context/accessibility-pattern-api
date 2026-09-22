@@ -18,7 +18,7 @@ A row in a vertical list. The row is one accessibility node rather than the seve
 A row carrying a title, a subtitle, an image, and a trailing control looks like four or five things and should read as one. Getting that wrong is the most common accessibility failure in a Compose list, and it is invisible to a scanner: every element has a name, contrast passes, and the tree is well formed.
 
 ## Use When
-- Use when a row in a vertical list presents one item and, on tap, acts on that item or opens it (e.g., an episode in a season list, a channel in a guide, a row in a settings screen).
+- Use when a row in a vertical list presents one item and, on tap, acts on that item or opens it (e.g., a message in an inbox, an order in a purchase history, a row in a settings screen).
 - Use when the row carries several pieces of content, such as a thumbnail with a title and supporting text, that describe one thing.
 
 ## Do Not Use When
@@ -28,11 +28,11 @@ A row carrying a title, a subtitle, an image, and a trailing control looks like 
 - Do not use when the row carries a setting that toggles in place (use `switch.basic`).
 
 ## Must Haves
-- Use the Material `ListItem` composable for the row's structure, so its slots carry the content in a known order and its merge behavior is the documented one (`global.native-first`).
+- The row's content sits in a known order, because that order is the order its merged name reads in. Material's `ListItem` is the reference implementation and its slots supply that order; a hand-built `Row` satisfies it when composition order matches the reading order you want (`global.native-first`).
 - Make the whole row the target when tapping it acts on the item, by putting `Modifier.clickable` on the `ListItem` rather than on the text inside it.
 - The row is a single accessibility node. Its headline, overline, and supporting text merge into one name, read in traversal order, so order the slots so that name reads as a sentence (`global.merge-semantics`).
 - Expose a secondary control inside the row as a `CustomAccessibilityAction` on the row rather than as a nested interactive child. TalkBack surfaces custom actions through its actions menu, which keeps the row a single stop.
-- Set `onClickLabel` on the row when "Double tap to activate" would not say what happens (e.g., `onClickLabel = "open episode"`).
+- Set `onClickLabel` on the row when "Double tap to activate" would not say what happens (e.g., `onClickLabel = "open message"`).
 - Give a leading thumbnail `contentDescription = null` when the row's text already names the item. The artwork repeats the title, and naming it makes the row announce the title twice (`global.icon`).
 - Declare `collectionItemInfo` on each row and `collectionInfo` on the list when position in the set is meaningful. A `LazyColumn` announces that the user is in a list and reports neither position nor total (`global.collection-semantics`).
 - Name the list itself on its container, not only its visible heading. A heading above a `LazyColumn` is read on the way past and is not attached to the list, so a user who enters the rows any other way hears only "in list" (`global.collection-semantics`).
@@ -59,51 +59,56 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ```kotlin
 @Composable
 fun ListItemExamples() {
-    val episodes = listOf(
-        "The Silencer" to "41m, Sep 26 2012",
-        "The Pact" to "43m, Oct 3 2012"
+    val messages = listOf(
+        Message(id = "1", from = "Dana Whitfield", preview = "Re: invoice for March", unread = true),
+        Message(id = "2", from = "Support", preview = "Your ticket has been closed", unread = false)
     )
 
     LazyColumn(
         modifier = Modifier.semantics {
-            collectionInfo = CollectionInfo(rowCount = episodes.size, columnCount = 1)
+            contentDescription = "Inbox"
+            collectionInfo = CollectionInfo(rowCount = messages.size, columnCount = 1)
         }
     ) {
-        itemsIndexed(episodes, key = { _, item -> item.first }) { index, (title, meta) ->
-            var saved by remember { mutableStateOf(false) }
+        itemsIndexed(messages, key = { _, m -> m.id }) { index, message ->
+            var unread by remember { mutableStateOf(message.unread) }
 
             ListItem(
-                headlineContent = { Text(title) },
-                supportingContent = { Text(meta) },
-                // The artwork repeats the title, so naming it makes the row say
-                // the title twice.
+                headlineContent = { Text(message.from) },
+                supportingContent = { Text(message.preview) },
+                // The avatar stands for the sender the headline already names,
+                // so naming it makes the row say the sender twice.
                 leadingContent = {
                     Image(
-                        painter = painterResource(R.drawable.episode_still),
+                        painter = painterResource(R.drawable.avatar),
                         contentDescription = null
                     )
                 },
-                // No nested IconButton here. A second clickable inside a clickable
-                // row is not absorbed by the merge, and becomes a rival target.
+                // No nested IconButton here. A second clickable inside a
+                // clickable row is not absorbed by the merge, and becomes a
+                // rival target.
                 trailingContent = {
-                    Icon(
-                        imageVector = if (saved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
-                        contentDescription = null
-                    )
+                    if (unread) {
+                        Box(Modifier.size(8.dp).background(MaterialTheme.colorScheme.primary, CircleShape))
+                    }
                 },
                 modifier = Modifier
-                    .clickable(onClickLabel = "open episode") { /* open */ }
+                    .clickable(onClickLabel = "open message") { /* open */ }
                     .heightIn(min = 48.dp)
                     .semantics {
                         collectionItemInfo = CollectionItemInfo(
                             rowIndex = index, rowSpan = 1, columnIndex = 0, columnSpan = 1
                         )
-                        // The bookmark control reaches the user here, through the
-                        // actions menu, instead of as a second stop in the list.
+                        // The unread dot is inside the merged node and says
+                        // nothing on its own, so the row carries it.
+                        stateDescription = if (unread) "Unread" else "Read"
+                        // The mark-as-read control reaches the user here,
+                        // through the actions menu, instead of as a second stop
+                        // in the list.
                         customActions = listOf(
                             CustomAccessibilityAction(
-                                label = if (saved) "Remove from saved" else "Save episode"
-                            ) { saved = !saved; true }
+                                label = if (unread) "Mark as read" else "Mark as unread"
+                            ) { unread = !unread; true }
                         )
                     }
             )

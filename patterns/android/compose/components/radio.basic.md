@@ -16,7 +16,7 @@ Pattern ID: `radio.basic`
 Exactly one choice from a mutually exclusive set. The group carries `selectableGroup`, which is what makes each option announce its position in the set, and each row carries the selection rather than the button.
 
 ## Use When
-- Use when exactly one option must be chosen from a small set that stays fully visible as a list of rows (e.g., "Choose a quality", "Choose a plan").
+- Use when exactly one option must be chosen from a small set that stays fully visible as a list of rows (e.g., "Shipping speed", "Choose a plan").
 - Use when the always-visible list is preferred over a control that collapses the choices behind a pop-up.
 
 ## Do Not Use When
@@ -26,7 +26,7 @@ Exactly one choice from a mutually exclusive set. The group carries `selectableG
 - Do not use when one choice comes from a longer set and a compact pop-up is preferred over an expanded list (use `select.basic`).
 
 ## Must Haves
-- Use the Material `RadioButton` composable, so its role and selected state come from the component (`global.native-first`).
+- The control reports `Role.RadioButton` and its selected state. Material's `RadioButton` is the reference implementation of that contract; anything else has to set both itself (`global.native-first`).
 - Ship the group with one option already selected. A radio group has no route back to nothing selected, so an empty start is a state the user can leave once and never return to, and it makes the group the one control on the screen that can be silently skipped. Where "none" is a legitimate answer, give it its own option rather than leaving the group empty.
 - Put `Modifier.selectableGroup()` on the container holding the options. Without it the rows are unrelated selectable controls, and TalkBack does not announce which position in the set each one occupies.
 - Put each option's control and label in a row that carries `Modifier.selectable(selected = isSelected, onClick = onSelect, role = Role.RadioButton)`, and set the `RadioButton`'s own `onClick = null`. The whole row then selects, and TalkBack reads it as one control.
@@ -58,14 +58,14 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ```kotlin
 @Composable
 fun RadioGroupExamples() {
-    val options = listOf("Auto", "High", "Data saver")
+    val options = listOf("Standard", "Express", "Overnight")
     // The group opens with a selection. There is no route back to none, so
     // starting empty creates a state the user cannot return to.
     var selected by remember { mutableStateOf(options.first()) }
 
     Column {
         Text(
-            text = "Streaming quality",
+            text = "Shipping speed",
             modifier = Modifier.semantics { heading() }
         )
 
@@ -74,7 +74,7 @@ fun RadioGroupExamples() {
             // the set. Without it the rows are unrelated selectable controls.
             modifier = Modifier
                 .selectableGroup()
-                .semantics { contentDescription = "Streaming quality" }
+                .semantics { contentDescription = "Shipping speed" }
         ) {
             options.forEach { option ->
                 Row(
@@ -88,10 +88,7 @@ fun RadioGroupExamples() {
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(
-                        selected = (option == selected),
-                        onClick = null
-                    )
+                    RadioButton(selected = (option == selected), onClick = null)
                     Text(option)
                 }
             }

@@ -6,19 +6,19 @@ status: beta
 latest_version: 0.1.0
 tags: [content-shelf, shelf, rail, horizontal-list, carousel, collection, browse]
 aliases: [collection row, collection-row, content row, content rail, rail, strip, shelf, tile row, poster row, card row, media row, LazyRow, carousel row]
-summary: Horizontally scrolling strip of tiles under a heading. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.
+summary: Horizontally scrolling strip of tiles under a heading that says what the tiles have in common. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.
 ---
 
 # Content Shelf
 
 Pattern ID: `content-shelf.basic`
 
-Horizontally scrolling strip of tiles under a heading. A `LazyRow` reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.
+Horizontally scrolling strip of tiles under a heading that says what the tiles have in common. A `LazyRow` reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.
 
 A browse screen stacks several of these, and they are told apart only by their headings. Get the naming wrong and a user swiping through hears forty unlabeled posters in a row with no sense of which shelf ended and which began.
 
 ## Use When
-- Use when several related items sit in a horizontally scrolling strip under a shared heading (e.g., "Continue Watching", "Action Movies", "Recently Played").
+- Use when several related items sit in a horizontally scrolling strip under a shared heading (e.g., "Customers also bought", "Continue watching", "Recently played").
 - Use when more than one item is visible at a time and the rest are reached by scrolling sideways.
 - Use when each item is a compact tile carrying artwork and, usually, a short title.
 
@@ -31,7 +31,7 @@ A browse screen stacks several of these, and they are told apart only by their h
 ## Must Haves
 - Build the strip with `LazyRow` rather than a `Row` inside `Modifier.horizontalScroll`. Only the lazy layout reports itself as a collection, and only it avoids composing every tile in the set.
 - Name the shelf on the `LazyRow` with `Modifier.semantics { contentDescription = "..." }`. The heading above it is read on the way past and is not attached to the strip, so a user who enters the tiles any other way hears only "in list" (`global.collection-semantics`).
-- Give the shelf a visible heading and mark it with `heading()`, so a user can move between shelves directly instead of swiping through every tile (`global.headings`).
+- Give the shelf a visible heading naming the category, and mark it with `heading()`. The heading is what tells any user which shelf they are looking at, and marking it lets a TalkBack user move between shelves directly instead of swiping through every tile (`global.headings`).
 - Declare `collectionInfo = CollectionInfo(rowCount = 1, columnCount = items.size)` on the `LazyRow` and `collectionItemInfo` on each tile with `rowIndex = 0` and `columnIndex` set to the item's index. A horizontal strip is one row of many columns; reversing the two reports a column of items and the position announcement comes out wrong.
 - Index each tile against the full set, not against what is on screen. The count the user hears has to survive scrolling.
 - Make each tile a single accessibility node by putting `Modifier.clickable` on the tile container rather than on the artwork or the title inside it (`global.merge-semantics`).
@@ -63,10 +63,10 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ```kotlin
 @Composable
 fun ContentShelfExamples() {
-    val shelfTitle = "Continue Watching"
-    val items = listOf(
-        Title(id = "1", name = "Baby Driver", meta = "43m left"),
-        Title(id = "2", name = "The Fifth Element", meta = "1h 12m left")
+    val shelfTitle = "Customers also bought"
+    val products = listOf(
+        Product(id = "1", name = "Cast iron skillet", price = "$39.00", badge = null),
+        Product(id = "2", name = "Enamel dutch oven", price = "$92.00", badge = "Only 2 left")
     )
 
     Column {
@@ -82,39 +82,42 @@ fun ContentShelfExamples() {
                 contentDescription = shelfTitle
                 // One row, many columns. Swapping these reports the position
                 // against the wrong axis.
-                collectionInfo = CollectionInfo(rowCount = 1, columnCount = items.size)
+                collectionInfo = CollectionInfo(rowCount = 1, columnCount = products.size)
             }
         ) {
-            itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
+            itemsIndexed(products, key = { _, p -> p.id }) { index, product ->
                 var saved by remember { mutableStateOf(false) }
 
                 Column(
                     modifier = Modifier
                         .width(160.dp)
-                        .clickable(onClickLabel = "play") { /* open */ }
+                        .clickable(onClickLabel = "open product") { /* open */ }
                         .semantics {
                             collectionItemInfo = CollectionItemInfo(
                                 rowIndex = 0, rowSpan = 1,
                                 columnIndex = index, columnSpan = 1
                             )
-                            stateDescription = item.meta
-                            // The favorite control reaches the user here rather
-                            // than as a second stop inside the tile.
+                            // The stock badge is inside the merged node and
+                            // contributes nothing on its own.
+                            product.badge?.let { stateDescription = it }
+                            // Add to cart reaches the user here rather than as
+                            // a second stop inside the tile.
                             customActions = listOf(
                                 CustomAccessibilityAction(
-                                    label = if (saved) "Remove from list" else "Add to list"
+                                    label = if (saved) "Remove from cart" else "Add to cart"
                                 ) { saved = !saved; true }
                             )
                         }
                 ) {
-                    // The title is rendered below, so naming the artwork would
-                    // make the tile announce it twice.
+                    // The name and price are rendered below and merge into the
+                    // tile's name, so naming the image would repeat them.
                     Image(
-                        painter = painterResource(R.drawable.poster),
+                        painter = painterResource(R.drawable.product),
                         contentDescription = null,
-                        modifier = Modifier.height(90.dp).fillMaxWidth()
+                        modifier = Modifier.height(120.dp).fillMaxWidth()
                     )
-                    Text(item.name)
+                    Text(product.name)
+                    Text(product.price)
                 }
             }
         }

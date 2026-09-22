@@ -37,7 +37,7 @@ scope: [component]
 ### Don'ts
 - Do not treat a visual match as a semantic match. A `Row` containing a check glyph and a label renders like a checkbox and exposes none of a checkbox's role or state.
 - Do not assume a component satisfies the contract because it is named after the control. Read what it sets: a wrapper that forwards to `Modifier.toggleable(role = Role.Checkbox)` qualifies, and one that forwards to a bare `clickable` does not.
-- Do not reach for `androidx.compose.foundation` primitives when `androidx.compose.material3` ships the control, unless the component's own pattern names that case.
+- Do not hand-assemble a control from `androidx.compose.foundation` primitives when a component that already meets the contract is available to the project, whether that is the Material composable or the design system's own. Assembling one is the fallback, not the starting point.
 
 ## Rule: Merged Semantics
 

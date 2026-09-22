@@ -27,7 +27,7 @@ Yes or no choice submitted with a form, independent of any other checkbox beside
 - Do not use when several checkboxes answer one shared question and their labels are not meaningful without it. Group them and name the group, per `global.collection-semantics`.
 
 ## Must Haves
-- Use the Material `Checkbox` composable, so its role, checked state, and click semantics come from the component (`global.native-first`).
+- The control reports `Role.Checkbox`, its checked state, and a click action. Material's `Checkbox` is the reference implementation of that contract; a design system's own checkbox satisfies it by forwarding to `Modifier.toggleable(role = Role.Checkbox)`, and a drawn box with a check glyph satisfies none of it (`global.native-first`).
 - Put the control and its label in a row that carries `Modifier.toggleable(value = checked, onValueChange = onCheckedChange, role = Role.Checkbox)`, and set the `Checkbox`'s own `onCheckedChange = null`. The whole row then toggles, which is a larger target than the box alone and what TalkBack reads as one control.
 - Size that row to at least 48dp. `Checkbox` applies the minimum only while it owns its callback, so hoisting state to the row moves the obligation to the row (`global.touch-target-size`).
 - The row is a single accessibility node, and the label text inside it becomes the accessible name (`global.merge-semantics`).

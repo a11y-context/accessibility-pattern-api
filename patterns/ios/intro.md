@@ -4,31 +4,22 @@ title: iOS / SwiftUI
 slug: /
 ---
 
-<!--
-  TODO(ios overview): the SwiftUI catalog is still being built out. When the
-  full component library ships, revisit this page:
-    - remove the "in active development / will drop soon" framing below,
-    - expand the Components row (or swap in a gallery link once one exists,
-      matching the web/react component-gallery.md pattern),
-    - add a Release Notes row to "What's here" once ios/swiftui/release-notes.md exists.
--->
-
 # iOS / SwiftUI Accessibility Patterns
 
 Welcome to the iOS / SwiftUI section of A11y Context.
 
 This corpus provides prescriptive, production-ready accessibility patterns for SwiftUI applications.
 Each pattern documents the **must-have** semantics, VoiceOver and focus behavior, and interaction
-rules, plus a golden implementation and a checklist of acceptance criteria.
+rules, plus a golden implementation.
 
-> **The SwiftUI catalog is in active development.** A first set of components is available now; the full component library is in progress and will drop soon.
+> **The SwiftUI catalog is in active development.** Foundations and nineteen components are published. Seventeen more are planned.
 
 ## What's here
 
 | Section | Description |
 |---------|-------------|
 | [Foundations](./swiftui/global/global_rules.md) | Baseline accessibility rules applied across all SwiftUI UI work |
-| Components | Available today — [Basic Button](./swiftui/components/button.basic.md), [Toggle Button](./swiftui/components/button.toggle.md), [Switch](./swiftui/components/switch.basic.md). The full library is in progress. |
+| [Components](./swiftui/component-gallery.md) | Nineteen patterns published. Seventeen more are planned |
 
 ## How to use these patterns
 

@@ -335,21 +335,6 @@ html[data-theme='dark'] {
   color: var(--a11y-ink);
 }
 
-/* "v0.5" pill — rendered immediately right of the wordmark. */
-.navbar__version-chip {
-  flex-shrink: 0;
-  margin-left: 0;
-  margin-right: 18px; /* pill → primary links (E navbar gap) */
-  font-family: var(--a11y-font-body);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--a11y-muted);
-  border: 1px solid var(--a11y-border);
-  border-radius: var(--a11y-radius-pill);
-  padding: 2px 9px;
-  white-space: nowrap;
-}
 
 /* Primary links: humanist body face, muted until hover/active (E: 14px/500,
    8px 12px hit area, 4px between adjacent links). */
@@ -437,6 +422,23 @@ html[data-theme='dark'] {
      breadcrumb. (Was 0.25rem/4px, which sat ~28px too high.) */
   padding: 32px 0.75rem 0.5rem;
   margin: 0 0 0.25rem;
+}
+
+/* Stack-aware catalog version, rendered inside the platform label by the
+   sidebar modules (sidebars-<stack>.js) from that stack's catalog_revision.
+   Each stack versions independently, so there is no site-wide number to show
+   here — the badge names the revision a retrieval client would pin to. */
+.menu .a11y-sidebar-platform .a11y-sidebar-version {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 1px 6px;
+  border: 1px solid var(--a11y-border, currentColor);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  vertical-align: middle;
 }
 
 /* Sidebar nav inset — 32px of left padding on the menu so its links (and the

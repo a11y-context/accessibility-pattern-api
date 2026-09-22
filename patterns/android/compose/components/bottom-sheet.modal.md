@@ -6,14 +6,14 @@ status: beta
 latest_version: 0.1.0
 tags: [bottom sheet, modal, overlay, dialog, sheet]
 aliases: [modal bottom sheet, ModalBottomSheet, bottom drawer, action sheet, sheet, slide-up panel, tray]
-summary: Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.
+summary: Overlay that rises from the bottom edge and blocks the content behind it. Most of the dismissal contract arrives with the component rather than the caller, and every part of it disappears under some configuration the caller controls.
 ---
 
 # Bottom Sheet (Modal)
 
 Pattern ID: `bottom-sheet.modal`
 
-Overlay that rises from the bottom edge and blocks the content behind it. Material supplies most of the dismissal contract, and each of its parts disappears under a configuration the caller controls.
+Overlay that rises from the bottom edge and blocks the content behind it. Most of the dismissal contract arrives with the component rather than the caller, and every part of it disappears under some configuration the caller controls.
 
 `ModalBottomSheet` already supplies most of the dismissal contract: scrim tap, back press, and a drag handle carrying named expand, collapse, and dismiss actions. Every one of them is conditional on a parameter the caller sets, so the requirements below are about keeping them rather than building them.
 
@@ -28,7 +28,7 @@ Overlay that rises from the bottom edge and blocks the content behind it. Materi
 - Do not use when the message reports an outcome and needs no response (use `snackbar.basic`).
 
 ## Must Haves
-- Use the Material `ModalBottomSheet` composable, so the scrim, the back-press dismissal, the pane-change announcement, and the drag handle's accessibility actions come from the component (`global.native-first`).
+- The sheet blocks the content behind it, announces itself when it opens, and can be dismissed without a drag gesture. Material's `ModalBottomSheet` is the reference implementation, supplying the scrim, back-press dismissal, the pane-change announcement, and the drag handle's accessibility actions; anything else owes all four (`global.native-first`).
 - Keep the default drag handle. It is `clickable` and carries named `expand`, `collapse`, and `dismiss` accessibility actions, which is the non-gesture route to every state change the sheet offers. Passing `dragHandle = null` removes all of them.
 - Leave `skipHiddenState` at its default. The named `dismiss` action is added only when the hidden state is reachable, and without it double-tapping the handle collapses the sheet instead of closing it.
 - Leave `sheetSwipeEnabled` at its default, or supply another route to every state the sheet can reach. The handle's expand, collapse, and dismiss actions are all conditional on the sheet having more than one anchor and on swipe being enabled.

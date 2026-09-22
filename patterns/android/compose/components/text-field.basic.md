@@ -6,7 +6,7 @@ status: beta
 latest_version: 0.1.0
 tags: [text-field, form, input, autofill, error, keyboard]
 aliases: [textfield, text input, input field, edit text, EditText, TextField, OutlinedTextField, BasicTextField, password field, search field, secure field]
-summary: Single-line text entry built from the Material text field, whose label slot supplies the accessible name. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.
+summary: Single-line text entry whose accessible name has to come from the field's own label slot rather than a Text beside it. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.
 ---
 
 # Text Field
@@ -29,7 +29,7 @@ The trap is `isError`. Setting it turns the field red and announces a generic er
 - Do not use when the field is one cell of a segmented code entry (use `pin-input.basic`).
 
 ## Must Haves
-- Use the Material `TextField` or `OutlinedTextField`, so editable-text semantics, the label association, and the focus and error states come from the component (`global.native-first`).
+- The field reports editable-text semantics and takes its accessible name from its visible label. Material's `TextField` and `OutlinedTextField` are the reference implementations, supplying that through the `label` slot along with the focus and error states; `BasicTextField` supplies the editing and none of the rest (`global.native-first`).
 - Supply the visible label through the `label` slot. It is what gives the field its accessible name, and it stays on screen as the floating label once the user types.
 - Set your own `Modifier.semantics { error("...") }` with the real message when the field is invalid. Material's `isError` applies `error()` with a generic default string and does not read the supporting text, so `isError` alone announces that something is wrong and never what.
 - Keep `isError = true` alongside it, because that is what drives the visual error treatment and the error color.
