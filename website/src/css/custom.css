@@ -431,14 +431,19 @@ html[data-theme='dark'] {
 .menu .a11y-sidebar-platform .a11y-sidebar-version {
   display: inline-block;
   margin-left: 0.5rem;
-  padding: 1px 6px;
-  border: 1px solid var(--a11y-border, currentColor);
+  padding: 1px 7px;
+  background: var(--a11y-accent-soft);
+  color: var(--a11y-link);
+  border: 1px solid var(--a11y-accent);
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: none;
   vertical-align: middle;
+  /* Measured: link-on-accent-soft is 7.16:1 in light and 7.39:1 in dark, and
+     the accent border reads at 6.72:1 against the sidebar canvas -- the tint
+     alone is nearly invisible on #f5f6f8, so the border carries the shape. */
 }
 
 /* Sidebar nav inset — 32px of left padding on the menu so its links (and the

@@ -61,6 +61,9 @@ fun BottomSheetModalExamples() {
     val sheetState = rememberModalBottomSheetState()
     val focusRequester = remember { FocusRequester() }
     val triggerRequester = remember { FocusRequester() }
+    val filters = remember {
+        mutableStateListOf(Filter("In stock"), Filter("Free shipping"), Filter("On sale"))
+    }
 
     Button(
         onClick = { open = true },
@@ -102,7 +105,26 @@ fun BottomSheetModalExamples() {
                     text = "Filter results",
                     modifier = Modifier.semantics { heading() }
                 )
-                Text("Filter controls go here.")
+
+                // Real content, so focus lands on something. Each row follows
+                // checkbox.basic: the row owns the toggle, the role, and the
+                // 48dp target, and the Checkbox's own callback is null.
+                filters.forEach { filter ->
+                    Row(
+                        modifier = Modifier
+                            .toggleable(
+                                value = filter.on,
+                                onValueChange = { filter.on = it },
+                                role = Role.Checkbox
+                            )
+                            .heightIn(min = 48.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked = filter.on, onCheckedChange = null)
+                        Text(filter.label)
+                    }
+                }
             }
         }
 
