@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # check-corpus-conventions diffs against the PR base, so the shallow
+          # default clone is not enough - origin/<base> has to resolve.
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -26,6 +30,11 @@ jobs:
 
       - name: Run prebuild generators
         working-directory: website
+        env:
+          # On a PR this is the target branch. On a push to main it is empty and
+          # the check falls back to origin/main, which is then HEAD's own line, so
+          # the version checks find nothing to compare and say so.
+          BASE_REF: ${{ github.base_ref && format('origin/{0}', github.base_ref) || '' }}
         run: npm run prebuild
 
       - name: Build site
