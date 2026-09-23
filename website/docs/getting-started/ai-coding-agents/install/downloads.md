@@ -13,6 +13,8 @@ The skill is the brain of every integration: it carries the invocation directive
 | **MCP** | calls the MCP server's tools | [ZIP ↓](#a11y-context--web-react-mcp) | install the [MCP server](./mcp-server) |
 | **RAG** | queries your vector DB | [ZIP ↓](#a11y-context--web-react-rag) | [index the corpus + fill config](./custom) |
 
+The table links the **Web / React** downloads. **Android / Compose** ships the same four variants — see its section below. Stacks are not interchangeable: install the one for the UI you are writing.
+
 **HTTP and Local** are self-contained — download, unzip, done. **MCP and RAG** add a retrieval mechanism the skill points at (a server, or your vector DB), so each has an extra setup step on its own page. All four are the same brain; only the retrieval step differs.
 
 ## How to install
@@ -95,7 +97,39 @@ The skill plus an `a11y-context.config.json` scaffold. Fill in your vector-DB en
 
 ## Android / Compose
 
-*Beta — the catalog is published and browsable; packaged skill downloads are coming.*
+Same four variants, Compose patterns. The Golden Patterns are Kotlin, and the semantics are Android's — nothing in them translates to React or SwiftUI.
+
+### A11y Context — Android Compose (HTTP)
+
+[**Download a11y-context-android-compose-http.zip**](pathname:///downloads/a11y-context-android-compose-http.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/android-compose/http)
+
+The agent fetches patterns from this site at generation time. One `SKILL.md` plus the catalog, always current.
+
+**Needs:** network access from the agent.
+
+### A11y Context — Android Compose (Local)
+
+[**Download a11y-context-android-compose-local.zip**](pathname:///downloads/a11y-context-android-compose-local.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/android-compose/local)
+
+The agent reads patterns from a copy of the corpus bundled with the skill. Fully offline, pinned to a `catalog_revision`.
+
+**Needs:** periodic refresh. Check [Release Notes](/android/compose/release-notes) and re-download to update.
+
+### A11y Context — Android Compose (MCP)
+
+[**Download a11y-context-android-compose-mcp.zip**](pathname:///downloads/a11y-context-android-compose-mcp.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/android-compose/mcp)
+
+The brain, retrieving through the MCP server's tools with `stack: "android/compose"`.
+
+**Needs:** the [A11y Context MCP server](./mcp-server) configured in your MCP client, at a release that bundles the Android catalog.
+
+### A11y Context — Android Compose (RAG)
+
+[**Download a11y-context-android-compose-rag.zip**](pathname:///downloads/a11y-context-android-compose-rag.zip) · [View source](https://github.com/a11y-context/a11y-context-skills/tree/main/skills/android-compose/rag)
+
+The skill plus an `a11y-context.config.json` scaffold already set to the `android/compose` stack.
+
+**Needs:** the corpus indexed into your retrieval system, and the config filled in. See [Custom / Enterprise RAG](./custom).
 
 ## Other consumption paths
 
