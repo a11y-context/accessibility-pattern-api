@@ -8,6 +8,10 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.28.2 — 2026-09-23
+
+- **Foundations** — Removed the last WCAG criterion reference in pattern text, a bare "1.4.1" in `global.use-of-color` that survived the 0.28.0 strip because no "WCAG" sat next to it. The sentence now states what breaks instead of which criterion it breaks. Found by the new `check-corpus-conventions` build check rather than by a person, which was the point of writing it.
+
 ## 0.28.1 — 2026-09-18
 
 **The no-external-references rule is written down.**
