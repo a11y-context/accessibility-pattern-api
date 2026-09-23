@@ -8,6 +8,10 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.3.1 — 2026-09-23
+
+- **Text Field → 0.1.1** — Touch-target Must Have reworded to match the style guide's formula verbatim ("touch target baseline", not "touch target size baseline"). No requirements change.
+
 ## 0.3.0 — 2026-09-23
 
 - **Button → 0.2.0** — Fixed the `IconButton` example in the Golden Pattern. `onClick(label = ...) { false }` passed a real action lambda that overrode the button's click handler in the accessibility tree, so a TalkBack double-tap did nothing while touch still worked. `action = null` attaches the label without overriding the handler. Must Haves and Don'ts now cover components, like `IconButton`, that take no `onClickLabel` parameter directly.

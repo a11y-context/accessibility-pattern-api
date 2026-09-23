@@ -1,7 +1,7 @@
 {
   "stack": "android/compose",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.3.0",
+  "catalog_revision": "0.3.1",
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
@@ -327,7 +327,7 @@
       "title": "Text Field",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "Single-line text entry whose accessible name has to come from the field's own label slot rather than a Text beside it. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.",
       "aliases": [
         "textfield",
