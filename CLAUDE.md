@@ -28,7 +28,12 @@ patterns/                            ← corpus (source of truth)
     components/                      ← one .md per SwiftUI component
     global/global_rules.md           ← Foundations
     component-gallery.md             ← generated from patterns.json (prebuild)
-  android/                           ← stub (Coming soon)
+  android/compose/                   ← LIVE stack (Jetpack Compose components, beta)
+    patterns.json                    ← machine index (generated)
+    components/                      ← one .md per Compose component
+    global/global_rules.md           ← Foundations
+    component-gallery.md             ← generated from patterns.json (prebuild)
+    release-notes.md
 
 website/                             ← Docusaurus site (sourced from patterns/)
   docs/
@@ -113,6 +118,10 @@ Three canonical references — **read all three before authoring or revising a p
 - **`schema/style-guide.md`** — the conventions (per-section guidance, prose rules, boilerplate formulas, Customizable typology, Golden Pattern code rules, definition of done, write-like-this examples).
 
 **Authoring an iOS/SwiftUI pattern?** Also read **`schema/ios-component-taxonomy.md`** — the full component list, the `family.variant` naming convention, the settled button/row/link family boundaries, and where each technique lands (component vs `global.*` rule). It keeps iOS families and names consistent across the corpus.
+
+**Authoring an `android/compose` pattern?** Also read **`schema/android-component-taxonomy.md`** — the full component list with each entry's status, the naming convention (Android follows the name an engineer would search for, usually Material's, which diverges from iOS deliberately), the settled boundaries, the wave plan, and two lists that will save a rewrite: the **verified trap list** of Compose behaviors that are not what they look like, and the **unverified claims** still awaiting a device check. Do not promote an unverified claim to a Must Have without checking it.
+
+Its opening section carries the idea the whole stack rests on, and is the thing to read first: a pattern's unit is the smallest thing with a complete accessibility contract, which on Android is almost never one composable. It is the checkbox plus its label plus the row that owns `toggleable`.
 
 Existing patterns under `patterns/web/react/components/` are good shape references. `button.basic.md`, `dialog.modal.md`, and `accordion.basic.md` cover the typical variations (simple component, focus-managed component, hierarchy-dependent component).
 

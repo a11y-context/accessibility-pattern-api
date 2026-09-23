@@ -345,11 +345,15 @@ The rAF defers the focus call until React has flushed the state change and the t
 
 ### Android / Compose formulas
 
-Provisional. These were derived from the Foundations rules and the wave-1 component set before any Android pattern was authored, which inverts how the web set was built. Confirm or trim them after the first three patterns ship, then treat the set as closed and reuse verbatim.
+Closed as of catalog 0.3.0. The set was drafted from the Foundations rules before any Android pattern existed, which inverts how the web set was built, so it was marked provisional pending a confirm-or-trim pass. That pass ran against the first eight patterns: nine of the ten formulas fired, the native-control formula was rewritten (see below), the touch-target formula split in two, and the live-region formula is held unfired until the first snackbar pattern lands. Reuse these verbatim; when a situation has no formula, write the sentence and add it here rather than paraphrasing per pattern.
 
-#### Native control formula
+#### Native control formula (contract first, implementation named second)
 
-> Use the Material `[Composable]` rather than assembling the control from primitives, so its role, state, and interaction semantics come from the component (`global.native-first`).
+> The [control] reports `Role.[X]`, its [state], and a click action. Material's `[Composable]` is the reference implementation of that contract; a design system's own [control] satisfies it by forwarding to the same semantics, and a hand-assembled one satisfies none of it by default (`global.native-first`).
+
+**State the contract, then name Material as the reference implementation — never the other way round.** The earlier version of this formula opened with "Use the Material `[Composable]`," and every wave-1 pattern shipped that way before the framing was corrected in 0.2.0. It reads as a requirement to adopt Material, which the corpus does not impose and cannot: a team on its own design system, or on foundation primitives, meets the same contract by declaring role, state, and actions itself. `global.native-first` has always said this; the patterns had drifted from their own Foundations rule.
+
+Material is still named, in a clause, and dropping it would be the opposite mistake. An agent handed an abstract contract with no concrete referent writes worse code than one given both, and the failure this formula exists to prevent — a `Row` with a check glyph and `Modifier.clickable` — is best prevented by pointing at something that works.
 
 #### Accessible name formulas
 
@@ -361,9 +365,19 @@ Provisional. These were derived from the Foundations rules and the wave-1 compon
 
 > An icon-only control takes its name from `contentDescription` on the control, and the `Icon` inside it carries `contentDescription = null`.
 
-#### Touch target formula (every pattern, near end of Must Haves)
+#### Touch target formulas
+
+Which one depends on whether the component still owns its own minimum.
+
+**Deferral**, where the Material composable applies the minimum itself (near the end of Must Haves):
 
 > Meets the touch target baseline in `global_rules.md` (`global.touch-target-size`).
+
+**Concrete obligation**, where state is hoisted to a wrapping row and the component therefore stops applying it:
+
+> Size that row to at least 48dp. `[Composable]` applies the minimum only while it owns its callback, so hoisting state to the row moves the obligation to the row (`global.touch-target-size`).
+
+The split is not stylistic. Material's selection controls apply `minimumInteractiveComponentSize()` only while they own their callback, so the hoisted-state arrangement — the one this corpus recommends everywhere — silently drops it. A pattern that hoists and then defers to the baseline sentence has told the reader nothing about the obligation that just moved.
 
 #### Focus state formula (every pattern, near end of Must Haves)
 
