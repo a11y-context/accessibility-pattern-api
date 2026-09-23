@@ -8,9 +8,12 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
-## 0.3.1 — 2026-09-23
+## 0.4.0 — 2026-09-23
 
-- **Text Field → 0.1.1** — Touch-target Must Have reworded to match the style guide's formula verbatim ("touch target baseline", not "touch target size baseline"). No requirements change.
+Two gaps found by auditing formula coverage across all eight patterns.
+
+- **Text Field → 0.2.0** — Adds the disabled-control Must Have, which every other form-control pattern carried and this one did not, plus the `readOnly` distinction: read-only keeps the value focusable and copyable, disabled removes it from the interaction flow. Touch-target Must Have also reworded to match the style guide's formula verbatim.
+- **Bottom Sheet (Modal) → 0.2.0** — Adds the focus-states Must Have. The pattern makes its content container focusable in order to move focus into the sheet on open, and never said that a container which can hold focus has to show it.
 
 ## 0.3.0 — 2026-09-23
 
