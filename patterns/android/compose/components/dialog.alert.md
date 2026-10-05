@@ -34,7 +34,7 @@ Modal message that interrupts to ask for a decision or report something the user
 - Mark the title with `Modifier.semantics { heading() }` (`global.headings`).
 - Label each button with what it does (e.g., "Delete" and "Cancel"), never "OK", "Yes", or "No". The buttons are read without the question in front of them.
 - Make `onDismissRequest` do exactly what the dismiss button does, and never the confirming action. Back, Escape, and a tap outside all call it.
-- Move input focus to the dismiss button when the dialog opens, with a `FocusRequester` requested from a `LaunchedEffect` inside the dialog's content, so an Enter keypress cannot confirm a destructive action by accident (`global.focus-management`).
+- Move input focus to the dismiss button when the dialog opens, or to its only button when it has one, with a `FocusRequester` requested from a `LaunchedEffect` inside the dialog's content. On a confirmation, this means an Enter keypress cannot confirm a destructive action by accident (`global.focus-management`).
 - Restore input focus to the control that opened the dialog when it closes, by holding a `FocusRequester` for the trigger and requesting it on dismissal (`global.focus-management`).
 - Meets the touch target baseline in `global_rules.md` (`global.touch-target-size`).
 - Meets the focus states baseline in `global_rules.md` (`global.focus-states`).
