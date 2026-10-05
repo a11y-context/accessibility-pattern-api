@@ -140,7 +140,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | `list-item.basic` | `ListItem` | A row in a vertical list, with leading, trailing, overline, and supporting slots. Merges its descendants by default, so a row carrying several controls is the platform's sharpest merge hazard | **W1** |
 | `navigation-bar.basic` | `NavigationBar`, `NavigationBarItem` | Bottom navigation between top-level destinations. Announces as Tab | **W1** |
 | `tabs.basic` | `Tab`, `TabRow`, `ScrollableTabRow`, `PrimaryTabRow`, `SecondaryTabRow` | Switch between views. Primary against secondary and fixed against scrollable are visual | **W1** |
-| `menu.basic` | `DropdownMenu`, `DropdownMenuItem` | Pull-down list of commands | **W1** |
+| `menu.basic` | `DropdownMenu`, `DropdownMenuItem` | Pull-down list of commands | **W1** (written) |
 | `navigation-drawer.modal` | `ModalNavigationDrawer`, `ModalDrawerSheet` | Temporary overlay navigation with a scrim and a focus trap | W2 |
 | `navigation-drawer.persistent` | `PermanentNavigationDrawer`, `DismissibleNavigationDrawer` | Navigation alongside content, no focus trap. **Unverified** whether Dismissible and Permanent differ in exposed semantics beyond togglability | W3 |
 | `navigation-rail.basic` | `NavigationRail`, `WideNavigationRail` | Side navigation on wider layouts | deferred to W3; same selection contract as `navigation-bar.basic`, so it references that pattern rather than restating it |
@@ -186,7 +186,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 
 | ID | Compose | What it is | Status |
 |---|---|---|---|
-| `dialog.alert` | `AlertDialog`, `BasicAlertDialog` | Modal message with actions. The two composables differ in how much layout Material supplies, not in semantics | **W1** |
+| `dialog.alert` | `AlertDialog`, `BasicAlertDialog` | Modal message with actions. The two composables differ in how much layout Material supplies, not in semantics | **W1** (written) |
 | `bottom-sheet.modal` | `ModalBottomSheet` | Modal sheet with scrim and focus trap. Material already supplies more than expected: scrim tap and back press dismiss by default, `paneTitle` is set internally, and the drag handle is clickable and carries named expand, collapse, and dismiss accessibility actions. The pattern's work is the conditions under which those disappear, plus Escape, which is never handled | **W1** |
 | `snackbar.basic` | `Snackbar`, `SnackbarHost` | Transient message announced through a live region, acknowledging something that already happened. No action to reach | **W1** |
 | `snackbar.action` | `Snackbar` with an `action` slot | Transient message carrying an action. Focus never moves to the message, which is what keeps it from interrupting and what puts its action out of easy reach for sighted keyboard-only users. Splits from `snackbar.basic` for the same reason `toast.action` splits from `toast.basic` on web: the reachability contract is the whole pattern | **W1** |
@@ -200,7 +200,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 
 | ID | Compose | What it is | Status |
 |---|---|---|---|
-| `image.basic` | `Image`, `Icon` | Decorative, informative, and functional roles as variants | **W1** |
+| `image.basic` | `Image`, `Icon` | Decorative, informative, and functional roles as variants | **W1** (written) |
 | `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Covers the strip and its tiles; there is no separate tile pattern, and "tile" is vocabulary rather than an ID. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row`, `tile` | **W1** (written) |
 | `card.basic` | `Card`, `ElevatedCard`, `OutlinedCard`, each with a clickable overload | Grouped surface, static or interactive. The clickable overload adds `Role.Button`; both branches are their own requirement | W2 |
 | `badge.basic` | `Badge`, `BadgedBox` | Non-interactive indicator whose value folds into the host's name. **Unverified** whether a documented API suppresses standalone announcement | W2 |
@@ -290,7 +290,7 @@ That is a large wave, and it is only tractable because Android patterns run roug
 
 **Wave 3** is the long tail: `divider.basic`, `accordion.basic`, `grid.basic`, `table.basic`, `date-picker.basic`, `date-picker.range`, `time-picker.dial`, `time-picker.input`, `listbox.basic`, `tooltip.basic`, `pull-to-refresh.basic`, `swipe-to-dismiss.basic`, `navigation-rail.basic`, `navigation-drawer.persistent`, `fab.menu`, `combobox.autocomplete`, `stepper.basic`.
 
-**Blocked, not scheduled.** Three patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility, `bottom-sheet.standard` and `carousel.basic` wait on their APIs leaving `@ExperimentalMaterial3Api`.
+**Blocked, not scheduled.** Four patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility, `bottom-sheet.standard` and `carousel.basic` wait on their APIs leaving `@ExperimentalMaterial3Api`, and `search-bar.basic` waits on the stable `SearchBar(state, inputField)` overload, which ships only from Material 3 1.5.0.
 
 ### Dependency graph
 
@@ -439,6 +439,9 @@ Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are th
 ## Unverified claims
 
 Each of these must be confirmed before it reaches a Must Have.
+
+- Whether TalkBack announces `DialogProperties(windowTitle = ...)` in place of the generic "Dialog" pane title Material 3 1.4.0's `BasicAlertDialog` sets on its content box, and whether a caller's own `paneTitle` on the dialog's `modifier` wins over Material's. The modifier is earlier in that node's chain than Material's `semantics` call, but which value survives is not settled from source. `dialog.alert` keeps both out of its Must Haves and requires the title to be the first content instead.
+- Whether keyboard focus lands on the first item of a `DropdownMenu` by itself when the popup opens. The popup is focusable by default and arrow keys move between items, but no code in Material 3 1.4.0 requests focus on an item. `menu.basic` requests it explicitly, which is correct either way.
 
 - Whether a caller's `error(...)` set through `Modifier.semantics` on a Material `TextField` overrides the component's internal `defaultErrorSemantics`, which applies `error()` with a generic default string on the inner `BasicTextField` when `isError` is true. The default merge policy keeps the ancestor's value, which would make the caller's message win, but the two sit on different nodes and only a device check settles it. `text-field.basic` is written on the assumption that it does; if it does not, the message has to move into the label instead.
 

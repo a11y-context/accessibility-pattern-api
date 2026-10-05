@@ -8,6 +8,21 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.0 — 2026-10-05
+
+Three wave-1 patterns, and four corrections that came from checking their mechanisms against the stable Material 3 1.4.0 and Compose UI 1.12.1 sources.
+
+- **Image → 0.1.0** — Informative, decorative, and functional images. `contentDescription` is a required parameter on `Image` and `Icon`, so the decision is explicit at every call site, and `""` is not decorative: it still applies `Role.Image`. Only `null` removes an image from the tree.
+- **Menu → 0.1.0** — `DropdownMenu` is a focusable popup that closes on back, Escape, and a tap outside it with no extra code. Its items carry no role and Compose has no menu role or expanded state, so the trigger says it opens a menu through its click label.
+- **Dialog (Alert) → 0.1.0** — `AlertDialog` blocks the screen and closes on back and Escape, but sets its pane title to the generic word "Dialog". The title is the first content the user lands on, so it carries the question; the icon before it is decorative.
+- **List Item → 0.2.0** — Replaced a Don't that warned against omitting `contentDescription`, which cannot be omitted on Compose. The real trap is passing `""` to a decorative thumbnail.
+- **Content Shelf → 0.2.0** — The same correction for tile artwork.
+- **Bottom Sheet (Modal) → 0.3.0** — The focus request moves inside the sheet's content, because the sheet composes in its own window and an effect in the parent can run before its target exists. The Escape Must Have now says the sheet is the exception: `AlertDialog` and `DropdownMenu` handle Escape themselves.
+
+Foundations change in the same release:
+
+- `global.icon` replaces a Don't about an "unset" `contentDescription` with the two Compose traps that are real: passing `""` instead of `null`, and drawing a meaningful graphic with `Modifier.paint`, `Canvas`, or a background, none of which applies semantics.
+
 ## 0.4.0 — 2026-09-23
 
 Two gaps found by auditing formula coverage across all eight patterns.

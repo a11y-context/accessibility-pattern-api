@@ -407,7 +407,9 @@ For any pattern whose unit is a row or surface containing several elements:
 
 For any overlay the user can close:
 
-> The overlay closes on back press and on a tap outside it. Escape from a hardware keyboard is handled explicitly, because Compose does not supply it.
+> The overlay closes on back press, on Escape from a hardware keyboard, and on a tap outside it.
+
+Which of those the caller writes depends on the container, verified against ui 1.12.1 and Material 3 1.4.0. `Dialog` handles Escape in its window's `onKeyUp`, and `Popup` in `dispatchKeyEvent`, so `AlertDialog` and `DropdownMenu` get all three for free and the caller only routes `onDismissRequest`. `ModalBottomSheet` runs in its own dialog class with no key override, so it supplies back and the scrim tap and the caller handles Escape. An earlier version of this formula said Compose never supplies Escape, which was true of the one overlay pattern written at the time and false in general.
 
 #### Live region formula
 

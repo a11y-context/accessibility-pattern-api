@@ -36,7 +36,10 @@ const note = (s) => console.log(`[check-corpus-conventions] ${s}`);
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
-const git = (...args) => execFileSync("git", args, {cwd: ROOT, encoding: "utf8"}).trim();
+// stderr is discarded: `git show <base>:<path>` for a newly added pattern exits non-zero by design,
+// and letting git print "fatal: path ... not in origin/main" made a passing run read like a failure.
+const git = (...args) =>
+  execFileSync("git", args, {cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"]}).trim();
 
 /**
  * Lines of a pattern file that carry prose, i.e. neither YAML frontmatter nor

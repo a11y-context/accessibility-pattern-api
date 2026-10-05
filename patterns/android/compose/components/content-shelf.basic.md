@@ -3,7 +3,7 @@ id: content-shelf.basic
 title: Content Shelf
 stack: android/compose
 status: beta
-latest_version: 0.1.0
+latest_version: 0.2.0
 tags: [content-shelf, shelf, rail, horizontal-list, carousel, collection, browse]
 aliases: [collection row, collection-row, content row, content rail, rail, strip, shelf, tile row, poster row, card row, media row, LazyRow, carousel row]
 summary: Horizontally scrolling strip of tiles under a heading that says what the tiles have in common. A LazyRow reports that the user is in a list and nothing else, so the shelf's name, each tile's name, and every position announcement are the app's to supply.
@@ -48,7 +48,7 @@ A browse screen stacks several of these, and they are told apart only by their h
 - Do not write the position into each tile's `contentDescription` by hand. It duplicates what `collectionItemInfo` reports and goes stale the moment the shelf reorders.
 - Do not name a tile from its artwork filename or a generic string such as "poster". The title is in the data; use it.
 - Do not rely on the heading alone to name the shelf. It is a separate node and nothing associates the two.
-- Do not leave decorative artwork unnamed by omitting `contentDescription` entirely. An unset description is not the same as `null`, and the image reports no name rather than leaving the tree.
+- Do not pass `contentDescription = ""` to a decorative artwork. An empty string still applies `Role.Image`, so the artwork stays in the tree; only `null` removes it (`global.icon`).
 
 ## Customizable
 - A tile may be a bare `Box` with artwork, a `Card`, or a column of artwork with a title and metadata beneath, as long as the result is one node with a name from the data.
