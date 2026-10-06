@@ -1,6 +1,6 @@
 {
   "_comment": "Hand-edited top-level metadata for patterns.json. Bumped per the Versioning protocol when a release ships. The patterns.json output file is regenerated from this + the .md files in components/ by website/scripts/generate-patterns-json.js (runs in prebuild).",
-  "_comment_order_overrides": "Patterns default to alphabetical filename order, which also drives the sidebar. Each [earlierId, laterId] pair pins earlierId immediately before laterId. snackbar.basic (\"Snackbar\") must precede snackbar.action (\"Snackbar with Action\"), the reverse of the alphabetical order, matching web's toast.basic / toast.action. segmented-button.single likewise precedes segmented-button.multi, the reverse of the alphabetical order, because the multiple-choice row is described against the single-choice one.",
+  "_comment_order_overrides": "Patterns default to alphabetical filename order, which also drives the sidebar. Each [earlierId, laterId] pair pins earlierId immediately before laterId. snackbar.basic (\"Snackbar\") must precede snackbar.action (\"Snackbar with Action\"), the reverse of the alphabetical order, matching web's toast.basic / toast.action.",
   "stack": "android/compose",
   "schema_version": "1.0.0",
   "catalog_revision": "0.8.0",
@@ -9,10 +9,6 @@
     [
       "snackbar.basic",
       "snackbar.action"
-    ],
-    [
-      "segmented-button.single",
-      "segmented-button.multi"
     ]
   ]
 }

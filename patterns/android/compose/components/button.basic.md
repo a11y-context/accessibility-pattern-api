@@ -30,7 +30,7 @@ Control that triggers an immediate action. Covers text, icon-only, floating, and
 - The control reports `Role.Button` and a click action. Material's `Button`, `IconButton`, `FloatingActionButton`, `AssistChip`, and `SuggestionChip` are the reference implementations across the presentations this pattern covers; anything else has to set both itself (`global.native-first`).
 - The button has an accessible name that describes its purpose or action.
 - When the button has visible text, that text serves as the accessible name and no `contentDescription` is set on it.
-- An icon-only control takes its name from `contentDescription` on the control, and the `Icon` inside it carries `contentDescription = null`.
+- An icon-only control takes its name from `contentDescription` on its `Icon`, which the control merges into its own name (`global.icon`).
 - When several buttons on one screen share visible text, such as a repeated "Edit" per row, give each a `contentDescription` that names what it acts on (e.g., "Edit username").
 - When an `ExtendedFloatingActionButton` collapses to icon-only, set a `contentDescription` that survives the collapse. The visible text is the name while expanded and disappears while collapsed, so a control named only by its text becomes unnamed.
 - Set `onClickLabel` when "Double tap to activate" would not tell the user what happens (e.g., `onClickLabel = "add to watchlist"`). This is the only supplementary text Compose exposes, and it completes the sentence TalkBack speaks.

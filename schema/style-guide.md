@@ -373,7 +373,7 @@ Material is still named, in a clause, and dropping it would be the opposite mist
 
 > When more context is needed than the visible text carries, set `contentDescription` on the control, opening with the visible text.
 
-> An icon-only control takes its name from `contentDescription` on the control, and the `Icon` inside it carries `contentDescription = null`.
+> An icon-only control takes its name from `contentDescription` on its `Icon`, which the control merges into its own name (`global.icon`).
 
 #### Touch target formulas
 

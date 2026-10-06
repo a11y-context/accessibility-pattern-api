@@ -23,12 +23,12 @@ Icon button that turns something on or off in place and keeps the same name in b
 - Do not use when the control's name changes to the action it performs next, such as "Play" becoming "Pause" (use `button.basic`).
 - Do not use when the control is a persistent setting, such as "Dark theme" (use `switch.basic`).
 - Do not use when the control records a value submitted with a form (use `checkbox.basic`).
-- Do not use when two to five related options form one connected control (use `segmented-button.multi`).
+- Do not use when two to five related options form one connected control (use `segmented-button.basic`).
 - Do not use when the control filters a set of results (use `chip.filter`).
 
 ## Must Haves
 - The control reports its on or off state, a name, and a click action. Material's `IconToggleButton`, `FilledIconToggleButton`, `FilledTonalIconToggleButton`, and `OutlinedIconToggleButton` are the reference implementation, reporting `Role.Checkbox` and a checked state with a 48dp target; an `IconButton` that swaps its icon reports no state at all (`global.native-first`).
-- Name the control for what it turns on (e.g., "Favorite", "Mute") with `contentDescription` on the toggle button, and give the `Icon` inside it `contentDescription = null` (`global.icon`).
+- Name the control for what it turns on (e.g., "Favorite", "Mute") with `contentDescription` on its `Icon`, which the toggle merges into its own name (`global.icon`).
 - Keep the name the same in both states. The control already reports checked or not checked, so a name that also changes ("Unmute" while checked) states the condition twice, in contradictory words.
 - Word the name so it reads true when checked. A checked "Mute" means the sound is off.
 - Show the checked state by more than its color. The standard `IconToggleButton` changes only the icon's color, so swap the icon as well (e.g., an outlined heart for a filled one). `OutlinedIconToggleButton` drops its border and fills its container when checked, which carries the state on its own (`global.use-of-color`).
@@ -60,29 +60,26 @@ fun ToggleButtonExamples() {
 
     IconToggleButton(
         checked = favorite,
-        onCheckedChange = { favorite = it },
-        modifier = Modifier.semantics { contentDescription = "Favorite" }
+        onCheckedChange = { favorite = it }
     ) {
         Icon(
             if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-            contentDescription = null
+            contentDescription = "Favorite"
         )
     }
 
     Row {
         OutlinedIconToggleButton(
             checked = bold,
-            onCheckedChange = { bold = it },
-            modifier = Modifier.semantics { contentDescription = "Bold" }
+            onCheckedChange = { bold = it }
         ) {
-            Icon(Icons.Filled.FormatBold, contentDescription = null)
+            Icon(Icons.Filled.FormatBold, contentDescription = "Bold")
         }
         OutlinedIconToggleButton(
             checked = italic,
-            onCheckedChange = { italic = it },
-            modifier = Modifier.semantics { contentDescription = "Italic" }
+            onCheckedChange = { italic = it }
         ) {
-            Icon(Icons.Filled.FormatItalic, contentDescription = null)
+            Icon(Icons.Filled.FormatItalic, contentDescription = "Italic")
         }
     }
 }

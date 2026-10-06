@@ -69,7 +69,7 @@ Verified, not recalled. Every item here is something a model will confidently pr
 - **Lazy layouts apply list semantics automatically but do not populate `CollectionInfo` or `CollectionItemInfo`.** Position and total count are set by hand.
 - **Material selection controls apply the 48dp minimum only when they own the click handler.** Lift state to a parent `toggleable` or `selectable`, which is Material's own documented pattern for a settings row, and the control renders with no padding while the parent becomes responsible for the target.
 - **`testTag` is invisible to accessibility services** unless an ancestor sets `testTagsAsResourceId`.
-- **`selectableGroup()` reports position only for selectable children.** Compose derives the set's `CollectionInfo` from it by counting children that carry `selected`, so a row of toggleable children gains nothing from it, and the modifier still looks like the fix.
+- **`selectableGroup()` reports position only for selectable children.** Compose derives the set's `CollectionInfo` from it by counting children that carry `selected`, so a row or column of toggleable children, such as checkbox rows, gains nothing from it, and the modifier still looks like the fix.
 - **Material's multiple-choice `SegmentedButton` sets no role.** The single-choice segment sets `Role.RadioButton` itself; the multiple-choice one is a toggleable `Surface` with nothing, so it reports a checked state with no checkbox role until the caller adds one. Its row sets no semantics either.
 - **The standard `IconToggleButton` shows its checked state by color alone.** Its container is transparent in both states and only the icon's color changes. The outlined skin drops its border and fills its container when checked.
 - **Focus is two systems, not one.** `FocusRequester` moves keyboard and D-pad focus; `Modifier.semantics { focused = true }` moves the TalkBack cursor. iOS's `@AccessibilityFocusState` unifies both. Android does not.
@@ -103,7 +103,11 @@ The contested calls, resolved. Each was surveyed against four or more design sys
 
 **List item, not list row.** Material ships a literal `ListItem` composable. The iOS family is `list.row`, named for a `NavigationLink` inside a `List`, which is not what Android's primitive is.
 
-**Segmented button, not segmented control.** Material's name, and the industry splits evenly with no Android-side precedent for "control." Single-choice and multi-choice rows are accessibility-distinct: one composes items with radio semantics, the other with checkbox semantics.
+**Segmented button, not segmented control.** Material's name, and the industry splits evenly with no Android-side precedent for "control."
+
+**Segmented button is one pattern, not two.** It was split on single and multiple choice when the taxonomy was drafted, because one row composes radio semantics and the other checkbox semantics. Written out on 2026-10-06, six of each file's eight Must Haves were identical, and two of the three Don'ts in each were mirror images of the other file's. What differs is which row is chosen and what the caller adds to the multiple-choice row: a role and the collection properties Material omits. Merged into `segmented-button.basic` before release, as the progress indicators were. Radio and checkbox stay separate because developers ask for them by different names; nobody asks for a multiple-choice segmented button by any name but segmented button.
+
+**Checkbox group is its own pattern.** A radio button exists only in a set, so `radio.basic` carries its group rules. A checkbox can stand alone, so the set's rules need a home of their own: the set's name, a group-level hint and error, and position, which `selectableGroup()` does not supply for checkboxes. The draft taxonomy left it out entirely, neither scheduled nor cut, which is the failure the Components legend exists to prevent. The web corpus splits `checkbox.group` from `checkbox.basic` the same way.
 
 **Select keeps its industry name.** Material has no component-level name for the select control, only the composable `ExposedDropdownMenuBox`. Fluent UI Android says ComboBox, Backpack says Spinner, which on Android means something else again. `select.basic` carries `ExposedDropdownMenu` and `exposed dropdown` in aliases. The one place where leaning toward the framework name would produce a worse ID than the industry one.
 
@@ -170,9 +174,9 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | `switch.basic` | `Switch` | Persistent on or off setting | **W1** |
 | `checkbox.basic` | `Checkbox` | Independent binary choice | **W1** |
 | `radio.basic` | `RadioButton` with `Modifier.selectableGroup()` | One from a mutually exclusive set. Android ships this natively, unlike iOS, so the pattern is about using it correctly rather than building one | **W1** |
+| `checkbox.group` | `Checkbox` rows with `toggleable`, in a named container | Several checkboxes answering one question. `selectableGroup()` adds nothing for checkboxes, so position is set by hand, and the set carries one group-level error | **W2** (written) |
 | `checkbox.tristate` | `TriStateCheckbox` | Parent checkbox with an indeterminate state | **W2** (written) |
-| `segmented-button.single` | `SegmentedButton` in `SingleChoiceSegmentedButtonRow` | Mutually exclusive choice from two to five options. Radio semantics | **W2** (written) |
-| `segmented-button.multi` | `SegmentedButton` in `MultiChoiceSegmentedButtonRow` | Independent multiple choice in the same chrome. Checkbox semantics, which the caller sets: Material's multiple-choice segment sets no role | **W2** (written) |
+| `segmented-button.basic` | `SegmentedButton` in `SingleChoiceSegmentedButtonRow` or `MultiChoiceSegmentedButtonRow` | Two to five connected options, one selected or any number on. Material supplies radio semantics and position in the single-choice row; in the multiple-choice row the caller adds the checkbox role and position, which Material omits | **W2** (written) |
 | `date-picker.basic` | `DatePicker`, `DatePickerDialog` | Date selection | W3 |
 | `date-picker.range` | `DateRangePicker` | Start and end date selection. **Unverified** how announced state differs per cell | W3 |
 | `time-picker.dial` | `TimePicker` | Clock-face time entry, drag-driven | W3 |
@@ -290,7 +294,7 @@ Four rules where the iOS Must Have cannot be restated because the platform primi
 
 That is a large wave, and it is only tractable because Android patterns run roughly a third the length of their web siblings once Material handles the mechanics. Worth knowing at pattern one rather than discovering at pattern nine.
 
-**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `select.basic`, `slider.basic`, `button.toggle`, `segmented-button.single`, `segmented-button.multi`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the four that unblock once wave 1 merges: `button.split`, `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`.
+**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `select.basic`, `slider.basic`, `button.toggle`, `segmented-button.basic`, `checkbox.group`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the four that unblock once wave 1 merges: `button.split`, `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`.
 
 **Wave 3** is the long tail: `divider.basic`, `accordion.basic`, `grid.basic`, `table.basic`, `date-picker.basic`, `date-picker.range`, `time-picker.dial`, `time-picker.input`, `listbox.basic`, `tooltip.basic`, `pull-to-refresh.basic`, `swipe-to-dismiss.basic`, `navigation-rail.basic`, `navigation-drawer.persistent`, `fab.menu`, `combobox.autocomplete`, `stepper.basic`.
 
@@ -342,7 +346,7 @@ Each pattern is authored on its own PR branch in a worktree off freshly fetched 
 1. **Read the web sibling first.** Interaction expectations are parallel across stacks even where the mechanism is not, so the web pattern supplies the behavior contract and this corpus supplies the Compose mechanism. This also avoids re-deciding boundaries the web corpus already settled.
 2. **AI drafts** from the CVS technique plus Android and Material documentation: Use When, Do Not Use When, Must Haves, Don'ts, Customizable, and a minimal Compose Golden Pattern. Annotates provenance and lists what a human must verify on device. Patterns carry no Acceptance Checks section; verification belongs to the QA layer.
 3. **John reviews** on the rendered docs site, not as markdown.
-4. **On-device pass** with TalkBack is the gate before merge. Only after it: bump `catalog_revision`, add release notes, merge.
+4. **On-device pass** with TalkBack happens in a sample app built once the catalog is written, not per PR. Every assumption a merged pattern makes that only a device can settle goes on [`android-device-validation.md`](android-device-validation.md) when the pattern is written, so the pass has a list to work from. Each PR still bumps `catalog_revision` and adds release notes before merge.
 
 There is no third enrichment step. WCAG criterion identifiers appear as plain text, sparingly, only where a requirement's justification is not obvious from the requirement itself. No hyperlinks in pattern files or `global_rules.md`.
 
@@ -442,17 +446,7 @@ Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are th
 
 ## Unverified claims
 
-Each of these must be confirmed before it reaches a Must Have.
-
-- Whether TalkBack's cursor lands on an `AlertDialog`'s title when the dialog opens, rather than on a button. Material 3 1.4.0 lays out icon, title, text, then buttons, and with the icon decorative the title is first in traversal order, which is what TalkBack's initial placement normally follows. `dialog.alert` relies on it and requests no focus.
-
-- Whether TalkBack announces `DialogProperties(windowTitle = ...)` in place of the generic "Dialog" pane title Material 3 1.4.0's `BasicAlertDialog` sets on its content box, and whether a caller's own `paneTitle` on the dialog's `modifier` wins over Material's. The modifier is earlier in that node's chain than Material's `semantics` call, but which value survives is not settled from source. `dialog.alert` keeps both out of its Must Haves and requires the title to be the first content instead.
-- Whether keyboard focus lands on the first item of a `DropdownMenu` by itself when the popup opens. The popup is focusable by default and arrow keys move between items, but no code in Material 3 1.4.0 requests focus on an item. `menu.basic` requests it explicitly, which is correct either way.
-
-- Whether a caller's `error(...)` set through `Modifier.semantics` on a Material `TextField` overrides the component's internal `defaultErrorSemantics`, which applies `error()` with a generic default string on the inner `BasicTextField` when `isError` is true. The default merge policy keeps the ancestor's value, which would make the caller's message win, but the two sit on different nodes and only a device check settles it. `text-field.basic` is written on the assumption that it does; if it does not, the message has to move into the label instead.
-
-- Whether a container named with `contentDescription` around a `selectableGroup`, as `radio.basic` and both segmented-button patterns do, becomes a TalkBack stop of its own, so the user hears the group's name from the container and again from its visible label. `global.collection-semantics` requires the container name; a device check settles whether the visible label should then be hidden.
-- What TalkBack says for a segment's position in a one-row collection. The single-choice row gets its `CollectionItemInfo` from `selectableGroup()`, the multiple-choice row from `collectionItemInfo` set by hand, and the patterns claim the two rows report the same thing, not a particular phrase.
+Each of these must be confirmed before it reaches a Must Have. Assumptions already in a merged pattern that only a device can settle live in [`android-device-validation.md`](android-device-validation.md) instead.
 
 - Whether `DismissibleNavigationDrawer` and `PermanentNavigationDrawer` differ in exposed semantics beyond togglability.
 - Whether `ExposedDropdownMenuBox` applies combobox semantics automatically or requires the caller to add them.
@@ -462,5 +456,4 @@ Each of these must be confirmed before it reaches a Must Have.
 - Whether `PlainTooltip` and `RichTooltip` exist separately from `TooltipBox` in the current stable API.
 - How `DateRangePicker` announces start and end selection differently from `DatePicker`.
 - Whether any Material component beyond Checkbox, RadioButton, Switch, Slider, and Surface auto-applies the 48dp minimum when it owns its click handler.
-- Whether TalkBack's heading navigation reads Compose's `heading()` property in current versions.
 - Whether accessibility-specific `CompositionLocal`s exist analogous to SwiftUI's accessibility environment values.

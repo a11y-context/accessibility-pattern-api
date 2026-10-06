@@ -21,6 +21,7 @@
     "bottom-sheet.modal": "Bottom Sheet (Modal)",
     "button.basic": "Button (Basic)",
     "button.toggle": "Button (Toggle)",
+    "checkbox.group": "Checkbox (Group)",
     "checkbox.tristate": "Checkbox (Tri-State)",
     "link.basic": "Link (Standalone)",
     "link.inline": "Link (Inline)"
