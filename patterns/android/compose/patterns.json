@@ -1,7 +1,7 @@
 {
   "stack": "android/compose",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.7.0",
+  "catalog_revision": "0.8.0",
   "cache_ttl_seconds": 3600,
   "patterns": [
     {
@@ -52,7 +52,7 @@
       "title": "Button",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.2.2",
+      "latest_version": "0.3.0",
       "summary": "Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.",
       "aliases": [
         "btn",
@@ -82,7 +82,7 @@
           "Use when the action is presented as a floating action button, an icon-only control, or an assist or suggestion chip. All four carry Role.Button and no state of their own."
         ],
         "do_not_use_when": [
-          "Do not use when the control represents an on or off state that persists after the tap (use button.toggle).",
+          "Do not use when the control turns a feature on or off and keeps the same name in both states (use button.toggle).",
           "Do not use when the control carries a selected state, such as a filter or a removable token (use chip.filter or chip.input).",
           "Do not use when the control opens a list of commands (use menu.basic).",
           "Do not use when the control opens a URL or leaves the app (use link.basic).",
@@ -93,6 +93,55 @@
       "default_variant": null,
       "source": {
         "path": "components/button.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "button.toggle",
+      "title": "Toggle Button",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Icon button that turns something on or off in place and keeps the same name in both states. Material's icon toggle buttons report a checked state, so the name says what the control turns on and the state says whether it is on; the standard toggle shows that state by color alone.",
+      "aliases": [
+        "toggle button",
+        "IconToggleButton",
+        "FilledIconToggleButton",
+        "FilledTonalIconToggleButton",
+        "OutlinedIconToggleButton",
+        "icon toggle",
+        "pressed button",
+        "favorite button",
+        "bookmark button",
+        "formatting toggle"
+      ],
+      "tags": [
+        "button",
+        "toggle",
+        "icon button",
+        "on-off",
+        "checked",
+        "favorite",
+        "formatting"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when a control turns a feature or attribute on and off in the current context and keeps the same name in both states (e.g., \"Favorite\", \"Bookmark\", \"Mute\").",
+          "Use when several such controls sit together in a toolbar, each on or off independently (e.g., \"Bold\", \"Italic\", \"Underline\")."
+        ],
+        "do_not_use_when": [
+          "Do not use when the control's name changes to the action it performs next, such as \"Play\" becoming \"Pause\" (use button.basic).",
+          "Do not use when the control is a persistent setting, such as \"Dark theme\" (use switch.basic).",
+          "Do not use when the control records a value submitted with a form (use checkbox.basic).",
+          "Do not use when two to five related options form one connected control (use segmented-button.multi).",
+          "Do not use when the control filters a set of results (use chip.filter)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/button.toggle.md",
         "format": "markdown",
         "frontmatter": true
       }
@@ -137,6 +186,49 @@
       "default_variant": null,
       "source": {
         "path": "components/checkbox.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "checkbox.tristate",
+      "title": "Tri-State Checkbox",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Parent checkbox that checks or clears a set of child checkboxes and shows partially checked when only some of them are. Compose reports the third state as \"Partially checked\" without being asked; the parent's state has to be derived from its children, and activating the parent never lands on it.",
+      "aliases": [
+        "TriStateCheckbox",
+        "triStateToggleable",
+        "ToggleableState",
+        "indeterminate checkbox",
+        "mixed checkbox",
+        "partially checked",
+        "select all",
+        "parent checkbox",
+        "nested checkboxes"
+      ],
+      "tags": [
+        "checkbox",
+        "tristate",
+        "indeterminate",
+        "select all",
+        "parent checkbox",
+        "selection"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when one checkbox checks or clears a set of related checkboxes beneath it and shows whether all, some, or none of them are checked (e.g., \"All toppings\" above \"Cheese\", \"Mushrooms\", \"Olives\")."
+        ],
+        "do_not_use_when": [
+          "Do not use when a checkbox stands on its own, or sits in a set with no parent controlling it (use checkbox.basic).",
+          "Do not use when the third state is a value the user picks directly, such as include, exclude, or ignore (use radio.basic or segmented-button.single)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/checkbox.tristate.md",
         "format": "markdown",
         "frontmatter": true
       }
@@ -593,6 +685,92 @@
       "default_variant": null,
       "source": {
         "path": "components/radio.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "segmented-button.single",
+      "title": "Segmented Button (Single Choice)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Row of two to five connected options, exactly one of them selected. Material's single-choice row gives each segment radio semantics and announces its position in the set; naming the row and keeping a visible marker on the selected segment are the caller's.",
+      "aliases": [
+        "SegmentedButton",
+        "SingleChoiceSegmentedButtonRow",
+        "segmented control",
+        "single-select segmented button",
+        "toggle group",
+        "button group",
+        "view switcher"
+      ],
+      "tags": [
+        "segmented button",
+        "segmented control",
+        "single choice",
+        "selection",
+        "radio",
+        "view switcher"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user chooses one of two to five short options that stay visible together as one connected control (e.g., \"Day\", \"Week\", \"Month\").",
+          "Use when the choice takes effect immediately, such as changing how the content below is shown or sorted."
+        ],
+        "do_not_use_when": [
+          "Do not use when any number of the options may be chosen (use segmented-button.multi).",
+          "Do not use when there are more than five options or the labels are too long to fit side by side (use radio.basic, or select.basic for a compact control).",
+          "Do not use when each option opens its own pane of content, such as the sections of a profile (use tabs.basic).",
+          "Do not use when the control is a single on or off choice (use switch.basic or button.toggle)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/segmented-button.single.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
+      "id": "segmented-button.multi",
+      "title": "Segmented Button (Multiple Choice)",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Row of two to five connected options, any number of them on at once. Material's multiple-choice segment reports a checked state but no role, unlike the single-choice segment, and its row reports no set, so the role, each segment's position, and the row's name are the caller's.",
+      "aliases": [
+        "SegmentedButton",
+        "MultiChoiceSegmentedButtonRow",
+        "segmented control",
+        "multi-select segmented button",
+        "toggle group",
+        "button group"
+      ],
+      "tags": [
+        "segmented button",
+        "segmented control",
+        "multiple choice",
+        "selection",
+        "checkbox",
+        "toggle group"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user turns on any number of two to five short, related options shown together as one connected control (e.g., \"Walk\", \"Bike\", \"Transit\" as the ways a route may travel)."
+        ],
+        "do_not_use_when": [
+          "Do not use when exactly one option must be chosen (use segmented-button.single).",
+          "Do not use when the options filter a set of results, or there are more than five of them (use chip.filter).",
+          "Do not use when each control turns its own feature on and off, such as formatting in a toolbar (use button.toggle).",
+          "Do not use when the choices are recorded with a form and need room for longer labels (use checkbox.basic)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/segmented-button.multi.md",
         "format": "markdown",
         "frontmatter": true
       }

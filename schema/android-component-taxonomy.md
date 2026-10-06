@@ -69,6 +69,9 @@ Verified, not recalled. Every item here is something a model will confidently pr
 - **Lazy layouts apply list semantics automatically but do not populate `CollectionInfo` or `CollectionItemInfo`.** Position and total count are set by hand.
 - **Material selection controls apply the 48dp minimum only when they own the click handler.** Lift state to a parent `toggleable` or `selectable`, which is Material's own documented pattern for a settings row, and the control renders with no padding while the parent becomes responsible for the target.
 - **`testTag` is invisible to accessibility services** unless an ancestor sets `testTagsAsResourceId`.
+- **`selectableGroup()` reports position only for selectable children.** Compose derives the set's `CollectionInfo` from it by counting children that carry `selected`, so a row of toggleable children gains nothing from it, and the modifier still looks like the fix.
+- **Material's multiple-choice `SegmentedButton` sets no role.** The single-choice segment sets `Role.RadioButton` itself; the multiple-choice one is a toggleable `Surface` with nothing, so it reports a checked state with no checkbox role until the caller adds one. Its row sets no semantics either.
+- **The standard `IconToggleButton` shows its checked state by color alone.** Its container is transparent in both states and only the icon's color changes. The outlined skin drops its border and fills its container when checked.
 - **Focus is two systems, not one.** `FocusRequester` moves keyboard and D-pad focus; `Modifier.semantics { focused = true }` moves the TalkBack cursor. iOS's `@AccessibilityFocusState` unifies both. Android does not.
 
 **Vocabulary collisions specific to this platform.**
@@ -119,7 +122,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | ID | Compose | What it is | Status |
 |---|---|---|---|
 | `button.basic` | `Button` and its four skins, `IconButton`, `FloatingActionButton`, `ExtendedFloatingActionButton`, `AssistChip`, `SuggestionChip` | Any in-place action. Branches on where the name comes from (visible text, `contentDescription`, or a label that disappears when an extended FAB collapses) and on placement outside the content flow | **W1** |
-| `button.toggle` | `IconToggleButton`, `ToggleButton` | In-context on or off state. Distinct from `button.basic`: adds checked state | W2 |
+| `button.toggle` | `IconToggleButton` and its filled, tonal, and outlined skins | In-context on or off state with a stable name. Distinct from `button.basic`: adds checked state. `ToggleButton`, the text toggle, is not in the 1.4.0 stable baseline | **W2** (written) |
 | `chip.filter` | `FilterChip` | Selectable filter carrying `selected` | W2 |
 | `chip.input` | `InputChip` | Selectable token with a remove affordance. Two interactive targets in one chip | W2 |
 | `button.split` | `SplitButtonLayout` | Leading action plus trailing menu trigger | deferred to W2; composes `button.basic` and `menu.basic`, both W1 |
@@ -167,9 +170,9 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | `switch.basic` | `Switch` | Persistent on or off setting | **W1** |
 | `checkbox.basic` | `Checkbox` | Independent binary choice | **W1** |
 | `radio.basic` | `RadioButton` with `Modifier.selectableGroup()` | One from a mutually exclusive set. Android ships this natively, unlike iOS, so the pattern is about using it correctly rather than building one | **W1** |
-| `checkbox.tristate` | `TriStateCheckbox` | Parent checkbox with an indeterminate state | deferred to W2; extends `checkbox.basic`, which is W1 |
-| `segmented-button.single` | `SegmentedButton` in `SingleChoiceSegmentedButtonRow` | Mutually exclusive choice from two to five options. Radio semantics | W2 |
-| `segmented-button.multi` | `SegmentedButton` in `MultiChoiceSegmentedButtonRow` | Independent multiple choice in the same chrome. Checkbox semantics | W2 |
+| `checkbox.tristate` | `TriStateCheckbox` | Parent checkbox with an indeterminate state | **W2** (written) |
+| `segmented-button.single` | `SegmentedButton` in `SingleChoiceSegmentedButtonRow` | Mutually exclusive choice from two to five options. Radio semantics | **W2** (written) |
+| `segmented-button.multi` | `SegmentedButton` in `MultiChoiceSegmentedButtonRow` | Independent multiple choice in the same chrome. Checkbox semantics, which the caller sets: Material's multiple-choice segment sets no role | **W2** (written) |
 | `date-picker.basic` | `DatePicker`, `DatePickerDialog` | Date selection | W3 |
 | `date-picker.range` | `DateRangePicker` | Start and end date selection. **Unverified** how announced state differs per cell | W3 |
 | `time-picker.dial` | `TimePicker` | Clock-face time entry, drag-driven | W3 |
@@ -435,7 +438,7 @@ Nothing open. Everything previously listed here has been decided and folded into
 
 ### Decided and folded in
 
-Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are the Android expression of the concept web reserved `tag.basic` for, under a different platform name: native Android says chip (Material, Acorn), web says tag (Ant, Chakra, Polaris, Carbon, USWDS, GOV.UK, Base Web). Each stack takes its own platform's word and the two cross-alias, so `tag` finds the Android chips and `chip` finds the web pattern whenever someone writes it. Low stakes: `tag.basic` is an unwritten forward reference nobody has committed to. `content-shelf.basic` is the name, with `collection-row`, `shelf`, `rail`, `content row`, and `carousel row` as aliases: no design system surveyed names this component, Android's nearest terms are mechanisms rather than components, and `content-shelf` stays legible beside `list-item.basic` where `collection-row` would not. `global.use-of-color` stays its own rule rather than folding into `semantic-color`. Icon button, floating action button, and the assist and suggestion chips fold into `button.basic`. Secure text field folds into `text-field.basic`. `progress-indicator` splits on determinacy into two patterns. Navigation rail is deferred to wave 3 rather than cut, since the corpus serves any Android app and not only the two that prompted it. `fab.menu` is deferred, not cut, for the same reason.
+Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are the Android expression of the concept web reserved `tag.basic` for, under a different platform name: native Android says chip (Material, Acorn), web says tag (Ant, Chakra, Polaris, Carbon, USWDS, GOV.UK, Base Web). Each stack takes its own platform's word and the two cross-alias, so `tag` finds the Android chips and `chip` finds the web pattern whenever someone writes it. Low stakes: `tag.basic` is an unwritten forward reference nobody has committed to. `content-shelf.basic` is the name, with `collection-row`, `shelf`, `rail`, `content row`, and `carousel row` as aliases: no design system surveyed names this component, Android's nearest terms are mechanisms rather than components, and `content-shelf` stays legible beside `list-item.basic` where `collection-row` would not. `global.use-of-color` stays its own rule rather than folding into `semantic-color`. Icon button, floating action button, and the assist and suggestion chips fold into `button.basic`. Secure text field folds into `text-field.basic`. `progress-indicator` was planned as two patterns split on determinacy and merged into one before release (see Settled boundaries). Navigation rail is deferred to wave 3 rather than cut, since the corpus serves any Android app and not only the two that prompted it. `fab.menu` is deferred, not cut, for the same reason.
 
 ## Unverified claims
 
@@ -447,6 +450,9 @@ Each of these must be confirmed before it reaches a Must Have.
 - Whether keyboard focus lands on the first item of a `DropdownMenu` by itself when the popup opens. The popup is focusable by default and arrow keys move between items, but no code in Material 3 1.4.0 requests focus on an item. `menu.basic` requests it explicitly, which is correct either way.
 
 - Whether a caller's `error(...)` set through `Modifier.semantics` on a Material `TextField` overrides the component's internal `defaultErrorSemantics`, which applies `error()` with a generic default string on the inner `BasicTextField` when `isError` is true. The default merge policy keeps the ancestor's value, which would make the caller's message win, but the two sit on different nodes and only a device check settles it. `text-field.basic` is written on the assumption that it does; if it does not, the message has to move into the label instead.
+
+- Whether a container named with `contentDescription` around a `selectableGroup`, as `radio.basic` and both segmented-button patterns do, becomes a TalkBack stop of its own, so the user hears the group's name from the container and again from its visible label. `global.collection-semantics` requires the container name; a device check settles whether the visible label should then be hidden.
+- What TalkBack says for a segment's position in a one-row collection. The single-choice row gets its `CollectionItemInfo` from `selectableGroup()`, the multiple-choice row from `collectionItemInfo` set by hand, and the patterns claim the two rows report the same thing, not a particular phrase.
 
 - Whether `DismissibleNavigationDrawer` and `PermanentNavigationDrawer` differ in exposed semantics beyond togglability.
 - Whether `ExposedDropdownMenuBox` applies combobox semantics automatically or requires the caller to add them.

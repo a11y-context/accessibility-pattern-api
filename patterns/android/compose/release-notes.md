@@ -8,6 +8,16 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.8.0 — 2026-10-06
+
+The first wave-2 patterns: four selection controls that report checked or selected state, checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
+
+- **Toggle Button → 0.1.0** — Material's icon toggle buttons report `Role.Checkbox` and a checked state, so the name says what the control turns on and stays the same in both states; a name that changes to the next action belongs to `button.basic`. The standard `IconToggleButton` shows its checked state by color alone, so its icon changes with the state as well.
+- **Tri-State Checkbox → 0.1.0** — `TriStateCheckbox` and `triStateToggleable`, with Compose supplying "Partially checked" as the third state's description. The parent's state is derived from its children every time it is read, and activating the parent checks or clears them all, never landing on partially checked. The same row-hoisting rule as `checkbox.basic`, since `TriStateCheckbox` applies its 48dp minimum only while it owns its callback.
+- **Segmented Button (Single Choice) → 0.1.0** — `SingleChoiceSegmentedButtonRow` gives each segment `Role.RadioButton` and applies `selectableGroup()`, so position in the set comes for free. The row's name is the caller's, and so is keeping a marker on the selected segment: without its default check mark it differs only by container color.
+- **Segmented Button (Multiple Choice) → 0.1.0** — Material's multiple-choice segment reports a checked state but no role, unlike the single-choice one, and its row reports no set. The caller adds `Role.Checkbox` and the collection properties by hand; `selectableGroup()` counts only selectable children, so it adds nothing here.
+- **Button → 0.3.0** — A control that turns a feature on or off and keeps its name now routes to `button.toggle`, and a button whose name changes to the next action, such as "Play" and "Pause", stays here. The old boundary sent both to `button.toggle`.
+
 ## 0.7.0 — 2026-10-06
 
 The last wave-1 patterns, which completes the first wave: eighteen patterns. Checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.

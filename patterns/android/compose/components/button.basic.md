@@ -3,7 +3,7 @@ id: button.basic
 title: Button
 stack: android/compose
 status: beta
-latest_version: 0.2.2
+latest_version: 0.3.0
 tags: [button, control, action, icon-button, fab, chip]
 aliases: [btn, primary button, icon button, call to action, cta, IconButton, floating action button, fab, ExtendedFloatingActionButton, assist chip, suggestion chip, text button]
 summary: Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.
@@ -20,7 +20,7 @@ Control that triggers an immediate action. Covers text, icon-only, floating, and
 - Use when the action is presented as a floating action button, an icon-only control, or an assist or suggestion chip. All four carry `Role.Button` and no state of their own.
 
 ## Do Not Use When
-- Do not use when the control represents an on or off state that persists after the tap (use `button.toggle`).
+- Do not use when the control turns a feature on or off and keeps the same name in both states (use `button.toggle`).
 - Do not use when the control carries a `selected` state, such as a filter or a removable token (use `chip.filter` or `chip.input`).
 - Do not use when the control opens a list of commands (use `menu.basic`).
 - Do not use when the control opens a URL or leaves the app (use `link.basic`).
@@ -51,6 +51,7 @@ Control that triggers an immediate action. Covers text, icon-only, floating, and
 ## Customizable
 - Any of the five button skins, `Button`, `ElevatedButton`, `FilledTonalButton`, `OutlinedButton`, and `TextButton`, is acceptable. They share one role and one set of semantics and differ only in container and elevation tokens.
 - The same holds within each family: the four `IconButton` skins are interchangeable, as are the three `FloatingActionButton` sizes, and `AssistChip` and `SuggestionChip` differ by usage convention rather than by exposed semantics.
+- A button whose action alternates, such as "Play" and "Pause", may change its name to the action it performs next. It reports no state of its own, so the name carries it.
 - `onClickLabel` is optional. Add it when the action's outcome is not obvious from the name, and omit it when the name already says what happens ("Save", "Delete").
 
 ## Golden Pattern
