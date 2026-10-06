@@ -8,6 +8,18 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.10.0 — 2026-10-06
+
+The app's chrome: three wave-2 patterns for the bars and the drawer around a screen, checked against the stable Material 3 1.4.0 and Compose UI and Foundation 1.12.1 sources.
+
+- **Top App Bar → 0.1.0** — All four of Material's top app bars read the navigation control, the title, and the actions in order as one group, and none marks the title as a heading, so the pattern does. The navigation control is named for what it does ("Navigate up", "Open navigation menu"), and the content is padded clear of the bar so it never covers a focused item. All four bars are stable; only their scroll behaviors are still experimental.
+- **Bottom App Bar → 0.1.0** — A traversal group of actions with the floating action button read last, and nothing else from Material, so each action is named as `button.basic` describes and the content is padded clear of the bar. Actions stay actions: an item that marks the current screen belongs in a navigation bar.
+- **Navigation Drawer (Modal) → 0.1.0** — `ModalNavigationDrawer` names its panel "Navigation menu", gives it a dismiss action, and makes the scrim a "Close navigation menu" control, but leaves the screen behind in the accessibility tree and does nothing with focus or keys. The pattern hides the covered screen while the drawer is open, keeps keyboard focus inside the drawer, moves focus in on opening and back on closing, and closes on Escape. Turning off gestures also turns off the scrim's tap to close.
+
+Foundations change in the same release:
+
+- **Headings** — A title passed to a `TopAppBar`'s title slot is marked as a heading. The rule had exempted titles supplied through a component's title slot, which assumed Material marks them; none of its top app bars does. An `AlertDialog`'s title stays unmarked, since TalkBack lands on it when the dialog opens.
+
 ## 0.9.0 — 2026-10-06
 
 Five more wave-2 patterns: the small surfaces that carry state or meaning, and the select. Checked against the stable Material 3 1.4.0 and Compose UI and Foundation 1.12.1 sources. CVS has no technique for the chips, badge, or card; the device checks all five rely on are on the validation list.
