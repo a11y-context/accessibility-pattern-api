@@ -36,7 +36,10 @@ const note = (s) => console.log(`[check-corpus-conventions] ${s}`);
 
 /* ─────────────────────────── helpers ─────────────────────────── */
 
-const git = (...args) => execFileSync("git", args, {cwd: ROOT, encoding: "utf8"}).trim();
+// stderr is discarded: `git show <base>:<path>` for a newly added pattern exits non-zero by design,
+// and letting git print "fatal: path ... not in origin/main" made a passing run read like a failure.
+const git = (...args) =>
+  execFileSync("git", args, {cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"]}).trim();
 
 /**
  * Lines of a pattern file that carry prose, i.e. neither YAML frontmatter nor
@@ -92,6 +95,34 @@ for (const stack of STACKS) {
       if (WCAG.test(line)) {
         problems.push(`${rel(file)}:${n} — WCAG reference in pattern text\n      ${line.trim().slice(0, 110)}`);
       }
+    }
+  }
+}
+
+/* ───────────────────── CONTENT: one summary, not two ───────────────────── */
+// The frontmatter `summary` feeds patterns.json and the page head; the paragraph under
+// "Pattern ID:" is what an agent reading the .md sees first. Editing one and not the other
+// leaves the agent two different descriptions of the same component, which is how
+// text-field.basic kept "built from the Material text field" in its body for two weeks after
+// the frontmatter dropped it. web/react and ios/swiftui each carry 8 drifted pairs and join
+// this list once reconciled.
+const SUMMARY_STACKS = ["android/compose"];
+const plain = (s) => s.replace(/[`*]/g, "").trim().replace(/^"|"$/g, "");
+
+for (const stack of SUMMARY_STACKS) {
+  const dir = join(ROOT, "patterns", stack, "components");
+  if (!existsSync(dir)) continue;
+  for (const f of readdirSync(dir).filter((x) => x.endsWith(".md"))) {
+    const text = readFileSync(join(dir, f), "utf8");
+    if (/^status:\s*(draft|deprecated)\b/m.test(text)) continue;
+    const fm = text.match(/^summary: (.*)$/m)?.[1];
+    const after = text.split("Pattern ID:")[1];
+    const body = after?.split("\n\n")[1]?.trim();
+    if (fm && body && plain(fm) !== plain(body)) {
+      problems.push(
+        `patterns/${stack}/components/${f} — the body summary under "Pattern ID:" differs from the frontmatter summary.\n` +
+        `      Make them say the same thing; backticks aside, they should match word for word.`,
+      );
     }
   }
 }
