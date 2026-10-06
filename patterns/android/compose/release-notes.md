@@ -8,6 +8,16 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.7.0 — 2026-10-06
+
+The last wave-1 patterns, which completes the first wave: eighteen patterns. Checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
+
+- **Link → 0.1.0** — Compose has no link role and no Link composable. A `LinkAnnotation` is announced as a link but its tap area is clipped to the outline of its characters, so a standalone link is a `TextButton` whose text names the destination, with a click label when it leaves the app. Named `link.basic` to match web and iOS; it was `link.standalone` in the taxonomy, with no recorded reason to diverge.
+- **Inline Link → 0.1.0** — Compose exposes each `LinkAnnotation` as a `URLSpan` or `ClickableSpan` on its text, not as a node, so TalkBack reaches it through its Links menu and the link text has to stand on its own. The link node sets no indication and Material's default link style sets no `focusedStyle`, so keyboard focus is invisible until the caller supplies one.
+- **Progress Indicator → 0.1.0** — One pattern for measured and unmeasured progress. The `progress` lambda overloads report `ProgressBarRangeInfo` with a value and the others an indeterminate range, both on a merged node with no name, so a standalone indicator is named for its work and one inside a control hands its meaning to that control. A control showing its own progress stays focusable: a clickable set to `enabled = false` drops its focusable node, which throws away a keyboard user's focus the moment "Save" becomes "Saving". The taxonomy had planned this as two patterns, split on determinacy; written out, they shared most of their rules, so they ship as one.
+- **Button → 0.2.2** — Its redirect for a control that opens a URL now names `link.basic`.
+- **Image → 0.1.1** — Its redirect for a graphic showing work in progress now names `progress-indicator.basic`.
+
 ## 0.6.0 — 2026-10-06
 
 Four wave-1 patterns in two pairs, each pair sharing a mechanism, checked against the stable Material 3 1.4.0 source.

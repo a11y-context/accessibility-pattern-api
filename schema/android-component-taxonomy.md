@@ -86,7 +86,7 @@ The contested calls, resolved. Each was surveyed against four or more design sys
 
 **Divider, not separator.** All four native-Android sources say Divider. "Separator" appears only in Fluent Web.
 
-**Progress indicator splits on determinacy.** The web corpus split `progress-bar` from `spinner` on a different axis, whether the indicator carries its own name or sits inside a control that already has one. Android splits on determinacy instead, because the Compose overloads differ: one takes a `progress` value and populates `ProgressBarRangeInfo`, one does not and announces activity with no value. Two composables' worth of contract. The web axis becomes a branch inside each. "Spinner" is unavailable as a name regardless, because on Android it means a select control.
+**Progress indicator is one pattern, not two.** It was split on determinacy when the taxonomy was drafted, because the Compose overloads differ: one takes a `progress` value and populates `ProgressBarRangeInfo`, one does not. Writing both on 2026-10-06 showed the accessibility contract barely differs. Of seven and six Must Haves, five were shared, and of the Don'ts four; the determinate side added only the lambda overload, the 0-to-1 fraction, and a duplicated percentage label. A rule that belonged to both had already landed in only one file. Merged into `progress-indicator.basic` before release, with the value-specific rules as a branch. The web corpus splits `progress-bar` from `spinner` on whether the indicator names itself or sits inside a control; on Android that axis is also a branch inside the one pattern. "Spinner" stays an alias only, since on Android the word also means a select control.
 
 **Bottom sheet is its own family, distinct from both dialog and navigation drawer.** Material, Fluent UI Android, Acorn, and Backpack Android each ship it separately. Several web systems fold it into Drawer, which is the precedent to avoid. Modal and standard are accessibility-distinct: the modal sheet traps focus and adds a scrim, the standard sheet leaves background content reachable.
 
@@ -128,10 +128,12 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 
 ### Links
 
+`link.basic` was `link.standalone` until it was written on 2026-10-06. Nothing recorded a reason to diverge from web and iOS, which both call the standalone link `link.basic`, and Android has no Link composable whose name would argue otherwise, so cross-stack consistency decided it. `standalone link` stays in its aliases.
+
 | ID | Compose | What it is | Status |
 |---|---|---|---|
-| `link.standalone` | `Modifier.clickable` on text, or `TextButton` | A link outside a text block. Android has no Link composable, so purpose clarity, target size, and focus visibility all have to be stated | **W1** |
-| `link.inline` | `buildAnnotatedString` with `LinkAnnotation.Url` | A link inside a paragraph, which TalkBack surfaces through its Links list | **W1** |
+| `link.basic` | `Modifier.clickable` on text, or `TextButton` | A link outside a text block. Android has no Link composable, so purpose clarity, target size, and focus visibility all have to be stated | **W1** (written) |
+| `link.inline` | `buildAnnotatedString` with `LinkAnnotation.Url` | A link inside a paragraph, which TalkBack surfaces through its Links list | **W1** (written) |
 
 ### Navigation and rows
 
@@ -190,8 +192,7 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | `bottom-sheet.modal` | `ModalBottomSheet` | Modal sheet with scrim and focus trap. Material already supplies more than expected: scrim tap and back press dismiss by default, `paneTitle` is set internally, and the drag handle is clickable and carries named expand, collapse, and dismiss accessibility actions. The pattern's work is the conditions under which those disappear, plus Escape, which is never handled | **W1** |
 | `snackbar.basic` | `Snackbar`, `SnackbarHost` | Transient message announced through a live region, acknowledging something that already happened. No action to reach | **W1** (written) |
 | `snackbar.action` | `Snackbar` with an `action` slot | Transient message carrying an action. Focus never moves to the message, which is what keeps it from interrupting and what puts its action out of easy reach for sighted keyboard-only users. Splits from `snackbar.basic` for the same reason `toast.action` splits from `toast.basic` on web: the reachability contract is the whole pattern | **W1** (written) |
-| `progress-indicator.determinate` | `LinearProgressIndicator`, `CircularProgressIndicator` with a `progress` value | Measurable progress. Exposes `ProgressBarRangeInfo` and announces a percentage | **W1** |
-| `progress-indicator.indeterminate` | The same composables with no `progress` argument | Activity with no known duration. No range info | **W1** |
+| `progress-indicator.basic` | `LinearProgressIndicator`, `CircularProgressIndicator`, with or without a `progress` value | Progress, measured or not. With a value it exposes `ProgressBarRangeInfo` and announces a percentage; without one, an indeterminate range | **W1** (written) |
 | `tooltip.basic` | `TooltipBox` | Supplementary label on long-press or hover. Carries `@ExperimentalMaterial3Api` | W3 |
 | `bottom-sheet.standard` | `BottomSheetScaffold` | Persistent sheet, no scrim, background stays reachable | **blocked**: carries `@ExperimentalMaterial3Api`. Unblocks on stabilization |
 | `popover.basic` | `Popup` primitive | Anchored non-modal surface | cut: Material ships no Popover, and the concept is covered by `menu.basic`, `tooltip.basic`, and `bottom-sheet.*` |
@@ -280,9 +281,9 @@ Four rules where the iOS Must Have cannot be restated because the platform primi
 
 `global.merge-semantics` leads. It is the rule the largest number of Android patterns reference, and it has no counterpart in either existing stack, so there is no prior wording to lean on.
 
-**Wave 1, nineteen patterns.** Ordering inside the wave puts the three that everything else redirects to first.
+**Wave 1, eighteen patterns.** Ordering inside the wave puts the three that everything else redirects to first.
 
-`button.basic`, `image.basic`, `list-item.basic`, then `content-shelf.basic`, `navigation-bar.basic`, `tabs.basic`, `menu.basic`, `dialog.alert`, `bottom-sheet.modal`, `snackbar.basic`, `snackbar.action`, `text-field.basic`, `checkbox.basic`, `switch.basic`, `radio.basic`, `link.standalone`, `link.inline`, `progress-indicator.determinate`, `progress-indicator.indeterminate`.
+`button.basic`, `image.basic`, `list-item.basic`, then `content-shelf.basic`, `navigation-bar.basic`, `tabs.basic`, `menu.basic`, `dialog.alert`, `bottom-sheet.modal`, `snackbar.basic`, `snackbar.action`, `text-field.basic`, `checkbox.basic`, `switch.basic`, `radio.basic`, `link.basic`, `link.inline`, `progress-indicator.basic`.
 
 That is a large wave, and it is only tractable because Android patterns run roughly a third the length of their web siblings once Material handles the mechanics. Worth knowing at pattern one rather than discovering at pattern nine.
 
@@ -403,7 +404,7 @@ The Material 3 column links to the component's own spec page, which is the faste
 | `navigation-drawer.*` | [ModalNavigationDrawer and siblings](https://m3.material.io/components/navigation-drawer) | Drawer | Site menu | not found | Drawer, Sidenav, Side Nav | 13 | Material's name; Acorn's "Site menu" is a Firefox-specific outlier |
 | `navigation-bar.basic` | [NavigationBar](https://m3.material.io/components/navigation-bar) | Bottom Navigation | App bars | Bpk Nav Bar | no web equivalent | 14 | Material's name |
 | `segmented-button.*` | [SegmentedButton](https://m3.material.io/components/segmented-buttons) | not found | not found | not found | Segmented Control, Content Switcher, Pivot | 11 | Material's name, as the only native-Android source with the component |
-| `progress-indicator.determinate` / `.indeterminate` | [LinearProgressIndicator, CircularProgressIndicator](https://m3.material.io/components/progress-indicators) | ProgressBar, ProgressRing | not found | Bpk Progress, Bpk Spinner | ProgressBar, Spinner, Loading | 16 | Material has no Spinner, and "Spinner" means a select control on Android. Split on determinacy, which is the real accessibility axis |
+| `progress-indicator.basic` | [LinearProgressIndicator, CircularProgressIndicator](https://m3.material.io/components/progress-indicators) | ProgressBar, ProgressRing | not found | Bpk Progress, Bpk Spinner | ProgressBar, Spinner, Loading | 16 | Material has no Spinner, and "Spinner" means a select control on Android. Split on determinacy, which is the real accessibility axis |
 | `select.basic` | [ExposedDropdownMenuBox](https://m3.material.io/components/menus) | ComboBox, Dropdown | not found | Bpk Spinner | Select, Picker, Combobox | 18 | The one case where the industry name beats Material's, because Material has only a composable name and Backpack's Android name collides |
 | `card.basic` | [Card](https://m3.material.io/components/cards) | not found | not found | Bpk Card | Card, Tile | 15 | Dominant |
 | `switch.basic` | [Switch](https://m3.material.io/components/switch) | ToggleSwitch | Switch | Bpk Switch | Switch, Toggle | 14 | Material's name, and it matches the existing family |
