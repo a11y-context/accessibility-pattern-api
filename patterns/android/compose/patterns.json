@@ -959,6 +959,53 @@
       }
     },
     {
+      "id": "select.basic",
+      "title": "Select",
+      "pattern_type": "component",
+      "status": "beta",
+      "latest_version": "0.1.0",
+      "summary": "Field showing one chosen value that opens a list of the others. Material's ExposedDropdownMenuBox reports the field as a dropdown list and opens it from touch, TalkBack, and the keyboard, but its menu items report no selection, so marking the current option is the caller's. The component is still marked experimental, so the call site opts in.",
+      "aliases": [
+        "ExposedDropdownMenuBox",
+        "ExposedDropdownMenu",
+        "exposed dropdown",
+        "exposed dropdown menu",
+        "dropdown list",
+        "drop-down",
+        "picker",
+        "spinner",
+        "combo box",
+        "menuAnchor"
+      ],
+      "tags": [
+        "select",
+        "dropdown",
+        "picker",
+        "single choice",
+        "form-control",
+        "value chooser"
+      ],
+      "selection_excerpt": {
+        "use_when": [
+          "Use when the user chooses one value from a list too long to show inline, in a compact field that shows the current choice (e.g., \"Season\", \"Country\", \"Time zone\").",
+          "Use when the field sits among other form fields, or above content it switches, and the list is only needed while choosing."
+        ],
+        "do_not_use_when": [
+          "Do not use when two to five short options can stay visible (use segmented-button.basic, or radio.basic for a list).",
+          "Do not use when the user types to narrow the options (use combobox.autocomplete).",
+          "Do not use when the list holds commands rather than values (use menu.basic).",
+          "Do not use when any number of options may be chosen (use checkbox.group)."
+        ]
+      },
+      "variants": [],
+      "default_variant": null,
+      "source": {
+        "path": "components/select.basic.md",
+        "format": "markdown",
+        "frontmatter": true
+      }
+    },
+    {
       "id": "snackbar.basic",
       "title": "Snackbar",
       "pattern_type": "component",

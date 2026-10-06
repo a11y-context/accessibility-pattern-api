@@ -23,6 +23,7 @@ Run each check with TalkBack on, and repeat the focus checks with a hardware key
 | V-15 | Do a badge's words read after its host's name, and a row's status after the row's name? | `badge.basic` | open |
 | V-16 | Do a clickable card's click label and custom action work, and is its focus visible? | `card.basic` | open |
 | V-17 | Does a static card keep its contents together, and read as one item when merged? | `card.basic` | open |
+| V-18 | How does a select field announce itself, its opening, and its current option? | `select.basic` | open |
 
 ## Groups and sets
 
@@ -81,6 +82,10 @@ Compose supplies "Partially checked" as the state description when the parent's 
 ### V-17: A static card
 
 Material's static `Card` marks itself a traversal group. Check that its contents are read in order before anything after the card, that `semantics(mergeDescendants = true)` makes a card of plain content a single stop, and that a title marked `heading()` inside a card is reachable through TalkBack's heading navigation.
+
+### V-18: A select field
+
+`menuAnchor` gives a read-only field `Role.DropdownList`, which Compose reports to Android as a `Spinner`, and sets no expanded or collapsed state on it; only the editable variant does. `select.basic` marks the current option with `selected` on its `DropdownMenuItem`. Check what TalkBack says on the field (its role word, label, and value), whether opening the list is announced or only evident from focus moving into it, that the current option reads as selected and the others as not selected, and where keyboard focus and the TalkBack cursor land after an option is chosen. If opening is silent and focus does not move into the list, the field needs an expanded state of its own.
 
 ## Dialogs, menus, and fields
 

@@ -114,6 +114,8 @@ The contested calls, resolved. Each was surveyed against four or more design sys
 
 **Select keeps its industry name.** Material has no component-level name for the select control, only the composable `ExposedDropdownMenuBox`. Fluent UI Android says ComboBox, Backpack says Spinner, which on Android means something else again. `select.basic` carries `ExposedDropdownMenu` and `exposed dropdown` in aliases. The one place where leaning toward the framework name would produce a worse ID than the industry one.
 
+**Select is written on an experimental API, by exception.** `ExposedDropdownMenuBox` carries `@ExperimentalMaterial3Api` in Material 3 1.4.0, its only overload, and has since 1.0.0 in October 2022; experimental APIs are otherwise blocked. Two things set it apart, both checked on 2026-10-06. The 1.5.0 alphas (alpha29, September 23, 2026) drop the marker from the box, `menuAnchor`, and the menu with their parameters unchanged, so a pattern written today loses only its opt-in line when 1.5.0 is stable. And the two apps that prompted this taxonomy both ship select-style controls, built by hand from a dialog or a popup list, so the need is current rather than hypothetical. John's rule for the exception: write it if those apps have something like it. `bottom-sheet.standard` and `carousel.basic` stay blocked; their markers have not been dropped. Recheck `select.basic`'s signatures when 1.5.0 is stable and remove the opt-in in a patch.
+
 **Menu and select are different families**, matching the iOS taxonomy's value-against-command distinction. `menu.basic` is `DropdownMenu`, a list of commands. `select.basic` is a value chooser.
 
 **Text field absorbs the secure case.** Material now ships `SecureTextField` separately, but the contract difference is an obscured value plus an optional show-and-hide toggle, which is one Must Have branch. iOS folded `SecureField` the same way.
@@ -165,10 +167,10 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 |---|---|---|---|
 | `text-field.basic` | `TextField`, `OutlinedTextField`, `SecureTextField` | Single-line text entry: label association, keyboard type, IME action, `error()` state, autofill `contentType`, and the obscured-value branch with its show-and-hide toggle | **W1** (written) |
 | `search-bar.basic` | `SearchBar`, `DockedSearchBar` | Search entry with an expanding results surface | **blocked**: the stable `SearchBar(state, inputField)` overload and every `Expanded*SearchBar` composable ship only in 1.5.0-alpha, not the 1.4.0 baseline. The remaining stable overloads are deprecated. Unblocks when 1.5.0 stabilizes |
-| `select.basic` | `ExposedDropdownMenuBox` with a read-only `TextField` | Choose one value from a list | **blocked**: `ExposedDropdownMenuBox` carries `@ExperimentalMaterial3Api` in 1.4.0, its only overload. Unblocks on stabilization |
+| `select.basic` | `ExposedDropdownMenuBox` with a read-only `TextField` | Choose one value from a list | **W2** (written), on an experimental API by exception; see Settled boundaries |
 | `form.validation` | `error()` semantics plus focus handling on submit | Form-level error handling | deferred to W2; redirects to `text-field.basic`, which is W1 |
 | `pin-input.basic` | `BasicTextField` with `decorationBox` | Fixed-length code entry. No Material component exists | W2 |
-| `combobox.autocomplete` | `ExposedDropdownMenuBox` with an editable `TextField` | Text entry with filtered suggestions | **blocked**: the same experimental `ExposedDropdownMenuBox` as `select.basic`, and CVS flags the editable case as materially harder |
+| `combobox.autocomplete` | `ExposedDropdownMenuBox` with an editable `TextField` | Text entry with filtered suggestions | deferred to W3; depends on `select.basic`, shares its experimental API and its exception, and CVS flags the editable case as materially harder |
 
 ### Selection
 
@@ -297,11 +299,11 @@ Four rules where the iOS Must Have cannot be restated because the platform primi
 
 That is a large wave, and it is only tractable because Android patterns run roughly a third the length of their web siblings once Material handles the mechanics. Worth knowing at pattern one rather than discovering at pattern nine.
 
-**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `slider.basic`, `button.toggle`, `segmented-button.basic`, `checkbox.group`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the three that unblock once wave 1 merges: `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`. `select.basic` and `button.split` were planned here and are blocked; see below.
+**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `slider.basic`, `button.toggle`, `segmented-button.basic`, `checkbox.group`, `select.basic`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the three that unblock once wave 1 merges: `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`. `button.split` was planned here and is blocked; see below.
 
-**Wave 3** is the long tail: `divider.basic`, `accordion.basic`, `grid.basic`, `table.basic`, `date-picker.basic`, `date-picker.range`, `time-picker.dial`, `time-picker.input`, `listbox.basic`, `tooltip.basic`, `pull-to-refresh.basic`, `swipe-to-dismiss.basic`, `navigation-rail.basic`, `navigation-drawer.persistent`, `fab.menu`, `stepper.basic`.
+**Wave 3** is the long tail: `divider.basic`, `accordion.basic`, `grid.basic`, `table.basic`, `date-picker.basic`, `date-picker.range`, `time-picker.dial`, `time-picker.input`, `listbox.basic`, `tooltip.basic`, `pull-to-refresh.basic`, `swipe-to-dismiss.basic`, `navigation-rail.basic`, `navigation-drawer.persistent`, `fab.menu`, `combobox.autocomplete`, `stepper.basic`.
 
-**Blocked, not scheduled.** Seven patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility; `bottom-sheet.standard`, `carousel.basic`, `select.basic`, and `combobox.autocomplete` wait on their APIs leaving `@ExperimentalMaterial3Api`; `search-bar.basic` waits on the stable `SearchBar(state, inputField)` overload, which ships only from Material 3 1.5.0; and `button.split` waits on `SplitButtonLayout` reaching a stable release. `select.basic` and `button.split` were found blocked on 2026-10-06 while choosing the third wave-2 batch, by checking each remaining API's annotations in the 1.4.0 sources.
+**Blocked, not scheduled.** Five patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility; `bottom-sheet.standard` and `carousel.basic` wait on their APIs leaving `@ExperimentalMaterial3Api`; `search-bar.basic` waits on the stable `SearchBar(state, inputField)` overload, which ships only from Material 3 1.5.0; and `button.split` waits on `SplitButtonLayout` reaching a stable release, found missing from 1.4.0 on 2026-10-06 while choosing the third wave-2 batch.
 
 ### Dependency graph
 
@@ -340,7 +342,7 @@ flowchart LR
   NAVBAR --> RAIL
 ```
 
-Read it as: eight edges, seven dependent patterns. Five resolve by the end of wave 2; `button.split` and `combobox.autocomplete` are blocked on their own APIs, not on their dependencies. Nothing in wave 1 depends on anything else in wave 1, which is why the wave can be authored in any order once Foundations land.
+Read it as: eight edges, seven dependent patterns. `button.split` is blocked on its own API, not on its dependencies. Nothing in wave 1 depends on anything else in wave 1, which is why the wave can be authored in any order once Foundations land.
 
 ## Authoring pipeline
 
