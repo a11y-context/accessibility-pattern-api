@@ -8,6 +8,21 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.8.0 — 2026-10-06
+
+The first wave-2 patterns: four selection patterns that report checked or selected state, checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
+
+- **Toggle Button → 0.1.0** — Material's icon toggle buttons report `Role.Checkbox` and a checked state, so the name says what the control turns on and stays the same in both states; a name that changes to the next action belongs to `button.basic`. The standard `IconToggleButton` shows its checked state by color alone, so its icon changes with the state as well.
+- **Checkbox Group → 0.1.0** — Several checkboxes answering one question. Nothing on Android ties a label to a set of controls, so the container is named for the question, and `selectableGroup()` derives position only from selectable children, so a checkbox set declares its collection properties by hand. A requirement on the whole set gets one error, announced once, rather than an error on every option.
+- **Tri-State Checkbox → 0.1.0** — `TriStateCheckbox` and `triStateToggleable`, with Compose supplying "Partially checked" as the third state's description. The parent's state is derived from its children every time it is read, and activating it checks or clears them all; a cycle that restores the user's last mix is allowed as a variant. The same row-hoisting rule as `checkbox.basic`, since `TriStateCheckbox` applies its 48dp minimum only while it owns its callback.
+- **Segmented Button → 0.1.0** — One pattern for single and multiple choice. The single-choice row gives each segment `Role.RadioButton` and its position in the set. Material's multiple-choice segment reports a checked state but no role, and its row reports no set, so the caller adds `Role.Checkbox` and the collection properties. A selected segment keeps its check mark, without which it differs only by container color. Planned as two patterns; written out, six of eight Must Haves were shared, so it ships as one.
+- **Button → 0.3.0** — An icon-only button is named on its `Icon`, which the button merges into its own name, matching Android's documentation and the CVS techniques; the pattern's own example already did this. A control that turns a feature on or off and keeps its name now routes to `button.toggle`, and a button whose name changes to the next action, such as "Play" and "Pause", stays here.
+- **Checkbox → 0.1.2**, **Radio Group → 0.1.2**, **Tabs → 0.1.1** — Redirects now name `checkbox.group` and `segmented-button.basic`.
+
+Foundations change in the same release:
+
+- **Icons and Images** — An icon that is the only content of a control is named on the `Icon`, not on the control. The control keeps its role and merges the description into its name, so TalkBack hears the same thing either way, and this is the form Android's documentation and Material's samples use. The control is named instead only when its content changes on screen, such as an `ExtendedFloatingActionButton` that collapses to its icon. Naming both still announces the name twice.
+
 ## 0.7.0 — 2026-10-06
 
 The last wave-1 patterns, which completes the first wave: eighteen patterns. Checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
