@@ -12,6 +12,11 @@ on:
     branches: [main]
     paths:
       - 'patterns/**'
+      # A change to the sync itself re-runs it, so fixing the sync also catches up
+      # whatever it missed, without waiting for the next corpus release.
+      - 'scripts/sync-skills-repo.sh'
+      - '.github/workflows/sync-skills.yml'
+  workflow_dispatch:
 
 jobs:
   sync:
