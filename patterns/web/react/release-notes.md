@@ -8,6 +8,11 @@ slug: /release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.28.3 — 2026-10-06
+
+- **Foundations** — The `Rule:` prefix is gone from every rule heading, so the list reads as rule names ("Focus States", "Native First") instead of the same word repeated down the page. No rule changed. `@a11y-context/mcp-server` reads both forms, so `get_foundations` returns the same rules either way.
+- **Dialog → 0.1.1** and **Dialog (Modal, deprecated) → 1.0.1** — Each linked to `/web/react/foundations#rule-focus-states`, an anchor the heading change would have broken and a link the no-links rule forbade in any case. Both now name the rule by its ID, `global.focus-states`.
+
 ## 0.28.2 — 2026-09-23
 
 - **Foundations** — Removed the last WCAG criterion reference in pattern text, a bare "1.4.1" in `global.use-of-color` that survived the 0.28.0 strip because no "WCAG" sat next to it. The sentence now states what breaks instead of which criterion it breaks. Found by the new `check-corpus-conventions` build check rather than by a person, which was the point of writing it.

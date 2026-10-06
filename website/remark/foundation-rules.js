@@ -7,7 +7,7 @@
  * Build-time transform for the Foundations docs (patterns/{stack}/global/global_rules.md,
  * served at /foundations). Each rule there is authored as:
  *
- *     ## Rule: Offscreen Text Utility (sr-only)
+ *     ## Offscreen Text Utility (sr-only)
  *     ```yaml
  *     id: global.sr-only
  *     scope: [utility, component, style]
