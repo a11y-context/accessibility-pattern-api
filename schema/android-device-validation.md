@@ -18,7 +18,7 @@ Run each check with TalkBack on, and repeat the focus checks with a hardware key
 | V-10 | Does `windowTitle` or a caller's `paneTitle` replace the generic "Dialog"? | `dialog.alert` | open |
 | V-11 | Does keyboard focus land on a dropdown menu's first item by itself? | `menu.basic` | open |
 | V-12 | Does a caller's `error()` on a `TextField` override Material's default message? | `text-field.basic` | open |
-| V-13 | Can every user remove an input chip, and where does focus go after? | `chip.input` | open |
+| V-13 | Do an input chip and its remove button read as two clean stops, and where does focus go after removal? | `chip.input` | open |
 | V-14 | How does a filter chip announce its state, and is the result count read once? | `chip.filter` | open |
 | V-15 | Do a badge's words read after its host's name, and a row's status after the row's name? | `badge.basic` | open |
 | V-16 | Do a clickable card's click label and custom action work, and is its focus visible? | `card.basic` | open |
@@ -65,7 +65,7 @@ Compose supplies "Partially checked" as the state description when the parent's 
 
 ### V-13: Removing an input chip
 
-`chip.input` hides its remove icon from TalkBack with `clearAndSetSemantics {}` and exposes removal as a "Remove" custom action on the chip, following the Compose accessibility codelab's pattern for a nested button. Check that TalkBack lists "Remove" in the chip's actions menu and that it works. Check that a hardware keyboard can still reach and activate the hidden remove icon, since `clearAndSetSemantics` clears semantics and not focus, and what TalkBack says when keyboard focus lands on it. After a removal, check that both keyboard focus and the TalkBack cursor land on the text field the golden pattern moves focus to. If the icon is unreachable by keyboard, the chip needs a key handler (Backspace or Delete) as a Must Have rather than a Customizable option.
+`chip.input` nests a remove button (`Role.Button`, named "Remove Alex Rivera") inside the chip's trailing slot, and also puts a "Remove" custom action on the chip. Check that TalkBack reads the chip ("Alex Rivera" with its selected state) and the remove button as two separate stops, that the chip's own announcement does not pick up the button's name, and that both the button and the actions-menu entry remove the chip. Check that the 24dp button is tappable without hitting the chip by mistake, and that a hardware keyboard reaches the chip and its button as two stops. After a removal, check that both keyboard focus and the TalkBack cursor land on the text field the golden pattern moves focus to.
 
 ### V-14: A filter chip's announcement
 

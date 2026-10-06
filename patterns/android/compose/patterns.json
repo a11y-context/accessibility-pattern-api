@@ -416,7 +416,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Chip standing for a value the user entered, such as a recipient or a tag, that can be selected and removed. Material's InputChip is a single click target, and its trailing icon is content rather than a button, so removal is the caller's to build, as a touch target TalkBack skips plus a Remove action on the chip.",
+      "summary": "Chip standing for a value the user entered, such as a recipient or a tag, that can be selected and removed. Material's InputChip is a single click target, and its trailing icon is content rather than a button, so removal is the caller's to build, as a remove button inside the chip plus a Remove action on it.",
       "aliases": [
         "InputChip",
         "input chip",
