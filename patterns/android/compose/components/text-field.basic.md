@@ -13,7 +13,7 @@ summary: Single-line text entry whose accessible name has to come from the field
 
 Pattern ID: `text-field.basic`
 
-Single-line text entry built from the Material text field, whose `label` slot supplies the accessible name. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.
+Single-line text entry whose accessible name has to come from the field's own `label` slot rather than a `Text` beside it. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.
 
 The trap is `isError`. Setting it turns the field red and announces a generic error string, not the message sitting right underneath it, so the field reads as wrong without ever saying why.
 
