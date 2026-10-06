@@ -8,6 +8,16 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.7.0 — 2026-10-06
+
+The last four wave-1 patterns, which completes the first wave: nineteen patterns. Checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
+
+- **Link → 0.1.0** — Compose has no link role and no Link composable. A `LinkAnnotation` is announced as a link but its tap area is clipped to the outline of its characters, so a standalone link is a `TextButton` whose text names the destination, with a click label when it leaves the app. Named `link.basic` to match web and iOS; it was `link.standalone` in the taxonomy, with no recorded reason to diverge.
+- **Inline Link → 0.1.0** — Compose exposes each `LinkAnnotation` as a `URLSpan` or `ClickableSpan` on its text, not as a node, so TalkBack reaches it through its Links menu and the link text has to stand on its own. The link node sets no indication and Material's default link style sets no `focusedStyle`, so keyboard focus is invisible until the caller supplies one.
+- **Progress Indicator (Determinate) → 0.1.0** — The `progress` lambda overloads report `ProgressBarRangeInfo` on a merged node and set no name, so a standalone indicator is named for its work and one inside a control hands its value to that control.
+- **Progress Indicator (Indeterminate) → 0.1.0** — `progressSemantics()` reports an indeterminate range and nothing else. The wait is named, its end is announced, and a control showing its own wait stays focusable: a clickable set to `enabled = false` drops its focusable node, which throws away a keyboard user's focus the moment "Save" becomes "Saving".
+- **Button → 0.2.2** — Its redirect for a control that opens a URL now names `link.basic`.
+
 ## 0.6.0 — 2026-10-06
 
 Four wave-1 patterns in two pairs, each pair sharing a mechanism, checked against the stable Material 3 1.4.0 source.
