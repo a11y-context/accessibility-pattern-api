@@ -27,12 +27,12 @@ Panel that slides over the screen holding the app's destinations, behind a scrim
 - The drawer is modal: while it is open it is the only thing TalkBack and the keyboard can reach, it announces itself by name, and it closes from the back gesture, Escape, the scrim, and TalkBack's dismiss action. Material's `ModalNavigationDrawer` with a `ModalDrawerSheet` supplies part of this: the pane title "Navigation menu", a dismiss action while open, back handling, and a scrim that TalkBack reaches as a control named "Close navigation menu". It leaves the screen behind in the accessibility tree and has no focus or key handling (`global.native-first`).
 - While the drawer is open, remove the screen's content from the accessibility tree with `Modifier.clearAndSetSemantics {}` on the content's outermost composable, applied only while open. The content is covered by the scrim and cannot be tapped, so hiding it hides nothing a user can reach; the scrim stays in the tree as the way out (`global.merge-semantics`).
 - Keep keyboard focus inside the drawer while it is open, with `Modifier.focusProperties { onExit = { if (drawerState.isOpen) cancelFocusChange() } }` followed by `Modifier.focusGroup()` on the `ModalDrawerSheet` (`global.focus-management`).
-- When the drawer opens, move keyboard focus to the current destination with a `FocusRequester` requested from a `LaunchedEffect` once the drawer is open. When it closes without a choice, return focus to the menu button that opened it (`global.focus-management`).
+- When the drawer opens, move keyboard focus to the first destination with a `FocusRequester` requested from a `LaunchedEffect` once the drawer is open. Material's accessibility guidance puts initial focus on the first navigation item, the first interactive element in the drawer. When it closes without a choice, return focus to the menu button that opened it (`global.focus-management`).
 - When a destination is chosen, close the drawer and place focus on the new screen as `global.screen-announcement` describes, rather than returning it to the menu button.
-- Close the drawer on Escape with `Modifier.onKeyEvent` on the `ModalDrawerSheet`. Material handles the back gesture and the back key and has no key handling of its own, the same gap `bottom-sheet.modal` closes for its sheet.
+- Close the drawer on Escape with `Modifier.onKeyEvent` on the `ModalDrawerSheet`, as Material's Android guidance asks of every open drawer. `ModalNavigationDrawer` handles the back gesture and the back key and has no key handling of its own, the same gap `bottom-sheet.modal` closes for its sheet.
 - Name the menu button that opens the drawer "Open navigation menu" on its `Icon`, the counterpart of Material's "Close navigation menu" on the scrim (`global.icon`).
 - Build each destination with `NavigationDrawerItem`, which reports `Role.Tab` and a selected state, and put the items in a container with `Modifier.selectableGroup()` so each reports its position in the set (`global.collection-semantics`).
-- Show the current destination by more than a hue change. `NavigationDrawerItem` fills a container behind it; when restyling, keep a visible fill or add a second marker such as a bolder label (`global.use-of-color`).
+- Show the current destination by more than a hue change. When the items carry icons, use a filled icon for the current destination and outlined icons for the rest, as Material's guidance asks; `NavigationDrawerItem` also fills a container behind the current item, which a restyle keeps (`global.use-of-color`).
 - Put a count on a destination as `badge.basic` describes, in words ("Inbox, 24 unread").
 
 ## Don'ts
@@ -58,12 +58,12 @@ fun NavigationDrawerExamples() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val menuButtonFocus = remember { FocusRequester() }
-    val currentItemFocus = remember { FocusRequester() }
+    val firstItemFocus = remember { FocusRequester() }
     var returnFocusToMenu by remember { mutableStateOf(false) }
 
     LaunchedEffect(drawerState.isOpen) {
         if (drawerState.isOpen) {
-            currentItemFocus.requestFocus()
+            firstItemFocus.requestFocus()
         } else if (returnFocusToMenu) {
             menuButtonFocus.requestFocus()
             returnFocusToMenu = false
@@ -87,7 +87,7 @@ fun NavigationDrawerExamples() {
                     }
             ) {
                 Column(modifier = Modifier.selectableGroup()) {
-                    destinations.forEach { destination ->
+                    destinations.forEachIndexed { index, destination ->
                         NavigationDrawerItem(
                             label = { Text(destination) },
                             selected = destination == current,
@@ -96,8 +96,8 @@ fun NavigationDrawerExamples() {
                                 returnFocusToMenu = false
                                 scope.launch { drawerState.close() }
                             },
-                            modifier = if (destination == current) {
-                                Modifier.focusRequester(currentItemFocus)
+                            modifier = if (index == 0) {
+                                Modifier.focusRequester(firstItemFocus)
                             } else {
                                 Modifier
                             }
