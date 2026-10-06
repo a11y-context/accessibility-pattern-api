@@ -81,7 +81,10 @@ const rel = (p) => p.replace(`${ROOT}/`, "");
 // schema/style-guide.md: "No external references in pattern text. No hyperlinks
 // of any kind, and no WCAG criterion identifiers."
 
-const LINK = /\]\(\s*(?:https?:\/\/|\.{1,2}\/)|<https?:\/\/|(?<![`\w/])https?:\/\/\S/;
+// Root-relative targets (`](/web/react/foundations#...)`) count too. The first version of this
+// pattern caught only absolute and ./ ../ links, and two web patterns carried a root-relative
+// link to a Foundations anchor past it until the anchor was about to change.
+const LINK = /\]\(\s*(?:https?:\/\/|\.{1,2}\/|\/)|<https?:\/\/|(?<![`\w/])https?:\/\/\S/;
 const WCAG = /\bWCAG\b|\bSuccess Criteri|\bSC\s*\d\.\d|\b\d\.\d{1,2}\.\d{1,2}\b/;
 
 let scanned = 0;

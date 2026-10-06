@@ -469,10 +469,10 @@ Pages get chunked arbitrarily by enterprise RAG systems, so:
 
 ## Global rules (Foundations) anatomy
 
-Global rules live in `global/global_rules.md` as `## Rule:` sections within a single page. Each rule:
+Global rules live in `global/global_rules.md` as `##` sections within a single page, one per rule, headed by the rule's name alone. Each rule:
 
 ````markdown
-## Rule: Human Name
+## Human Name
 
 ```yaml
 id: global.kebab-name
@@ -483,6 +483,8 @@ scope: [screen | layout | component]
 ### Don'ts
 ### Snippets        ← optional; CSS/code the rule mandates
 ````
+
+Every `##` heading in the file is a rule, and nothing else may use that level: the MCP server splits the file on `##` and rejects any section without its `yaml` id block. The headings once carried a `Rule:` prefix, dropped in October 2026 because it repeated the same word down the page and made the list harder to scan; the server reads both forms.
 
 A Foundations rule states requirements and prohibitions only. It carries no Acceptance Checks section, for the same reason component patterns no longer do: `scripts/sync-skills-repo.sh` ships `global_rules.md` whole to the skills repo, so check-voice prose reaches the generating agent alongside the requirements it is supposed to apply. Verification belongs to the QA layer. If a check states something no Must Have or Don't requires, the requirement is missing and belongs in one of those sections.
 

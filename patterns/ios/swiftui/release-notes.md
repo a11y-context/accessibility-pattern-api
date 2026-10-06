@@ -8,6 +8,10 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.1 — 2026-10-06
+
+- **Foundations** — The `Rule:` prefix is gone from every rule heading, so the list reads as rule names ("Focus States", "Native First") instead of the same word repeated down the page. No rule changed. `@a11y-context/mcp-server` reads both forms, so `get_foundations` returns the same rules either way.
+
 ## 0.5.0 — 2026-09-18
 
 **WCAG citations removed, the focus rule renamed to match the rest of the corpus, and a native-first rule added.**

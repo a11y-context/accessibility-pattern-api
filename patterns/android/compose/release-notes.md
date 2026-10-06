@@ -8,6 +8,10 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.1 — 2026-10-06
+
+- **Foundations** — The `Rule:` prefix is gone from every rule heading, so the list reads as rule names ("Focus States", "Native First") instead of the same word repeated down the page. No rule changed. `@a11y-context/mcp-server` reads both forms, so `get_foundations` returns the same rules either way.
+
 ## 0.5.0 — 2026-10-05
 
 Three wave-1 patterns, and four corrections that came from checking their mechanisms against the stable Material 3 1.4.0 and Compose UI 1.12.1 sources.
