@@ -8,6 +8,30 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.5.2 — 2026-10-06
+
+**Golden Pattern comments removed, to the standard in the style guide.** Of 57 comment blocks across the nineteen examples, 56 restated a Must Have, Don't, or summary in the same pattern, often word for word, or argued a choice for a reviewer. The agent retrieves those sections with the code, so the comments cost tokens on every lookup and added nothing. Each was checked against its pattern's text before it came out, including the three closest calls: `onDismiss` focus return in Dialog (Modal), the decorative chevron in List Row, and the hidden-but-spoken label on a wheel Date Picker, all of which a Must Have already states. The one survivor, in Dialog (Alert), marks elided code. No requirement changed.
+
+- **Basic Button → 0.1.1**
+- **Checkbox → 0.1.1**
+- **Date Picker → 0.1.1**
+- **Dialog (Alert) → 0.1.2**
+- **Dialog (Confirmation) → 0.1.1**
+- **Dialog (Modal) → 0.1.1**
+- **Inline Link → 0.1.1**
+- **Link → 0.1.1**
+- **List Row (Navigable) → 0.1.1**
+- **Menu → 0.1.1**
+- **Radio Button → 0.1.1**
+- **Select (Menu) → 0.1.1**
+- **Select (Segmented) → 0.1.1**
+- **Select (Wheel) → 0.1.1**
+- **Slider → 0.1.2**
+- **Stepper → 0.1.1**
+- **Switch → 0.1.1**
+- **Text Field → 0.2.1**
+- **Toggle Button → 0.1.1**
+
 ## 0.5.1 — 2026-10-06
 
 - **Foundations** — The `Rule:` prefix is gone from every rule heading, so the list reads as rule names ("Focus States", "Native First") instead of the same word repeated down the page. No rule changed. `@a11y-context/mcp-server` reads both forms, so `get_foundations` returns the same rules either way.
