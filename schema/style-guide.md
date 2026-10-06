@@ -254,7 +254,7 @@ A placeholder that marks elided code (`/* open */`, `// draw the line chart from
 >
 > Does not: `// One name prop threaded through every branch, so the fallbacks cannot drift.`
 
-The `android/compose` examples were swept to this standard in catalog 0.5.0, and all but one comment came out, because every one restated a section of its own pattern. The `web/react` and `ios/swiftui` examples have not been swept yet.
+The `android/compose` examples were swept to this standard in catalog 0.5.0 and the `ios/swiftui` examples in 0.5.2. In both, all but one comment came out, because every one restated a section of its own pattern; the survivors mark elided code. The `web/react` examples have not been swept yet.
 
 **State, refs, and effects earn their place the same way.** Include them where they demonstrate *required* behavior — focus restoration, `aria-expanded` sync, an image `onError` fallback. State that exists only to make something interactive for a viewer is harness, and harness belongs in the lab.
 
