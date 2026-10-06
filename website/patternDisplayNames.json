@@ -23,6 +23,8 @@
     "button.toggle": "Button (Toggle)",
     "checkbox.group": "Checkbox (Group)",
     "checkbox.tristate": "Checkbox (Tri-State)",
+    "chip.filter": "Chip (Filter)",
+    "chip.input": "Chip (Input)",
     "link.basic": "Link (Standalone)",
     "link.inline": "Link (Inline)"
   }

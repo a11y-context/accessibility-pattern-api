@@ -70,6 +70,9 @@ Verified, not recalled. Every item here is something a model will confidently pr
 - **Material selection controls apply the 48dp minimum only when they own the click handler.** Lift state to a parent `toggleable` or `selectable`, which is Material's own documented pattern for a settings row, and the control renders with no padding while the parent becomes responsible for the target.
 - **`testTag` is invisible to accessibility services** unless an ancestor sets `testTagsAsResourceId`.
 - **`selectableGroup()` reports position only for selectable children.** Compose derives the set's `CollectionInfo` from it by counting children that carry `selected`, so a row or column of toggleable children, such as checkbox rows, gains nothing from it, and the modifier still looks like the fix.
+- **`Surface`'s clickable overload sets no role, so neither does a clickable `Card`.** Its selectable and toggleable overloads set none either; `FilterChip`, `InputChip`, and the single-choice `SegmentedButton` add their own on top.
+- **`InputChip`'s trailing icon is content, not a control.** The chip is one click target. An icon in `trailingIcon` joins the chip's name and does nothing when tapped on its own, so a close icon there removes nothing.
+- **`Badge` and `BadgedBox` set no semantics.** Inside a clickable host the badge's text merges as drawn, a bare number, and a dot badge contributes nothing.
 - **Material's multiple-choice `SegmentedButton` sets no role.** The single-choice segment sets `Role.RadioButton` itself; the multiple-choice one is a toggleable `Surface` with nothing, so it reports a checked state with no checkbox role until the caller adds one. Its row sets no semantics either.
 - **The standard `IconToggleButton` shows its checked state by color alone.** Its container is transparent in both states and only the icon's color changes. The outlined skin drops its border and fills its container when checked.
 - **Focus is two systems, not one.** `FocusRequester` moves keyboard and D-pad focus; `Modifier.semantics { focused = true }` moves the TalkBack cursor. iOS's `@AccessibilityFocusState` unifies both. Android does not.
@@ -111,6 +114,10 @@ The contested calls, resolved. Each was surveyed against four or more design sys
 
 **Select keeps its industry name.** Material has no component-level name for the select control, only the composable `ExposedDropdownMenuBox`. Fluent UI Android says ComboBox, Backpack says Spinner, which on Android means something else again. `select.basic` carries `ExposedDropdownMenu` and `exposed dropdown` in aliases. The one place where leaning toward the framework name would produce a worse ID than the industry one.
 
+**An input chip's remove button is its own TalkBack stop, and the chip also carries a Remove action.** Google offers two models. The Compose accessibility codelab hides a nested button with `clearAndSetSemantics {}` and moves its action into `customActions` on the parent, which is what `global.merge-semantics` prescribes for a row's secondary control. Android's View-based Material `Chip` exposes its close icon as a separate virtual node, through `ChipTouchHelper`. The first means fewer swipes but leaves removal discoverable only to users who know TalkBack's actions menu. John chose the second plus the action, on 2026-10-06: the remove button is visibly separate and named for what it removes, so it stands as its own target rather than competing with the chip. It is the one deliberate exception to the nested-control Don't.
+
+**Select is written on an experimental API, by exception.** `ExposedDropdownMenuBox` carries `@ExperimentalMaterial3Api` in Material 3 1.4.0, its only overload, and has since 1.0.0 in October 2022; experimental APIs are otherwise blocked. Two things set it apart, both checked on 2026-10-06. The 1.5.0 alphas (alpha29, September 23, 2026) drop the marker from the box, `menuAnchor`, and the menu with their parameters unchanged, so a pattern written today loses only its opt-in line when 1.5.0 is stable. And the two apps that prompted this taxonomy both ship select-style controls, built by hand from a dialog or a popup list, so the need is current rather than hypothetical. John's rule for the exception: write it if those apps have something like it. `bottom-sheet.standard` and `carousel.basic` stay blocked; their markers have not been dropped. Recheck `select.basic`'s signatures when 1.5.0 is stable and remove the opt-in in a patch.
+
 **Menu and select are different families**, matching the iOS taxonomy's value-against-command distinction. `menu.basic` is `DropdownMenu`, a list of commands. `select.basic` is a value chooser.
 
 **Text field absorbs the secure case.** Material now ships `SecureTextField` separately, but the contract difference is an obscured value plus an optional show-and-hide toggle, which is one Must Have branch. iOS folded `SecureField` the same way.
@@ -127,9 +134,9 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 |---|---|---|---|
 | `button.basic` | `Button` and its four skins, `IconButton`, `FloatingActionButton`, `ExtendedFloatingActionButton`, `AssistChip`, `SuggestionChip` | Any in-place action. Branches on where the name comes from (visible text, `contentDescription`, or a label that disappears when an extended FAB collapses) and on placement outside the content flow | **W1** |
 | `button.toggle` | `IconToggleButton` and its filled, tonal, and outlined skins | In-context on or off state with a stable name. Distinct from `button.basic`: adds checked state. `ToggleButton`, the text toggle, is not in the 1.4.0 stable baseline | **W2** (written) |
-| `chip.filter` | `FilterChip` | Selectable filter carrying `selected` | W2 |
-| `chip.input` | `InputChip` | Selectable token with a remove affordance. Two interactive targets in one chip | W2 |
-| `button.split` | `SplitButtonLayout` | Leading action plus trailing menu trigger | deferred to W2; composes `button.basic` and `menu.basic`, both W1 |
+| `chip.filter` | `FilterChip` | Selectable filter carrying `selected`, reported with `Role.Checkbox` | **W2** (written) |
+| `chip.input` | `InputChip` | Selectable token with a remove affordance. `InputChip` is one click target and its trailing icon is content, so removal is a nested remove button plus a custom action | **W2** (written) |
+| `button.split` | `SplitButtonLayout` | Leading action plus trailing menu trigger | **blocked**: `SplitButtonLayout` is not in the Material 3 1.4.0 stable release. Unblocks when it ships stable; composes `button.basic` and `menu.basic`, both written |
 | `fab.menu` | `FloatingActionButtonMenu` | Expandable menu of actions | deferred to W3; adds disclosure semantics, wants `menu.basic` merged first |
 | `button.group` | `ButtonGroup` | Container arranging connected buttons | cut: layout only, no role or state of its own |
 
@@ -162,10 +169,10 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 |---|---|---|---|
 | `text-field.basic` | `TextField`, `OutlinedTextField`, `SecureTextField` | Single-line text entry: label association, keyboard type, IME action, `error()` state, autofill `contentType`, and the obscured-value branch with its show-and-hide toggle | **W1** (written) |
 | `search-bar.basic` | `SearchBar`, `DockedSearchBar` | Search entry with an expanding results surface | **blocked**: the stable `SearchBar(state, inputField)` overload and every `Expanded*SearchBar` composable ship only in 1.5.0-alpha, not the 1.4.0 baseline. The remaining stable overloads are deprecated. Unblocks when 1.5.0 stabilizes |
-| `select.basic` | `ExposedDropdownMenuBox` with a read-only `TextField` | Choose one value from a list | W2 |
+| `select.basic` | `ExposedDropdownMenuBox` with a read-only `TextField` | Choose one value from a list | **W2** (written), on an experimental API by exception; see Settled boundaries |
 | `form.validation` | `error()` semantics plus focus handling on submit | Form-level error handling | deferred to W2; redirects to `text-field.basic`, which is W1 |
 | `pin-input.basic` | `BasicTextField` with `decorationBox` | Fixed-length code entry. No Material component exists | W2 |
-| `combobox.autocomplete` | `ExposedDropdownMenuBox` with an editable `TextField` | Text entry with filtered suggestions | deferred to W3; depends on `select.basic` in W2, and CVS flags the editable case as materially harder |
+| `combobox.autocomplete` | `ExposedDropdownMenuBox` with an editable `TextField` | Text entry with filtered suggestions | deferred to W3; depends on `select.basic`, shares its experimental API and its exception, and CVS flags the editable case as materially harder |
 
 ### Selection
 
@@ -210,8 +217,8 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 |---|---|---|---|
 | `image.basic` | `Image`, `Icon` | Decorative, informative, and functional roles as variants | **W1** (written) |
 | `content-shelf.basic` | `LazyRow` of image tiles | Horizontally scrolling collection of content tiles whose accessible name comes from data, not from rendered text. Covers the strip and its tiles; there is no separate tile pattern, and "tile" is vocabulary rather than an ID. Lead aliases: `collection-row`, `shelf`, `rail`, `content row`, `carousel row`, `tile` | **W1** (written) |
-| `card.basic` | `Card`, `ElevatedCard`, `OutlinedCard`, each with a clickable overload | Grouped surface, static or interactive. The clickable overload adds `Role.Button`; both branches are their own requirement | W2 |
-| `badge.basic` | `Badge`, `BadgedBox` | Non-interactive indicator whose value folds into the host's name. **Unverified** whether a documented API suppresses standalone announcement | W2 |
+| `card.basic` | `Card`, `ElevatedCard`, `OutlinedCard`, each with a clickable overload | Grouped surface, static or interactive. The static overload is a traversal group; the clickable overload merges its content and sets no role. Both branches are their own requirement | **W2** (written) |
+| `badge.basic` | `Badge`, `BadgedBox` | Non-interactive indicator whose value folds into the host's name. `Badge` and `BadgedBox` set no semantics, so the badge replaces its own content with words | **W2** (written) |
 | `divider.basic` | `HorizontalDivider`, `VerticalDivider` | Presentational separation | W3 |
 | `accordion.basic` | Hand-built with `expand()` and `collapse()` semantics actions | Expand and collapse a section. Material ships no Accordion | W3 |
 | `pull-to-refresh.basic` | `PullToRefreshBox` | Gesture-driven refresh. **Unverified** whether Compose supplies a non-gesture alternative; if not, that is the pattern's central requirement | W3 |
@@ -294,11 +301,11 @@ Four rules where the iOS Must Have cannot be restated because the platform primi
 
 That is a large wave, and it is only tractable because Android patterns run roughly a third the length of their web siblings once Material handles the mechanics. Worth knowing at pattern one rather than discovering at pattern nine.
 
-**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `select.basic`, `slider.basic`, `button.toggle`, `segmented-button.basic`, `checkbox.group`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the four that unblock once wave 1 merges: `button.split`, `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`.
+**Wave 2** picks up the components with no iOS sibling, which is the test of whether this taxonomy was authored rather than translated: `chip.filter`, `chip.input`, `card.basic`, `badge.basic`, `slider.basic`, `button.toggle`, `segmented-button.basic`, `checkbox.group`, `select.basic`, `navigation-drawer.modal`, `top-app-bar.basic`, `pin-input.basic`, plus the three that unblock once wave 1 merges: `bottom-app-bar.basic`, `form.validation`, `checkbox.tristate`. `button.split` was planned here and is blocked; see below.
 
 **Wave 3** is the long tail: `divider.basic`, `accordion.basic`, `grid.basic`, `table.basic`, `date-picker.basic`, `date-picker.range`, `time-picker.dial`, `time-picker.input`, `listbox.basic`, `tooltip.basic`, `pull-to-refresh.basic`, `swipe-to-dismiss.basic`, `navigation-rail.basic`, `navigation-drawer.persistent`, `fab.menu`, `combobox.autocomplete`, `stepper.basic`.
 
-**Blocked, not scheduled.** Four patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility, `bottom-sheet.standard` and `carousel.basic` wait on their APIs leaving `@ExperimentalMaterial3Api`, and `search-bar.basic` waits on the stable `SearchBar(state, inputField)` overload, which ships only from Material 3 1.5.0.
+**Blocked, not scheduled.** Five patterns cannot be authored yet and each names what unblocks it: `slider.range` waits on Compose fixing `RangeSlider` keyboard accessibility; `bottom-sheet.standard` and `carousel.basic` wait on their APIs leaving `@ExperimentalMaterial3Api`; `search-bar.basic` waits on the stable `SearchBar(state, inputField)` overload, which ships only from Material 3 1.5.0; and `button.split` waits on `SplitButtonLayout` reaching a stable release, found missing from 1.4.0 on 2026-10-06 while choosing the third wave-2 batch.
 
 ### Dependency graph
 
@@ -337,7 +344,7 @@ flowchart LR
   NAVBAR --> RAIL
 ```
 
-Read it as: eight edges, seven dependent patterns, and every one of them resolves by the end of wave 2. Nothing in wave 1 depends on anything else in wave 1, which is why the wave can be authored in any order once Foundations land.
+Read it as: eight edges, seven dependent patterns. `button.split` is blocked on its own API, not on its dependencies. Nothing in wave 1 depends on anything else in wave 1, which is why the wave can be authored in any order once Foundations land.
 
 ## Authoring pipeline
 
@@ -451,7 +458,6 @@ Each of these must be confirmed before it reaches a Must Have. Assumptions alrea
 - Whether `DismissibleNavigationDrawer` and `PermanentNavigationDrawer` differ in exposed semantics beyond togglability.
 - Whether `ExposedDropdownMenuBox` applies combobox semantics automatically or requires the caller to add them.
 - Whether `ModalBottomSheet`, `PullToRefreshBox`, and `SwipeToDismissBox` ship a built-in non-gesture alternative, or leave it to the caller. This decides whether the non-gesture requirement is a Must Have or a Don't.
-- Whether `Badge` and `BadgedBox` have a documented API for suppressing standalone announcement.
 - The focus behavior of `SearchBar`'s expanded-view composables, new in 1.4.0.
 - Whether `PlainTooltip` and `RichTooltip` exist separately from `TooltipBox` in the current stable API.
 - How `DateRangePicker` announces start and end selection differently from `DatePicker`.

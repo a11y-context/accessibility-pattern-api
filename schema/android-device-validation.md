@@ -18,6 +18,12 @@ Run each check with TalkBack on, and repeat the focus checks with a hardware key
 | V-10 | Does `windowTitle` or a caller's `paneTitle` replace the generic "Dialog"? | `dialog.alert` | open |
 | V-11 | Does keyboard focus land on a dropdown menu's first item by itself? | `menu.basic` | open |
 | V-12 | Does a caller's `error()` on a `TextField` override Material's default message? | `text-field.basic` | open |
+| V-13 | Do an input chip and its remove button read as two clean stops, and where does focus go after removal? | `chip.input` | open |
+| V-14 | How does a filter chip announce its state, and is the result count read once? | `chip.filter` | open |
+| V-15 | Do a badge's words read after its host's name, and a row's status after the row's name? | `badge.basic` | open |
+| V-16 | Do a clickable card's click label and custom action work, and is its focus visible? | `card.basic` | open |
+| V-17 | Does a static card keep its contents together, and read as one item when merged? | `card.basic` | open |
+| V-18 | How does a select field announce itself, its opening, and its current option? | `select.basic` | open |
 
 ## Groups and sets
 
@@ -54,6 +60,32 @@ Compose supplies "Partially checked" as the state description when the parent's 
 ### V-08: An icon button named on its `Icon`
 
 `global.icon` names an icon-only control on its `Icon` and lets the control merge the description into its own name. The Compose merge policies keep the control's role and combine the descriptions, so this should read exactly like naming the control ("Settings, button", with no "image"). Confirm it on an `IconButton` and an `IconToggleButton`.
+
+## Chips, badges, and cards
+
+### V-13: Removing an input chip
+
+`chip.input` nests a remove button (`Role.Button`, named "Remove Alex Rivera") inside the chip's trailing slot, and also puts a "Remove" custom action on the chip. Check that TalkBack reads the chip ("Alex Rivera" with its selected state) and the remove button as two separate stops, that the chip's own announcement does not pick up the button's name, and that both the button and the actions-menu entry remove the chip. Check that the 24dp button is tappable without hitting the chip by mistake, and that a hardware keyboard reaches the chip and its button as two stops. After a removal, check that both keyboard focus and the TalkBack cursor land on the text field the golden pattern moves focus to.
+
+### V-14: A filter chip's announcement
+
+`FilterChip` reports `Role.Checkbox` with a selected state rather than a checked one, and Compose reports a selected state on a checkbox as checked, with "Selected" or "Not selected" as the state description. Check what TalkBack actually says, and that the polite status line ("12 recipes") is read once after a chip changes, without moving focus off the chip.
+
+### V-15: A badge's words
+
+`badge.basic` replaces a badge's content with words through `clearAndSetSemantics { contentDescription = "..." }`, relying on `BadgedBox` placing the badge after its host so the words follow the host's name ("Notifications, 3 unread"). For a status beside a name, it uses `stateDescription` on the row instead. Check both orders, and that the count updates in the announcement when the value changes.
+
+### V-16: A clickable card
+
+`Card`'s `onClick` overload takes no click label, so `card.basic` sets one through `Modifier.semantics { onClick(label = "...", action = null) }`, the same mechanism `button.basic` uses on an `IconButton`. Check that TalkBack says "Double tap to open recipe", that activating it opens the card, and that the "Share" custom action works while the hidden share button stays out of the swipe order. Check also that a focused card's focus indication is visible from a keyboard, since a clickable `Surface` shows focus as a state layer over a large area.
+
+### V-17: A static card
+
+Material's static `Card` marks itself a traversal group. Check that its contents are read in order before anything after the card, that `semantics(mergeDescendants = true)` makes a card of plain content a single stop, and that a title marked `heading()` inside a card is reachable through TalkBack's heading navigation.
+
+### V-18: A select field
+
+`menuAnchor` gives a read-only field `Role.DropdownList`, which Compose reports to Android as a `Spinner`, and sets no expanded or collapsed state on it; only the editable variant does. `select.basic` marks the current option with `selected` on its `DropdownMenuItem`. Check what TalkBack says on the field (its role word, label, and value), whether opening the list is announced or only evident from focus moving into it, that the current option reads as selected and the others as not selected, and where keyboard focus and the TalkBack cursor land after an option is chosen. If opening is silent and focus does not move into the list, the field needs an expanded state of its own.
 
 ## Dialogs, menus, and fields
 

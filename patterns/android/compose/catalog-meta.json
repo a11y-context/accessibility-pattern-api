@@ -3,7 +3,7 @@
   "_comment_order_overrides": "Patterns default to alphabetical filename order, which also drives the sidebar. Each [earlierId, laterId] pair pins earlierId immediately before laterId. snackbar.basic (\"Snackbar\") must precede snackbar.action (\"Snackbar with Action\"), the reverse of the alphabetical order, matching web's toast.basic / toast.action.",
   "stack": "android/compose",
   "schema_version": "1.0.0",
-  "catalog_revision": "0.8.0",
+  "catalog_revision": "0.9.0",
   "cache_ttl_seconds": 3600,
   "order_overrides": [
     [
