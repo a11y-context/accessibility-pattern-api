@@ -10,14 +10,14 @@ Welcome to the Android / Compose section of A11y Context.
 
 This corpus provides prescriptive, production-ready accessibility patterns for Jetpack Compose applications. Each pattern documents the **must-have** semantics, TalkBack and focus behavior, and interaction rules, plus a golden implementation.
 
-> **The Compose catalog is in active development.** Foundations and the first eleven components are published. Eight more are planned for the first wave, and further waves follow that.
+> **The Compose catalog is in active development.** Foundations and the first fifteen components are published. Four more are planned for the first wave, and further waves follow that.
 
 ## What's here
 
 | Section | Description |
 |---------|-------------|
 | [Foundations](./compose/global/global_rules.md) | Baseline accessibility rules applied across all Compose UI work |
-| [Components](./compose/component-gallery.md) | Eleven patterns published. The taxonomy that governs which patterns exist, and what each is called, is settled |
+| [Components](./compose/component-gallery.md) | Fifteen patterns published. The taxonomy that governs which patterns exist, and what each is called, is settled |
 | [Release Notes](./compose/release-notes.md) | Catalog revisions and per-pattern versions |
 
 ## How to use these patterns

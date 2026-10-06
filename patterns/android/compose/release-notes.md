@@ -8,6 +8,15 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.6.0 — 2026-10-06
+
+Four wave-1 patterns in two pairs, each pair sharing a mechanism, checked against the stable Material 3 1.4.0 source.
+
+- **Navigation Bar → 0.1.0** — Items report `Role.Tab`, selected state, and position through `selectable` and `selectableGroup`. `NavigationBarItem` wraps its icon in `clearAndSetSemantics {}` whenever the label shows, which is right for the icon's description and silently drops a `BadgedBox` count drawn in the same slot. The badge's meaning goes in the item's name, and each icon still carries a description, because it is the item's only name when labels are hidden.
+- **Tabs → 0.1.0** — The same `Role.Tab` contract, with the opposite icon rule: `Tab` does not clear its icon, so an icon beside a tab's text takes `contentDescription = null`. Only the selected tab's content is composed, and a swipeable pager keeps the selected tab in step.
+- **Snackbar → 0.1.0** — Everything accessible lives in `SnackbarHost`, not `Snackbar`: a polite live region, a `dismiss` action, and a duration run through the system's recommended timeout. A `Snackbar` drawn by hand behind a timer gets none of it. `showSnackbar` queues messages rather than replacing them.
+- **Snackbar with Action → 0.1.0** — Focus never moves to the message, so its action is also available elsewhere on the screen. `showSnackbar` already defaults an action snackbar to `SnackbarDuration.Indefinite`; the pattern keeps that default and adds a visible dismiss control.
+
 ## 0.5.1 — 2026-10-06
 
 - **Foundations** — The `Rule:` prefix is gone from every rule heading, so the list reads as rule names ("Focus States", "Native First") instead of the same word repeated down the page. No rule changed. `@a11y-context/mcp-server` reads both forms, so `get_foundations` returns the same rules either way.
