@@ -138,8 +138,8 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | ID | Compose | What it is | Status |
 |---|---|---|---|
 | `list-item.basic` | `ListItem` | A row in a vertical list, with leading, trailing, overline, and supporting slots. Merges its descendants by default, so a row carrying several controls is the platform's sharpest merge hazard | **W1** |
-| `navigation-bar.basic` | `NavigationBar`, `NavigationBarItem` | Bottom navigation between top-level destinations. Announces as Tab | **W1** |
-| `tabs.basic` | `Tab`, `TabRow`, `ScrollableTabRow`, `PrimaryTabRow`, `SecondaryTabRow` | Switch between views. Primary against secondary and fixed against scrollable are visual | **W1** |
+| `navigation-bar.basic` | `NavigationBar`, `NavigationBarItem` | Bottom navigation between top-level destinations. Announces as Tab | **W1** (written) |
+| `tabs.basic` | `Tab`, `TabRow`, `ScrollableTabRow`, `PrimaryTabRow`, `SecondaryTabRow` | Switch between views. Primary against secondary and fixed against scrollable are visual | **W1** (written) |
 | `menu.basic` | `DropdownMenu`, `DropdownMenuItem` | Pull-down list of commands | **W1** (written) |
 | `navigation-drawer.modal` | `ModalNavigationDrawer`, `ModalDrawerSheet` | Temporary overlay navigation with a scrim and a focus trap | W2 |
 | `navigation-drawer.persistent` | `PermanentNavigationDrawer`, `DismissibleNavigationDrawer` | Navigation alongside content, no focus trap. **Unverified** whether Dismissible and Permanent differ in exposed semantics beyond togglability | W3 |
@@ -188,8 +188,8 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 |---|---|---|---|
 | `dialog.alert` | `AlertDialog`, `BasicAlertDialog` | Modal message with actions. The two composables differ in how much layout Material supplies, not in semantics | **W1** (written) |
 | `bottom-sheet.modal` | `ModalBottomSheet` | Modal sheet with scrim and focus trap. Material already supplies more than expected: scrim tap and back press dismiss by default, `paneTitle` is set internally, and the drag handle is clickable and carries named expand, collapse, and dismiss accessibility actions. The pattern's work is the conditions under which those disappear, plus Escape, which is never handled | **W1** |
-| `snackbar.basic` | `Snackbar`, `SnackbarHost` | Transient message announced through a live region, acknowledging something that already happened. No action to reach | **W1** |
-| `snackbar.action` | `Snackbar` with an `action` slot | Transient message carrying an action. Focus never moves to the message, which is what keeps it from interrupting and what puts its action out of easy reach for sighted keyboard-only users. Splits from `snackbar.basic` for the same reason `toast.action` splits from `toast.basic` on web: the reachability contract is the whole pattern | **W1** |
+| `snackbar.basic` | `Snackbar`, `SnackbarHost` | Transient message announced through a live region, acknowledging something that already happened. No action to reach | **W1** (written) |
+| `snackbar.action` | `Snackbar` with an `action` slot | Transient message carrying an action. Focus never moves to the message, which is what keeps it from interrupting and what puts its action out of easy reach for sighted keyboard-only users. Splits from `snackbar.basic` for the same reason `toast.action` splits from `toast.basic` on web: the reachability contract is the whole pattern | **W1** (written) |
 | `progress-indicator.determinate` | `LinearProgressIndicator`, `CircularProgressIndicator` with a `progress` value | Measurable progress. Exposes `ProgressBarRangeInfo` and announces a percentage | **W1** |
 | `progress-indicator.indeterminate` | The same composables with no `progress` argument | Activity with no known duration. No range info | **W1** |
 | `tooltip.basic` | `TooltipBox` | Supplementary label on long-press or hover. Carries `@ExperimentalMaterial3Api` | W3 |
