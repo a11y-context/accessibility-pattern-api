@@ -31,10 +31,9 @@ Modal message that interrupts to ask for a decision or report something the user
 - The dialog blocks the content behind it, contains focus, and closes on back, Escape, and a tap outside it. Material's `AlertDialog` is the reference implementation, through its dialog window and default `DialogProperties`; `BasicAlertDialog` meets the same contract with a layout the caller supplies (`global.native-first`).
 - Give the dialog a title stating the question or the fact, as the first content the user reaches (e.g., "Delete 3 photos?"). Material announces only "Dialog" on open, so the title is where the user learns what the dialog is about.
 - Give the `icon` slot's `Icon` `contentDescription = null`. The icon renders before the title, and a named icon puts its name first, ahead of the title.
-- Mark the title with `Modifier.semantics { heading() }` (`global.headings`).
 - Label each button with what it does (e.g., "Delete" and "Cancel"), never "OK", "Yes", or "No". The buttons are read without the question in front of them.
 - Make `onDismissRequest` do exactly what the dismiss button does, and never the confirming action. Back, Escape, and a tap outside all call it.
-- Move input focus to the dismiss button when the dialog opens, or to its only button when it has one, with a `FocusRequester` requested from a `LaunchedEffect` inside the dialog's content. On a confirmation, this means an Enter keypress cannot confirm a destructive action by accident (`global.focus-management`).
+- Leave initial focus to the dialog. It opens in its own window, which takes input focus without a `FocusRequester`, and with the icon decorative the title is the first content TalkBack reaches. Do not request focus on a button when the dialog opens: it skips the title and leaves a destructive action one keypress away (`global.focus-management`).
 - Restore input focus to the control that opened the dialog when it closes, by holding a `FocusRequester` for the trigger and requesting it on dismissal (`global.focus-management`).
 - Meets the touch target baseline in `global_rules.md` (`global.touch-target-size`).
 - Meets the focus states baseline in `global_rules.md` (`global.focus-states`).
@@ -48,7 +47,7 @@ Modal message that interrupts to ask for a decision or report something the user
 - Do not put a text field, a list, or other controls in an alert. A dialog that asks the user to fill something in is a bottom sheet or a full screen.
 
 ## Customizable
-- `AlertDialog` supplies the slots and their order. `BasicAlertDialog` takes free-form content, which then carries the ordering duties itself: decorative icon, then the title marked as a heading, then the text, then the buttons with the dismiss button first.
+- `AlertDialog` supplies the slots and their order. `BasicAlertDialog` takes free-form content, which then carries the ordering duties itself: decorative icon, then the title, then the text, then the buttons with the dismiss button first.
 - `dismissOnClickOutside = false` may be set for a decision the user must make deliberately. Back and Escape still close the dialog through `onDismissRequest`.
 - `DialogProperties(windowTitle = ...)` may be set to the title text, which names the dialog's window. Whether TalkBack speaks it in place of Material's generic "Dialog" is not yet verified on a device.
 - The confirm button may use a filled or tonal style and the dismiss button a text style. Emphasis is visual; both labels carry the meaning.
@@ -62,11 +61,9 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 fun AlertDialogExamples() {
     var open by remember { mutableStateOf(false) }
     val triggerFocus = remember { FocusRequester() }
-    val cancelFocus = remember { FocusRequester() }
 
     fun dismiss() {
         open = false
-        // Focus returns to what opened the dialog.
         triggerFocus.requestFocus()
     }
 
@@ -79,29 +76,12 @@ fun AlertDialogExamples() {
 
     if (open) {
         AlertDialog(
-            // Back, Escape, and a tap outside all arrive here. It does what
-            // Cancel does, never what Delete does.
             onDismissRequest = { dismiss() },
-            // The icon renders before the title. Named, it would be heard first.
             icon = { Icon(Icons.Outlined.Delete, contentDescription = null) },
-            // Material announces only "Dialog". The title is what the user
-            // lands on, so it carries the question.
-            title = {
-                Text(
-                    text = "Delete 3 photos?",
-                    modifier = Modifier.semantics { heading() }
-                )
-            },
+            title = { Text("Delete 3 photos?") },
             text = { Text("They will be removed from all your devices.") },
             dismissButton = {
-                TextButton(
-                    onClick = { dismiss() },
-                    modifier = Modifier.focusRequester(cancelFocus)
-                ) { Text("Cancel") }
-
-                // Inside the dialog's own content, so it runs after the window
-                // has composed the button. Enter on open cannot delete.
-                LaunchedEffect(Unit) { cancelFocus.requestFocus() }
+                TextButton(onClick = { dismiss() }) { Text("Cancel") }
             },
             confirmButton = {
                 TextButton(onClick = { /* delete */ dismiss() }) { Text("Delete") }

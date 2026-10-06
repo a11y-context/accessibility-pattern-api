@@ -242,11 +242,19 @@ Two names per fence, maximum: the export, and `<Pattern>Examples`. Every additio
 
 #### Comments and state both have to earn their place
 
-**A comment is justified only when it states something the code cannot show** — browser behavior, a spec constraint, or why a removable-looking thing is load-bearing. A comment that narrates the code is bloat.
+**A comment is justified only when it tells the agent something about the code that neither the code nor the pattern's own sections already say** — a platform behavior the code works around, or why a removable-looking line is load-bearing, when no Must Have or Don't covers it. Three kinds never earn a place:
 
-> Earns it: `// role="img" makes descendants presentational: the initials are never announced.`
+- **Restating a requirement.** The agent retrieves the Must Haves and Don'ts with the code. A comment that repeats one costs tokens on every retrieval and adds nothing.
+- **Arguing a design choice for a human reader.** "Compose has no `aria-haspopup`, so the click label is where this lives" is reasoning addressed to a reviewer, not an instruction to an agent.
+- **Explaining another platform's principles.** A Compose example does not mention ARIA, and a SwiftUI one does not mention the DOM.
+
+A placeholder that marks elided code (`/* open */`, `// draw the line chart from views`) is not commentary and stays.
+
+> Earns it: `// role="img" makes descendants presentational: the initials are never announced.` — a browser behavior, when no Must Have states it.
 >
 > Does not: `// One name prop threaded through every branch, so the fallbacks cannot drift.`
+
+The `android/compose` examples were swept to this standard in catalog 0.5.0, and all but one comment came out, because every one restated a section of its own pattern. The `web/react` and `ios/swiftui` examples have not been swept yet.
 
 **State, refs, and effects earn their place the same way.** Include them where they demonstrate *required* behavior — focus restoration, `aria-expanded` sync, an image `onError` fallback. State that exists only to make something interactive for a viewer is harness, and harness belongs in the lab.
 

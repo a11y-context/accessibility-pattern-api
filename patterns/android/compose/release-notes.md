@@ -13,11 +13,19 @@ Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisio
 Three wave-1 patterns, and four corrections that came from checking their mechanisms against the stable Material 3 1.4.0 and Compose UI 1.12.1 sources.
 
 - **Image → 0.1.0** — Informative, decorative, and functional images. `contentDescription` is a required parameter on `Image` and `Icon`, so the decision is explicit at every call site, and `""` is not decorative: it still applies `Role.Image`. Only `null` removes an image from the tree.
-- **Menu → 0.1.0** — `DropdownMenu` is a focusable popup that closes on back, Escape, and a tap outside it with no extra code. Its items carry no role and Compose has no menu role or expanded state, so the trigger says it opens a menu through its click label.
-- **Dialog (Alert) → 0.1.0** — `AlertDialog` blocks the screen and closes on back and Escape, but sets its pane title to the generic word "Dialog". The title is the first content the user lands on, so it carries the question; the icon before it is decorative.
+- **Menu → 0.1.0** — `DropdownMenu` is a focusable popup that closes on back, Escape, and a tap outside it with no extra code. Its items carry no role, so each label has to stand on its own as a command. An overflow trigger is named "More options", the label Android uses for its own overflow control.
+- **Dialog (Alert) → 0.1.0** — `AlertDialog` blocks the screen and closes on back and Escape, but sets its pane title to the generic word "Dialog". The title is the first content the user lands on, so it carries the question; the icon before it is decorative. The dialog's own window takes focus, so no button is focused on open.
 - **List Item → 0.2.0** — Replaced a Don't that warned against omitting `contentDescription`, which cannot be omitted on Compose. The real trap is passing `""` to a decorative thumbnail.
 - **Content Shelf → 0.2.0** — The same correction for tile artwork.
-- **Bottom Sheet (Modal) → 0.3.0** — The focus request moves inside the sheet's content, because the sheet composes in its own window and an effect in the parent can run before its target exists. The Escape Must Have now says the sheet is the exception: `AlertDialog` and `DropdownMenu` handle Escape themselves.
+- **Bottom Sheet (Modal) → 0.3.0** — The focus request moves inside the sheet's content, because the sheet composes in its own window and an effect in the parent can run before its target exists. The Escape Must Have now says the sheet is the exception: `AlertDialog` and `DropdownMenu` handle Escape themselves. The Escape handler now restores focus to the trigger, as back press already did.
+
+Every Golden Pattern in the stack drops its explanatory comments. Each one restated a Must Have or argued a choice for a human reviewer; the agent retrieves the sections with the code, so they cost tokens and said nothing new.
+
+- **Button → 0.2.1** — Golden Pattern comments removed; no requirements change.
+- **Checkbox → 0.1.1** — Golden Pattern comments removed; no requirements change.
+- **Radio Group → 0.1.1** — Golden Pattern comments removed; no requirements change.
+- **Switch → 0.1.1** — Golden Pattern comments removed; no requirements change.
+- **Text Field → 0.2.1** — Golden Pattern comments removed; no requirements change.
 
 Foundations change in the same release:
 

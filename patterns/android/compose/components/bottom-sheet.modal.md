@@ -66,6 +66,11 @@ fun BottomSheetModalExamples() {
         mutableStateListOf(Filter("In stock"), Filter("Free shipping"), Filter("On sale"))
     }
 
+    fun dismiss() {
+        open = false
+        triggerRequester.requestFocus()
+    }
+
     Button(
         onClick = { open = true },
         modifier = Modifier.focusRequester(triggerRequester)
@@ -75,14 +80,8 @@ fun BottomSheetModalExamples() {
 
     if (open) {
         ModalBottomSheet(
-            onDismissRequest = {
-                open = false
-                // Focus goes back to what opened the sheet. Compose does not do this.
-                triggerRequester.requestFocus()
-            },
+            onDismissRequest = { dismiss() },
             sheetState = sheetState,
-            // Default drag handle kept: it carries the expand, collapse, and
-            // dismiss accessibility actions. Passing null removes all three.
             contentWindowInsets = { WindowInsets.safeDrawing }
         ) {
             Column(
@@ -90,30 +89,22 @@ fun BottomSheetModalExamples() {
                     .verticalScroll(rememberScrollState())
                     .focusRequester(focusRequester)
                     .focusable()
-                    // Compose ships no Escape handling for this component.
                     .onKeyEvent { event ->
                         if (event.key == Key.Escape) {
-                            open = false
+                            dismiss()
                             true
                         } else {
                             false
                         }
                     }
             ) {
-                // Inside the sheet's own content, so it runs after the sheet's window
-                // has composed the column it is asking for.
                 LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
-                // The pane-change announcement is generic, so the heading is how
-                // a user finds out which sheet this is.
                 Text(
                     text = "Filter results",
                     modifier = Modifier.semantics { heading() }
                 )
 
-                // Real content, so focus lands on something. Each row follows
-                // checkbox.basic: the row owns the toggle, the role, and the
-                // 48dp target, and the Checkbox's own callback is null.
                 filters.forEach { filter ->
                     Row(
                         modifier = Modifier

@@ -76,12 +76,8 @@ fun ContentShelfExamples() {
         )
 
         LazyRow(
-            // The heading above is a separate node. Without this, a user who
-            // reaches the tiles any other way hears only "in list".
             modifier = Modifier.semantics {
                 contentDescription = shelfTitle
-                // One row, many columns. Swapping these reports the position
-                // against the wrong axis.
                 collectionInfo = CollectionInfo(rowCount = 1, columnCount = products.size)
             }
         ) {
@@ -97,11 +93,7 @@ fun ContentShelfExamples() {
                                 rowIndex = 0, rowSpan = 1,
                                 columnIndex = index, columnSpan = 1
                             )
-                            // The stock badge is inside the merged node and
-                            // contributes nothing on its own.
                             product.badge?.let { stateDescription = it }
-                            // Add to cart reaches the user here rather than as
-                            // a second stop inside the tile.
                             customActions = listOf(
                                 CustomAccessibilityAction(
                                     label = if (saved) "Remove from cart" else "Add to cart"
@@ -109,8 +101,6 @@ fun ContentShelfExamples() {
                             )
                         }
                 ) {
-                    // The name and price are rendered below and merge into the
-                    // tile's name, so naming the image would repeat them.
                     Image(
                         painter = painterResource(R.drawable.product),
                         contentDescription = null,
@@ -122,8 +112,6 @@ fun ContentShelfExamples() {
             }
         }
 
-        // The shelf name is in the button's label, because "See all" repeated
-        // down a browse screen names nothing.
         TextButton(
             onClick = { /* open shelf */ },
             modifier = Modifier.semantics { contentDescription = "See all in $shelfTitle" }

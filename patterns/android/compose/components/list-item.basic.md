@@ -76,17 +76,12 @@ fun ListItemExamples() {
             ListItem(
                 headlineContent = { Text(message.from) },
                 supportingContent = { Text(message.preview) },
-                // The avatar stands for the sender the headline already names,
-                // so naming it makes the row say the sender twice.
                 leadingContent = {
                     Image(
                         painter = painterResource(R.drawable.avatar),
                         contentDescription = null
                     )
                 },
-                // No nested IconButton here. A second clickable inside a
-                // clickable row is not absorbed by the merge, and becomes a
-                // rival target.
                 trailingContent = {
                     if (unread) {
                         Box(Modifier.size(8.dp).background(MaterialTheme.colorScheme.primary, CircleShape))
@@ -99,12 +94,7 @@ fun ListItemExamples() {
                         collectionItemInfo = CollectionItemInfo(
                             rowIndex = index, rowSpan = 1, columnIndex = 0, columnSpan = 1
                         )
-                        // The unread dot is inside the merged node and says
-                        // nothing on its own, so the row carries it.
                         stateDescription = if (unread) "Unread" else "Read"
-                        // The mark-as-read control reaches the user here,
-                        // through the actions menu, instead of as a second stop
-                        // in the list.
                         customActions = listOf(
                             CustomAccessibilityAction(
                                 label = if (unread) "Mark as read" else "Mark as unread"

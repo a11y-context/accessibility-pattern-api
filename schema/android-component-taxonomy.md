@@ -440,6 +440,8 @@ Recorded so nobody reopens them. Android's `chip.filter` and `chip.input` are th
 
 Each of these must be confirmed before it reaches a Must Have.
 
+- Whether TalkBack's cursor lands on an `AlertDialog`'s title when the dialog opens, rather than on a button. Material 3 1.4.0 lays out icon, title, text, then buttons, and with the icon decorative the title is first in traversal order, which is what TalkBack's initial placement normally follows. `dialog.alert` relies on it and requests no focus.
+
 - Whether TalkBack announces `DialogProperties(windowTitle = ...)` in place of the generic "Dialog" pane title Material 3 1.4.0's `BasicAlertDialog` sets on its content box, and whether a caller's own `paneTitle` on the dialog's `modifier` wins over Material's. The modifier is earlier in that node's chain than Material's `semantics` call, but which value survives is not settled from source. `dialog.alert` keeps both out of its Must Haves and requires the title to be the first content instead.
 - Whether keyboard focus lands on the first item of a `DropdownMenu` by itself when the popup opens. The popup is focusable by default and arrow keys move between items, but no code in Material 3 1.4.0 requests focus on an item. `menu.basic` requests it explicitly, which is correct either way.
 

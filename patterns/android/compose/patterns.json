@@ -52,7 +52,7 @@
       "title": "Button",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.2.0",
+      "latest_version": "0.2.1",
       "summary": "Control that triggers an immediate action. Covers text, icon-only, floating, and action-chip presentations, which share one role and differ in where the accessible name comes from.",
       "aliases": [
         "btn",
@@ -102,7 +102,7 @@
       "title": "Checkbox",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "Yes or no choice submitted with a form, independent of any other checkbox beside it. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.",
       "aliases": [
         "check box",
@@ -337,7 +337,7 @@
       "pattern_type": "component",
       "status": "beta",
       "latest_version": "0.1.0",
-      "summary": "Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own, but its items carry no role and its trigger reports nothing about what it opens, so both are the caller's to say.",
+      "summary": "Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own; its items carry no role, so each one's label has to stand on its own as a command.",
       "aliases": [
         "DropdownMenu",
         "DropdownMenuItem",
@@ -383,7 +383,7 @@
       "title": "Radio Group",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "Exactly one choice from a mutually exclusive set. The group carries selectableGroup, which is what makes each option announce its position in the set, and each row carries the selection rather than the button.",
       "aliases": [
         "radio button",
@@ -426,7 +426,7 @@
       "title": "Switch",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.1.0",
+      "latest_version": "0.1.1",
       "summary": "Persistent on or off setting that takes effect immediately. The control and its label form one accessibility node, and the row that owns the toggle owns the role and the touch target.",
       "aliases": [
         "toggle switch",
@@ -468,7 +468,7 @@
       "title": "Text Field",
       "pattern_type": "component",
       "status": "beta",
-      "latest_version": "0.2.0",
+      "latest_version": "0.2.1",
       "summary": "Single-line text entry whose accessible name has to come from the field's own label slot rather than a Text beside it. Supporting text and error messages are separate nodes the component does not attach, so both have to be associated deliberately.",
       "aliases": [
         "textfield",

@@ -34,7 +34,7 @@ The empty string is where web habits break. On the web, `alt=""` is how an image
 - Give a decorative image `contentDescription = null`. It then applies no semantics at all and TalkBack does not stop on it.
 - Pass `null` for a decorative image, never `""`. An empty string still applies `Role.Image` with an empty name, so the image stays in the tree.
 - Give an image of text a `contentDescription` that matches the text it shows (e.g., a wordmark logo named with the company name).
-- Give a complex image, such as a chart or a map, a short `contentDescription` stating its conclusion (e.g., "Weekly views, rising from 1,200 to 3,400"), and put the full data in visible text or a table nearby.
+- Give a complex image, such as a chart or a map, a short `contentDescription` stating its conclusion (e.g., "Weekly views, rising from 1,200 to 3,400"), and make the full data available as visible text or a table nearby, or one step away on another screen (e.g., a "View data" action beside the chart).
 - Name a meaningful graphic drawn without `Image` or `Icon` yourself. `Modifier.paint`, `Canvas`, and `Modifier.background` apply no semantics, so set `Modifier.semantics { contentDescription = "..."; role = Role.Image }` on it, or it does not exist to a screen reader.
 - Convey a status shown by an icon in more than its color. A red dot and a green dot that differ only in hue need a `contentDescription` each, or visible text beside them (`global.use-of-color`).
 
@@ -51,7 +51,7 @@ The empty string is where web habits break. On the web, `alt=""` is how an image
 - The image may be loaded from resources, a bitmap, a vector, or the network through a library such as Coil's `AsyncImage`. Every one of these takes the same `contentDescription` parameter with the same meaning.
 - `contentScale`, clipping, and shape are visual choices with no effect on the accessible name.
 - A decorative illustration assembled from several drawn shapes may be removed in one step with `Modifier.semantics { hideFromAccessibility() }` on its container, instead of handling each shape.
-- A long description may live in visible text below the image rather than in `contentDescription`, provided the `contentDescription` still states what the image is.
+- A long description may live in visible text below the image, or on a screen the user reaches from it, rather than in `contentDescription`, provided the `contentDescription` still states what the image is.
 
 ## Golden Pattern
 
@@ -61,37 +61,28 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 @Composable
 fun ImageExamples(views: List<Int>) {
     Column {
-        // Informative. Named for what it shows in this context.
         Image(
             painter = painterResource(R.drawable.skillet_hero),
             contentDescription = "Cast iron skillet, 12 inch, pre-seasoned"
         )
 
-        // Decorative. null, not "". An empty string still applies Role.Image
-        // and keeps the illustration in the tree.
         Image(
             painter = painterResource(R.drawable.kitchen_illustration),
             contentDescription = null
         )
 
-        // An icon beside text that says the same thing is decorative.
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Filled.CheckCircle, contentDescription = null)
             Text("Delivered September 26")
         }
 
-        // An icon standing alone carries the status, so it is named for the
-        // meaning, not the glyph.
         Icon(Icons.Filled.Error, contentDescription = "Upload failed")
 
-        // Image of text. The description matches the text it shows.
         Image(
             painter = painterResource(R.drawable.wordmark),
             contentDescription = "Acme Kitchen"
         )
 
-        // A chart drawn with Canvas has no semantics of its own. The summary
-        // goes on the Canvas; the full data is in the table below it.
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()

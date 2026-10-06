@@ -6,16 +6,16 @@ status: beta
 latest_version: 0.1.0
 tags: [menu, dropdown, overflow, commands, popup, actions]
 aliases: [DropdownMenu, DropdownMenuItem, overflow menu, more menu, kebab menu, three-dot menu, context menu, action menu, popup menu, options menu]
-summary: Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own, but its items carry no role and its trigger reports nothing about what it opens, so both are the caller's to say.
+summary: Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own; its items carry no role, so each one's label has to stand on its own as a command.
 ---
 
 # Menu
 
 Pattern ID: `menu.basic`
 
-Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own, but its items carry no role and its trigger reports nothing about what it opens, so both are the caller's to say.
+Pull-down list of commands opened from a button. Material's menu takes focus and closes on back and Escape on its own; its items carry no role, so each one's label has to stand on its own as a command.
 
-`DropdownMenu` is a focusable popup window, which is most of the contract: focus moves into it, the content behind it is out of reach, and back, Escape, and a tap outside all route to `onDismissRequest`. What Material does not supply is everything a web menu gets from `aria-haspopup` and `aria-expanded`. Compose has no menu role and no expanded state, so the trigger has to say in words what it does.
+`DropdownMenu` is a focusable popup window, which is most of the contract: focus moves into it, the content behind it is out of reach, and back, Escape, and a tap outside all route to `onDismissRequest`. `DropdownMenuItem` is a plain clickable row with no role of its own.
 
 ## Use When
 - Use when a button opens a short list of commands that act on the current screen or item (e.g., "Share", "Rename", "Delete" behind a "More options" button).
@@ -29,7 +29,8 @@ Pull-down list of commands opened from a button. Material's menu takes focus and
 
 ## Must Haves
 - The menu is a focusable popup that takes input focus when it opens and closes on back, Escape, and a tap outside it. Material's `DropdownMenu` is the reference implementation of that contract, through its default `PopupProperties(focusable = true)` (`global.native-first`).
-- Give the trigger a name and an `onClickLabel` saying that it opens a menu (e.g., an `IconButton` named "More options" with `onClickLabel = "open menu"`). Compose has no equivalent of `aria-haspopup`, so the click label is the only place that information can live.
+- Name an overflow trigger "More options", through `contentDescription` on its `Icon`. It is the label Android uses for its own overflow control.
+- When every row in a list carries its own menu, name each trigger for its row (e.g., "More options for Morning Mix"), or the triggers read alike (`button.basic`).
 - Route every way of closing to `onDismissRequest`, and set the expanded state to `false` there. Back, Escape, and a tap outside the menu all call it; selecting an item does not, so each item's `onClick` closes the menu too.
 - Move input focus to the first item when the menu opens, with a `FocusRequester` on that item requested from a `LaunchedEffect` inside the menu's content. The popup composes separately, so an effect in the parent can run before the item exists (`global.focus-management`).
 - Restore input focus to the trigger when the menu closes, by holding a `FocusRequester` for the trigger and requesting it on dismissal (`global.focus-management`).
@@ -49,8 +50,8 @@ Pull-down list of commands opened from a button. Material's menu takes focus and
 - Do not rely on item order to group commands. Use `HorizontalDivider` between groups so the separation is visible, and keep each label self-explanatory without it.
 
 ## Customizable
-- The trigger may be an `IconButton`, a `TextButton`, or a list row's trailing control. Whatever it is, it carries the name and the click label.
-- The trigger may also set `stateDescription` to "Expanded" or "Collapsed". Focus is inside the menu whenever it is open, so the collapsed state is the one users hear; it is optional because the click label already says what the control opens.
+- The trigger may be an `IconButton`, a `TextButton`, or a list row's trailing control. Whatever it is, it carries the name.
+- The trigger may also set `stateDescription` to "Expanded" or "Collapsed". Focus is inside the menu whenever it is open, so the collapsed state is the one users hear.
 - Items may carry a leading icon, a trailing icon, or a trailing keyboard shortcut hint. All are decorative alongside the item's text.
 - The menu may be anchored to its trigger or offset from it. Position has no effect on the contract.
 
@@ -68,29 +69,21 @@ fun MenuExamples() {
 
     fun close() {
         expanded = false
-        // Focus returns to what opened the menu.
         triggerFocus.requestFocus()
     }
 
     Box {
         IconButton(
             onClick = { expanded = true },
-            modifier = Modifier
-                .focusRequester(triggerFocus)
-                // Compose has no aria-haspopup. The click label is where
-                // "this opens a menu" lives.
-                .semantics { onClick(label = "open menu", action = null) }
+            modifier = Modifier.focusRequester(triggerFocus)
         ) {
             Icon(Icons.Filled.MoreVert, contentDescription = "More options")
         }
 
         DropdownMenu(
             expanded = expanded,
-            // Back, Escape, and a tap outside all arrive here.
             onDismissRequest = { close() }
         ) {
-            // Inside the menu's own content, so it runs after the popup has
-            // composed the item it is asking for.
             LaunchedEffect(Unit) { firstItemFocus.requestFocus() }
 
             DropdownMenuItem(
@@ -105,7 +98,6 @@ fun MenuExamples() {
                 trailingIcon = {
                     if (showLyrics) Icon(Icons.Filled.Check, contentDescription = null)
                 },
-                // The check mark is decorative; the state is said here.
                 modifier = Modifier.semantics {
                     stateDescription = if (showLyrics) "Checked" else "Not checked"
                 }
@@ -117,7 +109,6 @@ fun MenuExamples() {
                 leadingIcon = { Icon(Icons.Outlined.Delete, contentDescription = null) }
             )
         }
-
     }
 }
 ```
