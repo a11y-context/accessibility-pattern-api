@@ -250,6 +250,8 @@ Two names per fence, maximum: the export, and `<Pattern>Examples`. Every additio
 
 A placeholder that marks elided code (`/* open */`, `// draw the line chart from views`) is not commentary and stays.
 
+A one-line label naming which mode an example shows also stays, when a pattern demonstrates more than one mode of the same component and the code tells them apart by something easy to miss. `progress-indicator.basic` labels each indicator determinate or indeterminate, because the only difference in the code is whether `progress` is passed.
+
 > Earns it: `// role="img" makes descendants presentational: the initials are never announced.` — a browser behavior, when no Must Have states it.
 >
 > Does not: `// One name prop threaded through every branch, so the fallbacks cannot drift.`
