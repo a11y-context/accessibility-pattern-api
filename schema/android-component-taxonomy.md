@@ -70,6 +70,9 @@ Verified, not recalled. Every item here is something a model will confidently pr
 - **Material selection controls apply the 48dp minimum only when they own the click handler.** Lift state to a parent `toggleable` or `selectable`, which is Material's own documented pattern for a settings row, and the control renders with no padding while the parent becomes responsible for the target.
 - **`testTag` is invisible to accessibility services** unless an ancestor sets `testTagsAsResourceId`.
 - **`selectableGroup()` reports position only for selectable children.** Compose derives the set's `CollectionInfo` from it by counting children that carry `selected`, so a row or column of toggleable children, such as checkbox rows, gains nothing from it, and the modifier still looks like the fix.
+- **`ModalNavigationDrawer` is modal only to the eye.** The screen behind an open drawer stays in the accessibility tree, and nothing contains focus or handles keys. Passing `gesturesEnabled = false` also stops the scrim from closing it on a tap.
+- **No top app bar marks its title as a heading.** `TopAppBar`, `CenterAlignedTopAppBar`, `MediumTopAppBar`, and `LargeTopAppBar` mark themselves traversal groups and set nothing on the title.
+- **`hideFromAccessibility()` hides the node it is set on, not its descendants.** Compose checks it per node, so hiding a whole screen behind an overlay takes `clearAndSetSemantics {}` on its outermost composable.
 - **`Surface`'s clickable overload sets no role, so neither does a clickable `Card`.** Its selectable and toggleable overloads set none either; `FilterChip`, `InputChip`, and the single-choice `SegmentedButton` add their own on top.
 - **`InputChip`'s trailing icon is content, not a control.** The chip is one click target. An icon in `trailingIcon` joins the chip's name and does nothing when tapped on its own, so a close icon there removes nothing.
 - **`Badge` and `BadgedBox` set no semantics.** Inside a clickable host the badge's text merges as drawn, a bare number, and a dot badge contributes nothing.
@@ -157,11 +160,11 @@ A deferred component is queued work. The iOS wave's failure was not that work st
 | `navigation-bar.basic` | `NavigationBar`, `NavigationBarItem` | Bottom navigation between top-level destinations. Announces as Tab | **W1** (written) |
 | `tabs.basic` | `Tab`, `TabRow`, `ScrollableTabRow`, `PrimaryTabRow`, `SecondaryTabRow` | Switch between views. Primary against secondary and fixed against scrollable are visual | **W1** (written) |
 | `menu.basic` | `DropdownMenu`, `DropdownMenuItem` | Pull-down list of commands | **W1** (written) |
-| `navigation-drawer.modal` | `ModalNavigationDrawer`, `ModalDrawerSheet` | Temporary overlay navigation with a scrim and a focus trap | W2 |
+| `navigation-drawer.modal` | `ModalNavigationDrawer`, `ModalDrawerSheet` | Temporary overlay navigation with a scrim and a focus trap. Material leaves the screen behind in the accessibility tree and supplies no focus trap, so both are the caller's | **W2** (written) |
 | `navigation-drawer.persistent` | `PermanentNavigationDrawer`, `DismissibleNavigationDrawer` | Navigation alongside content, no focus trap. **Unverified** whether Dismissible and Permanent differ in exposed semantics beyond togglability | W3 |
 | `navigation-rail.basic` | `NavigationRail`, `WideNavigationRail` | Side navigation on wider layouts | deferred to W3; same selection contract as `navigation-bar.basic`, so it references that pattern rather than restating it |
-| `top-app-bar.basic` | `TopAppBar` and its three size variants | The screen's title bar and action slots. All four sizes are accessibility-identical | W2 |
-| `bottom-app-bar.basic` | `BottomAppBar` | Bottom action bar | deferred to W2; composes `button.basic`, which is W1 |
+| `top-app-bar.basic` | `TopAppBar` and its three size variants | The screen's title bar and action slots. All four sizes are accessibility-identical and stable in 1.4.0; only the scroll behaviors are experimental. None marks its title as a heading | **W2** (written) |
+| `bottom-app-bar.basic` | `BottomAppBar` | Bottom action bar | **W2** (written) |
 
 ### Text input and forms
 
