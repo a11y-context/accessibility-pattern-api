@@ -18,6 +18,11 @@ Run each check with TalkBack on, and repeat the focus checks with a hardware key
 | V-10 | Does `windowTitle` or a caller's `paneTitle` replace the generic "Dialog"? | `dialog.alert` | open |
 | V-11 | Does keyboard focus land on a dropdown menu's first item by itself? | `menu.basic` | open |
 | V-12 | Does a caller's `error()` on a `TextField` override Material's default message? | `text-field.basic` | open |
+| V-13 | Can every user remove an input chip, and where does focus go after? | `chip.input` | open |
+| V-14 | How does a filter chip announce its state, and is the result count read once? | `chip.filter` | open |
+| V-15 | Do a badge's words read after its host's name, and a row's status after the row's name? | `badge.basic` | open |
+| V-16 | Do a clickable card's click label and custom action work, and is its focus visible? | `card.basic` | open |
+| V-17 | Does a static card keep its contents together, and read as one item when merged? | `card.basic` | open |
 
 ## Groups and sets
 
@@ -54,6 +59,28 @@ Compose supplies "Partially checked" as the state description when the parent's 
 ### V-08: An icon button named on its `Icon`
 
 `global.icon` names an icon-only control on its `Icon` and lets the control merge the description into its own name. The Compose merge policies keep the control's role and combine the descriptions, so this should read exactly like naming the control ("Settings, button", with no "image"). Confirm it on an `IconButton` and an `IconToggleButton`.
+
+## Chips, badges, and cards
+
+### V-13: Removing an input chip
+
+`chip.input` hides its remove icon from TalkBack with `clearAndSetSemantics {}` and exposes removal as a "Remove" custom action on the chip, following the Compose accessibility codelab's pattern for a nested button. Check that TalkBack lists "Remove" in the chip's actions menu and that it works. Check that a hardware keyboard can still reach and activate the hidden remove icon, since `clearAndSetSemantics` clears semantics and not focus, and what TalkBack says when keyboard focus lands on it. After a removal, check that both keyboard focus and the TalkBack cursor land on the text field the golden pattern moves focus to. If the icon is unreachable by keyboard, the chip needs a key handler (Backspace or Delete) as a Must Have rather than a Customizable option.
+
+### V-14: A filter chip's announcement
+
+`FilterChip` reports `Role.Checkbox` with a selected state rather than a checked one, and Compose reports a selected state on a checkbox as checked, with "Selected" or "Not selected" as the state description. Check what TalkBack actually says, and that the polite status line ("12 recipes") is read once after a chip changes, without moving focus off the chip.
+
+### V-15: A badge's words
+
+`badge.basic` replaces a badge's content with words through `clearAndSetSemantics { contentDescription = "..." }`, relying on `BadgedBox` placing the badge after its host so the words follow the host's name ("Notifications, 3 unread"). For a status beside a name, it uses `stateDescription` on the row instead. Check both orders, and that the count updates in the announcement when the value changes.
+
+### V-16: A clickable card
+
+`Card`'s `onClick` overload takes no click label, so `card.basic` sets one through `Modifier.semantics { onClick(label = "...", action = null) }`, the same mechanism `button.basic` uses on an `IconButton`. Check that TalkBack says "Double tap to open recipe", that activating it opens the card, and that the "Share" custom action works while the hidden share button stays out of the swipe order. Check also that a focused card's focus indication is visible from a keyboard, since a clickable `Surface` shows focus as a state layer over a large area.
+
+### V-17: A static card
+
+Material's static `Card` marks itself a traversal group. Check that its contents are read in order before anything after the card, that `semantics(mergeDescendants = true)` makes a card of plain content a single stop, and that a title marked `heading()` inside a card is reachable through TalkBack's heading navigation.
 
 ## Dialogs, menus, and fields
 

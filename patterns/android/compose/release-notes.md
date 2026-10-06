@@ -8,6 +8,15 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.9.0 — 2026-10-06
+
+Four more wave-2 patterns, the small surfaces that carry state or meaning, checked against the stable Material 3 1.4.0 and Compose UI and Foundation 1.12.1 sources. CVS has no technique for any of them; the device checks they rely on are on the validation list.
+
+- **Filter Chip → 0.1.0** — `FilterChip` reports `Role.Checkbox` with a selected state and drops its border when selected, which carries the state without color. The set of chips is named for what it filters, and a change to the results is announced once as a short count rather than by moving focus.
+- **Input Chip → 0.1.0** — `InputChip` is a single click target, and its trailing icon is content rather than a button: a close icon placed there joins the chip's name and removes nothing. Removal is a "Remove" custom action on the chip plus a touch target TalkBack skips, following the Compose accessibility codelab's pattern for a nested button, and focus moves deliberately after a removal.
+- **Badge → 0.1.0** — `Badge` and `BadgedBox` set no semantics, so a count merges into its host's name as a bare number and a dot badge says nothing. The badge replaces its own content with words ("3 unread"), which `BadgedBox` places after the host's name; a status beside a person's name goes on the row as `stateDescription` instead.
+- **Card → 0.1.0** — The static card is a traversal group; the clickable overload merges its content into one stop and sets no role. A clickable card puts its name first, carries a click label, and exposes any secondary control as a custom action with the control itself hidden.
+
 ## 0.8.0 — 2026-10-06
 
 The first wave-2 patterns: four selection patterns that report checked or selected state, checked against the stable Compose Foundation and UI 1.12.1 and Material 3 1.4.0 sources.
