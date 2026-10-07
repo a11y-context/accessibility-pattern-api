@@ -32,6 +32,7 @@ Each download is a folder containing a `SKILL.md` plus any supporting files. The
 | Codex | `.agents/skills/` |
 
 ```bash
+mkdir -p .claude/skills
 unzip a11y-context-web-react-http.zip -d .claude/skills/
 ```
 
