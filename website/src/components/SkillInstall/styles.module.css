@@ -1,6 +1,7 @@
-/* Stack picker: a native radio group drawn as three selectable cards.
-   Selected = filled radio dot + 2px accent border + accent-soft fill,
-   so the state never rests on color alone. */
+/* Stack and tool pickers: native radio groups drawn as cards with no visible
+   radio. The input stays in the page for the keyboard and screen readers but
+   is clipped out of sight; the card after it shows the state. Selected =
+   accent-soft fill + 2px accent border. */
 
 .install {
   margin-bottom: 1rem;
@@ -23,39 +24,79 @@
 
 .options {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.5rem;
 }
 
-.option {
+.stacks {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tools {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.choice {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.card {
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  box-sizing: border-box;
+  height: 100%;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--a11y-border);
   border-radius: var(--a11y-radius-md);
   background: var(--a11y-surface);
   color: var(--a11y-ink);
-  cursor: pointer;
 }
 
-.option:hover {
+.choice:hover .card {
   border-color: var(--a11y-accent);
 }
 
-.option:has(.radio:checked) {
+.srRadio:checked + .card {
   border-color: var(--a11y-accent);
   background: var(--a11y-accent-soft);
   box-shadow: inset 0 0 0 1px var(--a11y-accent);
 }
 
-.radio {
+/* The ring goes on the card the input belongs to (design system §7). */
+.srRadio:focus-visible + .card {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--a11y-focus-ring);
+}
+
+.srRadio:checked:focus-visible + .card {
+  box-shadow: inset 0 0 0 1px var(--a11y-accent), var(--a11y-focus-ring);
+}
+
+.srRadio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.srRadio:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.icon {
   flex: none;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  accent-color: var(--a11y-accent);
+  color: var(--a11y-ink);
 }
 
 .optionText {
@@ -69,32 +110,47 @@
   font-weight: 600;
 }
 
-.optionPlatform {
+.optionSub {
   font-size: 0.8125rem;
   color: var(--a11y-muted);
 }
 
-/* The ring goes on the card, not the small radio inside it (design system §7,
-   composite controls). Browsers without :has() keep the radio's own ring. */
-@supports selector(:has(*)) {
-  .option:has(.radio:focus-visible) {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    box-shadow: var(--a11y-focus-ring);
+/* Forced colors drop the fill and the inset border, which are the only
+   selected cue here, so the native radio comes back into view. */
+@media (forced-colors: active) {
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .option:has(.radio:checked):has(.radio:focus-visible) {
-    box-shadow: inset 0 0 0 1px var(--a11y-accent), var(--a11y-focus-ring);
+  .srRadio {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
   }
 
-  .radio:focus-visible {
-    outline: none;
-    box-shadow: none;
+  .card {
+    flex: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 480px) {
-  .options {
+  .stacks {
     grid-template-columns: 1fr;
   }
+}
+
+.result {
+  margin-top: 0.25rem;
 }

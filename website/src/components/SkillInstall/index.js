@@ -4,33 +4,33 @@ import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import {useQueryString, useStorageSlot} from '@docusaurus/theme-common';
 import CodeBlock from '@theme/CodeBlock';
-import TabItem from '@theme/TabItem';
-import Tabs from '@theme/Tabs';
+import BrandIcon from './BrandIcon';
 import styles from './styles.module.css';
 
-// Step 1 of the HTTP, Local, and MCP install pages: a stack picker above the
-// tool tabs, and the command, ZIP link, and folder tree for that pair.
+// Step 1 of the HTTP, Local, and MCP install pages: two choices, your stack and
+// your AI tool, then the command, ZIP link, and folder tree for that pair.
 //
-// The stack picker is a radio group, not a second row of tabs. It records a
-// setting that changes the contents of every tool tab instead of showing a
-// panel of its own, which is the case the React tabs.basic pattern sends to
-// a radio group. Both choices carry across pages and can be set from a link,
-// e.g. ?stack=compose&tool=cursor.
+// Both choices are radio groups rather than tabs. Each records a setting that
+// changes one block of instructions below it, which is the case the React
+// tabs.basic pattern sends to a radio group. They are drawn as cards with a
+// brand icon; the radio stays in the page for the keyboard and screen readers
+// but is hidden, and the card's fill and border show the selection. Both
+// choices carry across pages and can be set from a link, e.g.
+// ?stack=compose&tool=cursor.
 
 const SITE = 'https://a11y-context-project.vercel.app';
-const STACK_STORAGE_KEY = 'a11y-context.install.stack';
 
 const STACKS = [
-  {value: 'react', slug: 'web-react', name: 'React', platform: 'Web', project: ['src/', 'package.json']},
-  {value: 'swiftui', slug: 'ios-swiftui', name: 'SwiftUI', platform: 'iOS', project: ['YourApp/', 'YourApp.xcodeproj']},
-  {value: 'compose', slug: 'android-compose', name: 'Compose', platform: 'Android', project: ['app/', 'settings.gradle.kts']},
+  {value: 'react', slug: 'web-react', name: 'React', sub: 'Web', icon: 'html5', project: ['src/', 'package.json']},
+  {value: 'swiftui', slug: 'ios-swiftui', name: 'SwiftUI', sub: 'iOS', icon: 'apple', project: ['YourApp/', 'YourApp.xcodeproj']},
+  {value: 'compose', slug: 'android-compose', name: 'Compose', sub: 'Android', icon: 'android', project: ['app/', 'settings.gradle.kts']},
 ];
 
 const TOOLS = [
-  {value: 'claude-code', label: 'Claude Code', dir: '.claude'},
-  {value: 'codex', label: 'Codex', dir: '.agents'},
-  {value: 'cursor', label: 'Cursor', dir: '.cursor'},
-  {value: 'copilot', label: 'Copilot', dir: '.github'},
+  {value: 'claude-code', name: 'Claude Code', icon: 'claude', dir: '.claude'},
+  {value: 'codex', name: 'Codex', icon: 'codex', dir: '.agents'},
+  {value: 'cursor', name: 'Cursor', icon: 'cursor', dir: '.cursor'},
+  {value: 'copilot', name: 'Copilot', icon: 'copilot', dir: '.github'},
 ];
 
 const PROTOCOL = ['decisions-protocol.md', "when to ask before replacing your codebase's components"];
@@ -55,18 +55,21 @@ const FILES = {
 };
 
 const useIsomorphicLayoutEffect = ExecutionEnvironment.canUseDOM ? useLayoutEffect : useEffect;
-const isStack = (value) => STACKS.some((s) => s.value === value);
 
 // Same approach as Docusaurus's own Tabs: render the default on the server,
 // then sync to the link or the stored choice before the browser paints.
-function useStackChoice() {
-  const [value, setValue] = useState(STACKS[0].value);
-  const [query, setQuery] = useQueryString('stack');
-  const [stored, storage] = useStorageSlot(STACK_STORAGE_KEY);
-  const toSync = isStack(query) ? query : isStack(stored) ? stored : null;
+function useChoice(queryKey, storageKey, options) {
+  const isOption = (v) => options.some((o) => o.value === v);
+  const [value, setValue] = useState(options[0].value);
+  const [query, setQuery] = useQueryString(queryKey);
+  const [stored, storage] = useStorageSlot(storageKey);
+  const toSync = isOption(query) ? query : isOption(stored) ? stored : null;
 
+  // A choice that arrives in a link is remembered too, so someone sent
+  // ?stack=compose still sees Compose on the next install page.
   useIsomorphicLayoutEffect(() => {
     if (toSync) setValue(toSync);
+    if (isOption(query) && query !== stored) storage.set(query);
   }, [toSync]);
 
   const choose = (next) => {
@@ -74,7 +77,42 @@ function useStackChoice() {
     setQuery(next);
     storage.set(next);
   };
-  return [value, choose];
+  return [options.find((o) => o.value === value) ?? options[0], choose];
+}
+
+function ChoiceGroup({legend, options, selected, onChoose, className}) {
+  const groupName = useId();
+  return (
+    <fieldset className={styles.picker}>
+      <legend className={styles.legend}>{legend}</legend>
+      <div className={`${styles.options} ${className}`}>
+        {options.map((o) => (
+          <label key={o.value} className={styles.choice}>
+            <input
+              type="radio"
+              className={styles.srRadio}
+              name={groupName}
+              value={o.value}
+              checked={selected.value === o.value}
+              onChange={() => onChoose(o.value)}
+            />
+            <span className={styles.card}>
+              <BrandIcon name={o.icon} className={styles.icon} />
+              <span className={styles.optionText}>
+                <span className={styles.optionName}>{o.name}</span>
+                {o.sub && (
+                  <>
+                    {' '}
+                    <span className={styles.optionSub}>{o.sub}</span>
+                  </>
+                )}
+              </span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
 }
 
 function installCommand(stack, tool, variant) {
@@ -153,52 +191,28 @@ function ToolNote({tool, skill, variant}) {
 }
 
 export default function SkillInstall({variant}) {
-  const [stackValue, chooseStack] = useStackChoice();
-  const stack = STACKS.find((s) => s.value === stackValue) ?? STACKS[0];
-  const groupName = useId();
+  const [stack, chooseStack] = useChoice('stack', 'a11y-context.install.stack', STACKS);
+  const [tool, chooseTool] = useChoice('tool', 'a11y-context.install.tool', TOOLS);
   const downloads = useBaseUrl('/downloads/');
   const skill = `a11y-context-${stack.slug}-${variant}`;
 
   return (
     <div className={styles.install}>
-      <fieldset className={styles.picker}>
-        <legend className={styles.legend}>Your stack</legend>
-        <div className={styles.options}>
-          {STACKS.map((s) => (
-            <label key={s.value} className={styles.option}>
-              <input
-                type="radio"
-                className={styles.radio}
-                name={groupName}
-                value={s.value}
-                checked={stack.value === s.value}
-                onChange={() => chooseStack(s.value)}
-              />
-              <span className={styles.optionText}>
-                <span className={styles.optionName}>{s.name}</span>{' '}
-                <span className={styles.optionPlatform}>{s.platform}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <ChoiceGroup legend="Your stack" options={STACKS} selected={stack} onChoose={chooseStack} className={styles.stacks} />
+      <ChoiceGroup legend="Your AI tool" options={TOOLS} selected={tool} onChoose={chooseTool} className={styles.tools} />
 
-      <Tabs groupId="ai-tool" queryString="tool">
-        {TOOLS.map((tool, i) => (
-          <TabItem key={tool.value} value={tool.value} label={tool.label} default={i === 0}>
-            <CodeBlock language="bash">{installCommand(stack, tool, variant)}</CodeBlock>
-            <p>
-              Or download{' '}
-              <a href={`${downloads}${skill}.zip`} download>
-                {skill}.zip
-              </a>{' '}
-              and unzip it into <code>{tool.dir}/skills/</code> yourself.
-            </p>
-            <CodeBlock language="text">{folderTree(stack, tool, variant)}</CodeBlock>
-            <ToolNote tool={tool} skill={skill} variant={variant} />
-          </TabItem>
-        ))}
-      </Tabs>
+      <div className={styles.result}>
+        <CodeBlock language="bash">{installCommand(stack, tool, variant)}</CodeBlock>
+        <p>
+          Or download{' '}
+          <a href={`${downloads}${skill}.zip`} download>
+            {skill}.zip
+          </a>{' '}
+          and unzip it into <code>{tool.dir}/skills/</code> yourself.
+        </p>
+        <CodeBlock language="text">{folderTree(stack, tool, variant)}</CodeBlock>
+        <ToolNote tool={tool} skill={skill} variant={variant} />
+      </div>
     </div>
   );
 }
