@@ -10,6 +10,8 @@ import SkillInstall from '@site/src/components/SkillInstall';
 
 **Server repo:** [`a11y-context/accessibility-pattern-mcp`](https://github.com/a11y-context/accessibility-pattern-mcp)
 
+Comparing modes first? See [Choose a Retrieval Mode](/getting-started/ai-coding-agents/install/).
+
 ## Server + skill: two pieces
 
 MCP is a **retrieval mechanism**, not a replacement for the skill. Two pieces work together, and you install both:
@@ -88,25 +90,6 @@ claude mcp add --transport http a11y-context https://accessibility-pattern-mcp-p
 
 Health check: `GET /health` returns `{"ok":true,"contract_version":"v1"}`. You can also self-host — the repo includes the HTTP entry point (`node dist/http.js`); deploy it to any Node host (Railway, Fly, Render) and point your client at your own URL.
 
-## When MCP, when a skill is simpler
-
-Be honest about the fit. Most MCP servers wrap data that is live, changing, high-cardinality, or side-effectful — databases, APIs, file systems, ticketing systems. A11y Context is the opposite: a static, versioned corpus of a couple dozen documents. That's at the simpler end of what MCP is for, and for the core case the [HTTP skill](./http) fetches the same content with **zero infrastructure** — no server to run, no config beyond the skill file.
-
-So MCP here is a deliberate option, not the default. Reach for it when its specific properties earn the extra piece:
-
-- You (or your org) are **already MCP-native** and want accessibility guidance in the same tool paradigm as your other context sources.
-- You want retrieval **composable** with your other MCP servers in one session.
-- You want the tools **callable by any agent**, including ones that don't have the skill installed.
-- You want deterministic, ID-based tool calls rather than an HTTP fetch inside the skill.
-
-If none of those apply, the [HTTP skill](./http) is the simpler, recommended choice — and produces the same output quality measured in testing.
-
-## Why MCP over vector RAG (if you've chosen a retrieval server)
-
-- **Deterministic retrieval.** ~50 patterns per stack once complete — direct ID selection beats embedding search on accuracy and cost. No vector DB, no embeddings to refresh, no chunking to tune.
-- **Stable contract.** MCP is a standard, not a vendor API.
-- **Composable.** Combine with your other MCP servers in the same session.
-
-## Verifying
+## Verify
 
 After installing the skill and adding the server, restart your client, then run the prompts on [Verify It's Working](/getting-started/ai-coding-agents/verification). The agent should call `list_patterns` then `get_pattern` before generating UI code.
