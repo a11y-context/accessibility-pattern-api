@@ -15,9 +15,8 @@
  *     · Why This Works
  *   For AI Coding Agents
  *     · Overview            → ai-coding-agents/index
- *     · Retrieval Modes     → collapsible; the "Choose a Retrieval Mode" page
- *                             (install/index) is its link, and the mode pages, where
- *                             each mode is installed, are its children (kept in the
+ *     · Installation        → collapsible; the "Installation" page is its link,
+ *                             the four transport/method pages are its children (kept in the
  *                             sidebar so nothing is orphaned — the mockup showed a single
  *                             leaf; we adapt to preserve the detail pages)
  *     · Downloads           → ai-coding-agents/install/downloads
@@ -69,7 +68,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Retrieval Modes',
+      label: 'Installation',
       // S3: plain-link category label — no caret, children always visible
       // (collapsible:false). The `gs-subcat` class neutralizes the top-level
       // category top-margin so it stays in the "For AI Coding Agents" rhythm

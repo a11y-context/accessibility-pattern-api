@@ -10,22 +10,11 @@ import SkillInstall from '@site/src/components/SkillInstall';
 
 **Server repo:** [`a11y-context/accessibility-pattern-mcp`](https://github.com/a11y-context/accessibility-pattern-mcp)
 
-Comparing modes first? See [Choose a Retrieval Mode](/getting-started/ai-coding-agents/install/).
-
-## Server + skill: two pieces
-
-MCP is a **retrieval mechanism**, not a replacement for the skill. Two pieces work together, and you install both:
-
-1. **The skill** provides the brain — invocation, and the selection logic that decides *which* patterns to fetch. Same brain as every other integration; only its retrieval step differs.
-2. **The MCP server** provides the retrieval tools the skill calls once it has selected pattern IDs.
-
-The server exposes three tools:
+MCP is a retrieval mechanism, not a replacement for the skill. This MCP server exposes three tools:
 
 - **`list_patterns`** — the catalog (`id`, `title`, `summary`, `latest_version`, `tags`, `aliases`) for selection.
 - **`get_pattern(id)`** — the full spec (Must Haves, Don'ts, Customizable, Golden Pattern).
 - **`get_foundations()`** — the cross-cutting Foundations ruleset.
-
-Retrieval is deterministic — the skill selects by ID from a small structured catalog, not by embedding similarity. No drift, no embedding cost.
 
 ## Step 1 — Install the skill
 

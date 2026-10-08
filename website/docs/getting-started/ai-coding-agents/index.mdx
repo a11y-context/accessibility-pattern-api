@@ -26,7 +26,7 @@ A skill does the librarian's job *only if it's actually invoked*. The skills pub
 
 Building this for your environment means picking a value on two axes. A 48-run controlled experiment tested the combinations:
 
-**Retrieval transport: HTTP, local files, MCP, or enterprise RAG.** The skill fetches its selected patterns over whichever transport you choose. HTTP and local were measured head-to-head with no significant quality difference — HTTP needs network access but stays always-current; local is fastest and works offline. MCP tool calls and enterprise RAG are two further transports; the skill's retrieval step just points at a different place. Compare them: [Choose a Retrieval Mode](/getting-started/ai-coding-agents/install/).
+**Retrieval transport: HTTP, local files, MCP, or enterprise RAG.** The skill fetches its selected patterns over whichever transport you choose. HTTP and local were measured head-to-head with no significant quality difference — HTTP needs network access but stays always-current; local is fastest and works offline. MCP tool calls and enterprise RAG are two further transports; the skill's retrieval step just points at a different place. Details: [Choose an Integration](/getting-started/ai-coding-agents/install/).
 
 **Processing: inline skill or subagent.** Overall pass rates were statistically indistinguishable (91.3% vs 90.9%), but the failure modes differ. Skills were better at component-level "Critical" checks (98.7% vs 89.3%) because the full pattern documentation stays in the working context. Subagents condense guidance into a brief, which loses component-specific nuance, but they were better at cross-component concerns like heading structure, and they isolate retrieval tokens from the main agent's context.
 
@@ -40,7 +40,7 @@ The skills published here have rule-like invocation phrasing engineered into the
 
 **Inline skill + HTTP retrieval.** Matches the best quality results in testing at the lowest operational complexity: nothing to vendor locally, the corpus is always current, and the skill's description handles invocation.
 
-Next: [Choose a Retrieval Mode](/getting-started/ai-coding-agents/install/) compares HTTP, Local, MCP, and enterprise RAG and links each one's install page. Then [Verify it's working](/getting-started/ai-coding-agents/verification) with a test prompt.
+Next: [Choose an Integration](/getting-started/ai-coding-agents/install/) compares the options (skill, MCP, enterprise RAG) and links each setup. Then [Verify it's working](/getting-started/ai-coding-agents/verification) with a test prompt.
 
 ## Optional: belt-and-suspenders with an enforcement rule
 
