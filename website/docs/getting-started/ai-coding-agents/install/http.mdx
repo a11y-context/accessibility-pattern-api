@@ -2,8 +2,7 @@
 title: HTTP
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import SkillInstall from '@site/src/components/SkillInstall';
 
 # HTTP
 
@@ -21,123 +20,11 @@ So HTTP mode is **local catalog + local Foundations rules + remote pattern pages
 
 ## Install
 
-Pick your AI tool, then run these commands from your project's root. They create that tool's skills folder if it doesn't exist yet, download the skill, and unzip it there. The folder holds four small files and no corpus.
+Pick your stack and your AI tool, then run these commands from your project's root. They create that tool's skills folder if it doesn't exist yet, download the skill, and unzip it there. The folder holds four small files and no corpus.
 
-<Tabs groupId="ai-tool" queryString="tool">
-<TabItem value="claude-code" label="Claude Code" default>
+<SkillInstall variant="http" />
 
-```bash
-mkdir -p .claude/skills
-curl -fsSL https://a11y-context-project.vercel.app/downloads/a11y-context-web-react-http.zip -o /tmp/a11y-context.zip
-unzip -o /tmp/a11y-context.zip -d .claude/skills/
-```
-
-Or download [a11y-context-web-react-http.zip](pathname:///downloads/a11y-context-web-react-http.zip) and unzip it into `.claude/skills/` yourself.
-
-```text
-your-project/
-├── .claude/
-│   └── skills/
-│       └── a11y-context-web-react-http/
-│           ├── SKILL.md               # brain: invocation + selection + fetch step
-│           ├── decisions-protocol.md  # when to ask before replacing your codebase's components
-│           ├── patterns.json          # local catalog (selection only)
-│           └── global_rules.md        # local Foundations rules
-├── src/
-└── package.json
-```
-
-To install it for every project instead, unzip into `~/.claude/skills/`. Claude Code reaches for the skill on its own when you build UI; to call it by name, type `/a11y-context-web-react-http`.
-
-</TabItem>
-<TabItem value="codex" label="Codex">
-
-```bash
-mkdir -p .agents/skills
-curl -fsSL https://a11y-context-project.vercel.app/downloads/a11y-context-web-react-http.zip -o /tmp/a11y-context.zip
-unzip -o /tmp/a11y-context.zip -d .agents/skills/
-```
-
-Or download [a11y-context-web-react-http.zip](pathname:///downloads/a11y-context-web-react-http.zip) and unzip it into `.agents/skills/` yourself.
-
-```text
-your-project/
-├── .agents/
-│   └── skills/
-│       └── a11y-context-web-react-http/
-│           ├── SKILL.md               # brain: invocation + selection + fetch step
-│           ├── decisions-protocol.md  # when to ask before replacing your codebase's components
-│           ├── patterns.json          # local catalog (selection only)
-│           └── global_rules.md        # local Foundations rules
-├── src/
-└── package.json
-```
-
-Codex reads `.agents/skills/` from your working directory up to the repository root, and `~/.agents/skills/` for every project. To call the skill by name, type `$a11y-context-web-react-http`.
-
-This variant fetches pattern pages, and Codex keeps network access off by default. Turn it on in `~/.codex/config.toml`, or use the [Local](./local) variant instead:
-
-```toml
-[sandbox_workspace_write]
-network_access = true
-```
-
-</TabItem>
-<TabItem value="cursor" label="Cursor">
-
-```bash
-mkdir -p .cursor/skills
-curl -fsSL https://a11y-context-project.vercel.app/downloads/a11y-context-web-react-http.zip -o /tmp/a11y-context.zip
-unzip -o /tmp/a11y-context.zip -d .cursor/skills/
-```
-
-Or download [a11y-context-web-react-http.zip](pathname:///downloads/a11y-context-web-react-http.zip) and unzip it into `.cursor/skills/` yourself.
-
-```text
-your-project/
-├── .cursor/
-│   └── skills/
-│       └── a11y-context-web-react-http/
-│           ├── SKILL.md               # brain: invocation + selection + fetch step
-│           ├── decisions-protocol.md  # when to ask before replacing your codebase's components
-│           ├── patterns.json          # local catalog (selection only)
-│           └── global_rules.md        # local Foundations rules
-├── src/
-└── package.json
-```
-
-Cursor also reads `.agents/skills/` and `.claude/skills/`. If the skill is already in one of those for another tool, Cursor finds it there, so skip this step rather than install a second copy. For every project, use `~/.cursor/skills/`. To call the skill by name, type `/` in Agent chat and pick it.
-
-</TabItem>
-<TabItem value="copilot" label="Copilot">
-
-```bash
-mkdir -p .github/skills
-curl -fsSL https://a11y-context-project.vercel.app/downloads/a11y-context-web-react-http.zip -o /tmp/a11y-context.zip
-unzip -o /tmp/a11y-context.zip -d .github/skills/
-```
-
-Or download [a11y-context-web-react-http.zip](pathname:///downloads/a11y-context-web-react-http.zip) and unzip it into `.github/skills/` yourself.
-
-```text
-your-project/
-├── .github/
-│   └── skills/
-│       └── a11y-context-web-react-http/
-│           ├── SKILL.md               # brain: invocation + selection + fetch step
-│           ├── decisions-protocol.md  # when to ask before replacing your codebase's components
-│           ├── patterns.json          # local catalog (selection only)
-│           └── global_rules.md        # local Foundations rules
-├── src/
-└── package.json
-```
-
-This is for Copilot in VS Code, which also reads `.claude/skills/` and `.agents/skills/`. If the skill is already in one of those for another tool, skip this step rather than install a second copy. For every project, use `~/.copilot/skills/`. To call the skill by name, type `/` in Copilot Chat and pick it.
-
-</TabItem>
-</Tabs>
-
-To update, run the same commands again. Writing SwiftUI or Jetpack Compose? Use `ios-swiftui` or `android-compose` in place of `web-react` in the file name. Every ZIP is also on the [Downloads page](./downloads).
+To update, run the same commands again. Every ZIP is also on the [Downloads page](./downloads).
 
 ## When to pick HTTP
 
