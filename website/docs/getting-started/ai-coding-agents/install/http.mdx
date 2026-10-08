@@ -1,0 +1,31 @@
+---
+title: HTTP
+---
+
+import SkillInstall from '@site/src/components/SkillInstall';
+
+# HTTP
+
+The agent fetches each pattern from this site at generation time, so there is nothing to vendor locally, and pattern pages are always current. The skill ships as a `SKILL.md` plus a small local catalog and the Foundations rules; the pattern corpus itself lives on the docs site and is pulled over HTTP only for the patterns a given task actually selects. The base URL is baked into the skill; there is nothing to configure.
+
+## Install
+
+Pick your stack and your AI tool, then run the commands from your project's root. They create that tool's skills folder if it doesn't exist yet, download the skill, and unzip it there. The folder holds four small files and no corpus.
+
+<SkillInstall variant="http" />
+
+To update, run the same commands again. Every ZIP is also on the [Downloads page](./downloads).
+
+## Verify
+
+After unzipping, run the prompts on [Verify It's Working](/getting-started/ai-coding-agents/verification). The agent should select pattern IDs from the local catalog, then fetch `…/web/react/components/{id}` for each before generating UI code.
+
+## How it works
+
+HTTP is a **retrieval mechanism**, not a different brain. The skill's selection logic is identical to every other variant; only the retrieval step changes. Two of the three inputs stay local — only the per-component pattern pages travel over the network:
+
+- **Catalog — local.** The skill reads `patterns.json` from its own folder to select pattern IDs. It is *not* fetched over HTTP.
+- **Pattern pages — remote.** For each selected ID, the skill issues `GET https://a11y-context-project.vercel.app/web/react/components/{id}` — all fetches in parallel, each URL at most once per session — and extracts Must Haves, Don'ts, Golden Pattern, and Customizable from the response.
+- **Foundations rules — local.** The skill reads `global_rules.md` from its own directory and applies each rule by scope.
+
+So HTTP mode is **local catalog + local Foundations rules + remote pattern pages**. The base URL is baked into the skill; there is nothing to configure.

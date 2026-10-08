@@ -36,6 +36,7 @@ Indexing the corpus is only the retrieval half. You still need the **brain** —
 Unzip it into your tool's skills directory, the same one-step install as every other variant:
 
 ```bash
+mkdir -p .claude/skills
 unzip a11y-context-web-react-rag.zip -d .claude/skills/
 ```
 
