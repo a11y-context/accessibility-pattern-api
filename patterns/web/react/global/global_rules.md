@@ -86,6 +86,28 @@ scope: [screen]
 
 ---
 
+## Page Language
+
+```yaml
+id: global.page-language
+scope: [screen, component]
+```
+
+### Must Haves
+- Every document sets `lang` on the `<html>` element to the primary language of its content, as a language tag (e.g., `lang="en"`, `lang="es-MX"`).
+  - Set it where the `<html>` element is rendered: `index.html` in a client-rendered app, or the root layout in a framework that renders `<html>` (e.g., Next.js `app/layout.js`).
+- When the app switches its display language at runtime, update `document.documentElement.lang` to match.
+- A passage in a language other than the page's carries `lang` on the element that contains it (e.g., `<blockquote lang="fr">`, a show title in its original language as `<span lang="ja">`).
+  - Proper names, technical terms, and words that have passed into the surrounding language take no `lang`.
+- Each option in a language switcher that names a language in that language carries the matching `lang` (e.g., `<a lang="es" href="...">Español</a>`).
+
+### Don'ts
+- Do not leave `<html>` without `lang`, or with an empty `lang=""`.
+- Do not ship a template default that does not match the content (e.g., `lang="en"` on a page served in Spanish). Screen readers pronounce the whole page with the wrong voice.
+- Do not put a language name in `lang` (e.g., `lang="english"`). It is not a valid language tag, so screen readers cannot switch to the right voice.
+
+---
+
 ## Landmarks
 
 ```yaml

@@ -5584,6 +5584,86 @@
         }
       ]
     },
+    "global.page-language": {
+      "rule_id": "global.page-language",
+      "stack": "web/react",
+      "rules": [
+        {
+          "rule": "Every document sets `lang` on the `<html>` element to the primary language of its content, as a language tag (e.g., `lang=\"en\"`, `lang=\"es-MX\"`).",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The <html> element carries a non-empty lang attribute holding a valid language tag.",
+          "llm_eval_question": null,
+          "runtime_check": "On each route, assert document.documentElement.lang is a valid language tag matching the language of the visible content."
+        },
+        {
+          "rule": "When the app switches its display language at runtime, update `document.documentElement.lang` to match.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Switch the display language; assert document.documentElement.lang changes to the new language."
+        },
+        {
+          "rule": "A passage in a language other than the page's carries `lang` on the element that contains it (e.g., `<blockquote lang=\"fr\">`, a show title in its original language as `<span lang=\"ja\">`).",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does any passage in a language other than the page's lack a lang attribute on its containing element (excluding proper names and assimilated terms)?",
+          "runtime_check": null,
+          "confidence": "advisory"
+        },
+        {
+          "rule": "Each option in a language switcher that names a language in that language carries the matching `lang` (e.g., `<a lang=\"es\" href=\"...\">Espa\u00f1ol</a>`).",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Each language-switcher option whose text is in another language carries the matching lang.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not leave `<html>` without `lang`, or with an empty `lang=\"\"`.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag an <html> element with no lang or lang=\"\".",
+          "llm_eval_question": null,
+          "runtime_check": "Assert document.documentElement.lang is non-empty."
+        },
+        {
+          "rule": "Do not ship a template default that does not match the content (e.g., `lang=\"en\"` on a page served in Spanish). Screen readers pronounce the whole page with the wrong voice.",
+          "source": "dont",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Does the <html> lang value match the language the page's content is actually written in?",
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not put a language name in `lang` (e.g., `lang=\"english\"`). It is not a valid language tag, so screen readers cannot switch to the right voice.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag lang values that are language names (e.g., \"english\") rather than language tags.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        }
+      ],
+      "catalog_revision": "0.21.0"
+    },
     "global.page-title": {
       "rule_id": "global.page-title",
       "stack": "web/react",
