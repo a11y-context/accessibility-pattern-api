@@ -102,6 +102,7 @@ scope: [screen, layout]
   - The `main` landmark contains the dominant content of the page, which directly relates to or expands upon the central topic of the page, or the central functionality of an application.
   - If site or app navigation is present at the top of the page or view (i.e., `header`), and/or a footer (`footer`) is present at the bottom of the page, the `main` landmark should wrap all content between `header` and `footer` content
   - The `main` landmark must be a sibling of the `header` and/or `footer` containers.
+  - The `main` landmark is the skip link's target, so it carries a stable `id` and `tabindex="-1"` on every route. See `global.skip-link`.
 - If the page contains complementary content - i.e., content that is only indirectly related to the page's main content - this is contained inside an `<aside>` (or `role="complementary"`) landmark
   - The `aside` landmark is infrequently used and does not need to be present.
   - If present, the `aside` landmark should be a sibling to the `main` landmark, and to the `header` and/or `footer`, if present.
@@ -109,6 +110,80 @@ scope: [screen, layout]
 ### Don'ts
 - Do not use multiple `main` landmarks on the same page.
 - Do not wrap the `header`, `footer`, or `aside` inside the `main` landmark, or vice-versa: these should all be siblings.
+
+---
+
+## Bypass Blocks (Skip Link)
+
+```yaml
+id: global.skip-link
+scope: [screen, layout]
+```
+
+A skip link lets a keyboard user move past the repeated header and navigation to the main content in one keystroke. It belongs to the app shell, not to a page: it is built once, in the layout every route renders, and a task that touches a single page fixes it there rather than adding a target to that page.
+
+### Must Haves
+- Render one skip link, in the app shell or root layout component that every route renders (e.g., `App.jsx`, a Next.js `app/layout.js`), so every route gets it with no per-page code.
+- The skip link is the first focusable element in the document, before the logo, the header, and the navigation.
+- The skip link is a native `<a>` whose `href` points at the main content (e.g., `href="#main"`).
+- The link text names the destination (e.g., "Skip to main content").
+- The skip link is visually hidden until it receives focus and visible for as long as it has focus. Use `.sr-only` paired with `.sr-only-focusable` (see `global.sr-only`).
+  - While visible, it carries the focus indicator in `global.focus-states`, and no sticky header covers it (see `global.focus-not-obscured`).
+- The target is the `<main>` landmark (see `global.landmarks`), with a stable `id` (e.g., `id="main"`) rendered on every route.
+  - Put the `id` on the `<main>` in the shared layout, not on a page component's wrapper, so no route can omit it.
+- The `<main>` target has `tabindex="-1"`, so activating the link moves keyboard focus into it and a screen reader continues reading from there. Without it, only the sequential-focus starting point moves.
+  - `tabindex="-1"` makes `<main>` focusable by script and by fragment navigation without adding it to the Tab order.
+- In a single-page app, handle activation in script: the click handler calls `event.preventDefault()` and then focuses the target (see the snippet below). Enter on a focused link fires `click`, so the one handler covers keyboard and pointer.
+  - The plain `href="#main"` with no handler is sufficient when nothing but the browser handles the URL fragment: a server-rendered or multi-page site, or a history-based router with no hash-change or scroll-restoration listener. Use the handler whenever a hash router is in use, or anything in the app reacts to `hashchange`.
+
+### Don'ts
+- Do not render more than one skip link, or render a skip link from a page component. Per-page links end up duplicated on some routes and missing on others.
+- Do not point the skip link at an `id` that some routes do not render, such as one page's content wrapper. On every other route, activating it does nothing.
+- Do not target an element that is not focusable (a `<main>` or `<div>` without `tabindex="-1"`). The page may scroll, but focus does not move, so a screen reader announces nothing and keeps its reading position at the top of the page.
+- Do not give `<main>` `tabindex="0"`. It adds a non-interactive stop to every keyboard user's Tab order.
+- Do not let a hash router handle the skip link's `href`. `#main` is read as the route `/main`, and activating the link navigates away from the page.
+- Do not hide the skip link with `display: none` or `visibility: hidden`, or with `.sr-only` and no focus restoration. A skip link that stays hidden while focused leaves keyboard users focused on nothing visible.
+
+### Customizable
+- The focused `<main>` may suppress its focus outline. It is a programmatic focus target, not an interactive component, and `global.focus-states` governs the controls a user reaches by Tab. Showing an outline on `<main>` is also acceptable. See the second snippet below.
+
+### Snippets
+
+The skip link and its target, both rendered by the root layout. The handler keeps the fragment out of the router and moves focus explicitly; `focus()` also scrolls the target into view:
+
+```jsx
+"use client";
+
+export function AppShell({ children }) {
+  function skipToMain(event) {
+    event.preventDefault();
+    document.getElementById("main")?.focus();
+  }
+
+  return (
+    <>
+      <a href="#main" className="sr-only sr-only-focusable" onClick={skipToMain}>
+        Skip to main content
+      </a>
+      <header>{/* logo, primary navigation */}</header>
+      <main id="main" tabIndex={-1}>
+        {children}
+      </main>
+      <footer>{/* footer links */}</footer>
+    </>
+  );
+}
+```
+
+Suppressing the outline on the focused `<main>`, when that option is taken. The selector outranks the global `:focus-visible` ring and its forced-colors override, and it applies only to the non-interactive target:
+
+```css
+main[tabindex="-1"]:focus,
+main[tabindex="-1"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+```
 
 ---
 
