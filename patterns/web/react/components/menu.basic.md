@@ -77,6 +77,7 @@ A button that opens a menu of commands using `role="menu"` and `role="menuitem"`
 - Do not declare `role="menu"` without implementing the full keyboard contract (roving tabindex, Arrow keys, Home/End, type-ahead, Esc).
 - Do not forget to return focus to the trigger when the menu closes via activation or Esc.
 - Do not render the trigger without `aria-expanded`; `aria-haspopup="menu"` alone does not convey open/closed state.
+- Do not remove `aria-haspopup="menu"` from the trigger to make VoiceOver announce its state. In Safari, VoiceOver does not voice expanded or collapsed on this trigger, either when focus returns from the menu or when the cursor moves back to it while the menu is open, even with `aria-expanded` set correctly. Confirm the state in the DOM instead.
 - Do not leave the menu visible while `aria-expanded="false"` (and vice versa).
 - Do not reach for `aria-activedescendant` when roving tabindex is simpler for the case at hand.
 
