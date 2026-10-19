@@ -3416,7 +3416,7 @@
           ],
           "static_hint": "The trigger carries aria-expanded bound to the popover's open state, unless it is a native popovertarget button.",
           "llm_eval_question": null,
-          "runtime_check": "Open and close the popover from the trigger; assert the trigger's aria-expanded (or, for a popovertarget button, its exposed expanded state) matches the popover's visibility every time."
+          "runtime_check": "Open and close the popover from the trigger; assert the trigger's aria-expanded matches the popover's visibility every time. For a popovertarget button, read the expanded state from the accessibility tree (DevTools Accessibility pane), since no aria-expanded attribute appears in the DOM."
         },
         {
           "rule": "The trigger references the popover with `aria-controls` whenever the popover element is in the DOM. While the popover is unmounted, omit `aria-controls`, since it would point at an `id` that does not exist.",

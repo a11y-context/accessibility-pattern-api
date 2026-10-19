@@ -33,7 +33,7 @@ The non-modal counterpart to `dialog.basic`. The defining contrast is the absenc
 - The popover surface uses `role="dialog"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).
 - The popover has an accessible name via `aria-labelledby` (preferred), referencing a visible title element (e.g., `<h2 id="...">`), or `aria-label`.
 - The trigger reflects open state with `aria-expanded="true|false"`. This state toggle is the core signal of the pattern; the implementation fails without it.
-  - A native `<button popovertarget="...">` is exposed as expanded or collapsed by the browser, with no `aria-expanded` from the author.
+  - A native `<button popovertarget="...">` is exposed as expanded or collapsed by the browser, with no `aria-expanded` from the author. The state appears in the accessibility tree, not as an attribute in the DOM.
 - The trigger references the popover with `aria-controls` whenever the popover element is in the DOM. While the popover is unmounted, omit `aria-controls`, since it would point at an `id` that does not exist.
 - Activating the trigger while the popover is open closes it.
 - Focus moves into the popover on open, landing on the popover container or its first interactive control.
