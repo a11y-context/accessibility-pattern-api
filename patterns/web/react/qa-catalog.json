@@ -1,10 +1,10 @@
 {
   "stack": "web/react",
-  "catalog_revision": "0.20.0",
+  "catalog_revision": "0.21.0",
   "components": {
     "accordion.basic": {
       "pattern_id": "accordion.basic",
-      "catalog_revision": "0.13.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Accordion is composed of a series of header + panel pairs.",
@@ -48,7 +48,7 @@
           "runtime_check": null
         },
         {
-          "rule": "The header button uses `aria-expanded=\"true\"` when its panel is visible and `\"false\"` when hidden.",
+          "rule": "The header button uses `aria-expanded=\"true\"` when its panel is visible and `\"false\"` when hidden. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -98,6 +98,17 @@
           "static_hint": "In an always-one-open accordion, the expanded header carries aria-disabled=\"true\" rather than the native disabled attribute.",
           "llm_eval_question": null,
           "runtime_check": null
+        },
+        {
+          "rule": "Do not render a header button without `aria-expanded`, including while its panel is collapsed (e.g., `aria-expanded={open || undefined}`); a screen reader announces a plain button with no expanded or collapsed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a header button with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the panel closed, assert the header button carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
         },
         {
           "rule": "Do not remove panel content from the DOM in a way that breaks expected focus behavior (e.g., collapsing a panel while focus remains inside it without moving focus).",
@@ -1144,7 +1155,7 @@
     },
     "combobox.autocomplete": {
       "pattern_id": "combobox.autocomplete",
-      "catalog_revision": "0.16.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Use a native `<input>` element with `role=\"combobox\"` as the editable control.",
@@ -1199,7 +1210,7 @@
           "runtime_check": "Assert the label renders visible and resolves into the input's computed accessible name."
         },
         {
-          "rule": "Set `aria-expanded=\"true|false\"` on the input reflecting whether the listbox is displayed.",
+          "rule": "Set `aria-expanded=\"true|false\"` on the input reflecting whether the listbox is displayed. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1372,6 +1383,17 @@
           "static_hint": null,
           "llm_eval_question": null,
           "runtime_check": "Press Esc with the listbox open; assert it closes. Press Esc again; assert the input is cleared."
+        },
+        {
+          "rule": "Do not render the input without `aria-expanded`; `role=\"combobox\"` and `aria-haspopup` do not convey whether the listbox is displayed.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a input with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the listbox closed, assert the input carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
         },
         {
           "rule": "Do not use `role=\"menu\"` or `role=\"menuitem\"` for the options; use `role=\"listbox\"` and `role=\"option\"`.",
@@ -1570,7 +1592,7 @@
     },
     "disclosure.basic": {
       "pattern_id": "disclosure.basic",
-      "catalog_revision": "0.13.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
@@ -1594,7 +1616,7 @@
           "runtime_check": "Focus the role=\"button\" control and press Enter, then Space; assert each activates it and that Space does not scroll the page."
         },
         {
-          "rule": "The button reflects open state with `aria-expanded=\"true|false\"`.",
+          "rule": "The button reflects open state with `aria-expanded=\"true|false\"`. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -1667,6 +1689,17 @@
           "static_hint": "Flag aria-haspopup on the disclosure trigger \u2014 a revealed region is not a popup widget.",
           "llm_eval_question": null,
           "runtime_check": null
+        },
+        {
+          "rule": "Do not render the button without `aria-expanded`, including while collapsed (e.g., `aria-expanded={open || undefined}`); a screen reader announces a plain button with no open or closed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a button with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the region closed, assert the button carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
         },
         {
           "rule": "Do not use `role=\"menu\"` on the region.",
@@ -2182,7 +2215,7 @@
     },
     "menu.basic": {
       "pattern_id": "menu.basic",
-      "catalog_revision": "0.13.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
@@ -2308,7 +2341,7 @@
           "runtime_check": null
         },
         {
-          "rule": "The trigger has `aria-expanded=\"true|false\"` reflecting the open or closed state of the menu.",
+          "rule": "The trigger has `aria-expanded=\"true|false\"` reflecting the open or closed state of the menu. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -2452,6 +2485,17 @@
           "runtime_check": "With the menu open, click outside it and separately move focus away; assert it closes in both cases."
         },
         {
+          "rule": "Do not render the trigger without `aria-expanded`; `aria-haspopup=\"menu\"` alone does not convey open/closed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a trigger with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the menu closed, assert the trigger carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
+        },
+        {
           "rule": "Do not use `role=\"menu\"` for navigation or for items that are links.",
           "source": "dont",
           "techniques": [
@@ -2476,7 +2520,7 @@
     },
     "menu.menubar": {
       "pattern_id": "menu.menubar",
-      "catalog_revision": "0.16.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "The container has `role=\"menubar\"`.",
@@ -2560,7 +2604,7 @@
           "runtime_check": null
         },
         {
-          "rule": "Each top-level item that opens a submenu has `aria-haspopup=\"menu\"` and `aria-expanded=\"true|false\"` reflecting open/closed.",
+          "rule": "Each top-level item that opens a submenu has `aria-haspopup=\"menu\"` and `aria-expanded=\"true|false\"` reflecting open/closed. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -2683,6 +2727,17 @@
           "runtime_check": "With a submenu open, Tab out of the menubar and separately click outside it; assert the submenu closes in both cases."
         },
         {
+          "rule": "Do not render a top-level item that opens a submenu without `aria-expanded`; `aria-haspopup=\"menu\"` alone does not convey open/closed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a top-level item that opens a submenu with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the submenu closed, assert the top-level item that opens a submenu carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
+        },
+        {
           "rule": "Do not use a menubar for site or app navigation; a horizontal bar of links is navigation and must use `navigation-menu.basic`, not menu roles.",
           "source": "dont",
           "techniques": [
@@ -2697,7 +2752,7 @@
     },
     "navigation-menu.basic": {
       "pattern_id": "navigation-menu.basic",
-      "catalog_revision": "0.16.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Navigation is contained within a `<nav>` landmark, or an element with `role=\"navigation\"`, and an accessible name (`aria-label`) when multiple nav landmarks exist.",
@@ -2824,7 +2879,7 @@
           "runtime_check": "Compare the current-page link's computed style with its siblings; assert a visible difference beyond the accessible-state attribute."
         },
         {
-          "rule": "The toggle reflects open state with `aria-expanded=\"true|false\"`.",
+          "rule": "The toggle reflects open state with `aria-expanded=\"true|false\"`. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -2968,6 +3023,17 @@
           "runtime_check": "Open one submenu, then open a second; assert the first closes."
         },
         {
+          "rule": "Do not render the toggle without `aria-expanded`, including while collapsed (e.g., `aria-expanded={open || undefined}`); a screen reader announces a plain button with no open or closed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a toggle with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the submenu closed, assert the toggle carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
+        },
+        {
           "rule": "Do not open sub-menus on hover only.",
           "source": "dont",
           "techniques": [
@@ -3011,7 +3077,7 @@
     },
     "navigation-menu.dropdown": {
       "pattern_id": "navigation-menu.dropdown",
-      "catalog_revision": "0.13.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Use a native `<button>` (preferred), or `role=\"button\"` only when a native button cannot be used.",
@@ -3087,7 +3153,7 @@
           "runtime_check": null
         },
         {
-          "rule": "The button reflects open state with `aria-expanded=\"true|false\"`.",
+          "rule": "The button reflects open state with `aria-expanded=\"true|false\"`. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -3159,6 +3225,17 @@
           "runtime_check": "With the dropdown open, press Esc; assert it closes and document.activeElement is the invoking button."
         },
         {
+          "rule": "Do not render the button without `aria-expanded`; state alone is what conveys open or closed.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a button with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the list closed, assert the button carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
+        },
+        {
           "rule": "Do not use `role=\"menu\"` or `role=\"menuitem\"`; the items are links in a list, not menu commands.",
           "source": "dont",
           "techniques": [
@@ -3203,7 +3280,7 @@
     },
     "popover.basic": {
       "pattern_id": "popover.basic",
-      "catalog_revision": "0.17.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "The popover surface uses `role=\"dialog\"`, or a native `<dialog>` element shown non-modally (rendered in the DOM or opened with `.show()`, never `.showModal()`).",
@@ -3318,6 +3395,59 @@
           ],
           "static_hint": "The close control has a non-empty accessible name source.",
           "llm_eval_question": "Does the close control's name describe the action it performs, rather than being an icon name or empty?",
+          "runtime_check": null
+        },
+        {
+          "rule": "The trigger reflects open state with `aria-expanded=\"true|false\"`. This state toggle is the core signal of the pattern; the implementation fails without it.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The trigger carries aria-expanded bound to the popover's open state, unless it is a native popovertarget button.",
+          "llm_eval_question": null,
+          "runtime_check": "Open and close the popover from the trigger; assert the trigger's aria-expanded (or, for a popovertarget button, its exposed expanded state) matches the popover's visibility every time."
+        },
+        {
+          "rule": "The trigger references the popover with `aria-controls` whenever the popover element is in the DOM. While the popover is unmounted, omit `aria-controls`, since it would point at an `id` that does not exist.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "aria-controls on the trigger is set only while the popover element is rendered, and its IDREF matches the popover's id.",
+          "llm_eval_question": null,
+          "runtime_check": "While open, assert the trigger's aria-controls resolves to the popover element; while closed, assert aria-controls is absent or still resolves to an element in the DOM."
+        },
+        {
+          "rule": "Activating the trigger while the popover is open closes it.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Open the popover, return focus to the trigger, activate it; assert the popover closes and the trigger reports aria-expanded=\"false\"."
+        },
+        {
+          "rule": "Do not render the trigger without `aria-expanded`. Focus moving into the popover announces it once; a user who Tabs back to the trigger has no other way to learn the popover is still open.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a popover trigger with no aria-expanded, unless it is a native popovertarget button.",
+          "llm_eval_question": null,
+          "runtime_check": "Open the popover, Shift+Tab back to the trigger; assert it reports aria-expanded=\"true\" while the popover is still open."
+        },
+        {
+          "rule": "Do not set `aria-expanded` by hand on a `popovertarget` button. Light dismiss closes the popover without updating component state, and the hand-set value goes stale.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag an explicit aria-expanded attribute on any element carrying popovertarget.",
+          "llm_eval_question": null,
           "runtime_check": null
         },
         {
@@ -3578,7 +3708,7 @@
     },
     "select.basic": {
       "pattern_id": "select.basic",
-      "catalog_revision": "0.17.0",
+      "catalog_revision": "0.21.0",
       "rules": [
         {
           "rule": "Provide a visible label for the field. Prefer a native `<label>` and ensure the custom UI is programmatically associated with the label (see `aria-labelledby` below).",
@@ -3664,7 +3794,7 @@
           "runtime_check": null
         },
         {
-          "rule": "The button carries `aria-expanded=\"true|false\"` reflecting open/closed.",
+          "rule": "The button carries `aria-expanded=\"true|false\"` reflecting open/closed. This state toggle is the core signal of the pattern; the implementation fails without it.",
           "source": "must_have",
           "techniques": [
             "static",
@@ -3808,6 +3938,17 @@
           "static_hint": null,
           "llm_eval_question": null,
           "runtime_check": "With the listbox open, click outside the control; assert it closes."
+        },
+        {
+          "rule": "Do not render the trigger without `aria-expanded`; `aria-haspopup=\"listbox\"` alone does not convey open/closed state.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a button with no aria-expanded, or with a binding that drops it while closed (e.g., `open || undefined`, or rendering it only when open).",
+          "llm_eval_question": null,
+          "runtime_check": "With the listbox closed, assert the button carries aria-expanded=\"false\" (present, not absent); open it and assert \"true\"."
         },
         {
           "rule": "Do not use `role=\"menu\"` / `role=\"menuitem\"` for select options.",
@@ -4838,6 +4979,107 @@
     }
   },
   "foundations": {
+    "global.expanded-state": {
+      "rule_id": "global.expanded-state",
+      "stack": "web/react",
+      "rules": [
+        {
+          "rule": "Any control that shows and hides another element exposes `aria-expanded=\"true\"` while that element is visible and `aria-expanded=\"false\"` while it is hidden.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Every control that toggles another element's visibility carries aria-expanded bound to that visibility.",
+          "llm_eval_question": null,
+          "runtime_check": "Operate each show/hide control; assert aria-expanded is \"true\" while the controlled element is visible and \"false\" while hidden."
+        },
+        {
+          "rule": "`aria-expanded` sits on the control the user operates (the `<button>`, or the combobox `<input>`), not on the element being shown or hidden.",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "aria-expanded is on the button or combobox input, not on the panel, menu, or listbox being shown.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "`aria-expanded` changes in the same update that shows or hides the element, so the attribute and the visibility never disagree.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Toggle each control; assert aria-expanded and the controlled element's visibility change together, with no frame where they disagree after the update settles."
+        },
+        {
+          "rule": "`aria-expanded` is present in both states. In React, `aria-expanded={open}` renders `\"true\"` or `\"false\"`.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag bindings that drop the attribute while closed (e.g., `open || undefined`).",
+          "llm_eval_question": null,
+          "runtime_check": "With the controlled element hidden, assert the control carries aria-expanded=\"false\" (present, not absent)."
+        },
+        {
+          "rule": "The rule does not apply to controls whose state is carried by something else:",
+          "source": "must_have",
+          "techniques": [
+            "llm-eval"
+          ],
+          "static_hint": null,
+          "llm_eval_question": "Is this control a modal-dialog opener that moves focus into the dialog, an aria-pressed toggle, a tooltip trigger, a tab, or a carousel picker? If so, do not flag a missing aria-expanded.",
+          "runtime_check": null,
+          "confidence": "advisory"
+        },
+        {
+          "rule": "Do not rely on `aria-haspopup` to convey open or closed. It says the control opens something, not whether it is open.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag a control with aria-haspopup and no aria-expanded.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not drop the attribute while collapsed (e.g., `aria-expanded={open || undefined}`, or rendering it only when open). A screen reader then announces the collapsed control with no state at all.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag conditional aria-expanded bindings that render undefined, null, or nothing when closed.",
+          "llm_eval_question": null,
+          "runtime_check": "With the controlled element hidden, assert aria-expanded=\"false\" is present."
+        },
+        {
+          "rule": "Do not leave the controlled element visible while `aria-expanded=\"false\"` (and vice versa).",
+          "source": "dont",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Toggle each control; assert no state where the element is visible with aria-expanded=\"false\", or hidden with \"true\"."
+        },
+        {
+          "rule": "Do not put `aria-expanded` and `aria-pressed` on the same control. It is announced as both a toggle and an expander, and neither state reads clearly.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag any element carrying both aria-expanded and aria-pressed.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        }
+      ],
+      "catalog_revision": "0.21.0"
+    },
     "global.focus-not-obscured": {
       "rule_id": "global.focus-not-obscured",
       "stack": "web/react",
@@ -5401,6 +5643,160 @@
         }
       ],
       "catalog_revision": "0.11.0"
+    },
+    "global.skip-link": {
+      "rule_id": "global.skip-link",
+      "stack": "web/react",
+      "rules": [
+        {
+          "rule": "Render one skip link, in the app shell or root layout component that every route renders (e.g., `App.jsx`, a Next.js `app/layout.js`), so every route gets it with no per-page code.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The skip link is rendered by the app shell or root layout component, not by any page or route component.",
+          "llm_eval_question": null,
+          "runtime_check": "Visit at least three routes; on each, assert exactly one skip link exists and it is the same element from the shared layout."
+        },
+        {
+          "rule": "The skip link is the first focusable element in the document, before the logo, the header, and the navigation.",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Load each route and press Tab once; assert the focused element is the skip link."
+        },
+        {
+          "rule": "The skip link is a native `<a>` whose `href` points at the main content (e.g., `href=\"#main\"`).",
+          "source": "must_have",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "The skip link is an <a> with an href fragment that matches the id of the main landmark.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "The link text names the destination (e.g., \"Skip to main content\").",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "llm-eval"
+          ],
+          "static_hint": "The skip link's text names where it goes (e.g., \"Skip to main content\").",
+          "llm_eval_question": "Does the link text name the destination rather than the action alone (\"Skip\")?",
+          "runtime_check": null
+        },
+        {
+          "rule": "The skip link is visually hidden until it receives focus and visible for as long as it has focus. Use `.sr-only` paired with `.sr-only-focusable` (see `global.sr-only`).",
+          "source": "must_have",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Before focus, assert the skip link has no visible box; Tab to it and assert it is visible on screen with a focus indicator and not covered by a sticky header."
+        },
+        {
+          "rule": "The target is the `<main>` landmark (see `global.landmarks`), with a stable `id` (e.g., `id=\"main\"`) rendered on every route.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The skip link's target id is on the <main> element in the shared layout.",
+          "llm_eval_question": null,
+          "runtime_check": "On every route, assert the element whose id the skip link names exists and is the main landmark."
+        },
+        {
+          "rule": "The `<main>` target has `tabindex=\"-1\"`, so activating the link moves keyboard focus into it and a screen reader continues reading from there. Without it, only the sequential-focus starting point moves.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "The <main> target carries tabindex=\"-1\".",
+          "llm_eval_question": null,
+          "runtime_check": "Activate the skip link with Enter; assert document.activeElement is the <main> landmark, and the next Tab reaches the first focusable element inside it."
+        },
+        {
+          "rule": "In a single-page app, handle activation in script: the click handler calls `event.preventDefault()` and then focuses the target (see the snippet below). Enter on a focused link fires `click`, so the one handler covers keyboard and pointer.",
+          "source": "must_have",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "In an SPA (hash router, or any hashchange or scroll-restoration listener), the skip link's click handler calls preventDefault() and focuses the target.",
+          "llm_eval_question": null,
+          "runtime_check": "Activate the skip link; assert the route did not change and the URL did not gain a route-like hash."
+        },
+        {
+          "rule": "Do not render more than one skip link, or render a skip link from a page component. Per-page links end up duplicated on some routes and missing on others.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a skip link rendered from a page or route component, or more than one skip link in the shell.",
+          "llm_eval_question": null,
+          "runtime_check": "On each route, assert there is exactly one skip link."
+        },
+        {
+          "rule": "Do not point the skip link at an `id` that some routes do not render, such as one page's content wrapper. On every other route, activating it does nothing.",
+          "source": "dont",
+          "techniques": [
+            "runtime"
+          ],
+          "static_hint": null,
+          "llm_eval_question": null,
+          "runtime_check": "Visit every route; assert the skip link's target id resolves on each."
+        },
+        {
+          "rule": "Do not target an element that is not focusable (a `<main>` or `<div>` without `tabindex=\"-1\"`). The page may scroll, but focus does not move, so a screen reader announces nothing and keeps its reading position at the top of the page.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag a skip-link target without tabindex=\"-1\" (or another means of being focusable).",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not give `<main>` `tabindex=\"0\"`. It adds a non-interactive stop to every keyboard user's Tab order.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag tabindex=\"0\" on the main landmark.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        },
+        {
+          "rule": "Do not let a hash router handle the skip link's `href`. `#main` is read as the route `/main`, and activating the link navigates away from the page.",
+          "source": "dont",
+          "techniques": [
+            "static",
+            "runtime"
+          ],
+          "static_hint": "Flag a skip link with a bare #fragment href in an app using a hash router, with no click handler that prevents default.",
+          "llm_eval_question": null,
+          "runtime_check": "Activate the skip link; assert the app does not navigate to a route named after the fragment."
+        },
+        {
+          "rule": "Do not hide the skip link with `display: none` or `visibility: hidden`, or with `.sr-only` and no focus restoration. A skip link that stays hidden while focused leaves keyboard users focused on nothing visible.",
+          "source": "dont",
+          "techniques": [
+            "static"
+          ],
+          "static_hint": "Flag display:none, visibility:hidden, or .sr-only without the :focus restoration on the skip link.",
+          "llm_eval_question": null,
+          "runtime_check": null
+        }
+      ],
+      "catalog_revision": "0.21.0"
     },
     "global.sr-only": {
       "rule_id": "global.sr-only",
