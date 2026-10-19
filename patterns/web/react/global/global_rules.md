@@ -536,3 +536,48 @@ Meaningful standalone icon, where no text nearby carries the status. Either rout
   <span className="sr-only">Downloaded</span>
 </span>
 ```
+
+---
+
+## Expanded State
+
+```yaml
+id: global.expanded-state
+scope: [component]
+```
+
+A control that shows and hides another element tells assistive technology which of the two states it is in. `aria-expanded` is that signal, and it is the one most often left out: a screen reader user hears a button, presses it, and hears nothing about what happened.
+
+### Must Haves
+- Any control that shows and hides another element exposes `aria-expanded="true"` while that element is visible and `aria-expanded="false"` while it is hidden.
+  - This covers disclosure buttons, accordion headers, menu buttons, navigation dropdown and submenu toggles, custom select triggers, combobox inputs, and popover triggers.
+- `aria-expanded` sits on the control the user operates (the `<button>`, or the combobox `<input>`), not on the element being shown or hidden.
+- `aria-expanded` changes in the same update that shows or hides the element, so the attribute and the visibility never disagree.
+- `aria-expanded` is present in both states. In React, `aria-expanded={open}` renders `"true"` or `"false"`.
+- The rule does not apply to controls whose state is carried by something else:
+  - A button that opens a modal dialog and moves focus into it (see `dialog.basic`).
+  - A toggle button whose state is on or off, which uses `aria-pressed` (see `button.toggle`).
+  - A tooltip trigger, which links its tooltip with `aria-describedby` (see `tooltip.basic`).
+  - A tab or a carousel picker, which selects one panel of a set with `aria-selected` or `aria-current` (see `tabs.basic`, `carousel.dots`).
+
+### Don'ts
+- Do not rely on `aria-haspopup` to convey open or closed. It says the control opens something, not whether it is open.
+- Do not drop the attribute while collapsed (e.g., `aria-expanded={open || undefined}`, or rendering it only when open). A screen reader then announces the collapsed control with no state at all.
+- Do not leave the controlled element visible while `aria-expanded="false"` (and vice versa).
+- Do not put `aria-expanded` and `aria-pressed` on the same control. It is announced as both a toggle and an expander, and neither state reads clearly.
+
+### Snippets
+
+```jsx
+<button
+  type="button"
+  aria-expanded={open}
+  aria-controls="filters-panel"
+  onClick={() => setOpen((value) => !value)}
+>
+  Filters
+</button>
+<div id="filters-panel" hidden={!open}>
+  {/* filter controls */}
+</div>
+```
