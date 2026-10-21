@@ -201,6 +201,8 @@ function PatternExamples()       // slot 3 — optional; see the gate below
 
 **On `android/compose`, slot 1 is conditional.** A pattern whose unit is a composable you write once and reuse, such as a list row that carries its own semantics, exports it as normal. A pattern whose unit is a call site does not: on Android you do not write a Button, you call `androidx.compose.material3.Button`, and what an agent lifts is a correctly configured call rather than a component definition. Those patterns carry only `<Pattern>Examples`, and the export slot stays empty. The test is whether the pattern teaches a component or the way to invoke one. This does not apply to `web/react`, where the DOM ships no component and the export is always the thing being taught.
 
+**On `ios/swiftui`, slot 1 is conditional by the same test.** Most SwiftUI patterns teach a call site: SwiftUI ships `Button`, `Toggle`, `Picker`, `Slider`, and the modal modifiers, and what an agent lifts is a correctly configured call. Those patterns carry only `<Pattern>Examples`. A pattern whose unit is a type you write and reuse exports that type, named for the pattern: `checkbox.basic` exports `CheckboxToggleStyle`, because SwiftUI has no checkbox and the style is what is being taught, and `radio.basic` exports `RadioButton` for the same reason. Supporting views that are not the unit, such as a navigation destination, are inlined into `<Pattern>Examples` rather than declared as types (`list.row` pushes `Text("Account settings").navigationTitle("Account")`, not a `SettingDetail` view). Name the container after the pattern ID's family and variant where the title alone would collide across siblings: `SelectMenuExamples`, `DialogAlertExamples`, not `PickerExamples`.
+
 #### Does the pattern need Examples at all?
 
 Ask: **does any Must Have mention something the component does not contain?**
@@ -238,7 +240,7 @@ A prop that cannot change output is documentation wearing an API's clothes. `<Ba
 
 Two names per fence, maximum: the export, and `<Pattern>Examples`. Every additional name is a retrieval hazard, because the corpus is chunked and an agent can receive a chunk holding only that function with nothing marking it as illustration. `ChannelRow` collides with the real `collection-row.basic`; `NotificationsButton` sits beside `button.basic`. Prefix the container (`BadgeExamples`, not `Examples`) so an excerpted chunk still identifies itself. Naming a host after the pattern is worse still: a `CountBadge` that renders a whole `<button>` is a lie in the name.
 
-`XDemo` naming survives in 17 older patterns (`SwitchDemo`, `ButtonBasicDemo`, `SaveButtonDemo`). It is legacy, not a model to copy. `progress-bar.basic` shows the older multi-variant habit at its best (`UploadProgress` and `ReportProgress` both keep the noun); `spinner.basic` shows it at its worst (`SaveButton`, `PanelLoading` keep nothing).
+`XDemo` naming survives in 17 older `web/react` patterns (`SwitchDemo`, `ButtonBasicDemo`, `SaveButtonDemo`). It is legacy, not a model to copy. The `ios/swiftui` examples carried it too until they moved to `<Pattern>Examples` in catalog 0.7.0. `progress-bar.basic` shows the older multi-variant habit at its best (`UploadProgress` and `ReportProgress` both keep the noun); `spinner.basic` shows it at its worst (`SaveButton`, `PanelLoading` keep nothing).
 
 #### Comments and state both have to earn their place
 

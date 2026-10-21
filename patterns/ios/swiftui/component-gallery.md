@@ -30,6 +30,6 @@ Browse all accessibility patterns available for iOS / SwiftUI.
 | [Slider](./components/slider.basic.md) | A native SwiftUI Slider that VoiceOver adjusts by swiping up or down, paired with single-tap controls so the value is adjustable without a drag gesture. |
 | [Stepper](./components/stepper.basic.md) | A native SwiftUI Stepper whose visible label text becomes its accessible name and which VoiceOver increments or decrements automatically, with no .adjustable trait to add. |
 | [Switch](./components/switch.basic.md) | Native SwiftUI Toggle representing a persistent on/off setting. The label and switch state merge into a single accessible element. |
-| [Text Field](./components/text-field.basic.md) | A single-line SwiftUI text field whose visible label is exposed to VoiceOver through the field title, an accessibility label, or LabeledContent, with keyboardType and textContentType set so the correct keyboard and AutoFill appear. |
+| [Text Field](./components/text-field.basic.md) | A single-line SwiftUI text field with a persistent visible label, since the field title renders only as placeholder text on iOS, with keyboardType and textContentType set so the correct keyboard and AutoFill appear. |
 
 <!-- gallery:end -->
