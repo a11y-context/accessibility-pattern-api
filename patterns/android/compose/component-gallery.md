@@ -6,7 +6,7 @@ slug: /compose/component-gallery
 
 # Components
 
-Every published Android / Compose pattern, with the situation it selects for. The table is generated from `patterns.json`.
+Every published Android / Compose pattern, with the situation it selects for. The patterns cover Android phones and tablets. Android TV, Google TV, and Fire TV are out of scope. The table is generated from `patterns.json`.
 
 <!-- gallery:start — generated from patterns.json; do not edit by hand. Run `npm run gen:gallery` in /website. -->
 

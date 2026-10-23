@@ -8,6 +8,14 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.9.1 — 2026-10-23
+
+The stack now states its scope wherever retrieval reads it. No pattern changed.
+
+Foundations change in this release:
+
+- **Scope** — The Foundations summary and introduction, and the Components page, say the patterns cover Android phones and tablets and that Android TV, Google TV, and Fire TV are out of scope. Code that runs only on a TV does not apply them. Code in a module that the TV build also uses follows them, unchecked against TV behavior. The summary carries the statement because the MCP server's `get_foundations` returns the frontmatter and the rules but not the introduction. The skills have run the same check before every task since October 7.
+
 ## 0.9.0 — 2026-10-06
 
 Five more wave-2 patterns: the small surfaces that carry state or meaning, and the select. Checked against the stable Material 3 1.4.0 and Compose UI and Foundation 1.12.1 sources. CVS has no technique for the chips, badge, or card; the device checks all five rely on are on the validation list.
