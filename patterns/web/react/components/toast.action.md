@@ -50,7 +50,6 @@ This component is recommended only where no other pattern fits. Its barriers are
 - The announced text states the message, the action's label in the same words as the control, and the landmark's name as the route to it (e.g., "Nightfall Protocol removed from My List. Undo available in Notifications.").
 - The announced text is cleared once the message has left the screen.
 - When a dialog action triggers the message (e.g., "Remove" in a "Remove from My Channels?" confirmation), write the message and its announcement only after the dialog has closed and focus has been restored, at least one animation frame after the focus move.
-  - While a modal dialog is open, everything outside it is hidden from screen readers, the announcing element included, so text written there is never announced.
 - The surface the message is drawn on is distinguishable from the content behind it by a contrast ratio of at least 3:1, per `global.non-text-contrast`.
 
 ### Keyboard
@@ -75,7 +74,7 @@ This component is recommended only where no other pattern fits. Its barriers are
 - Do not give the message `role="alert"`, `role="status"`, `role="alertdialog"`, or `aria-live`, and do not place the action control inside the announcing element. Interactive content in a live region is announced as flat text, so the button is spoken as part of the message with nothing marking it activatable.
 - Do not expose more than one landmark for messages. When several stack, the container carries the role and the messages do not, or the rotor's landmark list fills with duplicates of one name.
 - Do not rely on Tab order alone as the route to the action. The message is commonly mounted at the end of the document, which places the action after every other control on the page.
-- Do not write the message in the same update that closes a modal dialog. The live region changes while the dialog still hides the rest of the page, and the announcement is lost or cut off by the focus move that follows.
+- Do not write the message while a modal dialog is open, or in the same update that closes it. Whether it is announced then depends on the screen reader and on how the dialog hides the rest of the page, and the focus move that follows can cut it off.
 - Do not mount or unmount the announcing element along with the message. A live region that is not in the DOM before its text changes does not announce reliably.
 - Do not announce the message text alone when an action is present. An action the user is never told about is unreachable in practice.
 - Do not restart a paused timer from its full duration when the pointer leaves. A user who reads a message slowly is then given less time than one who never looked at it.

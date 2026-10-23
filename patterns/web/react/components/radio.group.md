@@ -42,12 +42,11 @@ A set of mutually exclusive options from which the user picks exactly one. Nativ
 
 ### State & properties
 - The selected option is the native `checked` state, bound in React with `checked` and `onChange` on each radio.
-- If the group is required, put `required` on each radio in the group, and indicate the requirement visibly in the group label (e.g., append "(required)" to the `<legend>`).
-  - Provide one inline error container, present in the DOM at all times (empty until invalid), carrying `aria-live="polite"` and referenced from each radio's `aria-describedby`.
-  - Populate the error only when focus leaves the whole group with no option chosen, not as focus moves between options.
+- One radio in the group is checked from the first render, so the group always holds a value.
+  - When no option is a safe default, add an explicit neutral option (e.g., "Decide later", "Prefer not to say") and check that one.
 
 ### Keyboard
-- The group is a single tab stop. Tab moves focus to the checked radio, or to the first radio when none is checked (the last, with Shift+Tab).
+- The group is a single tab stop. Tab moves focus to the checked radio.
 - Arrow Down and Arrow Right move focus to the next radio and check it; Arrow Up and Arrow Left move focus to the previous radio and check it. Movement wraps from the last radio to the first and from the first to the last.
 - Space checks the focused radio when it is not already checked.
 
@@ -59,15 +58,15 @@ A set of mutually exclusive options from which the user picks exactly one. Nativ
 - Do not give each radio its own `name`, or omit `name`. The radios stop forming a group: each becomes its own tab stop, arrow keys no longer move between them, and more than one can be checked.
 - Do not build the set from `<button>` elements with `aria-pressed`. It is announced as independent toggles with no single-selection semantics, even when the code allows only one to be pressed.
 - Do not set `aria-checked` on a native `<input type="radio">`. The native `checked` state is what is exposed, and a stale `aria-checked` contradicts it.
-- Do not rely on `aria-describedby` on the `<fieldset>` or `role="radiogroup"` container to convey the hint or error. Container descriptions are not announced consistently as focus moves between options; put the reference on each `<input>`.
+- Do not render the group with no radio checked. A user who Tabs past it submits no value without having chosen to, and once any radio is checked, a native group cannot return to none.
 - Do not combine unrelated questions in one group; one question per `<fieldset>` or `role="radiogroup"`.
 
 ## Customizable
 - The grouping mechanism: `<fieldset>` with `<legend>` (most robust), or `role="radiogroup"` with `aria-labelledby` (choose this when `<legend>` styling or layout is the blocker). Both convey the group name.
-- Whether an option is checked initially. Preselect one when a safe default exists (e.g., "Auto"). Leave all unchecked when the user must make an active choice (e.g., a plan or a consent answer), since once a native group has a checked radio the user cannot return it to none.
+- Which option is checked by default, as long as one is. Prefer the safest or most common choice (e.g., "Auto"); use a neutral option when no real option is a safe default.
 - Per-option visual styling (`accent-color`, `appearance: none` with a painted indicator, or a visually hidden input beside a painted one), as long as each input stays focusable and operable, and the checked state is visible by more than color (see `global.use-of-color`) and under forced colors (see `global.forced-colors`).
 - Layout in a column, inline, or as a segmented control, as long as the controls stay native radios and the reading and focus order is sensible.
-- Manual fallback, when native radios cannot be used: a container with `role="radiogroup"` holding elements with `role="radio"` and `aria-checked="true|false"`. Implement a roving tabindex (the checked radio, or the first when none is checked, at `tabindex="0"` and every other at `tabindex="-1"`), arrow keys that move focus and check, and Space to check the focused radio.
+- Manual fallback, when native radios cannot be used: a container with `role="radiogroup"` holding elements with `role="radio"` and `aria-checked="true|false"`. Implement a roving tabindex (the checked radio at `tabindex="0"` and every other at `tabindex="-1"`), arrow keys that move focus and check, and Space to check the focused radio.
 
 ## Golden Pattern
 
@@ -76,58 +75,38 @@ Structural reference for AI coding assistants — semantics, focus, and keyboard
 ```jsx
 "use client";
 
-export function RadioGroup({ legend, options, value, onChange, hint, required = false }) {
+export function RadioGroup({ legend, options, value, onChange, hint }) {
   const name = useId();
   const hintId = `${name}-hint`;
-  const errorId = `${name}-error`;
-  const [error, setError] = useState("");
-
-  function onGroupBlur(event) {
-    if (event.currentTarget.contains(event.relatedTarget)) return;
-    setError(required && !value ? `Error: Choose an option for ${legend}.` : "");
-  }
-
-  const describedBy =
-    [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ") || undefined;
 
   return (
-    <>
-      <fieldset onBlur={onGroupBlur}>
-        <legend>{required ? `${legend} (required)` : legend}</legend>
-        {hint ? <p id={hintId}>{hint}</p> : null}
-        {options.map((option) => (
-          <div key={option.value}>
-            <input
-              type="radio"
-              id={`${name}-${option.value}`}
-              name={name}
-              value={option.value}
-              checked={value === option.value}
-              required={required}
-              aria-describedby={describedBy}
-              onChange={() => {
-                onChange(option.value);
-                setError("");
-              }}
-            />
-            <label htmlFor={`${name}-${option.value}`}>{option.label}</label>
-          </div>
-        ))}
-      </fieldset>
-      <p id={errorId} aria-live="polite">
-        {error}
-      </p>
-    </>
+    <fieldset>
+      <legend>{legend}</legend>
+      {hint ? <p id={hintId}>{hint}</p> : null}
+      {options.map((option) => (
+        <div key={option.value}>
+          <input
+            type="radio"
+            id={`${name}-${option.value}`}
+            name={name}
+            value={option.value}
+            checked={value === option.value}
+            aria-describedby={hint ? hintId : undefined}
+            onChange={() => onChange(option.value)}
+          />
+          <label htmlFor={`${name}-${option.value}`}>{option.label}</label>
+        </div>
+      ))}
+    </fieldset>
   );
 }
 
 function RadioGroupExamples() {
   const [quality, setQuality] = useState("auto");
-  const [plan, setPlan] = useState("");
+  const [plan, setPlan] = useState("undecided");
 
   return (
-    <form noValidate>
-      {/* A safe default exists, so one option starts checked. */}
+    <form>
       <RadioGroup
         legend="Video quality"
         value={quality}
@@ -138,14 +117,14 @@ function RadioGroupExamples() {
           { value: "data-saver", label: "Data saver" },
         ]}
       />
-      {/* An active choice, so none starts checked and the group is required. */}
+      {/* No real plan is a safe default, so a neutral option is checked. */}
       <RadioGroup
         legend="Plan"
         hint="You can change plans at any time."
-        required
         value={plan}
         onChange={setPlan}
         options={[
+          { value: "undecided", label: "Decide later" },
           { value: "essential", label: "Essential, with ads" },
           { value: "premium", label: "Premium, ad-free" },
         ]}
