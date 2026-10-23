@@ -24,6 +24,9 @@ Run each check with TalkBack on, and repeat the focus checks with a hardware key
 | V-16 | Do a clickable card's click label and custom action work, and is its focus visible? | `card.basic` | open |
 | V-17 | Does a static card keep its contents together, and read as one item when merged? | `card.basic` | open |
 | V-18 | How does a select field announce itself, its opening, and its current option? | `select.basic` | open |
+| V-19 | Is an open modal drawer the only thing TalkBack and the keyboard can reach, and does focus move in and back? | `navigation-drawer.modal` | open |
+| V-20 | Is a closed drawer's content out of reach of TalkBack and the keyboard? | `navigation-drawer.modal` | open |
+| V-21 | Do app bars stay clear of a focused item in the content? | `top-app-bar.basic`, `bottom-app-bar.basic` | open |
 
 ## Groups and sets
 
@@ -86,6 +89,20 @@ Material's static `Card` marks itself a traversal group. Check that its contents
 ### V-18: A select field
 
 `menuAnchor` gives a read-only field `Role.DropdownList`, which Compose reports to Android as a `Spinner`, and sets no expanded or collapsed state on it; only the editable variant does. `select.basic` marks the current option with `selected` on its `DropdownMenuItem`. Check what TalkBack says on the field (its role word, label, and value), whether opening the list is announced or only evident from focus moving into it, that the current option reads as selected and the others as not selected, and where keyboard focus and the TalkBack cursor land after an option is chosen. If opening is silent and focus does not move into the list, the field needs an expanded state of its own.
+
+## App chrome
+
+### V-19: An open modal drawer
+
+`ModalNavigationDrawer` leaves the screen behind in the accessibility tree and has no focus or key handling. `navigation-drawer.modal` hides the content with `clearAndSetSemantics {}` while the drawer is open, contains keyboard focus with `focusProperties { onExit = { cancelFocusChange() } }` on a focus group, moves focus to the first destination on open and back to the menu button on a close without a choice, and closes on Escape through `onKeyEvent`. Check that TalkBack swiping from the last destination reaches only the scrim ("Close navigation menu") and never the screen behind, that Tab and Shift+Tab never leave the drawer, that focus lands on the first destination when it opens and returns to the menu button when it closes from the scrim, Escape, or back, and that the pane title "Navigation menu" is announced on opening. Check also whether Escape closes the drawer without the handler, through the system's fallback from Escape to Back; if it does, the handler is redundant but harmless.
+
+### V-20: A closed drawer
+
+A closed `ModalNavigationDrawer` keeps its content composed, offset off the screen. Check that TalkBack cannot reach the closed drawer's destinations and that Tab does not move keyboard focus into them. If either can, the drawer content needs hiding while closed as well, the mirror of what the pattern does to the screen while open.
+
+### V-21: App bars over a focused item
+
+`top-app-bar.basic` and `bottom-app-bar.basic` apply the `Scaffold`'s `innerPadding` as `Modifier.padding` so the scrolling area sits between the bars. Check, with a hardware keyboard and with TalkBack, that moving through a long list never leaves the focused item hidden under either bar, and compare with the padding passed as `contentPadding` instead, which lets content scroll beneath the bars.
 
 ## Dialogs, menus, and fields
 
