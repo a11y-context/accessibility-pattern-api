@@ -1,0 +1,31 @@
+---
+title: Local
+---
+
+import SkillInstall from '@site/src/components/SkillInstall';
+
+# Local
+
+The agent reads each pattern from a copy of the corpus bundled with the skill. The skill ships with the catalog, the Foundations rules, and every pattern file on disk; retrieval never leaves your machine. The skill's only allowed tool is `Read`. The skill is fully offline, zero network.
+
+## Install
+
+Pick your stack and your AI tool, then run the commands from your project's root. They create that tool's skills folder if it doesn't exist yet, download the skill, and unzip it there. The folder carries the whole corpus.
+
+<SkillInstall variant="local" />
+
+To update, run the same commands again. Every ZIP is also on the [Downloads page](./downloads).
+
+## Verify
+
+After unzipping, run the prompts on [Verify It's Working](/getting-started/ai-coding-agents/verification). The agent should select pattern IDs from the catalog, then read the matching `components/{id}.md` files from disk before generating UI code.
+
+## How it works
+
+Local is a **retrieval mechanism**, not a different brain — the selection logic is identical to every other variant; only the retrieval step changes. Every input sits on disk under the skill's own directory; nothing is fetched:
+
+- **Catalog — local.** The skill reads `patterns.json` to select pattern IDs. Each entry carries a `source.path` field pointing at that pattern's bundled file.
+- **Pattern files — local.** For each selected ID, the skill reads `{source.path}` from its own folder (for example `components/toast.basic.md`) and extracts Must Haves, Don'ts, Golden Pattern, and Customizable.
+- **Foundations rules — local.** The skill reads `global_rules.md` and applies each rule by scope.
+
+The skill's only allowed tool is `Read` — there is no network step at all.

@@ -101,7 +101,7 @@ Later / niche: `drag-drop.basic`, `tip.basic` (TipKit).
 
 Referenced by components, not authored as component pages. Rules marked ✅ are authored in `global_rules.md` today.
 
-`touch-target-size` ✅ · `focus-visible` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` ✅ (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` ✅ (`@AccessibilityFocusState`) · `meaningful-names` (WCAG 2.5.3) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` ✅ · `reading-order` · `navigation-focus` ✅ (push/pop focus) · `text-contrast` + `non-text-contrast` · `semantic-color` ✅ · `dynamic-type` ✅ · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
+`native-first` ✅ · `touch-target-size` ✅ · `focus-states` ✅ · `accessible-name` · `value` · `hint` · `traits` · `hidden` · `custom-control-representation` ✅ (`accessibilityRepresentation`; the key custom-control rule) · `grouping` (`.combine` vs `.contain`) · `focus-management` ✅ (`@AccessibilityFocusState`) · `meaningful-names` (visible label starts the accessible name) · `headings` · `language` · `custom-actions` (custom / adjustable / magic-tap) · `escape-action` · `custom-rotor` · `announcements` ✅ · `reading-order` · `navigation-focus` ✅ (push/pop focus) · `text-contrast` + `non-text-contrast` · `semantic-color` ✅ · `dynamic-type` ✅ · `respect-system-settings` (dark mode, reduce motion, increase contrast, etc.) · `reflow` · `form-instructions` · `redundant-entry` · `page-title`
 
 Skipped: A11yCheck / SwiftLint / XCTestAccessibility (tooling), `AccessibilityDetection` (anti-pattern-adjacent), `AccessibilityIdentifier` (test hooks).
 
@@ -113,8 +113,8 @@ Skipped: A11yCheck / SwiftLint / XCTestAccessibility (tooling), `AccessibilityDe
 
 Each new iOS pattern is authored on its own PR branch. New patterns are `status: beta` from the start (the unmerged branch isolates the work in progress; see `CONTRIBUTING.md` § Status ladder):
 
-1. **AI drafts** the pattern from CVS + Apple docs: Use When / Do Not Use When, Must Haves, Customizable, Don'ts, and a minimal SwiftUI Golden Pattern. Annotates provenance and lists what a human must verify on device. Patterns carry no Acceptance Checks section; verification belongs to the QA layer, and executable assertions belong to the harness.
-2. **Maintainer enriches** on the branch: WCAG success-criterion citations, Apple-doc links, trait-precision review, schema calls.
+1. **AI drafts** the pattern from CVS + Apple docs: Use When / Do Not Use When, Must Haves, Don'ts, Customizable, and a minimal SwiftUI Golden Pattern. Annotates provenance and lists what a human must verify on device. Patterns carry no Acceptance Checks section; verification belongs to the QA layer, and executable assertions belong to the harness.
+2. **Maintainer enriches** on the branch: trait-precision review and schema calls. Pattern text carries no WCAG criterion identifiers and no hyperlinks (`schema/style-guide.md` § Prose and punctuation); `check-corpus-conventions.mjs` fails the build on either.
 3. **On-device AT pass** (VoiceOver + Switch Control) is the mandatory gate before merge. Only after it: bump `catalog_revision`, add release notes, merge.
 
 Conform to `schema/style-guide.md` (the conventions) and `schema/pattern-template.md` (the format).

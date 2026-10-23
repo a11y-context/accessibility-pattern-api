@@ -8,6 +8,43 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.7.0 — 2026-10-21
+
+**Two Golden Pattern accuracy fixes, and a sweep that brings the SwiftUI patterns to the style guide.** The text field and wheel picker examples showed labels that are not visible on iOS. Every example drops the legacy `Demo` naming for `<Pattern>Examples`, following a new SwiftUI rule in the style guide. Use When bullets lose the implementation sentences that told an agent how to build the control rather than whether to pick the pattern, and the SwiftUI type names move to `aliases`. 46 Don'ts that restated a Must Have or a Do Not Use When redirect without adding a symptom, a look-alike mistake, or a platform defect are removed, along with the prohibitions and cross-pattern comparisons that sat inside Must Haves. 17 patterns now reference `global.native-first`.
+
+- **Text Field → 0.3.0** — The `TextField` title renders only as placeholder text on iOS, so it no longer counts as the visible label. Each field carries a persistent visible `Text` label, hidden from VoiceOver, with a matching `TextField` title as the name. The titleless field named only by `.accessibilityLabel` is gone, horizontal `LabeledContent` remains the alternative, and a native `TextField` Must Have and a `prompt:` Customizable item are added.
+- **Select (Wheel) → 0.2.0** — New Must Have: a visible `Text` label, hidden from VoiceOver, since a wheel `Picker` does not display its label text outside a `Form`. The Golden Pattern now shows it.
+- **Select (Segmented) → 0.2.0** — New Must Have: the visible `Text` label is hidden from VoiceOver, so the name is spoken once, on the picker.
+- **Switch → 0.3.0** — The hand-built switch Don't no longer accepts `.accessibilityElement(children: .combine)` as a rescue; it supplies no switch trait, value, or action. A hand-drawn switch follows `global.custom-control-representation`.
+- **Basic Button → 0.2.0** — `Button` added to aliases.
+- **Toggle Button → 0.2.0** — Aliases expanded from 2 to 6, meeting the 4 to 8 range.
+- **Checkbox → 0.2.0** — `ToggleStyle checkbox` added to aliases. The exported `CheckboxToggleStyle` now precedes `CheckboxExamples`.
+- **Radio Button → 0.1.2** — The exported `RadioButton` now precedes `RadioGroupExamples`.
+- **List Row (Navigable) → 0.1.2** — The `SettingDetail` view is inlined as the destination.
+- **Date Picker → 0.1.2**
+- **Dialog (Alert) → 0.1.4**
+- **Dialog (Confirmation) → 0.1.2**
+- **Dialog (Modal) → 0.1.2**
+- **Inline Link → 0.1.2**
+- **Link → 0.1.2**
+- **Menu → 0.1.3**
+- **Select (Menu) → 0.1.3**
+- **Slider → 0.1.3**
+- **Stepper → 0.1.3**
+
+Patterns listed without a note change only by the sweep above. No requirement changed in them.
+
+## 0.6.0 — 2026-10-21
+
+**Contradictions inside and between patterns resolved, and a stale scope removed.** Each fix lines a sentence up with a requirement the corpus already states; one selection redirect is added.
+
+- **Foundations** — `global.native-first` scope corrected from `[control, component]` to `[component]`. `control` left the scope vocabulary in 0.4.0, and the site was rendering it as a stray scope label. No rule changed.
+- **Switch → 0.2.0** — Do Not Use When redirects a value submitted with a form to `checkbox.basic`, matching web and Android.
+- **Stepper → 0.1.2** — Customizable no longer calls the paired `TextField` "recommended" on a wide range, where a Must Have requires it.
+- **Select (Menu) → 0.1.2** — A Must Have that repeated a Don't word for word is removed; the prohibition on `.accessibilityLabel` stays in Don'ts, and the positive naming Must Have is unchanged.
+- **Dialog (Alert) → 0.1.3** — The redirect to `dialog.confirmation` no longer calls it non-blocking, which its own Must Haves contradict. The boundary is unchanged.
+- **Menu → 0.1.2** — Customizable no longer says an icon-only trigger "may" carry the `.accessibilityLabel` its Must Have requires, and the focus-return Don't no longer implies `.sheet()` and `.popover()` restore focus on their own (`global.focus-management`).
+
 ## 0.5.2 — 2026-10-06
 
 **Golden Pattern comments removed, to the standard in the style guide.** Of 57 comment blocks across the nineteen examples, 56 restated a Must Have, Don't, or summary in the same pattern, often word for word, or argued a choice for a reviewer. The agent retrieves those sections with the code, so the comments cost tokens on every lookup and added nothing. Each was checked against its pattern's text before it came out, including the three closest calls: `onDismiss` focus return in Dialog (Modal), the decorative chevron in List Row, and the hidden-but-spoken label on a wheel Date Picker, all of which a Must Have already states. The one survivor, in Dialog (Alert), marks elided code. No requirement changed.
