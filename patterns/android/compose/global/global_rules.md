@@ -272,7 +272,6 @@ scope: [layout]
 
 ### Don'ts
 - Do not set `traversalIndex` on every element in a screen to force an order. It is a correction for the cases where composition order is wrong, not a layout mechanism.
-- Do not rely on `traversalIndex` on a TV. The screen reader there follows D-pad focus, so the index has no useful effect.
 
 ## Headings
 
