@@ -8,6 +8,19 @@ slug: /compose/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.11.0 — 2026-11-10
+
+Lessons from TalkBack testing in a production Compose app. No pattern changed.
+
+Foundations changes in this release:
+
+- **Merged Semantics** — Two new Must Haves. A `contentDescription` set on a merged parent adds a name without removing its children's text, so replacing what the children say takes `clearAndSetSemantics` on the parent, after its `clickable` or `toggleable`. A merged node reports its `Role` as a class name, such as `android.widget.Button`, only when it has no merged children, so a tile that must announce its role is made childless the same way.
+- **Collection Semantics** — New Don't: do not replace a lazy list's `LazyListState` while the list is on screen. The accessibility delegate stays bound to the old state, stops reporting scrolls, and TalkBack's heading navigation reports "No next heading." Platform defect: https://issuetracker.google.com/issues/538084338
+- **Announcements** — The `paneTitle` Must Have now says that on content that loads asynchronously, the pane title can race the first focus announcement and be cut off or doubled, so the context goes in the first focused element's label instead. New Don't: do not keep a hidden live-region node to carry announcements, since once it holds text it is a permanent extra focus stop. The ban on `announceForAccessibility` and `TYPE_ANNOUNCEMENT` is unchanged.
+- **Screen Announcement** — New Must Have: after a window change (cold start, deep link, new activity), request focus after the window's first accessibility-focus event rather than on first composition, because TalkBack can drop an early request and land on the first focusable node, usually Back.
+- **Traversal Order** — Tightened without banning `traversalIndex`: fix composition order or use `isTraversalGroup` first, and use the index only when neither works. It reorders accessibility traversal only, not keyboard, D-pad, or switch access focus, so keyboard focus is made to follow the same order (WCAG 2.4.3 Focus Order, 1.3.2 Meaningful Sequence).
+- **Icons and Images** — New Must Have: an image that stands in for text, such as a title logo, is named with `Modifier.semantics { contentDescription = "..." }` and `contentDescription = null` on the `Image`, so it reads as text rather than as an image. The decorative-image rules are unchanged.
+
 ## 0.10.1 — 2026-10-23
 
 The stack now states its scope wherever retrieval reads it. No pattern changed.
