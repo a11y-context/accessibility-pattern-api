@@ -8,6 +8,13 @@ slug: /swiftui/release-notes
 
 Catalog and per-pattern versions use semver (MAJOR.MINOR.PATCH). Catalog revisions are dated. Each release lists changes by pattern.
 
+## 0.8.0 — 2026-11-10
+
+**New Foundations rule for an iOS 18 crash.** On iOS 18, an `@AccessibilityFocusState` binding left on a view that is hidden from accessibility but still mounted sends the hosting view into an endless layout loop: VoiceOver focus jumps to the status bar and the app stops responding. Hanna Horobchenko found it in paramount-apple (A11Y-2723) and proposed the rule.
+
+- **Focus Binding Visibility (`global.focus-binding-visibility`) → new.** Applies when the deployment target is iOS 18 or lower. Bind focus only while the element is exposed, remove the binding in the same state update that hides it, and use a clear overlay element for controls that fade but stay mounted.
+- **Focus Management (`global.focus-management`)** and **Navigation Focus (`global.navigation-focus`)** — Each gains a Must Have pointing to the new rule for apps that can run on iOS 18.
+
 ## 0.7.0 — 2026-10-21
 
 **Two Golden Pattern accuracy fixes, and a sweep that brings the SwiftUI patterns to the style guide.** The text field and wheel picker examples showed labels that are not visible on iOS. Every example drops the legacy `Demo` naming for `<Pattern>Examples`, following a new SwiftUI rule in the style guide. Use When bullets lose the implementation sentences that told an agent how to build the control rather than whether to pick the pattern, and the SwiftUI type names move to `aliases`. 46 Don'ts that restated a Must Have or a Do Not Use When redirect without adding a symptom, a look-alike mistake, or a platform defect are removed, along with the prohibitions and cross-pattern comparisons that sat inside Must Haves. 17 patterns now reference `global.native-first`.
